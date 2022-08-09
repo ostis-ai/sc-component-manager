@@ -1,0 +1,2 @@
+https://github.com/MksmOrlov/components-repo-example/repos.txt
+https://github.com/ostis-ai/ostis-inference

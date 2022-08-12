@@ -6,7 +6,26 @@
 
 #include "sc_component_manager_impl.hpp"
 
-void ScComponentManagerImpl::Emit(std::string const & command)
-{
+#include "parser/sc_component_manager_parser.hpp"
 
+ExecutionResult ScComponentManagerImpl::Emit(std::string const & command)
+{
+  std::pair<std::string, CommandParameters> parsed = ScComponentManagerParser::Parse(command);
+  m_handler.SetReposPath(m_reposPath);
+  ExecutionResult executionResult = m_handler.Handle(parsed.first, parsed.second);
+
+  std::cout << "ScComponentManagerImpl: execution result size is " + std::to_string(executionResult.size()) + "\n";
+  SC_LOG_DEBUG("ScComponentManagerImpl: execution result size is " + std::to_string(executionResult.size()));
+  // call formatter to format result
+
+  return executionResult;
+}
+
+void ScComponentManagerImpl::DisplayResult(ExecutionResult const & executionResult)
+{
+  for (std::string const & line : executionResult)
+  {
+    std::cout << line << std::endl;
+    SC_LOG_DEBUG(line);
+  }
 }

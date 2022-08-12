@@ -20,3 +20,10 @@ add_executable(
 include_directories(${GLIB2_INCLUDE_DIRS} ${SC_COMPONENT_MANAGER_ROOT}/../sc-config-utils)
 target_link_libraries(sc-component-manager sc-memory sc-agents-common sc-config-utils)
 
+if(${SC_CLANG_FORMAT_CODE})
+    target_clangformat_setup(sc-component-manager)
+endif()
+
+if(${SC_BUILD_TESTS})
+    include(tests/tests.cmake)
+endif()

@@ -8,10 +8,13 @@
 #include <atomic>
 #include <thread>
 
+#include "sc-memory/sc_debug.hpp"
 #include "sc-config/sc_config.hpp"
 #include "sc_options.hpp"
 #include "sc_memory_config.hpp"
 #include "sc-memory/utils/sc_signal_handler.hpp"
+#include "src/manager/sc_component_manager_impl.hpp"
+#include "src/manager/sc-component-manager-facory/sc_component_manager_factory.hpp"
 
 sc_int main(sc_int argc, sc_char * argv[])
 {
@@ -41,12 +44,14 @@ sc_int main(sc_int argc, sc_char * argv[])
   for (std::string const & key : *configManager)
     params.insert({key, configManager[key]});
 
-
-  std::vector<std::vector<std::string>> keys
-      = {{"extensions_path", "e"}, {"repo_path", "r"}, {"verbose", "v"}, {"clear"}};
+  std::vector<std::vector<std::string>> keys = {
+      {"extensions_path", "e"}, {"repo_path", "r"}, {"verbose", "v"}, {"clear"}};
   ScParams memoryParams{options, keys};
 
-  // ScMemoryConfig memoryConfig{config, std::move(memoryParams)};
+  ScMemoryConfig memoryConfig{config, std::move(memoryParams)};
+
+  std::unique_ptr<ScComponentManager> scComponentManager =
+      ScComponentManagerFactory::ConfigureScComponentManager(params, memoryConfig.GetParams());
 
   std::atomic_bool isRun = {SC_TRUE};
   utils::ScSignalHandler::Initialize();
@@ -54,10 +59,22 @@ sc_int main(sc_int argc, sc_char * argv[])
     isRun = SC_FALSE;
   };
 
-  while (isRun)
+  try
   {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    scComponentManager->Run();
+    while (isRun)
+    {
+      std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    scComponentManager->Stop();
+  }
+  catch (utils::ScException const & e)
+  {
+    SC_LOG_ERROR(e.Description());
+    scComponentManager->Stop();
+
+    return EXIT_FAILURE;
   }
 
-  return 0;
+  return EXIT_SUCCESS;
 }

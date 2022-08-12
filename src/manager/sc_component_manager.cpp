@@ -19,24 +19,22 @@ void ScComponentManager::Run()
 void ScComponentManager::Start()
 {
   std::string command;
-
-  while (command != "exit" && !command.empty())
+  do
   {
+    std::cout << "ScComponentManager: Enter command\n";
+    SC_LOG_DEBUG("ScComponentManager: Enter command");
     getline(std::cin, command);
 
     try
     {
-      Emit(command);
+      ExecutionResult executionResult = Emit(command);
+      DisplayResult(executionResult);
     }
     catch (utils::ScException const & exception)
     {
       SC_LOG_ERROR(exception.Description());
     }
-    catch (std::exception const & exception)
-    {
-      SC_LOG_ERROR(exception.what());
-    }
-  }
+  } while (command != "exit" && !command.empty());
 }
 
 void ScComponentManager::Stop()

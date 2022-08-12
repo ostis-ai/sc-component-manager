@@ -6,13 +6,21 @@
 
 #pragma once
 
-#include "sc_component_manager.hpp"
+#include <utility>
 
-#include "sc-memory/sc_memory.hpp"
-#include "sc_component.hpp"
+#include "sc_component_manager.hpp"
 
 class ScComponentManagerImpl : public ScComponentManager
 {
+public:
+  ScComponentManagerImpl(std::string reposPath, sc_memory_params memoryParams)
+    : ScComponentManager(std::move(reposPath), memoryParams)
+  {
+    m_handler.SetReposPath(reposPath);
+  }
+
 protected:
-  virtual void Emit(std::string const & command) override;
+  ExecutionResult Emit(std::string const & command) override;
+
+  void DisplayResult(ExecutionResult const & executionResult) override;
 };

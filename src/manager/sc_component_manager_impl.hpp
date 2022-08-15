@@ -13,11 +13,12 @@
 class ScComponentManagerImpl : public ScComponentManager
 {
 public:
-  ScComponentManagerImpl(std::string reposPath, sc_memory_params memoryParams)
-    : ScComponentManager(std::move(reposPath), memoryParams)
+  ScComponentManagerImpl(std::string reposPath, std::string specificationsPath, sc_memory_params memoryParams)
+    : ScComponentManager(std::move(reposPath), std::move(specificationsPath), memoryParams)
   {
-    m_handler.SetReposPath(reposPath);
   }
+
+  ~ScComponentManagerImpl() override = default;
 
 protected:
   ExecutionResult Emit(std::string const & command) override;

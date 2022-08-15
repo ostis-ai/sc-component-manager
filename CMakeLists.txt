@@ -13,15 +13,18 @@ include_directories(
 )
 
 add_executable(
-        sc-component-manager
-        "${SC_COMPONENT_MANAGER_ROOT}/src/main.cpp"
-        ${SOURCES}
+    sc-component-manager
+    "${SC_COMPONENT_MANAGER_ROOT}/src/main.cpp"
 )
+
+add_library(sc-component-manager-lib SHARED ${SOURCES})
+
 include_directories(${GLIB2_INCLUDE_DIRS} ${SC_COMPONENT_MANAGER_ROOT}/../sc-config-utils)
-target_link_libraries(sc-component-manager sc-memory sc-agents-common sc-config-utils)
+target_link_libraries(sc-component-manager-lib sc-memory sc-agents-common)
+target_link_libraries(sc-component-manager sc-component-manager-lib sc-config-utils)
 
 if(${SC_CLANG_FORMAT_CODE})
-    target_clangformat_setup(sc-component-manager)
+    target_clangformat_setup(sc-component-manager sc-component-manager-lib)
 endif()
 
 if(${SC_BUILD_TESTS})

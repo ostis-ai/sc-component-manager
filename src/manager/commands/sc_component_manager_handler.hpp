@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "sc_component_manager_command.hpp"
 
 class ScComponentManagerHandler
@@ -14,12 +16,4 @@ public:
   virtual ExecutionResult Handle(std::string const & commandType, CommandParameters const & commandParameters) = 0;
 
   virtual ~ScComponentManagerHandler() = default;
-
-  void SetReposPath(std::string const & reposPath)
-  {
-    m_reposPath = reposPath;
-  }
-
-protected:
-  std::string m_reposPath;
 };

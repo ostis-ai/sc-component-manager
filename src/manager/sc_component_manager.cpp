@@ -10,10 +10,12 @@
 
 #include "sc_component_manager.hpp"
 #include "sc-memory/sc_debug.hpp"
+#include "src/manager/commands/sc_component_manager_command.hpp"
 
 void ScComponentManager::Run()
 {
   m_instance = std::thread(&ScComponentManager::Start, this);
+  m_isRunning = SC_TRUE;
 }
 
 void ScComponentManager::Start()
@@ -34,11 +36,12 @@ void ScComponentManager::Start()
     {
       SC_LOG_ERROR(exception.Description());
     }
-  } while (command != "exit" && !command.empty());
+  } while (m_isRunning && command != "exit" && !command.empty());
 }
 
 void ScComponentManager::Stop()
 {
+  m_isRunning = SC_FALSE;
   if (m_instance.joinable())
-    m_instance.join();
+    m_instance.detach();
 }

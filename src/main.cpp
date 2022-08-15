@@ -13,6 +13,7 @@
 #include "sc_options.hpp"
 #include "sc_memory_config.hpp"
 #include "sc-memory/utils/sc_signal_handler.hpp"
+
 #include "src/manager/sc_component_manager_impl.hpp"
 #include "src/manager/sc-component-manager-facory/sc_component_manager_factory.hpp"
 
@@ -38,7 +39,8 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   ScParams params{options, {}};
 
-  std::vector<std::string> const pathKeys = {"repos_path", "repo_path", "extensions_path", "log_file"};
+  std::vector<std::string> const pathKeys = {
+      "repos_path", "specifications_path", "repo_path", "extensions_path", "log_file"};
   ScConfig config{configFile, pathKeys};
   ScConfigGroup configManager = config["sc-component-manager"];
   for (std::string const & key : *configManager)

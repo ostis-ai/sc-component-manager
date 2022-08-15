@@ -21,11 +21,4 @@ public:
 
   virtual ~ScComponentManagerCommand() = default;
 
-  void SetReposPath(std::string const & reposPath)
-  {
-    m_reposPath = reposPath;
-  }
-
-protected:
-  std::string m_reposPath;
 };

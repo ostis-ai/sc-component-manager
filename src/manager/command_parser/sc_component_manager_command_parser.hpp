@@ -9,7 +9,7 @@
 #include <string>
 #include <iostream>
 
-#include "../handler/sc_component_manager_command.hpp"
+#include "../commands/sc_component_manager_command.hpp"
 
 #include <algorithm>
 

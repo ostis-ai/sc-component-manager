@@ -1,5 +1,5 @@
 [repositories]
-https://github.com/MksmOrlov/components-repo-example/repos.txt
+https://github.com/MksmOrlov/components-repo-example
 
 [components]
 https://github.com/MksmOrlov/cat-kb-component

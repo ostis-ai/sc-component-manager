@@ -27,7 +27,7 @@ TEST_F(ScComponentManagerParserTest, ParseReposFile)
   EXPECT_TRUE(parsedComponents.size() == 2);
   EXPECT_EQ(parsedRepositories, repositories);
   EXPECT_EQ(parsedComponents, components);
-//
-//  ReposDownloaderHandler handler;
-//  handler.Handle("https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing");
+  //
+  //  ReposDownloaderHandler handler;
+  //  handler.Handle("https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing");
 }

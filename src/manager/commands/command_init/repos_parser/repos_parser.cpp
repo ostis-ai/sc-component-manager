@@ -8,11 +8,10 @@
 #include <iostream>
 
 #include "repos_parser.hpp"
+#include "src/manager/commands/command_init/constants/command_init_constants.hpp"
 
 void ReposParser::Parse(std::string const & reposPath)
 {
-  std::string const REPOS_HEADER = "[repositories]";
-  std::string const COMPONENTS_HEADER = "[components]";
 
   std::fstream reposFile;
   reposFile.open(reposPath, std::ios::in);
@@ -26,14 +25,14 @@ void ReposParser::Parse(std::string const & reposPath)
     {
       if (!line.empty())
       {
-        if (line.find(REPOS_HEADER) != std::string::npos)
+        if (line.find(SpecificationConstants::REPOS_SECTION_HEADER) != std::string::npos)
         {
           is_repos = true;
           is_components = false;
           continue;
         }
 
-        if (line.find(COMPONENTS_HEADER) != std::string::npos)
+        if (line.find(SpecificationConstants::COMPONENTS_SECTION_HEADER) != std::string::npos)
         {
           is_components = true;
           is_repos = false;

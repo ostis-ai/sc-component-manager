@@ -23,18 +23,48 @@ public:
   {
     ExecutionResult executionResult;
 
-    ReposParser parser;
-    parser.Parse(m_reposPath);
-
-    ReposDownloaderHandler downloaderHandler;
-    std::vector<std::string> parsedComponents = parser.GetComponents();
-    for (std::string const & componentPath : parsedComponents)
-      downloaderHandler.Handle(componentPath, m_specificationsPath);
+    ProcessRepositories(context, m_reposPath, m_specificationsPath);
 
     return executionResult;
   }
 
-private:
+  void ProcessRepositories(ScMemoryContext * context, std::string & reposPath, std::string & specificationsPath)
+  {
+    ReposParser parser;
+    parser.Parse(reposPath);
+
+    // TODO: set system identifier to repository and component nodes
+    ScAddr repositoryAddr = context->CreateNode(ScType::NodeConst);
+    context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ComponentManagerKeynodes::concept_repository, repositoryAddr);
+
+    ScAddr componentsSetAddr = context->CreateNode(ScType::NodeConst);
+    ScAddr rrelComponentsEdgeAddr = context->CreateEdge(ScType::EdgeAccessConstPosPerm, repositoryAddr, componentsSetAddr);
+    context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ComponentManagerKeynodes::rrel_components, rrelComponentsEdgeAddr);
+
+    ScAddr repositoriesSetAddr = context->CreateNode(ScType::NodeConst);
+    ScAddr rrelRepositoriesEdgeAddr = context->CreateEdge(ScType::EdgeAccessConstPosPerm, repositoryAddr, repositoriesSetAddr);
+    context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ComponentManagerKeynodes::rrel_repositories,
+        rrelRepositoriesEdgeAddr);
+
+    ReposDownloaderHandler downloaderHandler;
+    std::vector<std::string> parsedComponents = parser.GetComponents();
+    for (std::string const & componentPath : parsedComponents)
+    {
+      downloaderHandler.HandleComponents(context, componentPath, specificationsPath, componentsSetAddr);
+    }
+
+    std::vector<std::string> parsedRepositories = parser.GetRepositories();
+    for (std::string const & repositoryPath : parsedRepositories)
+    {
+      downloaderHandler.HandleRepositories(repositoryPath, specificationsPath);
+      std::stringstream reposPathStream;
+      reposPathStream << specificationsPath << "/" << SpecificationConstants::REPOS_FILENAME;
+      reposPath = reposPathStream.str();
+      ProcessRepositories(context, reposPath, specificationsPath);
+    }
+  }
+
+protected:
   std::string m_reposPath;
 
   std::string m_specificationsPath;

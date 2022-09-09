@@ -30,7 +30,6 @@ public:
     {
       ScComponentManagerCommand * commander = it->second;
       std::cout << "ScComponentManagerCommandHandler: execute " + it->first + " command\n";
-      SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
       executionResult = commander->Execute(m_context, commandParameters);
     }
     else

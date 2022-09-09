@@ -13,14 +13,11 @@
 class ReposDownloaderGoogleDrive : public ReposDownloader
 {
 public:
-  void Download(std::string const & componentPath, std::string const & specificationsPath) override
+  void Download(std::string const & componentPath, std::string const & specificationsPath, bool is_repository = false) override
   {
-    std::string const gDrivePrefix = "https://drive.google.com/file/d/";
-    std::string const gDriveDownloadPrefix = "https://docs.google.com/uc?export=download&id=";
-    std::string const gDrivePostfix = "/view?usp=sharing";
-    std::string const gDriveFileId = componentPath.substr(gDrivePrefix.size(), componentPath.size() - gDrivePrefix.size() - gDrivePostfix.size());
-    std::string const gDriveInstallCommandParameter = " -O specification.scs";
-    std::string const gDriveInstallCommand = "cd " + specificationsPath + " ; wget --no-check-certificate " + "\'" + gDriveDownloadPrefix + gDriveFileId + "\'" + gDriveInstallCommandParameter;
+    std::string const gDriveFileId = componentPath.substr(GoogleDriveConstants::GOOGLE_DRIVE_FILE_PREFIX.size(), componentPath.size() - GoogleDriveConstants::GOOGLE_DRIVE_FILE_PREFIX.size() - GoogleDriveConstants::GOOGLE_DRIVE_POSTFIX.size());
+    std::string const gDriveInstallCommandParameter = " -O " + SpecificationConstants::SPECIFICATION_FILENAME;
+    std::string const gDriveInstallCommand = "cd " + specificationsPath + " ; wget --no-check-certificate " + "\'" + GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX + gDriveFileId + "\'" + gDriveInstallCommandParameter;
 
     system(gDriveInstallCommand.c_str());
   }

@@ -20,8 +20,15 @@ add_executable(
 add_library(sc-component-manager-lib SHARED ${SOURCES})
 
 include_directories(${GLIB2_INCLUDE_DIRS} ${SC_COMPONENT_MANAGER_ROOT}/../sc-config-utils)
-target_link_libraries(sc-component-manager-lib sc-memory sc-agents-common)
+target_link_libraries(sc-component-manager-lib sc-memory sc-agents-common sc-builder-lib)
+add_dependencies(sc-component-manager-lib sc-code-generator)
+
 target_link_libraries(sc-component-manager sc-component-manager-lib sc-config-utils)
+
+sc_codegen_ex(sc-component-manager
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/manager/commands/keynodes/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/manager/commands/keynodes/generated"
+)
 
 if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(sc-component-manager sc-component-manager-lib)

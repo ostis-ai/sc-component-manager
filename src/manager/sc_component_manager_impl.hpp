@@ -16,6 +16,7 @@ public:
   ScComponentManagerImpl(std::string reposPath, std::string specificationsPath, sc_memory_params memoryParams)
     : ScComponentManager(std::move(reposPath), std::move(specificationsPath), memoryParams)
   {
+    keynodes::ComponentManagerKeynodes::InitGlobal();
   }
 
   ~ScComponentManagerImpl() override = default;

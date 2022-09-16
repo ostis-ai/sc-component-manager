@@ -11,12 +11,14 @@
 #include "sc_component_manager_handler.hpp"
 #include "sc_component_manager_command.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
+#include "src/manager/commands/command_search/sc_component_manager_command_search.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {
 public:
   explicit ScComponentManagerCommandHandler(std::string reposPath, std::string specificationsPath)
-    : m_reposPath(std::move(reposPath)), m_specificationsPath(std::move(specificationsPath))
+    : m_reposPath(std::move(reposPath))
+    , m_specificationsPath(std::move(specificationsPath))
   {
     m_context = new ScMemoryContext("sc-component-manager-command-handler");
   }
@@ -24,13 +26,14 @@ public:
   ExecutionResult Handle(std::string const & commandType, CommandParameters const & commandParameters) override
   {
     ExecutionResult executionResult;
+    m_commandParameters = commandParameters;
 
     auto const & it = m_actions.find(commandType);
     if (it != m_actions.end())
     {
       ScComponentManagerCommand * commander = it->second;
       std::cout << "ScComponentManagerCommandHandler: execute " + it->first + " command\n";
-      executionResult = commander->Execute(m_context, commandParameters);
+      executionResult = commander->Execute(m_context, m_commandParameters);
     }
     else
     {
@@ -54,10 +57,11 @@ public:
 protected:
   ScMemoryContext * m_context{};
 
+  CommandParameters m_commandParameters;
   std::string m_reposPath;
   std::string m_specificationsPath;
 
   std::map<std::string, ScComponentManagerCommand *> m_actions = {
-      { "init", new ScComponentManagerCommandInit(m_reposPath, m_specificationsPath) }
-  };
+      {"init", new ScComponentManagerCommandInit(m_reposPath, m_specificationsPath)},
+      {"search", new ScComponentManagerCommandSearch()}};
 };

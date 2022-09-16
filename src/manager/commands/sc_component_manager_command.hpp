@@ -20,5 +20,4 @@ public:
   virtual ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) = 0;
 
   virtual ~ScComponentManagerCommand() = default;
-
 };

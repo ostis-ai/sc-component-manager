@@ -18,8 +18,8 @@ class ScComponentManager
 {
 public:
   explicit ScComponentManager(std::string reposPath, std::string specificationsPath, sc_memory_params memoryParams)
-    : m_reposPath(std::move(reposPath)),
-    m_specificationsPath(std::move(specificationsPath))
+    : m_reposPath(std::move(reposPath))
+    , m_specificationsPath(std::move(specificationsPath))
   {
     ScMemory::Initialize(memoryParams);
     m_handler = new ScComponentManagerCommandHandler(m_reposPath, m_specificationsPath);

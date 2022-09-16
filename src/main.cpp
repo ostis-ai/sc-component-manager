@@ -70,9 +70,10 @@ sc_int main(sc_int argc, sc_char * argv[])
     }
     scComponentManager->Stop();
   }
-  catch (utils::ScException const & e)
+  catch (utils::ScException const & exception)
   {
-    SC_LOG_ERROR(e.Description());
+    std::cout << exception.Description();
+    SC_LOG_ERROR(exception.Description());
     scComponentManager->Stop();
 
     return EXIT_FAILURE;

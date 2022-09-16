@@ -17,7 +17,7 @@ extern "C"
 #include "repos_downloader.hpp"
 #include "repos_downloader_git.hpp"
 #include "repos_downloader_google_drive.hpp"
-#include "src/manager/commands/keynodes/ComponentManagerKeynodes.hpp"
+#include "../../keynodes/ScComponentManagerKeynodes.hpp"
 
 #include "sc-memory/sc_scs_helper.hpp"
 #include "../sc-builder/src/scs_loader.hpp"
@@ -25,7 +25,11 @@ extern "C"
 class ReposDownloaderHandler
 {
 public:
-  void HandleComponents(ScMemoryContext * context, std::string const & componentPath, std::string & specificationsPath, ScAddr const & componentsSet)
+  void HandleComponents(
+      ScMemoryContext * context,
+      std::string const & componentPath,
+      std::string & specificationsPath,
+      ScAddr const & componentsSet)
   {
     sc_fs_mkdirs(specificationsPath.c_str());
 
@@ -83,20 +87,23 @@ public:
 
 protected:
   std::map<std::string, ReposDownloader *> m_downloaders = {
-    {GitHubConstants::GITHUB_PREFIX, new ReposDownloaderGit()},
-    {GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive()}
-  };
+      {GitHubConstants::GITHUB_PREFIX, new ReposDownloaderGit()},
+      {GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive()}};
 
-  static void AddComponentToSet(ScMemoryContext * context, std::string const & specificationDirName, ScAddr const & componentsSet)
+  static void AddComponentToSet(
+      ScMemoryContext * context,
+      std::string const & specificationDirName,
+      ScAddr const & componentsSet)
   {
     std::stringstream pathStream;
     pathStream << specificationDirName << '/' << SpecificationConstants::SPECIFICATION_FILENAME;
 
+    // TODO: Check if component exists, not load
     ScsLoader loader;
     loader.loadScsFile(*context, pathStream.str());
 
     ScIterator3Ptr reusableComponentIterator = context->Iterator3(
-        keynodes::ComponentManagerKeynodes::concept_reusable_component,
+        keynodes::ScComponentManagerKeynodes::concept_reusable_component,
         ScType::EdgeAccessConstPosPerm,
         ScType::NodeConst);
 
@@ -104,9 +111,11 @@ protected:
     {
       context->CreateEdge(ScType::EdgeAccessConstPosPerm, componentsSet, reusableComponentIterator->Get(2));
     }
-    else // TODO: check this throw
+    else  // TODO: check this throw
     {
-      SC_THROW_EXCEPTION(utils::ExceptionItemNotFound, "Incorrect component specification. Reusable component not found in " + specificationDirName);
+      SC_THROW_EXCEPTION(
+          utils::ExceptionItemNotFound,
+          "Incorrect component specification. Reusable component not found in " + specificationDirName);
     }
   }
 };

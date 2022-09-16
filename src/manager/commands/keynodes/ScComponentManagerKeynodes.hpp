@@ -1,20 +1,19 @@
 /*
-* This source file is part of an OSTIS project. For the latest info, see http://ostis.net
-* Distributed under the MIT License
-* (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
-*/
+ * This source file is part of an OSTIS project. For the latest info, see http://ostis.net
+ * Distributed under the MIT License
+ * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
+ */
 
 #pragma once
 
 #include "sc-memory/sc_addr.hpp"
 #include "sc-memory/sc_object.hpp"
 
-#include "generated/ComponentManagerKeynodes.generated.hpp"
+#include "generated/ScComponentManagerKeynodes.generated.hpp"
 
 namespace keynodes
 {
-
-class ComponentManagerKeynodes : public ScObject
+class ScComponentManagerKeynodes : public ScObject
 {
   SC_CLASS()
   SC_GENERATED_BODY()
@@ -31,6 +30,12 @@ public:
 
   SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_components;
+
+  SC_PROPERTY(Keynode("nrel_author"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr nrel_author;
+
+  SC_PROPERTY(Keynode("nrel_explanation"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr nrel_explanation;
 };
 
-} // namespace commands
+}  // namespace keynodes

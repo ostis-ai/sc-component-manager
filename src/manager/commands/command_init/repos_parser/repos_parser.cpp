@@ -12,7 +12,6 @@
 
 void ReposParser::Parse(std::string const & reposPath)
 {
-
   std::fstream reposFile;
   reposFile.open(reposPath, std::ios::in);
   if (reposFile.is_open())

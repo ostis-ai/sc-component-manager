@@ -15,7 +15,8 @@ class ScComponentManagerCommandInit : public ScComponentManagerCommand
 {
 public:
   ScComponentManagerCommandInit(std::string reposPath, std::string specificationsPath)
-    : m_reposPath(std::move(reposPath)), m_specificationsPath(std::move(specificationsPath))
+    : m_reposPath(std::move(reposPath))
+    , m_specificationsPath(std::move(specificationsPath))
   {
   }
 
@@ -34,26 +35,33 @@ public:
     parser.Parse(reposPath);
 
     // TODO: set system identifier to repository and component nodes
+    // TODO: if repository exists, continue
     ScAddr repositoryAddr = context->CreateNode(ScType::NodeConst);
-    context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ComponentManagerKeynodes::concept_repository, repositoryAddr);
+    context->CreateEdge(
+        ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::concept_repository, repositoryAddr);
 
     ScAddr componentsSetAddr = context->CreateNode(ScType::NodeConst);
-    ScAddr rrelComponentsEdgeAddr = context->CreateEdge(ScType::EdgeAccessConstPosPerm, repositoryAddr, componentsSetAddr);
-    context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ComponentManagerKeynodes::rrel_components, rrelComponentsEdgeAddr);
+    ScAddr rrelComponentsEdgeAddr =
+        context->CreateEdge(ScType::EdgeAccessConstPosPerm, repositoryAddr, componentsSetAddr);
+    context->CreateEdge(
+        ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::rrel_components, rrelComponentsEdgeAddr);
 
     ScAddr repositoriesSetAddr = context->CreateNode(ScType::NodeConst);
-    ScAddr rrelRepositoriesEdgeAddr = context->CreateEdge(ScType::EdgeAccessConstPosPerm, repositoryAddr, repositoriesSetAddr);
-    context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ComponentManagerKeynodes::rrel_repositories,
+    ScAddr rrelRepositoriesEdgeAddr =
+        context->CreateEdge(ScType::EdgeAccessConstPosPerm, repositoryAddr, repositoriesSetAddr);
+    context->CreateEdge(
+        ScType::EdgeAccessConstPosPerm,
+        keynodes::ScComponentManagerKeynodes::rrel_repositories,
         rrelRepositoriesEdgeAddr);
 
     ReposDownloaderHandler downloaderHandler;
-    std::vector<std::string> parsedComponents = parser.GetComponents();
+    std::vector<std::string> const parsedComponents = parser.GetComponents();
     for (std::string const & componentPath : parsedComponents)
     {
       downloaderHandler.HandleComponents(context, componentPath, specificationsPath, componentsSetAddr);
     }
 
-    std::vector<std::string> parsedRepositories = parser.GetRepositories();
+    std::vector<std::string> const parsedRepositories = parser.GetRepositories();
     for (std::string const & repositoryPath : parsedRepositories)
     {
       downloaderHandler.HandleRepositories(repositoryPath, specificationsPath);

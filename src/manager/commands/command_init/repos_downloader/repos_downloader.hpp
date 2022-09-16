@@ -11,7 +11,10 @@
 class ReposDownloader
 {
 public:
-  virtual void Download(std::string const & componentPath, std::string const & specificationsPath, bool is_repository) = 0;
+  virtual void Download(
+      std::string const & componentPath,
+      std::string const & specificationsPath,
+      bool is_repository) = 0;
 
   virtual ~ReposDownloader() = default;
 };

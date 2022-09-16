@@ -31,7 +31,7 @@ sc_codegen_ex(sc-component-manager
 )
 
 if(${SC_CLANG_FORMAT_CODE})
-    target_clangformat_setup(sc-component-manager sc-component-manager-lib)
+    target_clangformat_setup(sc-component-manager-lib)
 endif()
 
 if(${SC_BUILD_TESTS})

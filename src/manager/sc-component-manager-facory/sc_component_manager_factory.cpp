@@ -11,11 +11,9 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
     const ScParams & scComponentManagerParams,
     sc_memory_params memoryParams)
 {
-  std::unique_ptr<ScComponentManager> scComponentManager = std::unique_ptr<ScComponentManager>(
-      new ScComponentManagerImpl(
-          scComponentManagerParams.at("repos_path"),
-          scComponentManagerParams.at("specifications_path"),
-          memoryParams));
+  std::unique_ptr<ScComponentManager> scComponentManager =
+      std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(
+          scComponentManagerParams.at("repos_path"), scComponentManagerParams.at("specifications_path"), memoryParams));
 
   return scComponentManager;
 }

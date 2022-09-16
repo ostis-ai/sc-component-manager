@@ -8,10 +8,10 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <regex>
 
 #include "../commands/sc_component_manager_command.hpp"
-
-#include <algorithm>
 
 class ScComponentManagerParser
 {
@@ -21,7 +21,7 @@ public:
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
-    utils::StringUtils::SplitString(command, ' ', commandTokens);
+    commandTokens = ParseCommand(command);
 
     if (commandTokens.size() < 2)
       SC_THROW_EXCEPTION(
@@ -34,8 +34,6 @@ public:
 
     parsedCommand.first = commandTokens.at(1);
 
-    SC_LOG_DEBUG("ScComponentManagerParser: parsed command " + parsedCommand.first);
-
     CommandParameters commandParameters = GetCommandParameters(commandTokens);
 
     parsedCommand.second = commandParameters;
@@ -44,7 +42,7 @@ public:
   }
 
 protected:
-  static CommandParameters GetCommandParameters(std::vector<std::string> & commandTokens)
+  static CommandParameters GetCommandParameters(std::vector<std::string> const & commandTokens)
   {
     CommandParameters commandParameters;
     std::string parameterName;
@@ -57,14 +55,6 @@ protected:
         if (!parameterValue.empty())
         {
           commandParameters.insert({parameterName, parameterValue});
-          //
-          std::string values;
-          for (std::string const & value : parameterValue)
-          {
-            values += " " + value;
-          }
-          SC_LOG_DEBUG("ScComponentManagerParser: parsed parameter " + parameterName + " with value" + values);
-          //
           parameterValue.clear();
         }
         if (commandTokens.at(tokenNumber).at(1) == '-')
@@ -73,7 +63,15 @@ protected:
           parameterName = commandTokens.at(tokenNumber).substr(1);
       }
       else
-        parameterValue.push_back(commandTokens.at(tokenNumber));
+      {
+        std::string parameter = commandTokens.at(tokenNumber);
+        if (parameter.at(0) == '\"')
+        {
+          parameter = parameter.substr(1, parameter.size() - 1);
+        }
+        parameterValue.push_back(parameter);
+      }
+
     }
     if (!parameterName.empty())
       commandParameters.insert({parameterName, parameterValue});
@@ -110,5 +108,23 @@ protected:
     }
 
     return parameterName;
+  }
+
+  static std::vector<std::string> ParseCommand(std::string const & command)
+  {
+    std::vector<std::string> result;
+
+    std::regex regex(R"(("[^"]+"|[^\s"]+))");
+    auto commandBegin = std::sregex_iterator(command.begin(), command.end(), regex);
+    auto commandEnd = std::sregex_iterator();
+    for (std::sregex_iterator i = commandBegin; i != commandEnd; ++i)
+    {
+      std::smatch const & match = *i;
+      std::string matchStr = match.str();
+      std::cout << matchStr << '\n';
+      result.push_back(matchStr);
+    }
+
+    return result;
   }
 };

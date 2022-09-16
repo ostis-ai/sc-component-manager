@@ -16,10 +16,11 @@ class ReposDownloaderGit : public ReposDownloader
 public:
   void Download(std::string const & componentPath, std::string const & specificationsPath, bool is_repository) override
   {
-    std::string pathPostfix = is_repository ? "/" + SpecificationConstants::REPOS_FILENAME : "/" + SpecificationConstants::SPECIFICATION_FILENAME;
-    std::string const svnInstallCommand = "cd " + specificationsPath + " ; svn export " + componentPath + GitHubConstants::SVN_TRUNK + pathPostfix;
+    std::string pathPostfix = is_repository ? "/" + SpecificationConstants::REPOS_FILENAME
+                                            : "/" + SpecificationConstants::SPECIFICATION_FILENAME;
+    std::string const svnInstallCommand =
+        "cd " + specificationsPath + " ; svn export " + componentPath + GitHubConstants::SVN_TRUNK + pathPostfix;
 
     system(svnInstallCommand.c_str());
   }
-
 };

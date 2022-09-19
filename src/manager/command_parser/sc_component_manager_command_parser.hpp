@@ -71,7 +71,6 @@ protected:
         }
         parameterValue.push_back(parameter);
       }
-
     }
     if (!parameterName.empty())
       commandParameters.insert({parameterName, parameterValue});

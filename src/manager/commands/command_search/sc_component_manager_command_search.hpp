@@ -152,7 +152,10 @@ protected:
     return links;
   }
 
-  ExecutionResult SearchComponents(ScMemoryContext * context, ScTemplate & searchComponentTemplate, ScTemplateSearchResult & searchComponentResult)
+  ExecutionResult SearchComponents(
+      ScMemoryContext * context,
+      ScTemplate & searchComponentTemplate,
+      ScTemplateSearchResult & searchComponentResult)
   {
     ExecutionResult result;
     if (!searchComponentTemplate.IsEmpty())
@@ -168,7 +171,11 @@ protected:
     return result;
   }
 
-  ExecutionResult SearchComponents(ScMemoryContext * context, ScTemplate & searchComponentTemplate, ScTemplateSearchResult & searchComponentResult, ScAddrVector const & links)
+  ExecutionResult SearchComponents(
+      ScMemoryContext * context,
+      ScTemplate & searchComponentTemplate,
+      ScTemplateSearchResult & searchComponentResult,
+      ScAddrVector const & links)
   {
     ExecutionResult result;
     for (ScAddr const & link : links)

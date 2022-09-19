@@ -14,38 +14,39 @@ void ReposParser::Parse(std::string const & reposPath)
 {
   std::fstream reposFile;
   reposFile.open(reposPath, std::ios::in);
-  if (reposFile.is_open())
+
+  if (!reposFile.is_open())
+    return;
+
+  std::string line;
+  bool is_repos = false;
+  bool is_components = false;
+
+  while (std::getline(reposFile, line))
   {
-    std::string line;
-    bool is_repos = false;
-    bool is_components = false;
+    if (line.empty())
+      continue;
 
-    while (std::getline(reposFile, line))
+    if (line.find(SpecificationConstants::REPOS_SECTION_HEADER) != std::string::npos)
     {
-      if (!line.empty())
-      {
-        if (line.find(SpecificationConstants::REPOS_SECTION_HEADER) != std::string::npos)
-        {
-          is_repos = true;
-          is_components = false;
-          continue;
-        }
-
-        if (line.find(SpecificationConstants::COMPONENTS_SECTION_HEADER) != std::string::npos)
-        {
-          is_components = true;
-          is_repos = false;
-          continue;
-        }
-
-        if (is_repos)
-          m_repositories.push_back(line);
-        if (is_components)
-          m_components.push_back(line);
-      }
+      is_repos = true;
+      is_components = false;
+      continue;
     }
-    reposFile.close();
+
+    if (line.find(SpecificationConstants::COMPONENTS_SECTION_HEADER) != std::string::npos)
+    {
+      is_components = true;
+      is_repos = false;
+      continue;
+    }
+
+    if (is_repos)
+      m_repositories.push_back(line);
+    if (is_components)
+      m_components.push_back(line);
   }
+  reposFile.close();
 }
 
 std::vector<std::string> ReposParser::GetComponents()

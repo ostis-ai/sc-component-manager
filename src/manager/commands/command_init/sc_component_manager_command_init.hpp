@@ -36,7 +36,7 @@ public:
 
     // TODO: set system identifier to repository and component nodes
     // TODO: if repository exists, continue
-    ScAddr repositoryAddr = context->CreateNode(ScType::NodeConst);
+    ScAddr const repositoryAddr = context->CreateNode(ScType::NodeConst);
     context->CreateEdge(
         ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::concept_repository, repositoryAddr);
 

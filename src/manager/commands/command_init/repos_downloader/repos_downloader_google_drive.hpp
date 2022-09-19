@@ -13,7 +13,7 @@
 class ReposDownloaderGoogleDrive : public ReposDownloader
 {
 public:
-  void Download(std::string const & componentPath, std::string const & specificationsPath, bool is_repository = false)
+  void Download(std::string const & componentPath, std::string const & specificationsPath, bool isRepository = false)
       override
   {
     std::string const gDriveFileId = componentPath.substr(
@@ -25,6 +25,6 @@ public:
                                              GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX + gDriveFileId + "\'" +
                                              gDriveInstallCommandParameter;
 
-    system(gDriveInstallCommand.c_str());
+    ScExec exec{{gDriveInstallCommand}};
   }
 };

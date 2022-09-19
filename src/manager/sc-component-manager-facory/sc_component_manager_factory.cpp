@@ -8,12 +8,20 @@
 #include "src/manager/sc_component_manager_impl.hpp"
 
 std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScComponentManager(
-    const ScParams & scComponentManagerParams,
+    ScParams const & scComponentManagerParams,
     sc_memory_params memoryParams)
 {
-  std::unique_ptr<ScComponentManager> scComponentManager =
-      std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(
-          scComponentManagerParams.at("repos_path"), scComponentManagerParams.at("specifications_path"), memoryParams));
-
-  return scComponentManager;
+  std::string const REPOS_PATH = "repos_path";
+  std::string const SPECIFICATIONS_PATH = "specifications_path";
+  try
+  {
+    std::unique_ptr<ScComponentManager> scComponentManager =
+        std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(
+            scComponentManagerParams.at(REPOS_PATH), scComponentManagerParams.at(SPECIFICATIONS_PATH), memoryParams));
+    return scComponentManager;
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR("ScComponentManagerFactory: ScComponentManager configuration error.");
+  }
 }

@@ -20,6 +20,7 @@ void ScComponentManager::Run()
 
 void ScComponentManager::Start()
 {
+  std::string const EXIT_COMMAND = "exit";
   std::string command;
   do
   {
@@ -36,7 +37,7 @@ void ScComponentManager::Start()
       std::cout << exception.Description();
       SC_LOG_ERROR(exception.Description());
     }
-  } while (m_isRunning && command != "exit" && !command.empty());
+  } while (m_isRunning && command != EXIT_COMMAND && !command.empty());
 }
 
 void ScComponentManager::Stop()

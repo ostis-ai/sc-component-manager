@@ -8,19 +8,22 @@
 
 #include <string>
 
+#include "sc-memory/utils/sc_exec.hpp"
+
 #include "repos_downloader.hpp"
 #include "src/manager/commands/command_init/constants/command_init_constants.hpp"
 
 class ReposDownloaderGit : public ReposDownloader
 {
 public:
-  void Download(std::string const & componentPath, std::string const & specificationsPath, bool is_repository) override
+  void Download(std::string const & componentPath, std::string const & specificationsPath, bool isRepository) override
   {
-    std::string pathPostfix = is_repository ? "/" + SpecificationConstants::REPOS_FILENAME
-                                            : "/" + SpecificationConstants::SPECIFICATION_FILENAME;
-    std::string const svnInstallCommand =
-        "cd " + specificationsPath + " ; svn export " + componentPath + GitHubConstants::SVN_TRUNK + pathPostfix;
+    char const DIRECTORY_DELIMITER = '/';
+    std::string pathPostfix = isRepository ? DIRECTORY_DELIMITER + SpecificationConstants::REPOS_FILENAME
+                                            : DIRECTORY_DELIMITER + SpecificationConstants::SPECIFICATION_FILENAME;
 
-    system(svnInstallCommand.c_str());
+    ScExec exec{
+        {"cd", specificationsPath, "&&", "svn", "export", componentPath + GitHubConstants::SVN_TRUNK + pathPostfix}
+    };
   }
 };

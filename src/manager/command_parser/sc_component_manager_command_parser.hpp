@@ -19,11 +19,13 @@ public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
+    size_t const COMMAND_KEYWORDS_SIZE = 2;
+
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
     commandTokens = ParseCommand(command);
 
-    if (commandTokens.size() < 2)
+    if (commandTokens.size() < COMMAND_KEYWORDS_SIZE)
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError, "Incorrect command. Command type not found in \"" + command + "\"");
 
@@ -44,39 +46,59 @@ public:
 protected:
   static CommandParameters GetCommandParameters(std::vector<std::string> const & commandTokens)
   {
+    size_t const COMMAND_KEYWORDS_SIZE = 2;
+    char const PARAMETER_VALUES_DELIMITER = '-';
+
     CommandParameters commandParameters;
     std::string parameterName;
     std::vector<std::string> parameterValue;
 
-    for (size_t tokenNumber = 2; tokenNumber < commandTokens.size(); tokenNumber++)
+    for (size_t tokenNumber = COMMAND_KEYWORDS_SIZE; tokenNumber < commandTokens.size(); tokenNumber++)
     {
-      if (commandTokens.at(tokenNumber).at(0) == '-')
+      std::string currentCommandToken = commandTokens.at(tokenNumber);
+      if (currentCommandToken.at(0) == PARAMETER_VALUES_DELIMITER)
       {
         if (!parameterValue.empty())
         {
           commandParameters.insert({parameterName, parameterValue});
           parameterValue.clear();
         }
-        if (commandTokens.at(tokenNumber).at(1) == '-')
-          parameterName = commandTokens.at(tokenNumber).substr(2);
-        else
-          parameterName = commandTokens.at(tokenNumber).substr(1);
+        parameterName = GetParameterNameAfterDelimiter(currentCommandToken, PARAMETER_VALUES_DELIMITER);
       }
       else
       {
-        std::string parameter = commandTokens.at(tokenNumber);
-        if (parameter.at(0) == '\"')
+        if (currentCommandToken.at(0) == '\"')
         {
-          parameter = parameter.substr(1, parameter.size() - 1);
+          currentCommandToken = currentCommandToken.substr(1, currentCommandToken.size() - 1);
         }
-        parameterValue.push_back(parameter);
+        parameterValue.push_back(currentCommandToken);
       }
-
     }
+
     if (!parameterName.empty())
       commandParameters.insert({parameterName, parameterValue});
 
+    insertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);
+
+    return commandParameters;
+  }
+
+  static std::string GetParameterNameAfterDelimiter(std::string const & currentCommandToken, char const parameterDelimiter)
+  {
+    if (currentCommandToken.at(1) == parameterDelimiter)
+      return currentCommandToken.substr(2);
+    else
+      return currentCommandToken.substr(1);
+  }
+
+  static void insertParametersWithoutValues(
+      CommandParameters & commandParameters,
+      std::vector<std::string> const & commandTokens,
+      char const parameterDelimiter)
+  {
+    std::string parameterName;
     std::vector<std::string> commandParametersName;
+
     for (auto & it : commandParameters)
     {
       commandParametersName.push_back(it.first);
@@ -84,7 +106,7 @@ protected:
 
     for (std::string const & commandToken : commandTokens)
     {
-      parameterName = GetParameterName(commandToken);
+      parameterName = GetParameterName(commandToken, parameterDelimiter);
       if (!parameterName.empty())
       {
         if (std::find(std::begin(commandParametersName), std::end(commandParametersName), parameterName) ==
@@ -92,19 +114,14 @@ protected:
           commandParameters.insert({parameterName, {}});
       }
     }
-
-    return commandParameters;
   }
 
-  static std::string GetParameterName(std::string const & commandToken)
+  static std::string GetParameterName(std::string const & commandToken, char const parameterDelimiter)
   {
     std::string parameterName;
-    if (commandToken.at(0) == '-')
+    if (commandToken.at(0) == parameterDelimiter)
     {
-      if (commandToken.at(1) == '-')
-        parameterName = commandToken.substr(2);
-      else
-        parameterName = commandToken.substr(1);
+      parameterName = GetParameterNameAfterDelimiter(commandToken, parameterDelimiter);
     }
 
     return parameterName;
@@ -121,7 +138,6 @@ protected:
     {
       std::smatch const & match = *i;
       std::string matchStr = match.str();
-      std::cout << matchStr << '\n';
       result.push_back(matchStr);
     }
 

@@ -14,13 +14,13 @@ extern "C"
 #include "sc-core/sc-store/sc-fs-storage/sc_file_system.h"
 }
 
+#include "sc-memory/sc_scs_helper.hpp"
+#include "../sc-builder/src/scs_loader.hpp"
+
 #include "repos_downloader.hpp"
 #include "repos_downloader_git.hpp"
 #include "repos_downloader_google_drive.hpp"
 #include "../../keynodes/ScComponentManagerKeynodes.hpp"
-
-#include "sc-memory/sc_scs_helper.hpp"
-#include "../sc-builder/src/scs_loader.hpp"
 
 class ReposDownloaderHandler
 {
@@ -33,25 +33,17 @@ public:
   {
     sc_fs_mkdirs(specificationsPath.c_str());
 
-    std::stringstream specificationDirNameStream;
-    std::string specificationDirName;
-
     for (auto const & it : m_downloaders)
     {
       if (componentPath.find(it.first) != std::string::npos)
       {
-        size_t componentDirNameIndex = componentPath.rfind('/');
-        std::string componentDirName = componentPath.substr(componentDirNameIndex);
-        specificationDirNameStream << specificationsPath << componentDirName;
-        specificationDirName = specificationDirNameStream.str();
-        sc_fs_mkdirs(specificationDirName.c_str());
-
         ReposDownloader * downloader = it.second;
-        downloader->Download(componentPath, specificationDirName, false);
+        Download(componentPath, specificationsPath, downloader, false);
         break;
       }
     }
 
+    std::string specificationDirName = GetSpecificationDirName(componentPath, specificationsPath);
     AddComponentToSet(context, specificationDirName, componentsSet);
   }
 
@@ -65,14 +57,8 @@ public:
     {
       if (repositoryPath.find(it.first) != std::string::npos)
       {
-        size_t repositoryDirNameIndex = repositoryPath.rfind('/');
-        std::string repositoryDirName = repositoryPath.substr(repositoryDirNameIndex);
-        specificationDirName << specificationsPath << repositoryDirName;
-
-        sc_fs_mkdirs(specificationDirName.str().c_str());
-
         ReposDownloader * downloader = it.second;
-        downloader->Download(repositoryPath, specificationDirName.str(), true);
+        Download(repositoryPath, specificationsPath, downloader, true);
         specificationsPath = specificationDirName.str();
         break;
       }
@@ -86,9 +72,32 @@ public:
   }
 
 protected:
+  static char const DIRECTORY_DELIMITER = '/';
   std::map<std::string, ReposDownloader *> m_downloaders = {
       {GitHubConstants::GITHUB_PREFIX, new ReposDownloaderGit()},
       {GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive()}};
+
+  static void Download(
+      std::string const & path,
+      std::string & specificationsPath,
+      ReposDownloader * downloader,
+      bool isRepository)
+  {
+    std::stringstream specificationDirNameStream;
+    std::string specificationDirName = GetSpecificationDirName(path, specificationsPath);
+    sc_fs_mkdirs(specificationDirName.c_str());
+
+    downloader->Download(path, specificationDirName, isRepository);
+  }
+
+  static std::string GetSpecificationDirName(std::string const & componentPath, std::string & specificationsPath)
+  {
+    std::stringstream specificationDirNameStream;
+    size_t componentDirNameIndex = componentPath.rfind(DIRECTORY_DELIMITER);
+    std::string componentDirName = componentPath.substr(componentDirNameIndex);
+    specificationDirNameStream << specificationsPath << componentDirName;
+    return specificationDirNameStream.str();
+  }
 
   static void AddComponentToSet(
       ScMemoryContext * context,
@@ -96,7 +105,7 @@ protected:
       ScAddr const & componentsSet)
   {
     std::stringstream pathStream;
-    pathStream << specificationDirName << '/' << SpecificationConstants::SPECIFICATION_FILENAME;
+    pathStream << specificationDirName << DIRECTORY_DELIMITER << SpecificationConstants::SPECIFICATION_FILENAME;
 
     // TODO: Check if component exists, not load
     ScsLoader loader;

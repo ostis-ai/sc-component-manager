@@ -4,7 +4,7 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include "sc_component_manager_test.hpp"
 
@@ -15,7 +15,7 @@ TEST_F(ScComponentManagerParserTest, ParseReposFile)
 {
   m_reposParser->Parse(REPOS_PATH "/test_repos.txt");
 
-  std::vector<std::string> repositories = {"https://github.com/MksmOrlov/components-repo-example/repos.txt"};
+  std::vector<std::string> repositories = {"https://github.com/MksmOrlov/components-repo-example"};
   std::vector<std::string> components = {
       "https://github.com/MksmOrlov/cat-kb-component",
       "https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing"};
@@ -27,7 +27,4 @@ TEST_F(ScComponentManagerParserTest, ParseReposFile)
   EXPECT_TRUE(parsedComponents.size() == 2);
   EXPECT_EQ(parsedRepositories, repositories);
   EXPECT_EQ(parsedComponents, components);
-  //
-  //  ReposDownloaderHandler handler;
-  //  handler.Handle("https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing");
 }

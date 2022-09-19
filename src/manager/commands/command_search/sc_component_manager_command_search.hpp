@@ -19,10 +19,8 @@ public:
 
   ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override
   {
-    //
     for (auto const & param : commandParameters)
     {
-      std::cout << "Param type: " << param.first << "\nParam value: ";
       if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first) ==
           possibleSearchParameters.cend())
       {
@@ -30,13 +28,7 @@ public:
             utils::ExceptionParseError,
             "ScComponentManagerCommandSearch: Unsupported search parameter " << param.first);
       }
-      for (std::string const & val : param.second)
-      {
-        std::cout << val << " ";
-      }
-      std::cout << '\n';
     }
-    // remove debug
 
     ScTemplate searchComponentTemplate;
     ScTemplateSearchResult searchComponentResult;
@@ -47,21 +39,18 @@ public:
 
     if (commandParameters.find(AUTHOR) != commandParameters.cend())
     {
-      std::cout << "Find by author\n";
       std::vector<std::string> const & parameters = commandParameters.at(AUTHOR);
       SearchComponentsByAuthor(context, searchComponentTemplate, parameters);
     }
 
     if (commandParameters.find(CLASS) != commandParameters.cend())
     {
-      std::cout << "Find by class\n";
       SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
     }
 
     ScAddrVector links;
     if (commandParameters.find(EXPLANATION) != commandParameters.cend())
     {
-      std::cout << "Find by explanation\n";
       links = SearchComponentsByExplanation(context, searchComponentTemplate, commandParameters.at(EXPLANATION));
     }
 
@@ -107,7 +96,6 @@ protected:
         searchComponentTemplate.Clear();
         break;
       }
-      std::cout << "Found author: " << context->HelperGetSystemIdtf(authorAddr) << std::endl;
       searchComponentTemplate.Triple(AUTHORS_SET_ALIAS, ScType::EdgeAccessVarPosPerm, authorAddr);
     }
   }
@@ -125,7 +113,6 @@ protected:
         searchComponentTemplate.Clear();
         break;
       }
-      std::cout << "Found class: " << context->HelperGetSystemIdtf(classAddr) << std::endl;
       searchComponentTemplate.Triple(classAddr, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
     }
   }

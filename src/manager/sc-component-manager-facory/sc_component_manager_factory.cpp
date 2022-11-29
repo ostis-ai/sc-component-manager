@@ -9,7 +9,7 @@
 
 std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScComponentManager(
     ScParams const & scComponentManagerParams,
-    sc_memory_params memoryParams)
+    sc_memory_params const & memoryParams)
 {
   std::string const REPOS_PATH = "repos_path";
   std::string const SPECIFICATIONS_PATH = "specifications_path";

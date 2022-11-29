@@ -13,6 +13,6 @@ class ScComponentManagerFactory
 {
 public:
   static std::unique_ptr<ScComponentManager> ConfigureScComponentManager(
-      const ScParams & scComponentManagerParams,
-      sc_memory_params memoryParams);
+      ScParams const & scComponentManagerParams,
+      sc_memory_params const & memoryParams);
 };

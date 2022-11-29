@@ -35,9 +35,7 @@ public:
           "\"" + command + "\" is not a command. Maybe you mean " + COMPONENTS_COMMAND_PREFIX + "?");
 
     parsedCommand.first = commandTokens.at(1);
-
     CommandParameters commandParameters = GetCommandParameters(commandTokens);
-
     parsedCommand.second = commandParameters;
 
     return parsedCommand;
@@ -78,7 +76,7 @@ protected:
     if (!parameterName.empty())
       commandParameters.insert({parameterName, parameterValue});
 
-    insertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);
+    InsertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);
 
     return commandParameters;
   }
@@ -91,7 +89,7 @@ protected:
       return currentCommandToken.substr(1);
   }
 
-  static void insertParametersWithoutValues(
+  static void InsertParametersWithoutValues(
       CommandParameters & commandParameters,
       std::vector<std::string> const & commandTokens,
       char const parameterDelimiter)

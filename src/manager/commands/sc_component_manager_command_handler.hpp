@@ -32,12 +32,12 @@ public:
     if (it != m_actions.end())
     {
       ScComponentManagerCommand * commander = it->second;
-      std::cout << "ScComponentManagerCommandHandler: execute " + it->first + " command\n";
+      SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
       executionResult = commander->Execute(m_context, m_commandParameters);
     }
     else
     {
-      executionResult = {"Unsupported command type: \"" + commandType + "\""};
+      SC_THROW_EXCEPTION(utils::ExceptionParseError, "Unsupported command type \"" + commandType + "\"");
     }
 
     return executionResult;

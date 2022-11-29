@@ -12,7 +12,7 @@ ExecutionResult ScComponentManagerImpl::Emit(std::string const & command)
   std::pair<std::string, CommandParameters> parsed = ScComponentManagerParser::Parse(command);
   ExecutionResult executionResult = m_handler->Handle(parsed.first, parsed.second);
 
-  std::cout << "ScComponentManagerImpl: execution result size is " + std::to_string(executionResult.size()) + "\n";
+  SC_LOG_DEBUG("ScComponentManagerImpl: execution result size is " + std::to_string(executionResult.size()));
   // call formatter to format result
 
   return executionResult;
@@ -22,6 +22,6 @@ void ScComponentManagerImpl::DisplayResult(ExecutionResult const & executionResu
 {
   for (std::string const & resultItem : executionResult)
   {
-    std::cout << resultItem << std::endl;
+    SC_LOG_DEBUG(resultItem);
   }
 }

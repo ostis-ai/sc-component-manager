@@ -24,12 +24,12 @@ public:
   {
     ExecutionResult executionResult;
 
-    ProcessRepositories(context, m_reposPath, m_specificationsPath);
+    ProcessRepositories(context, m_reposPath, m_specificationsPath, executionResult);
 
     return executionResult;
   }
 
-  void ProcessRepositories(ScMemoryContext * context, std::string & reposPath, std::string & specificationsPath)
+  void ProcessRepositories(ScMemoryContext * context, std::string & reposPath, std::string & specificationsPath, ExecutionResult & executionResult)
   {
     ReposParser parser;
     parser.Parse(reposPath);
@@ -58,6 +58,7 @@ public:
     std::vector<std::string> const parsedComponents = parser.GetComponents();
     for (std::string const & componentPath : parsedComponents)
     {
+      executionResult.push_back(componentPath);
       downloaderHandler.HandleComponents(context, componentPath, specificationsPath, componentsSetAddr);
     }
 
@@ -68,7 +69,7 @@ public:
       std::stringstream reposPathStream;
       reposPathStream << specificationsPath << "/" << SpecificationConstants::REPOS_FILENAME;
       reposPath = reposPathStream.str();
-      ProcessRepositories(context, reposPath, specificationsPath);
+      ProcessRepositories(context, reposPath, specificationsPath, executionResult);
     }
   }
 

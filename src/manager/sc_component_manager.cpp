@@ -20,11 +20,10 @@ void ScComponentManager::Run()
 
 void ScComponentManager::Start()
 {
-  std::string const EXIT_COMMAND = "exit";
   std::string command;
   do
   {
-    std::cout << "ScComponentManager: Enter command\n";
+    SC_LOG_DEBUG("ScComponentManager: Enter command");
     getline(std::cin, command);
 
     try
@@ -34,10 +33,9 @@ void ScComponentManager::Start()
     }
     catch (utils::ScException const & exception)
     {
-      std::cout << exception.Description();
-      SC_LOG_ERROR(exception.Description());
+      SC_LOG_ERROR(exception.Message());
     }
-  } while (m_isRunning && command != EXIT_COMMAND && !command.empty());
+  } while (m_isRunning);
 }
 
 void ScComponentManager::Stop()

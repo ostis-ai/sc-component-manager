@@ -31,8 +31,8 @@ public:
   SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_components;
 
-  SC_PROPERTY(Keynode("nrel_author"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr nrel_author;
+  SC_PROPERTY(Keynode("nrel_authors"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr nrel_authors;
 
   SC_PROPERTY(Keynode("nrel_explanation"), ForceCreate(ScType::NodeConstRole))
   static ScAddr nrel_explanation;

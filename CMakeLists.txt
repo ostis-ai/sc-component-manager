@@ -20,7 +20,7 @@ add_executable(
 add_library(sc-component-manager-lib SHARED ${SOURCES})
 
 include_directories(${GLIB2_INCLUDE_DIRS} ${SC_COMPONENT_MANAGER_ROOT}/../sc-config-utils)
-target_link_libraries(sc-component-manager-lib sc-memory sc-agents-common sc-builder-lib)
+target_link_libraries(sc-component-manager-lib sc-memory sc-agents-common sc-builder-lib sc-agents-common)
 add_dependencies(sc-component-manager-lib sc-code-generator)
 
 target_link_libraries(sc-component-manager sc-component-manager-lib sc-config-utils)

@@ -36,6 +36,9 @@ public:
 
   SC_PROPERTY(Keynode("nrel_explanation"), ForceCreate(ScType::NodeConstRole))
   static ScAddr nrel_explanation;
+
+  SC_PROPERTY(Keynode("nrel_component_address"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr nrel_component_address;
 };
 
 }  // namespace keynodes

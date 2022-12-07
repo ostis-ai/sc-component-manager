@@ -36,7 +36,7 @@ ExecutionResult ScComponentManagerCommandSearch::Execute(ScMemoryContext * conte
   {
     SearchComponentsByRelationSet(
         context,
-        keynodes::ScComponentManagerKeynodes::nrel_author,
+        keynodes::ScComponentManagerKeynodes::nrel_authors,
         AUTHORS_SET_ALIAS,
         searchComponentTemplate,
         commandParameters.at(AUTHOR));

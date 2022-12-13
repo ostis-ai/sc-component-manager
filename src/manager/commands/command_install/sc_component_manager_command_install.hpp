@@ -17,6 +17,11 @@ public:
   ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
 protected:
-  std::string const PARAMETER_NAME = "idtf";
+  static std::string GetComponentAddress(ScMemoryContext * context, ScAddr const & componentAddr);
 
+  static ScAddrVector GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  static ScAddr GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  std::string const PARAMETER_NAME = "idtf";
 };

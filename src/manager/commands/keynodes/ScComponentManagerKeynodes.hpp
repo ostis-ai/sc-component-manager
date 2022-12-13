@@ -39,6 +39,12 @@ public:
 
   SC_PROPERTY(Keynode("nrel_component_address"), ForceCreate(ScType::NodeConstRole))
   static ScAddr nrel_component_address;
+
+  SC_PROPERTY(Keynode("nrel_component_dependencies"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr nrel_component_dependencies;
+
+  SC_PROPERTY(Keynode("nrel_installation_method"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr nrel_installation_method;
 };
 
 }  // namespace keynodes

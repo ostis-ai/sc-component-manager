@@ -8,7 +8,9 @@
 
 #include "sc_component_manager_command_search.hpp"
 
-ExecutionResult ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
+ExecutionResult ScComponentManagerCommandSearch::Execute(
+    ScMemoryContext * context,
+    CommandParameters const & commandParameters)
 {
   for (auto const & param : commandParameters)
   {
@@ -16,8 +18,7 @@ ExecutionResult ScComponentManagerCommandSearch::Execute(ScMemoryContext * conte
         possibleSearchParameters.cend())
     {
       SC_THROW_EXCEPTION(
-          utils::ExceptionParseError,
-          "ScComponentManagerCommandSearch: Unsupported search parameter " << param.first);
+          utils::ExceptionParseError, "ScComponentManagerCommandSearch: Unsupported search parameter " << param.first);
     }
   }
 

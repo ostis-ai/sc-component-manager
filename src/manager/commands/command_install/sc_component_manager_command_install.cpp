@@ -12,6 +12,11 @@
 
 #include "src/manager/commands/command_init/constants/command_init_constants.hpp"
 
+ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string specificationsPath) :
+m_specificationsPath(std::move(specificationsPath))
+{
+}
+
 ExecutionResult ScComponentManagerCommandInstall::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
@@ -77,10 +82,20 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
     if (componentAddress.find(GitHubConstants::GITHUB_PREFIX) != std::string::npos)
     {
       SC_LOG_WARNING("found github address");
-      // TODO(MksmOrlov): get path from config
+      struct stat sb{};
+      size_t componentDirNameIndex = componentAddress.rfind('/');
+      std::string componentDirName = m_specificationsPath + componentAddress.substr(componentDirNameIndex);
+      while (stat(componentDirName.c_str(), &sb) == 0)
+      {
+        componentDirName += componentAddress.substr(componentDirNameIndex);
+      }
+      sc_fs_mkdirs(componentDirName.c_str());
+
       ScExec exec{
-          {"cd", "/home/mqsm/OSTIS/ostis-web-platform/ims.ostis.kb/ims/library", "&&", "git clone ", componentAddress}};
+            {"cd", componentDirName, "&&", "git clone ", componentAddress}};
     }
+
+    // Interpret installation method
   }
 
   return result;

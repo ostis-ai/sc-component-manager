@@ -20,10 +20,9 @@ public:
   {
     char const DIRECTORY_DELIMITER = '/';
     std::string pathPostfix = isRepository ? DIRECTORY_DELIMITER + SpecificationConstants::REPOS_FILENAME
-                                            : DIRECTORY_DELIMITER + SpecificationConstants::SPECIFICATION_FILENAME;
+                                           : DIRECTORY_DELIMITER + SpecificationConstants::SPECIFICATION_FILENAME;
 
     ScExec exec{
-        {"cd", specificationsPath, "&&", "svn", "export", componentPath + GitHubConstants::SVN_TRUNK + pathPostfix}
-    };
+        {"cd", specificationsPath, "&&", "svn", "export", componentPath + GitHubConstants::SVN_TRUNK + pathPostfix}};
   }
 };

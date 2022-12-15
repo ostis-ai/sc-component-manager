@@ -29,7 +29,11 @@ public:
     return executionResult;
   }
 
-  void ProcessRepositories(ScMemoryContext * context, std::string & reposPath, std::string & specificationsPath, ExecutionResult & executionResult)
+  void ProcessRepositories(
+      ScMemoryContext * context,
+      std::string & reposPath,
+      std::string & specificationsPath,
+      ExecutionResult & executionResult)
   {
     ReposParser parser;
     parser.Parse(reposPath);

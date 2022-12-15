@@ -65,5 +65,5 @@ protected:
   std::map<std::string, ScComponentManagerCommand *> m_actions = {
       {"init", new ScComponentManagerCommandInit(m_reposPath, m_specificationsPath)},
       {"search", new ScComponentManagerCommandSearch()},
-      {"install", new ScComponentManagerCommandInstall()}};
+      {"install", new ScComponentManagerCommandInstall(m_specificationsPath)}};
 };

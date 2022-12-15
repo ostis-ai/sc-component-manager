@@ -12,6 +12,7 @@
 #include "sc_component_manager_command.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
 #include "src/manager/commands/command_search/sc_component_manager_command_search.hpp"
+#include "src/manager/commands/command_install/sc_component_manager_command_install.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {
@@ -63,5 +64,6 @@ protected:
 
   std::map<std::string, ScComponentManagerCommand *> m_actions = {
       {"init", new ScComponentManagerCommandInit(m_reposPath, m_specificationsPath)},
-      {"search", new ScComponentManagerCommandSearch()}};
+      {"search", new ScComponentManagerCommandSearch()},
+      {"install", new ScComponentManagerCommandInstall(m_specificationsPath)}};
 };

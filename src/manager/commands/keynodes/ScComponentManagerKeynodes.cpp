@@ -16,5 +16,8 @@ ScAddr ScComponentManagerKeynodes::rrel_repositories;
 ScAddr ScComponentManagerKeynodes::rrel_components;
 ScAddr ScComponentManagerKeynodes::nrel_authors;
 ScAddr ScComponentManagerKeynodes::nrel_explanation;
+ScAddr ScComponentManagerKeynodes::nrel_component_address;
+ScAddr ScComponentManagerKeynodes::nrel_component_dependencies;
+ScAddr ScComponentManagerKeynodes::nrel_installation_method;
 
 }  // namespace keynodes

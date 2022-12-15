@@ -81,7 +81,9 @@ protected:
     return commandParameters;
   }
 
-  static std::string GetParameterNameAfterDelimiter(std::string const & currentCommandToken, char const parameterDelimiter)
+  static std::string GetParameterNameAfterDelimiter(
+      std::string const & currentCommandToken,
+      char const parameterDelimiter)
   {
     if (currentCommandToken.at(1) == parameterDelimiter)
       return currentCommandToken.substr(2);

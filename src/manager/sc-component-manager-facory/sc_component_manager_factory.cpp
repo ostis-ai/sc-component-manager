@@ -24,4 +24,6 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
   {
     SC_LOG_ERROR("ScComponentManagerFactory: ScComponentManager configuration error.");
   }
+
+  return {};
 }

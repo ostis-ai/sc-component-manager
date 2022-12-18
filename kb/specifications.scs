@@ -1,0 +1,12 @@
+sc_component_manager_repository
+	<- concept_repository;
+	-> rrel_components: ..components_addresses;
+	-> rrel_repositories: ..repositories_addresses;;
+
+..components_addresses
+	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/cat-kb-component];; *);
+	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/ui-menu-component];; *);
+	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);;
+
+..repositories_addresses
+	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;

@@ -31,6 +31,9 @@ public:
   SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_components;
 
+  SC_PROPERTY(Keynode("rrel_address"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr rrel_address;
+
   SC_PROPERTY(Keynode("nrel_authors"), ForceCreate(ScType::NodeConstRole))
   static ScAddr nrel_authors;
 

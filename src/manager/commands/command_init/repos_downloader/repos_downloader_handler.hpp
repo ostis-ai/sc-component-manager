@@ -28,8 +28,7 @@ public:
   void HandleComponents(
       ScMemoryContext * context,
       std::string const & componentPath,
-      std::string & specificationsPath,
-      ScAddr const & componentsSet)
+      std::string & specificationsPath)
   {
     sc_fs_mkdirs(specificationsPath.c_str());
 
@@ -44,7 +43,10 @@ public:
     }
 
     std::string specificationDirName = GetSpecificationDirName(componentPath, specificationsPath);
-    AddComponentToSet(context, specificationDirName, componentsSet);
+    ScsLoader loader;
+    std::stringstream pathStream;
+    pathStream << specificationDirName << DIRECTORY_DELIMITER << SpecificationConstants::SPECIFICATION_FILENAME;
+    loader.loadScsFile(*context, pathStream.str());
   }
 
   void HandleRepositories(std::string const & repositoryPath, std::string & specificationsPath)
@@ -99,32 +101,4 @@ protected:
     return specificationDirNameStream.str();
   }
 
-  static void AddComponentToSet(
-      ScMemoryContext * context,
-      std::string const & specificationDirName,
-      ScAddr const & componentsSet)
-  {
-    std::stringstream pathStream;
-    pathStream << specificationDirName << DIRECTORY_DELIMITER << SpecificationConstants::SPECIFICATION_FILENAME;
-
-    // TODO: Check if component exists, not load
-    ScsLoader loader;
-    loader.loadScsFile(*context, pathStream.str());
-
-    ScIterator3Ptr reusableComponentIterator = context->Iterator3(
-        keynodes::ScComponentManagerKeynodes::concept_reusable_component,
-        ScType::EdgeAccessConstPosPerm,
-        ScType::NodeConst);
-
-    if (reusableComponentIterator->Next())
-    {
-      context->CreateEdge(ScType::EdgeAccessConstPosPerm, componentsSet, reusableComponentIterator->Get(2));
-    }
-    else  // TODO: check this throw
-    {
-      SC_THROW_EXCEPTION(
-          utils::ExceptionItemNotFound,
-          "Incorrect component specification. Reusable component not found in " + specificationDirName);
-    }
-  }
 };

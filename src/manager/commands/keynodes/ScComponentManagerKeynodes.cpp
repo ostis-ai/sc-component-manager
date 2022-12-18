@@ -14,6 +14,7 @@ ScAddr ScComponentManagerKeynodes::concept_reusable_component;
 ScAddr ScComponentManagerKeynodes::concept_repository;
 ScAddr ScComponentManagerKeynodes::rrel_repositories;
 ScAddr ScComponentManagerKeynodes::rrel_components;
+ScAddr ScComponentManagerKeynodes::rrel_address;
 ScAddr ScComponentManagerKeynodes::nrel_authors;
 ScAddr ScComponentManagerKeynodes::nrel_explanation;
 ScAddr ScComponentManagerKeynodes::nrel_component_address;

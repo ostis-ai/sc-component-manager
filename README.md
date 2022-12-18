@@ -16,21 +16,27 @@
 File repos.txt Contains of two sections: [components] and [repositories].
 [repositories] are links for source (GitHub, google drive etc.) with repos.txt file, [components] are links to source with specification.txt file of component.
 
-Example of repository (repos.txt file)
+Example of repository (specifications.scs file)
 
-```txt
-[repositories]
-https://github.com/MksmOrlov/components-repo-example
+```scs
+sc_component_manager_repository
+	<- concept_repository;
+	-> rrel_components: ..components_addresses;
+	-> rrel_repositories: ..repositories_addresses;;
 
-[components]
-https://github.com/MksmOrlov/cat-kb-component
-https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing
+..components_addresses
+	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/cat-kb-component];; *);
+	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/ui-menu-component];; *);
+	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);;
+
+..repositories_addresses
+	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;
 ```
 
 ## Specification file
 Example of components specification (specification.scs file)
 
-``` scs
+```scs
 cat_specification
     <- concept_reusable_component_specification;;
 

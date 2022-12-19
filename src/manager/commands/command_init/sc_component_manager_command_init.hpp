@@ -10,7 +10,6 @@
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/repos_parser/repos_parser.hpp"
 #include "src/manager/commands/command_init/repos_downloader/repos_downloader.hpp"
 #include "src/manager/commands/command_init/repos_downloader/repos_downloader_handler.hpp"
 
@@ -49,15 +48,15 @@ public:
           keynodes::ScComponentManagerKeynodes::concept_repository,
           ScType::NodeConst);
 
-    if (availableRepositories == processedRepositories)
-    {
-      SC_LOG_WARNING("return;");
-      return;
-    }
+//    TODO(MksmOrlov): implement recursion break condition
+//    if (availableRepositories == processedRepositories)
+//    {
+//      SC_LOG_WARNING("return;");
+//      return;
+//    }
 
     for (ScAddr const & repository : availableRepositories)
     {
-      SC_LOG_WARNING("Handle repository " + context->HelperGetSystemIdtf(repository));
       repositoriesLinks = GetRepositoryAddresses(
             context,
             repository,
@@ -71,6 +70,7 @@ public:
       repositoryItems.second.insert(componentsLinks.cbegin(), componentsLinks.cend());
     }
 
+//    TODO(MksmOrlov): implement recursion to handle repositories
 //    for (std::string const & repositoryLink : repositoriesLinks)
 //    {
 //      downloaderHandler.HandleRepositories(repositoryLink, specificationsPath);
@@ -80,7 +80,6 @@ public:
 
     for (std::string const & componentLink : componentsLinks)
     {
-      SC_LOG_WARNING("Handle component " + componentLink);
       downloaderHandler.HandleComponents(context, componentLink, specificationsPath);
     }
   }

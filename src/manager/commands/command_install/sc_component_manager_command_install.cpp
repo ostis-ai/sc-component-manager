@@ -81,7 +81,6 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
 
     if (componentAddress.find(GitHubConstants::GITHUB_PREFIX) != std::string::npos)
     {
-      SC_LOG_WARNING("found github address");
       struct stat sb{};
       size_t componentDirNameIndex = componentAddress.rfind('/');
       std::string componentDirName = m_specificationsPath + componentAddress.substr(componentDirNameIndex);
@@ -93,6 +92,24 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
 
       ScExec exec{
             {"cd", componentDirName, "&&", "git clone ", componentAddress}};
+
+      ScsLoader loader;
+      DIR *dir;
+      struct dirent *diread;
+      componentDirName += componentAddress.substr(componentDirNameIndex);
+      if ((dir = opendir(componentDirName.c_str())) != nullptr)
+      {
+        while ((diread = readdir(dir)) != nullptr)
+        {
+          std::string filename = diread->d_name;
+          if (filename.rfind(".scs") != std::string::npos)
+          {
+            loader.loadScsFile(*context, componentDirName + "/" + filename);
+          }
+        }
+        closedir(dir);
+      }
+
     }
 
     // Interpret installation method

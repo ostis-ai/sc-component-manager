@@ -26,79 +26,26 @@ class ReposDownloaderHandler
 {
 public:
   void HandleComponents(
-      ScMemoryContext * context,
-      std::string const & componentPath,
-      std::string & specificationsPath)
-  {
-    sc_fs_mkdirs(specificationsPath.c_str());
+        ScMemoryContext * context,
+        std::string const & componentPath,
+        std::string & specificationsPath);
 
-    for (auto const & it : m_downloaders)
-    {
-      if (componentPath.find(it.first) != std::string::npos)
-      {
-        ReposDownloader * downloader = it.second;
-        Download(componentPath, specificationsPath, downloader, false);
-        break;
-      }
-    }
+  void HandleRepositories(std::string const & repositoryPath, std::string & specificationsPath);
 
-    std::string specificationDirName = GetSpecificationDirName(componentPath, specificationsPath);
-    ScsLoader loader;
-    std::stringstream pathStream;
-    pathStream << specificationDirName << DIRECTORY_DELIMITER << SpecificationConstants::SPECIFICATION_FILENAME;
-    loader.loadScsFile(*context, pathStream.str());
-  }
-
-  void HandleRepositories(std::string const & repositoryPath, std::string & specificationsPath)
-  {
-    sc_fs_mkdirs(specificationsPath.c_str());
-
-    std::stringstream specificationDirName;
-
-    for (auto const & it : m_downloaders)
-    {
-      if (repositoryPath.find(it.first) != std::string::npos)
-      {
-        ReposDownloader * downloader = it.second;
-        Download(repositoryPath, specificationsPath, downloader, true);
-        specificationsPath = specificationDirName.str();
-        break;
-      }
-    }
-  }
-
-  ~ReposDownloaderHandler()
-  {
-    for (auto const & it : m_downloaders)
-      delete it.second;
-  }
+  ~ReposDownloaderHandler();
 
 protected:
   static char const DIRECTORY_DELIMITER = '/';
   std::map<std::string, ReposDownloader *> m_downloaders = {
-      {GitHubConstants::GITHUB_PREFIX, new ReposDownloaderGit()},
-      {GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive()}};
+        { GitHubConstants::GITHUB_PREFIX,            new ReposDownloaderGit() },
+        { GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive() }};
 
   static void Download(
-      std::string const & path,
-      std::string & specificationsPath,
-      ReposDownloader * downloader,
-      bool isRepository)
-  {
-    std::stringstream specificationDirNameStream;
-    std::string specificationDirName = GetSpecificationDirName(path, specificationsPath);
-    sc_fs_mkdirs(specificationDirName.c_str());
+        std::string const & path,
+        std::string & specificationsPath,
+        ReposDownloader * downloader,
+        bool isRepository);
 
-    downloader->Download(path, specificationDirName, isRepository);
-  }
-
-  static std::string GetSpecificationDirName(std::string const & componentPath, std::string & specificationsPath)
-  {
-    std::stringstream specificationDirNameStream;
-    size_t componentDirNameIndex = componentPath.rfind(DIRECTORY_DELIMITER);
-    std::string componentDirName = componentPath.substr(componentDirNameIndex);
-    specificationDirNameStream << specificationsPath << componentDirName;
-    return specificationDirNameStream.str();
-  }
+  static std::string GetSpecificationDirName(std::string const & componentPath, std::string & specificationsPath);
 
 };

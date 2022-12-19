@@ -6,8 +6,10 @@
 
 #pragma once
 
+#include <dirent.h>
 #include <sys/stat.h>
-#include <filesystem>
+
+#include "../sc-builder/src/scs_loader.hpp"
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
 #include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"

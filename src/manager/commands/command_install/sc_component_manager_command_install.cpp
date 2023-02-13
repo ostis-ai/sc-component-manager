@@ -12,8 +12,8 @@
 
 #include "src/manager/commands/command_init/constants/command_init_constants.hpp"
 
-ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string specificationsPath) :
-m_specificationsPath(std::move(specificationsPath))
+ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string specificationsPath)
+  : m_specificationsPath(std::move(specificationsPath))
 {
 }
 
@@ -81,7 +81,9 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
 
     if (componentAddress.find(GitHubConstants::GITHUB_PREFIX) != std::string::npos)
     {
-      struct stat sb{};
+      struct stat sb
+      {
+      };
       size_t componentDirNameIndex = componentAddress.rfind('/');
       std::string componentDirName = m_specificationsPath + componentAddress.substr(componentDirNameIndex);
       while (stat(componentDirName.c_str(), &sb) == 0)
@@ -90,12 +92,11 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
       }
       sc_fs_mkdirs(componentDirName.c_str());
 
-      ScExec exec{
-            {"cd", componentDirName, "&&", "git clone ", componentAddress}};
+      ScExec exec{{"cd", componentDirName, "&&", "git clone ", componentAddress}};
 
       ScsLoader loader;
-      DIR *dir;
-      struct dirent *diread;
+      DIR * dir;
+      struct dirent * diread;
       componentDirName += componentAddress.substr(componentDirNameIndex);
       if ((dir = opendir(componentDirName.c_str())) != nullptr)
       {
@@ -109,7 +110,6 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
         }
         closedir(dir);
       }
-
     }
 
     // Interpret installation method

@@ -67,7 +67,9 @@ void ReposDownloaderHandler::Download(
   downloader->Download(path, specificationDirName, isRepository);
 }
 
-std::string ReposDownloaderHandler::GetSpecificationDirName(std::string const & componentPath, std::string & specificationsPath)
+std::string ReposDownloaderHandler::GetSpecificationDirName(
+    std::string const & componentPath,
+    std::string & specificationsPath)
 {
   std::stringstream specificationDirNameStream;
   size_t componentDirNameIndex = componentPath.rfind(DIRECTORY_DELIMITER);
@@ -75,4 +77,3 @@ std::string ReposDownloaderHandler::GetSpecificationDirName(std::string const & 
   specificationDirNameStream << specificationsPath << componentDirName;
   return specificationDirNameStream.str();
 }
-

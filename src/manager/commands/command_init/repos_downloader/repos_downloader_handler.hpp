@@ -15,7 +15,6 @@ extern "C"
 }
 
 #include "sc-memory/sc_scs_helper.hpp"
-#include "../sc-builder/src/scs_loader.hpp"
 
 #include "repos_downloader.hpp"
 #include "repos_downloader_git.hpp"

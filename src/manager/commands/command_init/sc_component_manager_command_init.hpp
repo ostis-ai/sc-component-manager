@@ -17,7 +17,7 @@ class ScComponentManagerCommandInit : public ScComponentManagerCommand
 {
 public:
   explicit ScComponentManagerCommandInit(std::string specificationsPath)
-        : m_specificationsPath(std::move(specificationsPath))
+    : m_specificationsPath(std::move(specificationsPath))
   {
   }
 
@@ -34,49 +34,43 @@ public:
   }
 
   void ProcessRepositories(
-        ScMemoryContext * context,
-        std::string & specificationsPath,
-        std::pair<std::set<std::string>, std::set<std::string>> & repositoryItems,
-        ScAddrVector & processedRepositories)
+      ScMemoryContext * context,
+      std::string & specificationsPath,
+      std::pair<std::set<std::string>, std::set<std::string>> & repositoryItems,
+      ScAddrVector & processedRepositories)
   {
     ReposDownloaderHandler downloaderHandler;
     std::set<std::string> repositoriesLinks;
     std::set<std::string> componentsLinks;
 
     ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
-          context,
-          keynodes::ScComponentManagerKeynodes::concept_repository,
-          ScType::NodeConst);
+        context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
 
-//    TODO(MksmOrlov): implement recursion break condition
-//    if (availableRepositories == processedRepositories)
-//    {
-//      SC_LOG_WARNING("return;");
-//      return;
-//    }
+    //    TODO(MksmOrlov): implement recursion break condition
+    //    if (availableRepositories == processedRepositories)
+    //    {
+    //      SC_LOG_WARNING("return;");
+    //      return;
+    //    }
 
     for (ScAddr const & repository : availableRepositories)
     {
-      repositoriesLinks = GetRepositoryAddresses(
-            context,
-            repository,
-            keynodes::ScComponentManagerKeynodes::rrel_repositories);
-      componentsLinks = GetRepositoryAddresses(
-            context,
-            repository,
-            keynodes::ScComponentManagerKeynodes::rrel_components);
+      repositoriesLinks =
+          GetRepositoryAddresses(context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories);
+      componentsLinks =
+          GetRepositoryAddresses(context, repository, keynodes::ScComponentManagerKeynodes::rrel_components);
 
       repositoryItems.first.insert(repositoriesLinks.cbegin(), repositoriesLinks.cend());
       repositoryItems.second.insert(componentsLinks.cbegin(), componentsLinks.cend());
     }
 
-//    TODO(MksmOrlov): implement recursion to handle repositories
-//    for (std::string const & repositoryLink : repositoriesLinks)
-//    {
-//      downloaderHandler.HandleRepositories(repositoryLink, specificationsPath);
-//
-//      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
-//    }
+    //    TODO(MksmOrlov): implement recursion to handle repositories
+    //    for (std::string const & repositoryLink : repositoriesLinks)
+    //    {
+    //      downloaderHandler.HandleRepositories(repositoryLink, specificationsPath);
+    //
+    //      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
+    //    }
 
     for (std::string const & componentLink : componentsLinks)
     {
@@ -84,32 +78,30 @@ public:
     }
   }
 
-  static std::set<std::string>
-  GetRepositoryAddresses(ScMemoryContext * context, ScAddr repository, ScAddr attributeRelation)
+  static std::set<std::string> GetRepositoryAddresses(
+      ScMemoryContext * context,
+      ScAddr repository,
+      ScAddr attributeRelation)
   {
     std::set<std::string> repositoryAddresses;
     ScIterator5Ptr repositoriesSetIterator = context->Iterator5(
-          repository,
-          ScType::EdgeAccessConstPosPerm,
-          ScType::NodeConst,
-          ScType::EdgeAccessConstPosPerm,
-          attributeRelation);
+        repository,
+        ScType::EdgeAccessConstPosPerm,
+        ScType::NodeConst,
+        ScType::EdgeAccessConstPosPerm,
+        attributeRelation);
 
     if (repositoriesSetIterator->Next())
     {
       ScAddr repositoryItemsSet = repositoriesSetIterator->Get(2);
-      ScIterator3Ptr innerRepositoryItemsIterator = context->Iterator3(
-            repositoryItemsSet,
-            ScType::EdgeAccessConstPosPerm,
-            ScType::NodeConst);
+      ScIterator3Ptr innerRepositoryItemsIterator =
+          context->Iterator3(repositoryItemsSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
       while (innerRepositoryItemsIterator->Next())
       {
         ScAddr innerRepositoryItem = innerRepositoryItemsIterator->Get(2);
         ScAddr repositoryAddress = utils::IteratorUtils::getAnyByOutRelation(
-              context,
-              innerRepositoryItem,
-              keynodes::ScComponentManagerKeynodes::rrel_address);
+            context, innerRepositoryItem, keynodes::ScComponentManagerKeynodes::rrel_address);
 
         if (repositoryAddress.IsValid())
         {

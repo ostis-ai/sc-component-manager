@@ -25,10 +25,7 @@ extern "C"
 class ReposDownloaderHandler
 {
 public:
-  void HandleComponents(
-        ScMemoryContext * context,
-        std::string const & componentPath,
-        std::string & specificationsPath);
+  void HandleComponents(ScMemoryContext * context, std::string const & componentPath, std::string & specificationsPath);
 
   void HandleRepositories(std::string const & repositoryPath, std::string & specificationsPath);
 
@@ -37,15 +34,14 @@ public:
 protected:
   static char const DIRECTORY_DELIMITER = '/';
   std::map<std::string, ReposDownloader *> m_downloaders = {
-        { GitHubConstants::GITHUB_PREFIX,            new ReposDownloaderGit() },
-        { GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive() }};
+      {GitHubConstants::GITHUB_PREFIX, new ReposDownloaderGit()},
+      {GoogleDriveConstants::GOOGLE_DRIVE_PREFIX, new ReposDownloaderGoogleDrive()}};
 
   static void Download(
-        std::string const & path,
-        std::string & specificationsPath,
-        ReposDownloader * downloader,
-        bool isRepository);
+      std::string const & path,
+      std::string & specificationsPath,
+      ReposDownloader * downloader,
+      bool isRepository);
 
   static std::string GetSpecificationDirName(std::string const & componentPath, std::string & specificationsPath);
-
 };

@@ -1,6 +1,0 @@
-[repositories]
-https://github.com/MksmOrlov/components-repo-example
-
-[components]
-https://github.com/MksmOrlov/cat-kb-component
-https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing

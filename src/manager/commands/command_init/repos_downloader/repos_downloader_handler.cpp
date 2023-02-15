@@ -5,6 +5,7 @@
  */
 
 #include "repos_downloader_handler.hpp"
+#include "../sc-builder/src/scs_loader.hpp"
 
 void ReposDownloaderHandler::HandleComponents(
     ScMemoryContext * context,

@@ -7,6 +7,7 @@
 #include "sc_component_manager_command_install.hpp"
 
 #include "sc-memory/utils/sc_exec.hpp"
+#include "../sc-builder/src/scs_loader.hpp"
 #include "sc-agents-common/utils/CommonUtils.hpp"
 #include "sc-agents-common/utils/IteratorUtils.hpp"
 

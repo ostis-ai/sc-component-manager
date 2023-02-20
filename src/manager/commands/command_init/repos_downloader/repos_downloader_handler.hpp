@@ -26,7 +26,7 @@ class ReposDownloaderHandler
 public:
   void HandleComponents(ScMemoryContext * context, std::string const & componentPath, std::string & specificationsPath);
 
-  void HandleRepositories(std::string const & repositoryPath, std::string & specificationsPath);
+  void HandleRepositories(ScMemoryContext * context, std::string const & repositoryPath, std::string & specificationsPath);
 
   ~ReposDownloaderHandler();
 

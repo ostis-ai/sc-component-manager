@@ -24,7 +24,7 @@ public:
   ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override
   {
     std::pair<std::set<std::string>, std::set<std::string>> repositoryItems;
-    ScAddrVector processedRepositories;
+    std::set<ScAddr, ScAddLessFunc> processedRepositories;
     ProcessRepositories(context, m_specificationsPath, repositoryItems, processedRepositories);
 
     ExecutionResult executionResult;
@@ -37,21 +37,21 @@ public:
       ScMemoryContext * context,
       std::string & specificationsPath,
       std::pair<std::set<std::string>, std::set<std::string>> & repositoryItems,
-      ScAddrVector & processedRepositories)
+      std::set<ScAddr, ScAddLessFunc> & processedRepositories)
   {
     ReposDownloaderHandler downloaderHandler;
     std::set<std::string> repositoriesLinks;
     std::set<std::string> componentsLinks;
 
-    ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
-        context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
+    std::set<ScAddr, ScAddLessFunc> availableRepositories;
 
-    //    TODO(MksmOrlov): implement recursion break condition
-    //    if (availableRepositories == processedRepositories)
-    //    {
-    //      SC_LOG_WARNING("return;");
-    //      return;
-    //    }
+    ScAddrVector elementList;
+    ScIterator3Ptr iterator3 = context->Iterator3(
+        keynodes::ScComponentManagerKeynodes::concept_repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    while (iterator3->Next())
+    {
+      availableRepositories.insert(iterator3->Get(2));
+    }
 
     for (ScAddr const & repository : availableRepositories)
     {
@@ -65,12 +65,12 @@ public:
     }
 
     //    TODO(MksmOrlov): implement recursion to handle repositories
-    //    for (std::string const & repositoryLink : repositoriesLinks)
-    //    {
-    //      downloaderHandler.HandleRepositories(repositoryLink, specificationsPath);
-    //
-    //      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
-    //    }
+    for (std::string const & repositoryLink : repositoriesLinks)
+    {
+      downloaderHandler.HandleRepositories(context, repositoryLink, specificationsPath);
+
+      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
+    }
 
     for (std::string const & componentLink : componentsLinks)
     {

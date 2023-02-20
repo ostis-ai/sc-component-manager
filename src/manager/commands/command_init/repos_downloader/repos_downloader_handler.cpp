@@ -31,11 +31,13 @@ void ReposDownloaderHandler::HandleComponents(
   loader.loadScsFile(*context, pathStream.str());
 }
 
-void ReposDownloaderHandler::HandleRepositories(std::string const & repositoryPath, std::string & specificationsPath)
+void ReposDownloaderHandler::HandleRepositories(
+    ScMemoryContext * context,
+    std::string const & repositoryPath,
+    std::string & specificationsPath)
 {
   sc_fs_mkdirs(specificationsPath.c_str());
 
-  std::stringstream specificationDirName;
 
   for (auto const & it : m_downloaders)
   {
@@ -43,10 +45,15 @@ void ReposDownloaderHandler::HandleRepositories(std::string const & repositoryPa
     {
       ReposDownloader * downloader = it.second;
       Download(repositoryPath, specificationsPath, downloader, true);
-      specificationsPath = specificationDirName.str();
       break;
     }
   }
+
+  std::string specificationDirName = GetSpecificationDirName(repositoryPath, specificationsPath);
+  ScsLoader loader;
+  std::stringstream pathStream;
+  pathStream << specificationDirName << DIRECTORY_DELIMITER << SpecificationConstants::REPOS_FILENAME;
+  loader.loadScsFile(*context, pathStream.str());
 }
 
 ReposDownloaderHandler::~ReposDownloaderHandler()

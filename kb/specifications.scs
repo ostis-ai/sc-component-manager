@@ -6,7 +6,8 @@ sc_component_manager_repository
 ..components_addresses
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/cat-kb-component];; *);
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/ui-menu-component];; *);
-	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);;
+	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);
+	-> ... (* -> rrel_address: [https://github.com/SHtress/kitten-kb-component];; *);;
 
 ..repositories_addresses
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;

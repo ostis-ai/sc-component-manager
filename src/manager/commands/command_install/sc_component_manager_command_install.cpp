@@ -24,9 +24,20 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
 {
   ExecutionResult result;
 
+  std::vector<std::string> componentsToInstall;
+
   // TODO(MksmOrlov): if no params install all from config (?)
   // try catch at map
-  std::vector<std::string> componentsToInstall = commandParameters.at(PARAMETER_NAME);
+  try
+  {
+    componentsToInstall = commandParameters.at(PARAMETER_NAME);
+  }
+  catch (std::exception & ex)
+  {
+    SC_LOG_ERROR("No arguments are passed for install command.\n Usage: components install [--idtf] <identifier>");
+    return result;
+  }
+
   for (std::string const & componentToInstall : componentsToInstall)
   {
     ScAddr componentAddr = context->HelperFindBySystemIdtf(componentToInstall);
@@ -71,6 +82,7 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
       SC_LOG_DEBUG("Install dependency \"" + dependencyIdtf + "\"");
       CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
       ExecutionResult dependencyResult = Execute(context, dependencyParameters);
+
       // Return empty if you couldn't install dependency
       if (dependencyResult.empty())
       {
@@ -111,6 +123,7 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
         }
         closedir(dir);
       }
+      result.insert(result.cbegin(), componentToInstall);
     }
 
     // Interpret installation method

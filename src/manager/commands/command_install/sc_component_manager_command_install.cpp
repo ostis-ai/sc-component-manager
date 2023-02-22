@@ -68,7 +68,7 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
     for (ScAddr const & componentDependency : componentDependencies)
     {
       std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
-      SC_LOG_DEBUG("Install dependency \"" + dependencyIdtf + "\"");
+      SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
       CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
       ExecutionResult dependencyResult = Execute(context, dependencyParameters);
       // Return empty if you couldn't install dependency

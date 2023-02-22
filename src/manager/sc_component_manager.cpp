@@ -23,7 +23,7 @@ void ScComponentManager::Start()
   std::string command;
   do
   {
-    SC_LOG_DEBUG("ScComponentManager: Enter command");
+    SC_LOG_INFO("ScComponentManager: Enter command");
     getline(std::cin, command);
 
     try

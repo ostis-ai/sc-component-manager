@@ -64,7 +64,7 @@ sc_int main(sc_int argc, sc_char * argv[])
   try
   {
     scComponentManager->Run();
-    SC_LOG_DEBUG("ScComponentManager started");
+    SC_LOG_INFO("ScComponentManager started");
     while (isRun)
     {
       std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -78,7 +78,7 @@ sc_int main(sc_int argc, sc_char * argv[])
 
     return EXIT_FAILURE;
   }
-  SC_LOG_DEBUG("ScComponentManager finished");
+  SC_LOG_INFO("ScComponentManager finished");
 
   return EXIT_SUCCESS;
 }

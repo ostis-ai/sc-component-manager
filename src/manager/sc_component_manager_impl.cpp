@@ -22,6 +22,6 @@ void ScComponentManagerImpl::DisplayResult(ExecutionResult const & executionResu
 {
   for (std::string const & resultItem : executionResult)
   {
-    SC_LOG_DEBUG(resultItem);
+    SC_LOG_INFO("ScComponentManager:" + resultItem);
   }
 }

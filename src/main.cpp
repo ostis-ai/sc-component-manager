@@ -15,7 +15,7 @@
 #include "sc-memory/utils/sc_signal_handler.hpp"
 
 #include "src/manager/sc_component_manager_impl.hpp"
-#include "src/manager/sc-component-manager-facory/sc_component_manager_factory.hpp"
+#include "src/manager/sc-component-manager-factory/sc_component_manager_factory.hpp"
 
 sc_int main(sc_int argc, sc_char * argv[])
 {

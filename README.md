@@ -1,22 +1,31 @@
-# sc-component-manager
+# SC-component-manager
 
-# Installation
-## Using ostis-web-platform
-- Install with sc-machine branch **feature/component_manager**
-- To include components-manager kb, add 'sc-machine/sc-tools/sc-component-manager/kb' to platform repo.path file
+## Installation
 
-# Usage
-## Commands
-- components init - downloading specifications from repos.txt sources to _specifications_ folder (automatically created if is not exists)
-- components search [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]
-- components install [--idtf \<system_idtf\>]
+  Install ostis-web-platform with branch **feature/component_manager**
 
-## Repos structure
-## Repository file
-File repos.txt Contains of two sections: [components] and [repositories].
-[repositories] are links for source (GitHub, google drive etc.) with repos.txt file, [components] are links to source with specification.txt file of component.
+## Usage
 
-Example of repository (specifications.scs file)
+### Start sc-component manager
+To start sc-component manager: 
+``cd ostis-web-platform/scripts``
+``./run_sc_component_manager.sh``
+
+### Commands:
+- components init - downloading specifications from repositories. `kb/specifications.scs` contains example of how to describe repository.
+- components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>] - searching component specification in knowledge base. You can search components by author, class or explanation substring.
+- components install [--idtf \<system_idtf\>] - installing component by it's system identifier.  
+
+## Repository and components
+
+File specification.scs contains description of two sections: `components` and `repositories`.
+
+`Repositories` have links for source (GitHub, google drive etc.) with specification file, `components` have links to source with specification of component.
+
+
+### Repository specification
+
+Example of repository (`specifications.scs`)
 
 ```scs
 sc_component_manager_repository
@@ -33,8 +42,8 @@ sc_component_manager_repository
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;
 ```
 
-## Specification file
-Example of components specification (specification.scs file)
+### Component specification
+Example of components specification (`specification.scs`)
 
 ```scs
 cat_specification

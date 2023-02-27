@@ -26,6 +26,8 @@ public:
     m_handler = new ScComponentManagerCommandHandler(m_reposPath, m_specificationsPath);
   }
 
+  void QuietInstall();
+
   void Run();
 
   void Stop();

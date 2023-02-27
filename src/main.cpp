@@ -25,6 +25,7 @@ sc_int main(sc_int argc, sc_char * argv[])
   {
     std::cout << "SC-COMPONENT-MANAGER USAGE\n\n"
               << "--config|-c -- Path to configuration file\n"
+              << "--interactive|-i -- Interactive mode\n"
               << "--extensions_path|-e -- Path to directory with sc-memory extensions\n"
               << "--repo_path|-r -- Path to kb.bin folder\n"
               << "--verbose|-v -- Flag to don't save sc-memory state on exit\n"
@@ -63,6 +64,11 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   try
   {
+    if (!options.Has({"interactive", "i"}))
+    {
+      std::cout << "Shutting down, not interacting mode\n";
+      return EXIT_SUCCESS;
+    }
     scComponentManager->Run();
     SC_LOG_INFO("ScComponentManager started");
     while (isRun)

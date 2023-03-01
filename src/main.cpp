@@ -66,7 +66,8 @@ sc_int main(sc_int argc, sc_char * argv[])
   {
     if (!options.Has({"interactive", "i"}))
     {
-      std::cout << "Shutting down, not interacting mode\n";
+      // TODO: Implement interactive mode
+      SC_LOG_INFO("Shutting down, not interacting mode");
       return EXIT_SUCCESS;
     }
     scComponentManager->Run();

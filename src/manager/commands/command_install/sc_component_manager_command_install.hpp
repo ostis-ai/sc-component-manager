@@ -33,13 +33,9 @@ protected:
 
   static ScAddr GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  static ScAddrList GetToInstallComponents(ScMemoryContext * context);
+  static bool ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  static bool CheckComponent(ScMemoryContext * context, ScAddr const & componentAddr);
-
-  virtual void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr) = 0;
-
-  virtual void InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr) = 0;
+  void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
   ExecutionResult InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 

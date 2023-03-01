@@ -2,13 +2,20 @@
 
 ## Installation
 
-  Install ostis-web-platform with branch **feature/component_manager**
+  Install ostis-web-platform with branch **feature/component_manager**.
+  
+  Also install subversion version control system.
+  If you use Debian-based distro:
+
+  `sudo apt install subversion`
 
 ## Usage
 
 ### Start sc-component manager
 To start sc-component manager: 
+
 ``cd ostis-web-platform/scripts``
+
 ``./run_sc_component_manager.sh``
 
 ### Commands:

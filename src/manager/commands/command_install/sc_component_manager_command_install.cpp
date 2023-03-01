@@ -176,6 +176,8 @@ bool ScComponentManagerCommandInstall::CheckComponent(ScMemoryContext * context,
     SC_LOG_WARNING("Component installation method not found. Unable to install");
     return false;
   }
+  
+  return true;
 }
 
 /**

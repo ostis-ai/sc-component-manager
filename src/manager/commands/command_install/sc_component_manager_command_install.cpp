@@ -87,12 +87,20 @@ std::string ScComponentManagerCommandInstall::GetComponentAddress(
   return componentAddress;
 }
 
+
+/**
+* Get component dependencies vector
+* @param context current sc-memory context
+* @param componentAddr sc-addr of component
+* @return ScAddrVector consists of component dependencies sc-addrs,
+* will be empty if component has no dependencies
+*/
 ScAddrVector ScComponentManagerCommandInstall::GetComponentDependencies(
     ScMemoryContext * context,
     ScAddr const & componentAddr)
 {
   ScAddrVector componentDependencies;
-  ScIterator5Ptr componentDependenciesIterator = context->Iterator5(
+  ScIterator5Ptr const componentDependenciesIterator = context->Iterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
@@ -111,12 +119,17 @@ ScAddrVector ScComponentManagerCommandInstall::GetComponentDependencies(
   return componentDependencies;
 }
 
+
+/**
+ * Get component installation method
+ * @return sc-addr of component installation method
+*/
 ScAddr ScComponentManagerCommandInstall::GetComponentInstallationMethod(
     ScMemoryContext * context,
     ScAddr const & componentAddr)
 {
   ScAddr componentInstallationMethod;
-  ScIterator5Ptr componentDependenciesIterator = context->Iterator5(
+  ScIterator5Ptr const componentDependenciesIterator = context->Iterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
@@ -197,6 +210,9 @@ ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
   return result;
 }
 
+/**
+* Tries to download component from Github
+*/
 void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
 

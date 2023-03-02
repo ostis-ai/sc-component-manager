@@ -27,12 +27,6 @@ public:
   ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
 protected:
-  static std::string GetComponentAddress(ScMemoryContext * context, ScAddr const & componentAddr);
-
-  static ScAddrVector GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
-
-  static ScAddr GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr);
-
   static bool ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
   void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);

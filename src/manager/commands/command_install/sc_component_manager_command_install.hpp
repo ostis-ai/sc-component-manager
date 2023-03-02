@@ -19,6 +19,8 @@ extern "C"
 
 class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 {
+  std::string const PARAMETER_NAME = "idtf";
+
 public:
   explicit ScComponentManagerCommandInstall(std::string specificationsPath);
 
@@ -31,7 +33,11 @@ protected:
 
   static ScAddr GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  std::string const PARAMETER_NAME = "idtf";
+  static bool ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  ExecutionResult InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
   std::string m_specificationsPath;
 };

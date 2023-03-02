@@ -44,3 +44,16 @@ void ScComponentManager::Stop()
   if (m_instance.joinable())
     m_instance.detach();
 }
+
+void ScComponentManager::QuietInstall()
+{
+  try
+  {
+    ExecutionResult executionResult = Emit("components init");
+    executionResult = Emit("components install");
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+  }
+}

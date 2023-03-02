@@ -62,6 +62,11 @@ public:
 
       repositoryItems.first.insert(repositoriesLinks.cbegin(), repositoriesLinks.cend());
       repositoryItems.second.insert(componentsLinks.cbegin(), componentsLinks.cend());
+
+      for (std::string const & componentLink : componentsLinks)
+      {
+        downloaderHandler.HandleComponents(context, componentLink, specificationsPath);
+      }
     }
 
     //    TODO(MksmOrlov): implement recursion to handle repositories
@@ -71,11 +76,6 @@ public:
     //
     //      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
     //    }
-
-    for (std::string const & componentLink : componentsLinks)
-    {
-      downloaderHandler.HandleComponents(context, componentLink, specificationsPath);
-    }
   }
 
   static std::set<std::string> GetRepositoryAddresses(

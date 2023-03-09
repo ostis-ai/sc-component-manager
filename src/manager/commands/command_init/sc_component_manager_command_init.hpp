@@ -23,21 +23,19 @@ public:
 
   ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
-  void ProcessRepositories(
-      ScMemoryContext * context,
-      std::string & specificationsPath,
-      std::pair<std::set<std::string>, std::set<std::string>> & repositoryItems,
-      ScAddrVector & processedRepositories);
+  void ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 
   static std::set<std::string> GetRepositoryAddresses(
       ScMemoryContext * context,
       ScAddr repository,
       ScAddr attributeRelation);
 
-  static ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
+  static ScAddrVector GetSpecificationsAddrs(
       ScMemoryContext * context,
       ScAddr const & repositoryAddr,
       ScAddr const & rrelAddr);
+
+  // static void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
 
 protected:
   std::string m_specificationsPath;

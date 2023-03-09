@@ -34,6 +34,11 @@ public:
       ScAddr repository,
       ScAddr attributeRelation);
 
+  static ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
+      ScMemoryContext * context,
+      ScAddr const & repositoryAddr,
+      ScAddr const & rrelAddr);
+
 protected:
   std::string m_specificationsPath;
 };

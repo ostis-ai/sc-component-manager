@@ -25,11 +25,11 @@ public:
   SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_repository;
 
-  SC_PROPERTY(Keynode("rrel_repositories"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_repositories;
+  SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr rrel_repositories_specifications;
 
-  SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_components;
+  SC_PROPERTY(Keynode("rrel_components_specifications"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr rrel_components_specifications;
 
   SC_PROPERTY(Keynode("rrel_address"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_address;

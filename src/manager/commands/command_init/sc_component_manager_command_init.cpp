@@ -33,8 +33,8 @@ void ScComponentManagerCommandInit::ProcessRepositories(
     ScAddrVector & processedRepositories)
 {
   ReposDownloaderHandler downloaderHandler;
-  std::set<std::string> repositoriesLinks;
-  std::set<std::string> componentsLinks;
+  ScAddrVector repositoriesAddrs;
+  ScAddrVector componentsAddrs;
 
   ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
       context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
@@ -48,10 +48,10 @@ void ScComponentManagerCommandInit::ProcessRepositories(
 
   for (ScAddr const & repository : availableRepositories)
   {
-    repositoriesLinks =
-        GetRepositoryAddresses(context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories);
-    componentsLinks =
-        GetRepositoryAddresses(context, repository, keynodes::ScComponentManagerKeynodes::rrel_components);
+    repositoriesAddrs =
+        GetSpecificationsAddrs(context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories_specifications);
+    componentsAddrs =
+        GetSpecificationsAddrs(context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
 
     repositoryItems.first.insert(repositoriesLinks.cbegin(), repositoriesLinks.cend());
     repositoryItems.second.insert(componentsLinks.cbegin(), componentsLinks.cend());
@@ -69,6 +69,20 @@ void ScComponentManagerCommandInit::ProcessRepositories(
   //
   //      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
   //    }
+}
+
+ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
+    ScMemoryContext * context,
+    ScAddr const & repositoryAddr,
+    ScAddr const & rrelAddr)
+{
+  ScAddr const & componentsSpecificationsSetAddr = utils::IteratorUtils::getFirstByOutRelation(
+      context, repositoryAddr, rrelAddr);
+
+  ScAddrVector componentsSpecificationsAddrs =
+      utils::IteratorUtils::getAllWithType(context, componentsSpecificationsSetAddr, ScType::NodeConst);
+
+  return componentsSpecificationsAddrs;
 }
 
 std::set<std::string> ScComponentManagerCommandInit::GetRepositoryAddresses(

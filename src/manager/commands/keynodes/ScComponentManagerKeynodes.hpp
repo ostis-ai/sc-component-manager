@@ -25,14 +25,17 @@ public:
   SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_repository;
 
-  SC_PROPERTY(Keynode("concept_github_url"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_github_url;
-
   SC_PROPERTY(Keynode("concept_single_address"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_single_address;
 
   SC_PROPERTY(Keynode("concept_complex_address"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_complex_address;
+
+  SC_PROPERTY(Keynode("concept_github_url"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_github_url;
+
+  SC_PROPERTY(Keynode("concept_google_drive_url"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_google_drive_url;
 
   SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_repositories_specifications;

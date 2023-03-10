@@ -15,6 +15,7 @@ ScAddr ScComponentManagerKeynodes::concept_repository;
 ScAddr ScComponentManagerKeynodes::concept_complex_address;
 ScAddr ScComponentManagerKeynodes::concept_single_address;
 ScAddr ScComponentManagerKeynodes::concept_github_url;
+ScAddr ScComponentManagerKeynodes::concept_google_drive_url;
 
 ScAddr ScComponentManagerKeynodes::rrel_repositories_specifications;
 ScAddr ScComponentManagerKeynodes::rrel_components_specifications;

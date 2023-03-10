@@ -25,6 +25,9 @@ public:
   SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_repository;
 
+  SC_PROPERTY(Keynode("concept_reusable_component_specification"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_component_specification;
+
   SC_PROPERTY(Keynode("concept_single_address"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_single_address;
 

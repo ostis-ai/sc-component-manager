@@ -12,6 +12,7 @@ namespace keynodes
 {
 ScAddr ScComponentManagerKeynodes::concept_reusable_component;
 ScAddr ScComponentManagerKeynodes::concept_repository;
+ScAddr ScComponentManagerKeynodes::concept_reusable_component_specification;
 ScAddr ScComponentManagerKeynodes::concept_complex_address;
 ScAddr ScComponentManagerKeynodes::concept_single_address;
 ScAddr ScComponentManagerKeynodes::concept_github_url;

@@ -25,17 +25,17 @@ public:
 
   void ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 
-  static std::set<std::string> GetRepositoryAddresses(
-      ScMemoryContext * context,
-      ScAddr repository,
-      ScAddr attributeRelation);
+  // static std::set<std::string> GetRepositoryAddresses(
+  //     ScMemoryContext * context,
+  //     ScAddr repository,
+  //     ScAddr attributeRelation);
 
   static ScAddrVector GetSpecificationsAddrs(
       ScMemoryContext * context,
       ScAddr const & repositoryAddr,
       ScAddr const & rrelAddr);
 
-  // static void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
+  static void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
 
 protected:
   std::string m_specificationsPath;

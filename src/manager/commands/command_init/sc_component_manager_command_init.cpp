@@ -63,15 +63,21 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
 
   for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
   {
-    // DownloadSpecification(context, componentSpecificationAddr);
+    DownloadSpecification(context, componentSpecificationAddr);
   }
 }
 
-void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr)
+void ScComponentManagerCommandInit::DownloadSpecification(
+    ScMemoryContext * context,
+    ScAddr const & componentSpecificationAddr)
 {
   // Get alternative addresses set addr
-  ScIterator3Ptr alternativeAddressesSetIterator =
-      context->Iterator3(componentSpecificationAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeTuple);
+  ScIterator5Ptr alternativeAddressesSetIterator = context->Iterator5(
+      componentSpecificationAddr,
+      ScType::EdgeAccessConstPosPerm,
+      ScType::NodeTuple,
+      ScType::EdgeAccessConstPosPerm,
+      keynodes::ScComponentManagerKeynodes::nrel_alternative_addresses);
   if (!alternativeAddressesSetIterator->Next())
   {
     SC_LOG_ERROR("No alternative addresses set found");
@@ -94,13 +100,14 @@ void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSp
   }
 
   // Get links with address
-  ScAddrVector specificationAddressLinks = utils::IteratorUtils::getAllWithType(context, specificationAddressAddr, ScType::LinkConst);
+  ScAddrVector specificationAddressLinks =
+      utils::IteratorUtils::getAllWithType(context, specificationAddressAddr, ScType::LinkConst);
 
-  // for (ScAddr const & specificationLink: specificationAddressLinks)
-  // {
-  //   DownloadByUrl();
-  //   UploadInMemory();
-  // }
+  for (ScAddr const & specificationLink : specificationAddressLinks)
+  {
+    // DownloadByUrl();
+    // UploadInMemory();
+  }
 };
 
 /**
@@ -125,34 +132,35 @@ ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
   return specificationsAddrs;
 }
 
-std::set<std::string> ScComponentManagerCommandInit::GetRepositoryAddresses(
-    ScMemoryContext * context,
-    ScAddr repository,
-    ScAddr attributeRelation)
-{
-  std::set<std::string> repositoryAddresses;
-  ScIterator5Ptr repositoriesSetIterator = context->Iterator5(
-      repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, attributeRelation);
+// std::set<std::string> ScComponentManagerCommandInit::GetRepositoryAddresses(
+//     ScMemoryContext * context,
+//     ScAddr repository,
+//     ScAddr attributeRelation)
+// {
+//   std::set<std::string> repositoryAddresses;
+//   ScIterator5Ptr repositoriesSetIterator = context->Iterator5(
+//       repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm,
+//       attributeRelation);
 
-  if (repositoriesSetIterator->Next())
-  {
-    ScAddr repositoryItemsSet = repositoriesSetIterator->Get(2);
-    ScIterator3Ptr innerRepositoryItemsIterator =
-        context->Iterator3(repositoryItemsSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+//   if (repositoriesSetIterator->Next())
+//   {
+//     ScAddr repositoryItemsSet = repositoriesSetIterator->Get(2);
+//     ScIterator3Ptr innerRepositoryItemsIterator =
+//         context->Iterator3(repositoryItemsSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
-    while (innerRepositoryItemsIterator->Next())
-    {
-      ScAddr innerRepositoryItem = innerRepositoryItemsIterator->Get(2);
-      ScAddr repositoryAddress = utils::IteratorUtils::getAnyByOutRelation(
-          context, innerRepositoryItem, keynodes::ScComponentManagerKeynodes::rrel_address);
+//     while (innerRepositoryItemsIterator->Next())
+//     {
+//       ScAddr innerRepositoryItem = innerRepositoryItemsIterator->Get(2);
+//       ScAddr repositoryAddress = utils::IteratorUtils::getAnyByOutRelation(
+//           context, innerRepositoryItem, keynodes::ScComponentManagerKeynodes::rrel_address);
 
-      if (repositoryAddress.IsValid())
-      {
-        std::string repositoryLink = utils::CommonUtils::getLinkContent(context, repositoryAddress);
-        repositoryAddresses.insert(repositoryLink);
-      }
-    }
-  }
+//       if (repositoryAddress.IsValid())
+//       {
+//         std::string repositoryLink = utils::CommonUtils::getLinkContent(context, repositoryAddress);
+//         repositoryAddresses.insert(repositoryLink);
+//       }
+//     }
+//   }
 
-  return repositoryAddresses;
-}
+//   return repositoryAddresses;
+// }

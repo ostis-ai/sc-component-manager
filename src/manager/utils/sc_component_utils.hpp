@@ -19,6 +19,8 @@ public:
   static ScAddrVector GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
   static ScAddr GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  static ScAddrVector GetSpecificationAddress(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
 };
 
 }  // namespace componentUtils

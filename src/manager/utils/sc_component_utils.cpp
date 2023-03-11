@@ -108,7 +108,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
 
   ScIterator5Ptr const & alternativeAddressesSetIterator = context->Iterator5(
       componentSpecificationAddr,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::EdgeDCommonConst,
       ScType::NodeTuple,
       ScType::EdgeAccessConstPosPerm,
       keynodes::ScComponentManagerKeynodes::nrel_alternative_addresses);

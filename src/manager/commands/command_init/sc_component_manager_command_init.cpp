@@ -8,8 +8,7 @@
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/repos_downloader/repos_downloader.hpp"
-#include "src/manager/commands/command_init/repos_downloader/repos_downloader_handler.hpp"
+#include "src/manager/commands/command_init/repos_downloader/downloader_handler.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
 
 ExecutionResult ScComponentManagerCommandInit::Execute(
@@ -44,80 +43,56 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   // Get last avaible repository from vector
   ScAddr const & repository = availableRepositories.back();
 
-  // Get all avaible repositories for current repository
-  ScAddrVector currentRepositoriesAddrs = GetSpecificationsAddrs(
-      context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories_specifications);
+  ScAddrVector currentRepositoriesAddrs;
 
-  // Remove processed repository from avaible
-  availableRepositories.pop_back();
+  try
+  {
+    // Get all avaible repositories for current repository
+    currentRepositoriesAddrs = GetSpecificationsAddrs(
+        context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories_specifications);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+  }
 
   // Add found repositories to avaible repositories
   availableRepositories.insert(
       availableRepositories.end(), currentRepositoriesAddrs.begin(), currentRepositoriesAddrs.end());
 
   // Get components of current repository
-  ScAddrVector currentComponentsSpecificationsAddrs =
-      GetSpecificationsAddrs(context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
+
+  ScAddrVector currentComponentsSpecificationsAddrs;
+
+  try
+  {
+    currentComponentsSpecificationsAddrs = GetSpecificationsAddrs(
+        context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+  }
 
   // Download specififcations
 
   for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
   {
-    DownloadSpecification(context, componentSpecificationAddr);
+    downloaderHandler->Download(context, componentSpecificationAddr);
   }
+
+  availableRepositories.pop_back();
+  ProcessRepositories(context, availableRepositories);
 }
 
-void ScComponentManagerCommandInit::DownloadSpecification(
-    ScMemoryContext * context,
-    ScAddr const & componentSpecificationAddr)
-{
-  // Get alternative addresses set addr
-  ScIterator5Ptr alternativeAddressesSetIterator = context->Iterator5(
-      componentSpecificationAddr,
-      ScType::EdgeAccessConstPosPerm,
-      ScType::NodeTuple,
-      ScType::EdgeAccessConstPosPerm,
-      keynodes::ScComponentManagerKeynodes::nrel_alternative_addresses);
-  if (!alternativeAddressesSetIterator->Next())
-  {
-    SC_LOG_ERROR("No alternative addresses set found");
-    return;
-  }
-  ScAddr const & alternativeAddressesSet = alternativeAddressesSetIterator->Get(2);
-
-  if (utils::CommonUtils::isEmpty(context, alternativeAddressesSet))
-  {
-    SC_LOG_ERROR("Alternative addresses set is empty");
-    return;
-  }
-
-  // Get address from alternative addresses set
-  ScAddr specificationAddressAddr = utils::IteratorUtils::getFirstFromSet(context, alternativeAddressesSet, true);
-
-  if (!specificationAddressAddr.IsValid())
-  {
-    specificationAddressAddr = utils::IteratorUtils::getAnyFromSet(context, alternativeAddressesSet);
-  }
-
-  // Get links with address
-  ScAddrVector specificationAddressLinks =
-      utils::IteratorUtils::getAllWithType(context, specificationAddressAddr, ScType::LinkConst);
-
-  for (ScAddr const & specificationLink : specificationAddressLinks)
-  {
-    // DownloadByUrl();
-    // UploadInMemory();
-  }
-};
-
 /**
- * @brief Get all address from first set
+ * @brief Get all sc-addrs from first set
  * that connected with nodeAddr by rrelAddr relation.
  * @param context current sc-memory context
- * @param nodeAddr ScAddr of node that connected with set
- * @param rrelAddr ScAddr of relation that connects nodeAddr with set
- * @return Vector of all sc-addrs of all NodeConst nodes that are in set that is connected with nodeAddr by rrelAddr
- * relation.
+ * @param nodeAddr sc-addr of node that connected with set
+ * @param rrelAddr sc-addr of relation that connects nodeAddr with set
+ * @return Vector of all sc-addrs of all NodeConst nodes
+ * that are in set that is connected with nodeAddr by rrelAdd rrelation.
  */
 ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
     ScMemoryContext * context,
@@ -131,36 +106,3 @@ ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
 
   return specificationsAddrs;
 }
-
-// std::set<std::string> ScComponentManagerCommandInit::GetRepositoryAddresses(
-//     ScMemoryContext * context,
-//     ScAddr repository,
-//     ScAddr attributeRelation)
-// {
-//   std::set<std::string> repositoryAddresses;
-//   ScIterator5Ptr repositoriesSetIterator = context->Iterator5(
-//       repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm,
-//       attributeRelation);
-
-//   if (repositoriesSetIterator->Next())
-//   {
-//     ScAddr repositoryItemsSet = repositoriesSetIterator->Get(2);
-//     ScIterator3Ptr innerRepositoryItemsIterator =
-//         context->Iterator3(repositoryItemsSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-
-//     while (innerRepositoryItemsIterator->Next())
-//     {
-//       ScAddr innerRepositoryItem = innerRepositoryItemsIterator->Get(2);
-//       ScAddr repositoryAddress = utils::IteratorUtils::getAnyByOutRelation(
-//           context, innerRepositoryItem, keynodes::ScComponentManagerKeynodes::rrel_address);
-
-//       if (repositoryAddress.IsValid())
-//       {
-//         std::string repositoryLink = utils::CommonUtils::getLinkContent(context, repositoryAddress);
-//         repositoryAddresses.insert(repositoryLink);
-//       }
-//     }
-//   }
-
-//   return repositoryAddresses;
-// }

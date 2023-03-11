@@ -49,8 +49,8 @@ ScAddr SearchUtils::GetComponentAddress(ScMemoryContext * context, ScAddr const 
 ScAddrVector SearchUtils::GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddrVector componentDependencies;
-  ScAddr componentDependenciesSet;
   ScAddrVector componentCurrentDependencies;
+  ScAddr componentDependenciesSet;
 
   ScIterator5Ptr const & componentDependenciesIterator = context->Iterator5(
       componentAddr,
@@ -101,28 +101,29 @@ ScAddr SearchUtils::GetComponentInstallationMethod(ScMemoryContext * context, Sc
  * @param componentSpecificationAddr sc-addr of specification node
  * @return Vector of sc-addr for sc-links which contain url address,
  * return empty vector if no links found
-*/
-ScAddrVector SearchUtils::GetSpecificationAddress(
-    ScMemoryContext * context,
-    ScAddr const & componentSpecificationAddr)
+ */
+ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScAddr const & componentSpecificationAddr)
 {
-  ScIterator5Ptr alternativeAddressesSetIterator = context->Iterator5(
+  ScAddrVector specificationAddressLinks;
+
+  ScIterator5Ptr const & alternativeAddressesSetIterator = context->Iterator5(
       componentSpecificationAddr,
       ScType::EdgeAccessConstPosPerm,
       ScType::NodeTuple,
       ScType::EdgeAccessConstPosPerm,
       keynodes::ScComponentManagerKeynodes::nrel_alternative_addresses);
+
   if (!alternativeAddressesSetIterator->Next())
   {
     SC_LOG_ERROR("No alternative addresses set found");
-    return {};
+    return specificationAddressLinks;
   }
   ScAddr const & alternativeAddressesSet = alternativeAddressesSetIterator->Get(2);
 
   if (utils::CommonUtils::isEmpty(context, alternativeAddressesSet))
   {
     SC_LOG_ERROR("Alternative addresses set is empty");
-    return {};
+    return specificationAddressLinks;
   }
 
   ScAddr specificationAddressAddr = utils::IteratorUtils::getFirstFromSet(context, alternativeAddressesSet, true);
@@ -132,16 +133,55 @@ ScAddrVector SearchUtils::GetSpecificationAddress(
     specificationAddressAddr = utils::IteratorUtils::getAnyFromSet(context, alternativeAddressesSet);
   }
 
-  ScAddrVector specificationAddressLinks =
+  specificationAddressLinks =
       utils::IteratorUtils::getAllWithType(context, specificationAddressAddr, ScType::LinkConst);
 
   if (specificationAddressLinks.empty())
   {
     SC_LOG_ERROR("No sc-links connected with address node");
-    return {};
+    return specificationAddressLinks;
   }
 
   return specificationAddressLinks;
+};
+
+/**
+ * @brief Get sc-addr of sc-link with repository address.
+ * @param context current sc-memory context
+ * @param componentSpecificationAddr sc-addr of repository node
+ * @return Sc-addr of link that contains url address of repository.
+ */
+ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const & repositoryAddr)
+{
+  ScAddr addressLinkAddr;
+
+  ScIterator5Ptr const & repositoryAddressIterator = context->Iterator5(
+      repositoryAddr,
+      ScType::EdgeDCommonConst,
+      ScType::NodeConst,
+      ScType::EdgeAccessConstPosPerm,
+      keynodes::ScComponentManagerKeynodes::nrel_repository_address);
+
+  if (!repositoryAddressIterator->Next())
+  {
+    SC_LOG_ERROR("No address found for repository");
+    return addressLinkAddr;
+  }
+
+  ScAddr const & repositoryAddressAddr = repositoryAddressIterator->Get(2);
+
+  ScIterator3Ptr const & addressLinkIterator =
+      context->Iterator3(repositoryAddressAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
+
+  if (!addressLinkIterator->Next())
+  {
+    SC_LOG_ERROR("No links for repository address found");
+    return addressLinkAddr;
+  }
+
+  addressLinkAddr = addressLinkIterator->Get(2);
+
+  return addressLinkAddr;
 };
 
 }  // namespace componentUtils

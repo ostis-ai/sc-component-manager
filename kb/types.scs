@@ -14,10 +14,10 @@ sc_node_role_relation
 	-> rrel_repositories;
 	-> rrel_components;
 	-> rrel_address;
-	-> rrel_components_specification;
-	-> rrel_repositories_specification;;
+	-> rrel_components_specifications;
+	-> rrel_repositories_specifications;;
 
-sc_node_class
+qsc_node_class
 	-> concept_reusable_component;
 	-> concept_atomic_reusable_component;
 	-> concept_independent_reusable_component;

@@ -16,9 +16,15 @@
 class DownloaderGit : public Downloader
 {
 public:
-  void Download(std::string const & urlAddress, std::string const & downloadPath) override
+  void Download(std::string const & downloadPath, std::string const & urlAddress, std::string const & pathPostfix = "")
+      override
   {
     ScExec exec{
-        {"cd", downloadPath, "&&", "svn", "export", urlAddress}};
+        {"cd",
+         downloadPath,
+         "&&",
+         "svn",
+         "export",
+         urlAddress + GitHubConstants::SVN_TRUNK + SpecificationConstants::DIRECTORY_DELIMETR + pathPostfix}};
   }
 };

@@ -13,7 +13,7 @@
 class DownloaderGoogleDrive : public Downloader
 {
 public:
-  void Download(std::string const & urlAddress, std::string const & downloadPath)
+  void Download(std::string const & urlAddress, std::string const & downloadPath, std::string const & pathPostfix = "")
       override
   {
     // std::string const gDriveFileId = componentPath.substr(
@@ -22,8 +22,8 @@ public:
     //         GoogleDriveConstants::GOOGLE_DRIVE_POSTFIX.size());
     // std::string const gDriveInstallCommandParameter = " -O " + SpecificationConstants::SPECIFICATION_FILENAME;
     // std::string const gDriveInstallCommand = "cd " + specificationsPath + " ; wget --no-check-certificate " + "\'" +
-    //                                          GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX + gDriveFileId + "\'" +
-    //                                          gDriveInstallCommandParameter;
+    //                                          GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX + gDriveFileId + "\'"
+    //                                          + gDriveInstallCommandParameter;
 
     // ScExec exec{{gDriveInstallCommand}};
   }

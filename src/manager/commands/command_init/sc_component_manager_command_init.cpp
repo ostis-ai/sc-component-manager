@@ -5,11 +5,11 @@
  */
 
 #include <sc-agents-common/utils/IteratorUtils.hpp>
-#include <sc-agents-common/utils/CommonUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/repos_downloader/downloader_handler.hpp"
+#include "src/manager/commands/command_init/downloader/downloader_handler.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
+#include "src/manager/utils/sc_component_utils.hpp"
 
 ExecutionResult ScComponentManagerCommandInit::Execute(
     ScMemoryContext * context,
@@ -40,30 +40,24 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   if (availableRepositories.empty())
     return;
 
-  // Get last avaible repository from vector
   ScAddr const & repository = availableRepositories.back();
 
   ScAddrVector currentRepositoriesAddrs;
-
   try
   {
-    // Get all avaible repositories for current repository
     currentRepositoriesAddrs = GetSpecificationsAddrs(
         context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories_specifications);
   }
   catch (utils::ScException const & exception)
   {
-    SC_LOG_ERROR(exception.Message());
+    SC_LOG_DEBUG("Problem getting repositories specifications");
+    SC_LOG_DEBUG(exception.Message());
   }
 
-  // Add found repositories to avaible repositories
   availableRepositories.insert(
       availableRepositories.end(), currentRepositoriesAddrs.begin(), currentRepositoriesAddrs.end());
 
-  // Get components of current repository
-
   ScAddrVector currentComponentsSpecificationsAddrs;
-
   try
   {
     currentComponentsSpecificationsAddrs = GetSpecificationsAddrs(
@@ -71,14 +65,16 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   }
   catch (utils::ScException const & exception)
   {
-    SC_LOG_ERROR(exception.Message());
+    SC_LOG_DEBUG("Problem getting component specifications");
+    SC_LOG_DEBUG(exception.Message());
   }
-
-  // Download specififcations
 
   for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
   {
     downloaderHandler->Download(context, componentSpecificationAddr);
+    std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR +
+                                          context->HelperGetSystemIdtf(componentSpecificationAddr);
+    componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
   }
 
   availableRepositories.pop_back();

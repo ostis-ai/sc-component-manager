@@ -66,6 +66,8 @@ sc_int main(sc_int argc, sc_char * argv[])
     {
       // TODO: Implement interactive mode
       SC_LOG_INFO("Shutting down, not interacting mode");
+      scComponentManager->Emit("components init");
+      scComponentManager->Emit("components install --idtf knowledge_base_ims");
       return EXIT_SUCCESS;
     }
     scComponentManager->Run();

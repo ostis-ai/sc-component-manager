@@ -40,7 +40,7 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   if (availableRepositories.empty())
     return;
 
-  ScAddr const & repository = availableRepositories.back();
+  ScAddr const repository = availableRepositories.back();
 
   ScAddrVector currentRepositoriesAddrs;
   try
@@ -55,7 +55,7 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   }
 
   availableRepositories.insert(
-      availableRepositories.end(), currentRepositoriesAddrs.begin(), currentRepositoriesAddrs.end());
+      availableRepositories.begin(), currentRepositoriesAddrs.begin(), currentRepositoriesAddrs.end());
 
   ScAddrVector currentComponentsSpecificationsAddrs;
   try

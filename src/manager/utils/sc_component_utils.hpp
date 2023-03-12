@@ -25,4 +25,10 @@ public:
   static ScAddr GetRepositoryAddress(ScMemoryContext * context, ScAddr const & repositoryAddr);
 };
 
+class LoadUtils
+{
+public:
+  static void LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath);
+};
+
 }  // namespace componentUtils

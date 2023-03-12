@@ -4,9 +4,13 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
+#include <dirent.h>
+#include <sys/stat.h>
+
 #include <sc-memory/sc_addr.hpp>
 #include <sc-memory/sc_type.hpp>
 #include <sc-memory/sc_iterator.hpp>
+#include <sc-builder/src/scs_loader.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 #include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
@@ -183,5 +187,24 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 
   return addressLinkAddr;
 };
+
+void LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath)
+{
+  ScsLoader loader;
+  DIR * dir;
+  struct dirent * diread;
+  if ((dir = opendir(dirPath.c_str())) != nullptr)
+  {
+    while ((diread = readdir(dir)) != nullptr)
+    {
+      std::string filename = diread->d_name;
+      if (filename.rfind(".scs") != std::string::npos)
+      {
+        loader.loadScsFile(*context, dirPath + "/" + filename);
+      }
+    }
+    closedir(dir);
+  }
+}
 
 }  // namespace componentUtils

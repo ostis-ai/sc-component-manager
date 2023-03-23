@@ -5,100 +5,107 @@
  */
 
 #include <sc-agents-common/utils/IteratorUtils.hpp>
-#include <sc-agents-common/utils/CommonUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/repos_downloader/repos_downloader.hpp"
-#include "src/manager/commands/command_init/repos_downloader/repos_downloader_handler.hpp"
+#include "src/manager/commands/command_init/downloader/downloader_handler.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
+#include "src/manager/utils/sc_component_utils.hpp"
 
+//TODO:
+/**
+ * @brief
+ * @param context
+ * @param commandParameters
+ * @return
+ */
 ExecutionResult ScComponentManagerCommandInit::Execute(
-        ScMemoryContext * context,
-        CommandParameters const & commandParameters)
+    ScMemoryContext * context,
+    CommandParameters const & commandParameters)
 {
-    std::pair<std::set<std::string>, std::set<std::string>> repositoryItems;
-    ScAddrVector processedRepositories;
-    ProcessRepositories(context, m_specificationsPath, repositoryItems, processedRepositories);
+  std::pair<std::set<std::string>, std::set<std::string>> repositoryItems;
+  ScAddrVector processedRepositories;
 
-    ExecutionResult executionResult;
-    executionResult.insert(executionResult.cbegin(), repositoryItems.second.cbegin(), repositoryItems.second.cend());
+  ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
+      context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
 
-    return executionResult;
+  ProcessRepositories(context, availableRepositories);
+
+  ExecutionResult executionResult;
+  executionResult.insert(executionResult.cbegin(), repositoryItems.second.cbegin(), repositoryItems.second.cend());
+
+  return executionResult;
 }
 
-void ScComponentManagerCommandInit::ProcessRepositories(
-        ScMemoryContext * context,
-        std::string & specificationsPath,
-        std::pair<std::set<std::string>, std::set<std::string>> & repositoryItems,
-        ScAddrVector & processedRepositories)
+/**
+ * @brief Recursivly iterates through repositories
+ * and download avaible components specifications.
+ * @param context current sc-memory context
+ * @param avaibleRepositories vector of avaible repositories addrs
+ */
+void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories)
 {
-    ReposDownloaderHandler downloaderHandler;
-    std::set<std::string> repositoriesLinks;
-    std::set<std::string> componentsLinks;
+  if (availableRepositories.empty())
+    return;
 
-    ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
-            context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
+  ScAddr const repository = availableRepositories.back();
 
-    //    TODO(MksmOrlov): implement recursion break condition
-    //    if (availableRepositories == processedRepositories)
-    //    {
-    //      SC_LOG_WARNING("return;");
-    //      return;
-    //    }
+  ScAddrVector currentRepositoriesAddrs;
+  try
+  {
+    currentRepositoriesAddrs = GetSpecificationsAddrs(
+        context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories_specifications);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_DEBUG("Problem getting repositories specifications");
+    SC_LOG_DEBUG(exception.Message());
+  }
 
-    for (ScAddr const & repository : availableRepositories)
-    {
-        repositoriesLinks =
-                GetRepositoryAddresses(context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories);
-        componentsLinks =
-                GetRepositoryAddresses(context, repository, keynodes::ScComponentManagerKeynodes::rrel_components);
+  availableRepositories.insert(
+      availableRepositories.begin(), currentRepositoriesAddrs.begin(), currentRepositoriesAddrs.end());
 
-        repositoryItems.first.insert(repositoriesLinks.cbegin(), repositoriesLinks.cend());
-        repositoryItems.second.insert(componentsLinks.cbegin(), componentsLinks.cend());
+  ScAddrVector currentComponentsSpecificationsAddrs;
+  try
+  {
+    currentComponentsSpecificationsAddrs = GetSpecificationsAddrs(
+        context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_DEBUG("Problem getting component specifications");
+    SC_LOG_DEBUG(exception.Message());
+  }
 
-        for (std::string const & componentLink : componentsLinks)
-        {
-            downloaderHandler.HandleComponents(context, componentLink, specificationsPath);
-        }
-    }
+  for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
+  {
+    downloaderHandler->Download(context, componentSpecificationAddr);
+    std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR +
+                                          context->HelperGetSystemIdtf(componentSpecificationAddr);
+    componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
+  }
 
-    //    TODO(MksmOrlov): implement recursion to handle repositories
-    //    for (std::string const & repositoryLink : repositoriesLinks)
-    //    {
-    //      downloaderHandler.HandleRepositories(repositoryLink, specificationsPath);
-    //
-    //      ProcessRepositories(context, specificationsPath, repositoryItems, processedRepositories);
-    //    }
+  availableRepositories.pop_back();
+  ProcessRepositories(context, availableRepositories);
 }
 
-std::set<std::string> ScComponentManagerCommandInit::GetRepositoryAddresses(
-        ScMemoryContext * context,
-        ScAddr repository,
-        ScAddr attributeRelation)
+/**
+ * @brief Get all sc-addrs from first set
+ * that connected with nodeAddr by rrelAddr relation.
+ * @param context current sc-memory context
+ * @param nodeAddr sc-addr of node that connected with set
+ * @param rrelAddr sc-addr of relation that connects nodeAddr with set
+ * @return Vector of all sc-addrs of all NodeConst nodes
+ * that are in set that is connected with nodeAddr by rrelAdd rrelation.
+ */
+ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
+    ScMemoryContext * context,
+    ScAddr const & nodeAddr,
+    ScAddr const & rrelAddr)
 {
-    std::set<std::string> repositoryAddresses;
-    ScIterator5Ptr repositoriesSetIterator = context->Iterator5(
-            repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, attributeRelation);
+  ScAddr const & specificationsSetAddr = utils::IteratorUtils::getFirstByOutRelation(context, nodeAddr, rrelAddr);
 
-    if (repositoriesSetIterator->Next())
-    {
-        ScAddr repositoryItemsSet = repositoriesSetIterator->Get(2);
-        ScIterator3Ptr innerRepositoryItemsIterator =
-                context->Iterator3(repositoryItemsSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  ScAddrVector specificationsAddrs =
+      utils::IteratorUtils::getAllWithType(context, specificationsSetAddr, ScType::NodeConst);
 
-        while (innerRepositoryItemsIterator->Next())
-        {
-            ScAddr innerRepositoryItem = innerRepositoryItemsIterator->Get(2);
-            ScAddr repositoryAddress = utils::IteratorUtils::getAnyByOutRelation(
-                    context, innerRepositoryItem, keynodes::ScComponentManagerKeynodes::rrel_address);
-
-            if (repositoryAddress.IsValid())
-            {
-                std::string repositoryLink = utils::CommonUtils::getLinkContent(context, repositoryAddress);
-                repositoryAddresses.insert(repositoryLink);
-            }
-        }
-    }
-
-    return repositoryAddresses;
+  return specificationsAddrs;
 }

@@ -8,13 +8,13 @@
 
 #include <string>
 
-class ReposDownloader
+class Downloader
 {
 public:
   virtual void Download(
-      std::string const & componentPath,
-      std::string const & specificationsPath,
-      bool isRepository) = 0;
+      std::string const & downloadPath,
+      std::string const & urlAddress,
+      std::string const & pathPostfix = "") = 0;
 
-  virtual ~ReposDownloader() = default;
+  virtual ~Downloader() = default;
 };

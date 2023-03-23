@@ -10,30 +10,29 @@
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/repos_downloader/repos_downloader.hpp"
-#include "src/manager/commands/command_init/repos_downloader/repos_downloader_handler.hpp"
+#include "src/manager/commands/command_init/downloader/downloader.hpp"
+#include "src/manager/commands/command_init/downloader/downloader_handler.hpp"
 
 class ScComponentManagerCommandInit : public ScComponentManagerCommand
 {
 public:
-    explicit ScComponentManagerCommandInit(std::string specificationsPath)
-            : m_specificationsPath(std::move(specificationsPath))
-    {
-    }
+  explicit ScComponentManagerCommandInit(std::string specificationsPath)
+    : m_specificationsPath(std::move(specificationsPath))
+  {
+  }
 
-    ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
-    void ProcessRepositories(
-            ScMemoryContext * context,
-            std::string & specificationsPath,
-            std::pair<std::set<std::string>, std::set<std::string>> & repositoryItems,
-            ScAddrVector & processedRepositories);
+  void ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 
-    static std::set<std::string> GetRepositoryAddresses(
-            ScMemoryContext * context,
-            ScAddr repository,
-            ScAddr attributeRelation);
+  static ScAddrVector GetSpecificationsAddrs(
+      ScMemoryContext * context,
+      ScAddr const & repositoryAddr,
+      ScAddr const & rrelAddr);
+
+  static void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
 
 protected:
-    std::string m_specificationsPath;
+  std::string m_specificationsPath;
+  std::unique_ptr<DownloaderHandler> downloaderHandler = std::make_unique<DownloaderHandler>(m_specificationsPath);
 };

@@ -1,12 +1,78 @@
 sc_component_manager_repository
 	<- concept_repository;
-	-> rrel_components: ..components_addresses;
-	-> rrel_repositories: ..repositories_addresses;;
+	-> rrel_components_specifications: ..components_addresses;
+	-> rrel_repositories_specifications: ..repositories_addresses;;
 
 ..components_addresses
-	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/cat-kb-component];; *);
-	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/ui-menu-component];; *);
-	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);;
+	<- sc_node_tuple;
+	-> knowledge_base_ims_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					... 
+					(*
+						-> [https://github.com/ostis-ai/ims.ostis.kb]
+							(*
+								<- concept_github_url;;
+							*);;
+					*);;
+			*);;
+		*);
+	-> cat_kb_component_spec
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/cat-kb-component]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> dog_component_spec
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/smousy/sc-web-dog]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> component_unknown_spec
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);;
 
 ..repositories_addresses
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;

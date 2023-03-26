@@ -36,7 +36,7 @@ public:
 protected:
   std::string m_downloadDir;
   static char const DIRECTORY_DELIMITER = '/';
-  std::map<ScAddr, Downloader *, ScAddrLessFunc> m_downloaders = {
+  std::map<ScAddr, Downloader *, ScAddLessFunc> m_downloaders = {
       {keynodes::ScComponentManagerKeynodes::concept_github_url, new DownloaderGit()},
       {keynodes::ScComponentManagerKeynodes::concept_google_drive_url, new DownloaderGoogleDrive()}};
 

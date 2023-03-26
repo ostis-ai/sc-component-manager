@@ -19,19 +19,23 @@ extern "C"
 
 class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 {
-  std::string const PARAMETER_NAME = "idtf";
+    std::string const PARAMETER_NAME = "idtf";
 
 public:
-  explicit ScComponentManagerCommandInstall(std::string specificationsPath);
+    explicit ScComponentManagerCommandInstall(std::string specificationsPath);
 
-  ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+    ExecutionResult Execute(ScMemoryContext *context, CommandParameters const &commandParameters) override;
 
 protected:
-  static bool ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+    static bool ValidateComponent(ScMemoryContext *context, ScAddr const &componentAddr);
 
-  void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+    void DownloadComponent(ScMemoryContext *context, ScAddr const &componentAddr);
 
-  ExecutionResult InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
+    ExecutionResult InstallDependencies(ScMemoryContext *context, ScAddr const &componentAddr);
 
-  std::string m_specificationsPath;
+    ScAddrVector GetAvailableComponents(ScMemoryContext *context, std::vector <std::string> componentsToInstall);
+
+    void InstallComponent(ScMemoryContext *context, ScAddr const &componentAddr);
+
+    std::string m_specificationsPath;
 };

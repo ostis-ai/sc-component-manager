@@ -66,6 +66,9 @@ public:
 
   SC_PROPERTY(Keynode("nrel_repository_address"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_repository_address;
+
+  SC_PROPERTY(Keynode("nrel_install_scripts"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_install_scripts;
 };
 
 }  // namespace keynodes

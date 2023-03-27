@@ -18,6 +18,8 @@
  */
 ScAddr DownloaderHandler::getDownloadableClass(ScMemoryContext * context, ScAddr const & nodeAddr)
 {
+  ScAddr downloadableClass;
+
   ScAddrVector const downloadableClasses = {
       keynodes::ScComponentManagerKeynodes::concept_repository,
       keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification};
@@ -26,11 +28,11 @@ ScAddr DownloaderHandler::getDownloadableClass(ScMemoryContext * context, ScAddr
   {
     if (context->HelperCheckEdge(currentClass, nodeAddr, ScType::EdgeAccessConstPosPerm))
     {
-      return currentClass;
+      downloadableClass = currentClass;
     }
   }
 
-  return ScAddr::Empty;
+  return downloadableClass;
 }
 
 /**
@@ -43,6 +45,7 @@ ScAddr DownloaderHandler::getDownloadableClass(ScMemoryContext * context, ScAddr
  */
 ScAddr DownloaderHandler::getUrlLinkClass(ScMemoryContext * context, ScAddr const & linkAddr)
 {
+  ScAddr urlLinkClass;
 
   ScAddrVector const downloadableUrls = {
       keynodes::ScComponentManagerKeynodes::concept_github_url,
@@ -52,11 +55,11 @@ ScAddr DownloaderHandler::getUrlLinkClass(ScMemoryContext * context, ScAddr cons
   {
     if (context->HelperCheckEdge(currentClass, linkAddr, ScType::EdgeAccessConstPosPerm))
     {
-      return currentClass;
+      urlLinkClass = currentClass;
     }
   }
 
-  return ScAddr::Empty;
+  return urlLinkClass;
 }
 
 DownloaderHandler::~DownloaderHandler()

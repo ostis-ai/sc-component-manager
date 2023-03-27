@@ -74,7 +74,16 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
     downloaderHandler->Download(context, componentSpecificationAddr);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR +
                                           context->HelperGetSystemIdtf(componentSpecificationAddr);
-    componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
+
+    try
+    {
+      componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
+    }
+    catch (utils::ScException const & exception)
+    {
+      SC_LOG_ERROR(exception.Message());
+      SC_LOG_ERROR(exception.Description());
+    }
   }
 
   availableRepositories.pop_back();

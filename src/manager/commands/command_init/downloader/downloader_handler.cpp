@@ -94,13 +94,30 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
   // TODO: Optimize choosing get address method
   if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification)
   {
-    nodeAddressLinkAddrs = componentUtils::SearchUtils::GetSpecificationAddress(context, nodeAddr);
+    try
+    {
+      nodeAddressLinkAddrs = componentUtils::SearchUtils::GetSpecificationAddress(context, nodeAddr);
+    }
+    catch (utils::ScException const & exception)
+    {
+      SC_LOG_ERROR(exception.Message());
+      SC_LOG_ERROR(exception.Description());
+    }
+
     specificationPostfix = SpecificationConstants::SPECIFICATION_FILENAME;
   }
 
   if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_repository)
   {
-    nodeAddressLinkAddrs = {componentUtils::SearchUtils::GetRepositoryAddress(context, nodeAddr)};
+    try
+    {
+      nodeAddressLinkAddrs = {componentUtils::SearchUtils::GetRepositoryAddress(context, nodeAddr)};
+    }
+    catch (utils::ScException const & exception)
+    {
+      SC_LOG_ERROR(exception.Message());
+      SC_LOG_ERROR(exception.Description());
+    }
   }
 
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)

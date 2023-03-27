@@ -11,21 +11,17 @@
 
 #include "src/manager/commands/command_init/constants/command_init_constants.hpp"
 
-//TODO:
-/**
- * @brief
- * @param specificationsPath
- */
+
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string specificationsPath)
         : m_specificationsPath(std::move(specificationsPath))
 {
 }
 
 /**
- *
- * @param context
- * @param componentsToInstall
- * @return
+ * @brief Check if components from specification is available
+ * @param context current sc-memory context
+ * @param componentsToInstall vector of components identifiers
+ * @return vector of available components
  */
 ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(ScMemoryContext *context,
                                                                       std::vector <std::string> componentsToInstall)
@@ -48,9 +44,9 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(ScMemoryCo
 }
 
 /**
- *
- * @param context
- * @param componentAddr
+ * @brief Installation of component
+ * @param context current sc-memory context
+ * @param componentAddr component addr
  */
 void ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext *context, ScAddr const &componentAddr)
 {

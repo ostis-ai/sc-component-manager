@@ -20,7 +20,6 @@ ScAddr ScComponentManagerKeynodes::concept_google_drive_url;
 
 ScAddr ScComponentManagerKeynodes::rrel_repositories_specifications;
 ScAddr ScComponentManagerKeynodes::rrel_components_specifications;
-// ScAddr ScComponentManagerKeynodes::rrel_address;
 
 ScAddr ScComponentManagerKeynodes::nrel_authors;
 ScAddr ScComponentManagerKeynodes::nrel_explanation;

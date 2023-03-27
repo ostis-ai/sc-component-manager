@@ -119,15 +119,14 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
 
   if (!alternativeAddressesSetIterator->Next())
   {
-    SC_LOG_ERROR("No alternative addresses set found");
-    return specificationAddressLinks;
+    SC_THROW_EXCEPTION(utils::ExceptionItemNotFound, "No alternative addresses set found");
   }
+
   ScAddr const & alternativeAddressesSet = alternativeAddressesSetIterator->Get(2);
 
   if (utils::CommonUtils::isEmpty(context, alternativeAddressesSet))
   {
-    SC_LOG_ERROR("Alternative addresses set is empty");
-    return specificationAddressLinks;
+    SC_THROW_EXCEPTION(utils::ExceptionAssert, "Alternative addresses set is empty");
   }
 
   ScAddr specificationAddressAddr = utils::IteratorUtils::getFirstFromSet(context, alternativeAddressesSet, true);
@@ -142,8 +141,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
 
   if (specificationAddressLinks.empty())
   {
-    SC_LOG_ERROR("No sc-links connected with address node");
-    return specificationAddressLinks;
+    SC_THROW_EXCEPTION(utils::ExceptionAssert, "No sc-links connected with address node");
   }
 
   return specificationAddressLinks;
@@ -168,8 +166,7 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 
   if (!repositoryAddressIterator->Next())
   {
-    SC_LOG_ERROR("No address found for repository");
-    return addressLinkAddr;
+    SC_THROW_EXCEPTION(utils::ExceptionItemNotFound, "No address found for repository");
   }
 
   ScAddr const & repositoryAddressAddr = repositoryAddressIterator->Get(2);
@@ -179,8 +176,7 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 
   if (!addressLinkIterator->Next())
   {
-    SC_LOG_ERROR("No links for repository address found");
-    return addressLinkAddr;
+    SC_THROW_EXCEPTION(utils::ExceptionItemNotFound, "No links for repository address found");
   }
 
   addressLinkAddr = addressLinkIterator->Get(2);

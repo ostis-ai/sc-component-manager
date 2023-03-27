@@ -15,7 +15,7 @@ ExecutionResult ScComponentManagerCommandInit::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
 {
-  std::pair<std::set<std::string>, std::set<std::string>> repositoryItems;
+  std::pair<std::set<std::string>, std::set<std::string>> repositoryItems; //its never updated
   ScAddrVector processedRepositories;
 
   ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
@@ -74,20 +74,14 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
     downloaderHandler->Download(context, componentSpecificationAddr);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR +
                                           context->HelperGetSystemIdtf(componentSpecificationAddr);
+    componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
 
-    try
-    {
-      componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
-    }
-    catch (utils::ScException const & exception)
-    {
-      SC_LOG_ERROR(exception.Message());
-      SC_LOG_ERROR(exception.Description());
-    }
+    ScAddrVector componentDependencies = componentUtils::SearchUtils::GetComponentDependencies(context, componentSpecificationAddr);
+    ProcessRepositories(context, componentDependencies);
   }
 
   availableRepositories.pop_back();
-  ProcessRepositories(context, availableRepositories);
+  ProcessRepositories(context, availableRepositories); // need to understand this logic and rewrite it
 }
 
 /**

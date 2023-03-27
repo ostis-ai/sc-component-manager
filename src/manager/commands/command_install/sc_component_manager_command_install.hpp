@@ -27,7 +27,7 @@ public:
     ExecutionResult Execute(ScMemoryContext *context, CommandParameters const &commandParameters) override;
 
 protected:
-    static bool ValidateComponent(ScMemoryContext *context, ScAddr const &componentAddr);
+    static void ValidateComponent(ScMemoryContext *context, ScAddr const &componentAddr);
 
     void DownloadComponent(ScMemoryContext *context, ScAddr const &componentAddr);
 

@@ -32,9 +32,14 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(ScMemoryCo
         ScAddr componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
 
         SC_LOG_DEBUG("Validating component \"" + componentToInstallIdentifier);
-        if (!ValidateComponent(context, componentAddr))
+        try
         {
-            SC_LOG_WARNING("Unable to install component \"" + componentToInstallIdentifier);
+            ValidateComponent(context, componentAddr);
+        }
+        catch(utils::ScException const & exception)
+        {
+            SC_LOG_DEBUG("Unable to install component \\\"\" + componentToInstallIdentifier");
+            SC_LOG_DEBUG(exception.Message());
             continue;
         }
         SC_LOG_DEBUG("Component \"" + componentToInstallIdentifier + "\" is specified correctly");
@@ -100,40 +105,33 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
  * - component is reusable;
  * - component's address link is valid;
  * - component's installation method is valid;
- * @return Returns true if component is valid.
+ * Throw exception if failed
  */
-bool ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext *context, ScAddr const &componentAddr)
+void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext *context, ScAddr const &componentAddr)
 {
-    bool result = true;
     // Check if component exist
     if (!componentAddr.IsValid())
     {
-        SC_LOG_WARNING("Component not found. Unable to install");
-        result = false;
+        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component not found. Unable to install");
     }
 
     // Check if component is a reusable component
-    if (result && !componentUtils::InstallUtils::IsReusable(context, componentAddr))
+    if (!componentUtils::InstallUtils::IsReusable(context, componentAddr))
     {
-        SC_LOG_WARNING("Component is not a reusable component.");
-        result = false;
+        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component is not a reusable component.");
     }
 
     // Find and check component address
-    if (result && componentUtils::InstallUtils::GetComponentAddressStr(context, componentAddr).empty())
+    if (componentUtils::InstallUtils::GetComponentAddressStr(context, componentAddr).empty())
     {
-        SC_LOG_WARNING("Component address not found.");
-        result = false;
+        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component address not found.");
     }
 
     // Find and check component installation method
-    if (result && !componentUtils::InstallUtils::IsComponentInstallationMethodValid(context, componentAddr))
+    if (!componentUtils::InstallUtils::IsComponentInstallationMethodValid(context, componentAddr))
     {
-        SC_LOG_WARNING("Component installation method not found.");
-        result = false;
+        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component installation method not found.");
     }
-
-    return result;
 }
 
 /**
@@ -157,7 +155,7 @@ ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
         CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
         ExecutionResult dependencyResult = Execute(context, dependencyParameters);
 
-        // Return empty if you couldn't install dependency why?
+        // Return empty if you couldn't install one from all dependencies why?
         if (dependencyResult.empty())
         {
             SC_LOG_ERROR("Dependency \"" + dependencyIdtf + "\" is not installed");
@@ -185,7 +183,9 @@ void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext *contex
 
         std::string componentDirName = componentUtils::InstallUtils::GetComponentDirName(context, componentAddr,
                                                                                          m_specificationsPath);
-        componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName);
-        //TODO: need to check if all files are translated and write warning if not, bug in sc-machine loader
+        if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
+        {
+            SC_LOG_WARNING("Not all files are loaded from" + componentDirName);
+        }
     }
 }

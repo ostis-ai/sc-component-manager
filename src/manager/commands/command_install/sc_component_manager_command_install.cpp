@@ -85,8 +85,18 @@ bool ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
     return false;
   }
 
+  ScAddr componentAddressAddr;
   // Find and check component address
-  ScAddr const & componentAddressAddr = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  try
+  {
+    componentAddressAddr = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+    SC_LOG_ERROR(exception.Description());
+  }
+
   std::string componentAddressContent;
   context->GetLinkContent(componentAddressAddr, componentAddressContent);
   if (componentAddressContent.empty())
@@ -95,9 +105,19 @@ bool ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
     return false;
   }
 
+  ScAddr componentInstallationMethod;
+
   // Find and check component installation method
-  ScAddr const & componentInstallationMethod =
-      componentUtils::SearchUtils::GetComponentInstallationMethod(context, componentAddr);
+  try
+  {
+    componentInstallationMethod = componentUtils::SearchUtils::GetComponentInstallationMethod(context, componentAddr);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+    SC_LOG_ERROR(exception.Description());
+  }
+
   if (!componentInstallationMethod.IsValid())
   {
     SC_LOG_WARNING("Component installation method not found.");
@@ -119,8 +139,19 @@ ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
 {
   ExecutionResult result;
   // Get component dependencies and install them recursively
-  ScAddrVector const & componentDependencies =
-      componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
+
+  ScAddrVector componentDependencies;
+
+  try
+  {
+    componentDependencies = componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+    SC_LOG_ERROR(exception.Description());
+  }
+
   for (ScAddr const & componentDependency : componentDependencies)
   {
     std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
@@ -145,7 +176,17 @@ ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
  */
 void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  ScAddr const & componentAddressAddr = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  ScAddr componentAddressAddr;
+
+  try
+  {
+    componentAddressAddr = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+    SC_LOG_ERROR(exception.Description());
+  }
   std::string componentAddressContent;
   context->GetLinkContent(componentAddressAddr, componentAddressContent);
   if (componentAddressContent.find(GitHubConstants::GITHUB_PREFIX) != std::string::npos)

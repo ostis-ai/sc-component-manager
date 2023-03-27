@@ -186,11 +186,11 @@ namespace componentUtils {
     };
 
     /**
-  *
-  * @param context
-  * @param componentAddr
-  * @return
-  */
+     * Check if component is reusable
+     * @param context current sc-memory context
+     * @param componentAddr component addr
+     * @return true if component is reusable
+     */
     bool InstallUtils::IsReusable(ScMemoryContext *context, ScAddr const &componentAddr)
     {
         bool result = true;
@@ -206,10 +206,10 @@ namespace componentUtils {
     }
 
     /**
-     *
-     * @param context
-     * @param componentAddr
-     * @return
+     * Get installation scripts from component
+     * @param context current sc-memory context
+     * @param componentAddr component addr
+     * @return vector of installation scripts
      */
     std::vector <std::string> InstallUtils::GetInstallScripts(ScMemoryContext *context, ScAddr const &componentAddr)
     {
@@ -233,10 +233,10 @@ namespace componentUtils {
     }
 
     /**
-     *
-     * @param context
-     * @param componentAddr
-     * @return
+     * Check if component installation method valid
+     * @param context current sc-memory context
+     * @param componentAddr component addr
+     * @return true if component installation method valid
      */
     bool InstallUtils::IsComponentInstallationMethodValid(ScMemoryContext *context, ScAddr const &componentAddr)
     {
@@ -252,10 +252,10 @@ namespace componentUtils {
     }
 
     /**
-     *
-     * @param context
-     * @param componentAddr
-     * @return
+     * Get string of component address
+     * @param context current sc-memory context
+     * @param componentAddr component addr
+     * @return string of component address
      */
     std::string InstallUtils::GetComponentAddressStr(ScMemoryContext *context, ScAddr const &componentAddr)
     {
@@ -266,11 +266,11 @@ namespace componentUtils {
     }
 
     /**
-     *
-     * @param context
-     * @param componentAddr
-     * @param specificationsPath
-     * @return
+     * Get component directory name
+     * @param context current sc-memory context
+     * @param componentAddr component addr
+     * @param specificationsPath path to specification
+     * @return component directory name
      */
     std::string InstallUtils::GetComponentDirName(ScMemoryContext *context, ScAddr const &componentAddr,
                                                   const std::string &specificationsPath)
@@ -283,9 +283,9 @@ namespace componentUtils {
     }
 
     /**
-     *
-     * @param context
-     * @param dirPath
+     * Load all .scs files in directory
+     * @param context current sc-memory context
+     * @param dirPath directory path
      */
     void LoadUtils::LoadScsFilesInDir(ScMemoryContext *context, std::string const &dirPath)
     {

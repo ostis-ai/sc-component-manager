@@ -43,7 +43,7 @@ namespace componentUtils {
     class LoadUtils
     {
     public:
-        static void LoadScsFilesInDir(ScMemoryContext *context, std::string const &dirPath);
+        static bool LoadScsFilesInDir(ScMemoryContext *context, std::string const &dirPath);
     };
 
 }  // namespace componentUtils

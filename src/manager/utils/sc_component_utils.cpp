@@ -227,7 +227,7 @@ namespace componentUtils {
         {
             const ScAddr &scriptAddrs = installScriptsIterator->Get(2);
             context->GetLinkContent(scriptAddrs, script);
-            SC_LOG_WARNING("ScComponentManager: Install script found:" + script);
+            SC_LOG_DEBUG("ScComponentManager: Install script found:" + script);
         }
         return {};
     }
@@ -287,8 +287,9 @@ namespace componentUtils {
      * @param context current sc-memory context
      * @param dirPath directory path
      */
-    void LoadUtils::LoadScsFilesInDir(ScMemoryContext *context, std::string const &dirPath)
+    bool LoadUtils::LoadScsFilesInDir(ScMemoryContext *context, std::string const &dirPath)
     {
+        bool result = false;
         ScsLoader loader;
         DIR *dir;
         struct dirent *diread;
@@ -299,11 +300,13 @@ namespace componentUtils {
                 std::string filename = diread->d_name;
                 if (filename.rfind(".scs") != std::string::npos)
                 {
-                    loader.loadScsFile(*context, dirPath + "/" + filename);
+                    loader.loadScsFile(*context, dirPath + "/" + filename); //TODO: need to fix in sc-machine
+                    result = true; //while not fixed
                 }
             }
             closedir(dir);
         }
+        return result;
     }
 
 }  // namespace componentUtils

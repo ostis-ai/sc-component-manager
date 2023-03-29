@@ -41,9 +41,26 @@ sc_component_manager_repository
 	-> rrel_repositories: ..repositories_addresses;;
 
 ..components_addresses
+	-> example_component
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+				...
+				(*
+					<- sc_node_tuple;;
+					-> rrel_1:
+						... 
+						(*
+							-> [https://github.com/example/kb-component]
+								(*
+									<- concept_github_url;;
+								*);;
+						*);;
+				*);;
+		*);;
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/cat-kb-component];; *);
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/ui-menu-component];; *);
-	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);;
+	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);
 
 ..repositories_addresses
 	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;

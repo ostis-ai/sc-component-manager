@@ -222,14 +222,19 @@ namespace componentUtils {
         );
 
         //TODO: bug: in kb folder there are 2 specifications for one rep, so all links duplicated
-        std::string script;
+        std::vector<std::string> scripts;
         while (installScriptsIterator->Next())
         {
+            std::string script;
             const ScAddr &scriptAddrs = installScriptsIterator->Get(2);
-            context->GetLinkContent(scriptAddrs, script);
+            script = context->GetLinkContent(scriptAddrs, script);
+            if(!script.empty())
+            {
+                scripts.push_back(script);
+            }
             SC_LOG_DEBUG("ScComponentManager: Install script found:" + script);
         }
-        return {};
+        return scripts;
     }
 
     /**

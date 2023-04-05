@@ -36,7 +36,7 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(ScMemoryCo
         {
             ValidateComponent(context, componentAddr);
         }
-        catch(utils::ScException const & exception)
+        catch (utils::ScException const &exception)
         {
             SC_LOG_DEBUG("Unable to install component \\\"\" + componentToInstallIdentifier");
             SC_LOG_DEBUG(exception.Message());
@@ -70,7 +70,7 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
         ScMemoryContext *context,
         CommandParameters const &commandParameters)
 {
-    ExecutionResult executionResult; //TODO: result doesn't change
+    ExecutionResult executionResult;
     std::vector <std::string> componentsToInstall;
 
     try
@@ -174,18 +174,12 @@ ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
  */
 void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext *context, ScAddr const &componentAddr)
 {
-    std::string const &componentAddressContent = componentUtils::InstallUtils::GetComponentAddressStr(context,
-                                                                                                      componentAddr);
-    if (componentAddressContent.find(GitHubConstants::GITHUB_PREFIX) != std::string::npos)
-    {
-        sc_fs_mkdirs(m_specificationsPath.c_str());
-        ScExec exec{{"cd", m_specificationsPath, "&&", "git clone ", componentAddressContent}};
+    downloaderHandler->Download(context, componentAddr);
 
-        std::string componentDirName = componentUtils::InstallUtils::GetComponentDirName(context, componentAddr,
-                                                                                         m_specificationsPath);
-        if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
-        {
-            SC_LOG_WARNING("Not all files are loaded from" + componentDirName);
-        }
+    std::string componentDirName = componentUtils::InstallUtils::GetComponentDirName(context, componentAddr,
+                                                                                     m_specificationsPath);
+    if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
+    {
+        SC_LOG_WARNING("Not all files are loaded from" + componentDirName);
     }
 }

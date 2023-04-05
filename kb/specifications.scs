@@ -68,7 +68,7 @@ sc_component_manager_repository
            			(*
            				-> [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing]
            					(*
-           						<- concept_github_url;;
+           						<- concept_google_drive_url;;
            					*);;
            			*);;
            	*);;

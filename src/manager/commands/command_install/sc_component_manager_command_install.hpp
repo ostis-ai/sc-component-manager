@@ -11,6 +11,8 @@
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
 #include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
+#include "src/manager/downloader/downloader.hpp"
+#include "src/manager/downloader/downloader_handler.hpp"
 
 extern "C"
 {
@@ -38,4 +40,6 @@ protected:
     void InstallComponent(ScMemoryContext *context, ScAddr const &componentAddr);
 
     std::string m_specificationsPath;
+
+    std::unique_ptr<DownloaderHandler> downloaderHandler = std::make_unique<DownloaderHandler>(m_specificationsPath);
 };

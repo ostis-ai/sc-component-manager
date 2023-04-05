@@ -7,7 +7,7 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/downloader/downloader_handler.hpp"
+#include "src/manager/downloader/downloader_handler.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
 #include "src/manager/utils/sc_component_utils.hpp"
 
@@ -15,7 +15,6 @@ ExecutionResult ScComponentManagerCommandInit::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
 {
-  std::pair<std::set<std::string>, std::set<std::string>> repositoryItems; //its never updated
   ScAddrVector processedRepositories;
 
   ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
@@ -24,7 +23,6 @@ ExecutionResult ScComponentManagerCommandInit::Execute(
   ProcessRepositories(context, availableRepositories);
 
   ExecutionResult executionResult;
-  executionResult.insert(executionResult.cbegin(), repositoryItems.second.cbegin(), repositoryItems.second.cend());
 
   return executionResult;
 }

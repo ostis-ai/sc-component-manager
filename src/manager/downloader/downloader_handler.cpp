@@ -108,7 +108,8 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
     specificationPostfix = SpecificationConstants::SPECIFICATION_FILENAME;
   }
 
-  if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_repository || nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component)
+  if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_repository ||
+      nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component)
   {
     try
     {
@@ -123,7 +124,7 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
 
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
-    ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr); //TODO: not safe method
+    ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method
     if (linkAddressClassAddr == keynodes::ScComponentManagerKeynodes::concept_github_url)
     {
       context->GetLinkContent(currentAddressLinkAddr, url);

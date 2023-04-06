@@ -74,12 +74,14 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
                                           context->HelperGetSystemIdtf(componentSpecificationAddr);
     componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
 
-    ScAddrVector componentDependencies = componentUtils::SearchUtils::GetComponentDependencies(context, componentSpecificationAddr);
-    ProcessRepositories(context, componentDependencies);
+    ScAddrVector componentDependencies =
+        componentUtils::SearchUtils::GetComponentDependencies(context, componentSpecificationAddr);
+    availableRepositories.insert(
+        availableRepositories.end(), componentDependencies.begin(), componentDependencies.end());
   }
 
   availableRepositories.pop_back();
-  ProcessRepositories(context, availableRepositories); // need to understand this logic and rewrite it
+  ProcessRepositories(context, availableRepositories);
 }
 
 /**

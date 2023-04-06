@@ -11,9 +11,8 @@
 
 #include "src/manager/commands/command_init/constants/command_init_constants.hpp"
 
-
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string specificationsPath)
-        : m_specificationsPath(std::move(specificationsPath))
+  : m_specificationsPath(std::move(specificationsPath))
 {
 }
 
@@ -23,81 +22,83 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string s
  * @param componentsToInstall vector of components identifiers
  * @return vector of available components
  */
-ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(ScMemoryContext *context,
-                                                                      std::vector <std::string> componentsToInstall)
+ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
+    ScMemoryContext * context,
+    std::vector<std::string> componentsToInstall)
 {
-    ScAddrVector availableComponents;
-    for (std::string const &componentToInstallIdentifier: componentsToInstall)
-    {
-        ScAddr componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
+  ScAddrVector availableComponents;
+  for (std::string const & componentToInstallIdentifier : componentsToInstall)
+  {
+    ScAddr componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
 
-        SC_LOG_DEBUG("Validating component \"" + componentToInstallIdentifier);
-        try
-        {
-            ValidateComponent(context, componentAddr);
-        }
-        catch (utils::ScException const &exception)
-        {
-            SC_LOG_ERROR("Unable to install component \\\"\" + componentToInstallIdentifier");
-            SC_LOG_DEBUG(exception.Message());
-            continue;
-        }
-        SC_LOG_DEBUG("Component \"" + componentToInstallIdentifier + "\" is specified correctly");
-        availableComponents.push_back(componentAddr);
+    SC_LOG_DEBUG("Validating component \"" + componentToInstallIdentifier + "\"");
+    try
+    {
+      ValidateComponent(context, componentAddr);
     }
-    return availableComponents;
+    catch (utils::ScException const & exception)
+    {
+      SC_LOG_ERROR("Unable to install component \\\"\" + componentToInstallIdentifier");
+      SC_LOG_DEBUG(exception.Message());
+      continue;
+    }
+    SC_LOG_DEBUG("Component \"" + componentToInstallIdentifier + "\" is specified correctly");
+    availableComponents.push_back(componentAddr);
+  }
+  return availableComponents;
 }
 
 /**
  * @brief Installation of component
  * @param context current sc-memory context
- * @param componentAddr component addr
+ * @param componentAddr component sc-addr
  */
-void ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext *context, ScAddr const &componentAddr)
+void ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-    std::vector <std::string> scripts = componentUtils::InstallUtils::GetInstallScripts(context, componentAddr);
-    for (auto script: scripts)
-    {
-        std::string componentDirName = componentUtils::InstallUtils::GetComponentDirName(context, componentAddr,
-                                                                                         m_specificationsPath);
-        std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
-        std::string path = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf + GitHubConstants::SVN_TRUNK ;
-        script = "."+script;
-        sc_fs_mkdirs(path.c_str());
-        ScExec exec{{"cd",path,"&&",script}};
-    }
+  std::vector<std::string> scripts = componentUtils::InstallUtils::GetInstallScripts(context, componentAddr);
+  for (auto script : scripts)
+  {
+    std::string componentDirName =
+        componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_specificationsPath);
+    std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
+    std::string path =
+        m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf + GitHubConstants::SVN_TRUNK;
+    script = "." + script;
+    sc_fs_mkdirs(path.c_str());
+    ScExec exec{{"cd", path, "&&", script}};
+  }
 }
 
 ExecutionResult ScComponentManagerCommandInstall::Execute(
-        ScMemoryContext *context,
-        CommandParameters const &commandParameters)
+    ScMemoryContext * context,
+    CommandParameters const & commandParameters)
 {
-    ExecutionResult executionResult;
-    std::vector <std::string> componentsToInstall;
+  ExecutionResult executionResult;
+  std::vector<std::string> componentsToInstall;
 
-    try
-    {
-        componentsToInstall = commandParameters.at(PARAMETER_NAME);
-    }
-    catch (std::exception const &exception)
-    {
-        // TODO: Implement install all components method
-        SC_LOG_INFO("No identifier provided, installing all to install components");
-
-        return executionResult;
-    }
-
-    ScAddrVector availableComponents = GetAvailableComponents(context, componentsToInstall);
-
-    for (ScAddr componentAddr: availableComponents)
-    {
-        InstallDependencies(context, componentAddr);
-        DownloadComponent(context, componentAddr);
-        InstallComponent(context, componentAddr);
-        // TODO: need to process installation method from component specification in kb
-    }
+  try
+  {
+    componentsToInstall = commandParameters.at(PARAMETER_NAME);
+  }
+  catch (std::exception const & exception)
+  {
+    // TODO: Implement install all components method
+    SC_LOG_INFO("No identifier provided, installing all to install components");
 
     return executionResult;
+  }
+
+  ScAddrVector availableComponents = GetAvailableComponents(context, componentsToInstall);
+
+  for (ScAddr componentAddr : availableComponents)
+  {
+    InstallDependencies(context, componentAddr);
+    DownloadComponent(context, componentAddr);
+    InstallComponent(context, componentAddr);
+    // TODO: need to process installation method from component specification in kb
+  }
+
+  return executionResult;
 }
 
 /**
@@ -109,31 +110,31 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
  * - component's installation method is valid;
  * Throw exception if failed
  */
-void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext *context, ScAddr const &componentAddr)
+void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-    // Check if component exist
-    if (!componentAddr.IsValid())
-    {
-        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component not found. Unable to install");
-    }
+  // Check if component exist
+  if (!componentAddr.IsValid())
+  {
+    SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component not found. Unable to install");
+  }
 
-    // Check if component is a reusable component
-    if (!componentUtils::InstallUtils::IsReusable(context, componentAddr))
-    {
-        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component is not a reusable component.");
-    }
+  // Check if component is a reusable component
+  if (!componentUtils::InstallUtils::IsReusable(context, componentAddr))
+  {
+    SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component is not a reusable component.");
+  }
 
-    // Find and check component address
-    if (componentUtils::InstallUtils::GetComponentAddressStr(context, componentAddr).empty())
-    {
-        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component address not found.");
-    }
+  // Find and check component address
+  if (componentUtils::InstallUtils::GetComponentAddressStr(context, componentAddr).empty())
+  {
+    SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component address not found.");
+  }
 
-    // Find and check component installation method
-    if (!componentUtils::InstallUtils::IsComponentInstallationMethodValid(context, componentAddr))
-    {
-        SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component installation method not found.");
-    }
+  // Find and check component installation method
+  if (!componentUtils::InstallUtils::IsComponentInstallationMethodValid(context, componentAddr))
+  {
+    SC_THROW_EXCEPTION(utils::ExceptionAssert, "Component installation method not found.");
+  }
 }
 
 /**
@@ -143,45 +144,46 @@ void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext *contex
  * returns empty vector.
  */
 ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
-        ScMemoryContext *context,
-        ScAddr const &componentAddr)
+    ScMemoryContext * context,
+    ScAddr const & componentAddr)
 {
-    ExecutionResult result;
-    // Get component dependencies and install them recursively
-    ScAddrVector const &componentDependencies =
-            componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
-    for (ScAddr const &componentDependency: componentDependencies)
+  ExecutionResult result;
+  // Get component dependencies and install them recursively
+  ScAddrVector const & componentDependencies =
+      componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
+  for (ScAddr const & componentDependency : componentDependencies)
+  {
+    std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
+    SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
+    CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
+    ExecutionResult dependencyResult = Execute(context, dependencyParameters);
+
+    // Return empty if you couldn't install one from all dependencies why?
+    if (dependencyResult.empty())
     {
-        std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
-        SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
-        CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
-        ExecutionResult dependencyResult = Execute(context, dependencyParameters);
-
-        // Return empty if you couldn't install one from all dependencies why?
-        if (dependencyResult.empty())
-        {
-            SC_LOG_ERROR("Dependency \"" + dependencyIdtf + "\" is not installed");
-            //return dependencyResult;
-        } else
-        {
-            result.insert(result.cbegin(), dependencyResult.cbegin(), dependencyResult.cend());
-        }
+      SC_LOG_ERROR("Dependency \"" + dependencyIdtf + "\" is not installed");
+      // return dependencyResult;
     }
+    else
+    {
+      result.insert(result.cbegin(), dependencyResult.cbegin(), dependencyResult.cend());
+    }
+  }
 
-    return result;
+  return result;
 }
 
 /**
  * Tries to download component from Github
  */
-void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext *context, ScAddr const &componentAddr)
+void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-    downloaderHandler->Download(context, componentAddr);
+  downloaderHandler->Download(context, componentAddr);
 
-    std::string componentDirName = componentUtils::InstallUtils::GetComponentDirName(context, componentAddr,
-                                                                                     m_specificationsPath);
-    if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
-    {
-        SC_LOG_WARNING("Not all files are loaded from" + componentDirName);
-    }
+  //  std::string componentDirName =
+  //      componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_specificationsPath);
+  //  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
+  //  {
+  //    SC_LOG_WARNING("Not all files are loaded from" + componentDirName);
+  //  }
 }

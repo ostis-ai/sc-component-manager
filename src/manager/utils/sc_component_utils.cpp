@@ -106,8 +106,7 @@ namespace componentUtils {
  * @return Vector of sc-addr for sc-links which contain url address,
  * return empty vector if no links found
  */
-    ScAddrVector
-    SearchUtils::GetSpecificationAddress(ScMemoryContext *context, ScAddr const &componentSpecificationAddr)
+    ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext *context, ScAddr const &componentSpecificationAddr)
     {
         ScAddrVector specificationAddressLinks;
 
@@ -227,7 +226,7 @@ namespace componentUtils {
         {
             std::string script;
             const ScAddr &scriptAddrs = installScriptsIterator->Get(2);
-            script = context->GetLinkContent(scriptAddrs, script);
+            context->GetLinkContent(scriptAddrs, script);
             if(!script.empty())
             {
                 scripts.push_back(script);

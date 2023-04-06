@@ -38,7 +38,7 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(ScMemoryCo
         }
         catch (utils::ScException const &exception)
         {
-            SC_LOG_DEBUG("Unable to install component \\\"\" + componentToInstallIdentifier");
+            SC_LOG_ERROR("Unable to install component \\\"\" + componentToInstallIdentifier");
             SC_LOG_DEBUG(exception.Message());
             continue;
         }
@@ -60,11 +60,13 @@ void ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext *context
     {
         std::string componentDirName = componentUtils::InstallUtils::GetComponentDirName(context, componentAddr,
                                                                                          m_specificationsPath);
-        sc_fs_mkdirs(componentDirName.c_str());
-        ScExec exec{{"cd", componentDirName, "&&", script}};
+        std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
+        std::string path = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf + GitHubConstants::SVN_TRUNK ;
+        script = "."+script;
+        sc_fs_mkdirs(path.c_str());
+        ScExec exec{{"cd",path,"&&",script}};
     }
 }
-
 
 ExecutionResult ScComponentManagerCommandInstall::Execute(
         ScMemoryContext *context,

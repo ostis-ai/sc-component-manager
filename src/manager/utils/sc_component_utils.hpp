@@ -25,10 +25,27 @@ public:
   static ScAddr GetRepositoryAddress(ScMemoryContext * context, ScAddr const & repositoryAddr);
 };
 
+class InstallUtils
+{
+public:
+  static bool IsReusable(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  static bool IsComponentInstallationMethodValid(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  static std::string GetComponentAddressStr(ScMemoryContext * context, ScAddr const & componentAddr);
+
+  static std::string GetComponentDirName(
+      ScMemoryContext * context,
+      ScAddr const & componentAddr,
+      const std::string & specificationsPath);
+
+  static std::vector<std::string> GetInstallScripts(ScMemoryContext * context, ScAddr const & componentAddr);
+};
+
 class LoadUtils
 {
 public:
-  static void LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath);
+  static bool LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath);
 };
 
 }  // namespace componentUtils

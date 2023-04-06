@@ -184,8 +184,116 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
   return addressLinkAddr;
 };
 
-void LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath)
+/**
+ * Check if component is reusable
+ * @param context current sc-memory context
+ * @param componentAddr component addr
+ * @return true if component is reusable
+ */
+bool InstallUtils::IsReusable(ScMemoryContext * context, ScAddr const & componentAddr)
 {
+  bool result = true;
+  ScIterator3Ptr const reusableComponentCLassIterator = context->Iterator3(
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessConstPosPerm, componentAddr);
+  if (!reusableComponentCLassIterator->Next())
+  {
+    SC_LOG_WARNING("Component is not a reusable component.");
+    result = false;
+  }
+  return result;
+}
+
+/**
+ * Get installation scripts from component
+ * @param context current sc-memory context
+ * @param componentAddr component addr
+ * @return vector of installation scripts
+ */
+std::vector<std::string> InstallUtils::GetInstallScripts(ScMemoryContext * context, ScAddr const & componentAddr)
+{
+  ScIterator5Ptr const & installScriptsIterator = context->Iterator5(
+      componentAddr,
+      ScType::EdgeDCommonConst,
+      ScType::LinkConst,
+      ScType::EdgeAccessConstPosPerm,
+      keynodes::ScComponentManagerKeynodes::nrel_installation_script);
+
+  // TODO: bug: in kb folder there are 2 specifications for one rep, so all links duplicated
+  std::vector<std::string> scripts;
+  while (installScriptsIterator->Next())
+  {
+    std::string script;
+    const ScAddr & scriptAddrs = installScriptsIterator->Get(2);
+    context->GetLinkContent(scriptAddrs, script);
+    if (!script.empty())
+    {
+      scripts.push_back(script);
+    }
+    SC_LOG_DEBUG("ScComponentManager: Install script found:" + script);
+  }
+  return scripts;
+}
+
+/**
+ * Check if component installation method valid
+ * @param context current sc-memory context
+ * @param componentAddr component addr
+ * @return true if component installation method valid
+ */
+bool InstallUtils::IsComponentInstallationMethodValid(ScMemoryContext * context, ScAddr const & componentAddr)
+{
+  bool result = true;
+  ScAddr const & componentInstallationMethod =
+      componentUtils::SearchUtils::GetComponentInstallationMethod(context, componentAddr);
+  if (!componentInstallationMethod.IsValid())
+  {
+    SC_LOG_WARNING("Component installation method isn't valid.");
+    result = false;
+  }
+  return result;
+}
+
+/**
+ * Get string of component address
+ * @param context current sc-memory context
+ * @param componentAddr component addr
+ * @return string of component address
+ */
+std::string InstallUtils::GetComponentAddressStr(ScMemoryContext * context, ScAddr const & componentAddr)
+{
+  ScAddr const & componentAddressAddr = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  std::string componentAddressContent;
+  context->GetLinkContent(componentAddressAddr, componentAddressContent);
+  return componentAddressContent;
+}
+
+/**
+ * Get component directory name
+ * @param context current sc-memory context
+ * @param componentAddr component addr
+ * @param specificationsPath path to specification
+ * @return component directory name
+ */
+std::string InstallUtils::GetComponentDirName(
+    ScMemoryContext * context,
+    ScAddr const & componentAddr,
+    const std::string & specificationsPath)
+{
+  std::string const & componentAddressContent =
+      componentUtils::InstallUtils::GetComponentAddressStr(context, componentAddr);
+  size_t componentDirNameIndex = componentAddressContent.rfind('/');
+  std::string componentDirName = specificationsPath + componentAddressContent.substr(componentDirNameIndex);
+  return componentDirName;
+}
+
+/**
+ * Load all .scs files in directory
+ * @param context current sc-memory context
+ * @param dirPath directory path
+ */
+bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath)
+{
+  bool result = false;
   ScsLoader loader;
   DIR * dir;
   struct dirent * diread;
@@ -196,11 +304,13 @@ void LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const &
       std::string filename = diread->d_name;
       if (filename.rfind(".scs") != std::string::npos)
       {
-        loader.loadScsFile(*context, dirPath + "/" + filename);
+        loader.loadScsFile(*context, dirPath + "/" + filename);  // TODO: need to fix in sc-machine
+        result = true;                                           // while not fixed
       }
     }
     closedir(dir);
   }
+  return result;
 }
 
 }  // namespace componentUtils

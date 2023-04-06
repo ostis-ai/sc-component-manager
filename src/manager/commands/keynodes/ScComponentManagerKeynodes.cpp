@@ -17,10 +17,8 @@ ScAddr ScComponentManagerKeynodes::concept_complex_address;
 ScAddr ScComponentManagerKeynodes::concept_single_address;
 ScAddr ScComponentManagerKeynodes::concept_github_url;
 ScAddr ScComponentManagerKeynodes::concept_google_drive_url;
-
 ScAddr ScComponentManagerKeynodes::rrel_repositories_specifications;
 ScAddr ScComponentManagerKeynodes::rrel_components_specifications;
-
 ScAddr ScComponentManagerKeynodes::nrel_authors;
 ScAddr ScComponentManagerKeynodes::nrel_explanation;
 ScAddr ScComponentManagerKeynodes::nrel_component_address;
@@ -28,4 +26,5 @@ ScAddr ScComponentManagerKeynodes::nrel_component_dependencies;
 ScAddr ScComponentManagerKeynodes::nrel_installation_method;
 ScAddr ScComponentManagerKeynodes::nrel_alternative_addresses;
 ScAddr ScComponentManagerKeynodes::nrel_repository_address;
+ScAddr ScComponentManagerKeynodes::nrel_installation_script;
 }  // namespace keynodes

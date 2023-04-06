@@ -11,6 +11,8 @@
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
 #include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
+#include "src/manager/downloader/downloader.hpp"
+#include "src/manager/downloader/downloader_handler.hpp"
 
 extern "C"
 {
@@ -27,11 +29,17 @@ public:
   ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
 protected:
-  static bool ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+  static void ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
   void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
   ExecutionResult InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
+  ScAddrVector GetAvailableComponents(ScMemoryContext * context, std::vector<std::string> componentsToInstall);
+
+  void InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+
   std::string m_specificationsPath;
+
+  std::unique_ptr<DownloaderHandler> downloaderHandler = std::make_unique<DownloaderHandler>(m_specificationsPath);
 };

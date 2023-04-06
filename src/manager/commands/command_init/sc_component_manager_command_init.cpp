@@ -7,7 +7,7 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 
 #include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/downloader/downloader_handler.hpp"
+#include "src/manager/downloader/downloader_handler.hpp"
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
 #include "src/manager/utils/sc_component_utils.hpp"
 
@@ -15,7 +15,6 @@ ExecutionResult ScComponentManagerCommandInit::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
 {
-  std::pair<std::set<std::string>, std::set<std::string>> repositoryItems;
   ScAddrVector processedRepositories;
 
   ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
@@ -24,7 +23,6 @@ ExecutionResult ScComponentManagerCommandInit::Execute(
   ProcessRepositories(context, availableRepositories);
 
   ExecutionResult executionResult;
-  executionResult.insert(executionResult.cbegin(), repositoryItems.second.cbegin(), repositoryItems.second.cend());
 
   return executionResult;
 }
@@ -74,16 +72,12 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
     downloaderHandler->Download(context, componentSpecificationAddr);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR +
                                           context->HelperGetSystemIdtf(componentSpecificationAddr);
+    componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
 
-    try
-    {
-      componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
-    }
-    catch (utils::ScException const & exception)
-    {
-      SC_LOG_ERROR(exception.Message());
-      SC_LOG_ERROR(exception.Description());
-    }
+    ScAddrVector componentDependencies =
+        componentUtils::SearchUtils::GetComponentDependencies(context, componentSpecificationAddr);
+    availableRepositories.insert(
+        availableRepositories.end(), componentDependencies.begin(), componentDependencies.end());
   }
 
   availableRepositories.pop_back();

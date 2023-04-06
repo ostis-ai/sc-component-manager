@@ -22,6 +22,7 @@ ScAddr DownloaderHandler::getDownloadableClass(ScMemoryContext * context, ScAddr
 
   ScAddrVector const downloadableClasses = {
       keynodes::ScComponentManagerKeynodes::concept_repository,
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component,
       keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification};
 
   for (ScAddr const & currentClass : downloadableClasses)
@@ -107,11 +108,12 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
     specificationPostfix = SpecificationConstants::SPECIFICATION_FILENAME;
   }
 
-  if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_repository)
+  if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_repository ||
+      nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component)
   {
     try
     {
-      nodeAddressLinkAddrs = {componentUtils::SearchUtils::GetRepositoryAddress(context, nodeAddr)};
+      nodeAddressLinkAddrs = {componentUtils::SearchUtils::GetComponentAddress(context, nodeAddr)};
     }
     catch (utils::ScException const & exception)
     {
@@ -122,7 +124,7 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
 
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
-    ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);
+    ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method
     if (linkAddressClassAddr == keynodes::ScComponentManagerKeynodes::concept_github_url)
     {
       context->GetLinkContent(currentAddressLinkAddr, url);

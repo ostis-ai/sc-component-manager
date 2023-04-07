@@ -17,6 +17,7 @@ sc_node_role_relation
 	-> rrel_components_specifications;
 	-> rrel_repositories_specifications;;
 
+
 sc_node_class
 	-> concept_reusable_component;
 	-> concept_atomic_reusable_component;

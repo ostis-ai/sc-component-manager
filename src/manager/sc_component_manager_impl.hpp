@@ -13,8 +13,8 @@
 class ScComponentManagerImpl : public ScComponentManager
 {
 public:
-  ScComponentManagerImpl(std::string reposPath, std::string specificationsPath, sc_memory_params memoryParams)
-    : ScComponentManager(std::move(reposPath), std::move(specificationsPath), memoryParams)
+  ScComponentManagerImpl(std::string specificationsPath, sc_memory_params memoryParams)
+    : ScComponentManager(std::move(specificationsPath), memoryParams)
   {
     keynodes::ScComponentManagerKeynodes::InitGlobal();
   }

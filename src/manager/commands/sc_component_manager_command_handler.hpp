@@ -17,9 +17,8 @@
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {
 public:
-  explicit ScComponentManagerCommandHandler(std::string reposPath, std::string specificationsPath)
-    : m_reposPath(std::move(reposPath))
-    , m_specificationsPath(std::move(specificationsPath))
+  explicit ScComponentManagerCommandHandler(std::string specificationsPath)
+    : m_specificationsPath(std::move(specificationsPath))
   {
     m_context = new ScMemoryContext("sc-component-manager-command-handler");
   }
@@ -59,7 +58,6 @@ protected:
   ScMemoryContext * m_context{};
 
   CommandParameters m_commandParameters;
-  std::string m_reposPath;
   std::string m_specificationsPath;
 
   std::map<std::string, ScComponentManagerCommand *> m_actions = {

@@ -40,7 +40,7 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   ScParams params{options, {}};
 
-  ScConfig config{configFile, {"repos_path", "specifications_path", "repo_path", "extensions_path", "log_file"}};
+  ScConfig config{configFile, {"specifications_path", "repo_path", "extensions_path", "log_file"}};
   ScConfigGroup configManager = config["sc-component-manager"];
   for (std::string const & key : *configManager)
     params.insert({key, configManager[key]});

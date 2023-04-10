@@ -12,23 +12,24 @@
 ## Usage
 
 ### Start sc-component manager
-To start sc-component manager: 
+
+To start sc-component manager:
 
 ``cd ostis-web-platform/scripts``
 
 ``./run_sc_component_manager.sh``
 
-### Commands:
-- components init - downloading specifications from repositories. `kb/specifications.scs` contains example of how to describe repository.
-- components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>] - searching component specification in knowledge base. You can search components by author, class or explanation substring.
-- components install [--idtf \<system_idtf\>] - installing component by it's system identifier.  
+### Commands
+
+- `components init` - downloading specifications from repositories. `kb/specifications.scs` contains example of how to describe repository.
+- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - searching component specification in knowledge base. You can search components by author, class or explanation substring.
+- `components install [--idtf \<system_idtf\>]` - installing component by it's system identifier.  
 
 ## Repository and components
 
-File specification.scs contains description of two sections: `components` and `repositories`.
+File specification.scs contains description of two sections: **components** and **repositories**.
 
-`Repositories` have links for source (GitHub, google drive etc.) with specification file, `components` have links to source with specification of component.
-
+**Repositories** have links for source (GitHub, google drive etc.) with specification file, **components** have links to source with specification of component.
 
 ### Repository specification
 
@@ -36,20 +37,57 @@ Example of repository (`specifications.scs`)
 
 ```scs
 sc_component_manager_repository
-	<- concept_repository;
-	-> rrel_components: ..components_addresses;
-	-> rrel_repositories: ..repositories_addresses;;
+  <- concept_repository;
+  -> rrel_components_specifications: ..components_addresses;
+  -> rrel_repositories_specifications: ..repositories_addresses;;
 
 ..components_addresses
-	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/cat-kb-component];; *);
-	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/ui-menu-component];; *);
-	-> ... (* -> rrel_address: [https://drive.google.com/file/d/1eUxPBd3VKNFSDEgolz11EQdEmBJMFYIk/view?usp=sharing];; *);;
+  <- sc_node_tuple;
+  -> knowledge_base_ims_specification
+    (*
+      <- concept_reusable_component_specification;;
+      => nrel_alternative_addresses:
+      ...
+      (*
+        <- sc_node_tuple;;
+        -> rrel_1:
+          ... 
+          (*
+            -> [https://github.com/ostis-ai/ims.ostis.kb]
+              (*
+                <- concept_github_url;;
+              *);;
+          *);;
+      *);;
+    *);
+  -> cat_kb_component_spec
+      (*
+           <- concept_reusable_component_specification;;
+           => nrel_alternative_addresses:
+           ...
+           (*
+                <- sc_node_tuple;;
+                -> rrel_1:
+                ...
+                (*
+                  -> [https://github.com/MksmOrlov/cat-kb-component]
+                      (*
+                        <- concept_github_url;;
+                      *);;
+                *);;
+            *);;
+        *);;
 
 ..repositories_addresses
-	-> ... (* -> rrel_address: [https://github.com/MksmOrlov/components-repo-example];; *);;
+  -> ... 
+      (*
+      -> rrel_address:
+          [https://github.com/MksmOrlov/components-repo-example];;
+      *);;
 ```
 
 ### Component specification
+
 Example of components specification (`specification.scs`)
 
 ```scs
@@ -72,7 +110,7 @@ concept_cat
     => nrel_authors: ... (* -> Orlov;; *);
     => nrel_component_dependencies: ... (* <- empty_set;; *);
 
-    => nrel_component_address: [https://github.com/MksmOrlov/cat-kb-component] (* <- github_url;; *);
+    => nrel_component_address: [https://github.com/MksmOrlov/cat-kb-component] (* <- concept_github_url;; *);
     => nrel_installation_method: ... (* <- concept_component_dynamically_installed_method;; *);;
 *];;
 ```

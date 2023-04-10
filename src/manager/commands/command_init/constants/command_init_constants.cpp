@@ -7,9 +7,6 @@
 #include "command_init_constants.hpp"
 
 std::string const SpecificationConstants::SPECIFICATION_FILENAME = "specification.scs";
-std::string const SpecificationConstants::REPOS_FILENAME = "repos.txt";
-std::string const SpecificationConstants::REPOS_SECTION_HEADER = "[repositories]";
-std::string const SpecificationConstants::COMPONENTS_SECTION_HEADER = "[components]";
 std::string const SpecificationConstants::DIRECTORY_DELIMETR = "/";
 
 std::string const GitHubConstants::SVN_TRUNK = "/trunk";

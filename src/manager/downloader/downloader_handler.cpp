@@ -86,12 +86,6 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
   std::string nodeSystIdtf = context->HelperGetSystemIdtf(nodeAddr);
   std::string downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf;
 
-  if (!sc_fs_mkdirs(downloadPath.c_str()))
-  {
-    SC_LOG_ERROR("Can't download. Can't create folder.");
-    return;
-  };
-
   // TODO: Optimize choosing get address method
   if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification)
   {

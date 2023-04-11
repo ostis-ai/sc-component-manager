@@ -19,12 +19,22 @@ public:
   void Download(std::string const & downloadPath, std::string const & urlAddress, std::string const & pathPostfix = "")
       override
   {
-    ScExec exec{
-        {"cd",
-         downloadPath,
-         "&&",
-         "svn",
-         "export",
-         urlAddress + GitHubConstants::SVN_TRUNK + SpecificationConstants::DIRECTORY_DELIMETR + pathPostfix}};
+    std::string path = downloadPath;
+    std::stringstream query;
+    query << urlAddress << GitHubConstants::SVN_TRUNK << SpecificationConstants::DIRECTORY_DELIMETR << pathPostfix;
+    if (pathPostfix.empty())
+    {
+      size_t const componentDirNameIndex = downloadPath.rfind('/');
+      query << "  " << downloadPath.substr(componentDirNameIndex + 1);
+      path = downloadPath.substr(0, componentDirNameIndex);
+    }
+
+    if (!sc_fs_mkdirs(path.c_str()))
+    {
+      SC_LOG_ERROR("Can't download. Can't create folder.");
+      return;
+    }
+
+    ScExec exec{{"cd", path, "&&", "svn", "export", query.str()}};
   }
 };

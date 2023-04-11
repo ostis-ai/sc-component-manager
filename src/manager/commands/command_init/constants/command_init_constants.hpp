@@ -12,9 +12,6 @@ class SpecificationConstants
 {
 public:
   static std::string const SPECIFICATION_FILENAME;
-  static std::string const REPOS_FILENAME;
-  static std::string const REPOS_SECTION_HEADER;
-  static std::string const COMPONENTS_SECTION_HEADER;
   static std::string const DIRECTORY_DELIMETR;
 };
 

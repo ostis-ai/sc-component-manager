@@ -9,8 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking changes
 
 ### Added
-- added changelog
-- added license
+- add contributing document
+- add codestyle document
+- add git workflow
+- add changelog
+- add license
 
 ### Changed
 

@@ -1,2 +1,18 @@
 tests/units/test_defines.hpp
 generated
+
+# devs
+.vscode
+.idea
+.cache
+
+# docs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.pdf
+*.run.xml

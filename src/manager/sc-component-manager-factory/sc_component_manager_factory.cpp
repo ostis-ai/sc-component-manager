@@ -14,9 +14,8 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
   std::string const SPECIFICATIONS_PATH = "specifications_path";
   try
   {
-    std::unique_ptr<ScComponentManager> scComponentManager =
-        std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(
-            scComponentManagerParams.at(SPECIFICATIONS_PATH), memoryParams));
+    std::unique_ptr<ScComponentManager> scComponentManager = std::unique_ptr<ScComponentManager>(
+        new ScComponentManagerImpl(scComponentManagerParams.at(SPECIFICATIONS_PATH), memoryParams));
     return scComponentManager;
   }
   catch (utils::ScException const & exception)

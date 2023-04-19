@@ -39,6 +39,9 @@ protected:
 
   void InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
+  // Install components that are in `need to install` set
+  void QuietInstall(ScMemoryContext * context);
+
   std::string m_specificationsPath;
 
   std::unique_ptr<DownloaderHandler> downloaderHandler = std::make_unique<DownloaderHandler>(m_specificationsPath);

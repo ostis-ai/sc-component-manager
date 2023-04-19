@@ -23,6 +23,8 @@ public:
   static ScAddrVector GetSpecificationAddress(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
 
   static ScAddr GetRepositoryAddress(ScMemoryContext * context, ScAddr const & repositoryAddr);
+
+  static ScAddrVector GetNeedToInstallComponents(ScMemoryContext * context);
 };
 
 class InstallUtils

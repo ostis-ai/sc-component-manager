@@ -5,23 +5,6 @@ sc_component_manager_repository
 
 ..components_addresses
 	<- sc_node_tuple;
-	-> knowledge_base_ims_specification
-		(*
-			<- concept_reusable_component_specification;;
-			=> nrel_alternative_addresses:
-			...
-			(*
-				<- sc_node_tuple;;
-				-> rrel_1:
-					... 
-					(*
-						-> [https://github.com/ostis-ai/ims.ostis.kb]
-							(*
-								<- concept_github_url;;
-							*);;
-					*);;
-			*);;
-		*);
 	-> cat_kb_component_spec
 	    (*
            	<- concept_reusable_component_specification;;

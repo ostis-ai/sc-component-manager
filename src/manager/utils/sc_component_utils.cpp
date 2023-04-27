@@ -6,6 +6,7 @@
 
 #include <dirent.h>
 #include <sys/stat.h>
+#include <filesystem>
 
 #include <sc-memory/sc_addr.hpp>
 #include <sc-memory/sc_type.hpp>
@@ -15,6 +16,7 @@
 #include <sc-agents-common/utils/CommonUtils.hpp>
 #include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
 #include "sc_component_utils.hpp"
+#include "src/manager/commands/constants/command_constants.hpp"
 
 namespace componentUtils
 {
@@ -279,10 +281,8 @@ std::string InstallUtils::GetComponentDirName(
     ScAddr const & componentAddr,
     const std::string & specificationsPath)
 {
-  std::string const & componentAddressContent =
-      componentUtils::InstallUtils::GetComponentAddressStr(context, componentAddr);
-  size_t componentDirNameIndex = componentAddressContent.rfind('/');
-  std::string componentDirName = specificationsPath + componentAddressContent.substr(componentDirNameIndex);
+  std::string componentIdtf = context->HelperGetSystemIdtf(componentAddr);
+  std::string componentDirName = specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR + componentIdtf;
   return componentDirName;
 }
 
@@ -295,21 +295,23 @@ bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const &
 {
   bool result = false;
   ScsLoader loader;
-  DIR * dir;
-  struct dirent * diread;
-  if ((dir = opendir(dirPath.c_str())) != nullptr)
+
+  if (!std::filesystem::exists(dirPath))
   {
-    while ((diread = readdir(dir)) != nullptr)
-    {
-      std::string filename = diread->d_name;
-      if (filename.rfind(".scs") != std::string::npos)
-      {
-        loader.loadScsFile(*context, dirPath + "/" + filename);  // TODO: need to fix in sc-machine
-        result = true;                                           // while not fixed
-      }
-    }
-    closedir(dir);
+    return result;
   }
+
+  for (std::filesystem::directory_entry const & dirEntry : std::filesystem::recursive_directory_iterator(dirPath))
+  {
+    std::filesystem::path const & filePath = dirEntry.path();
+    SC_LOG_DEBUG(filePath);
+    if (filePath.extension() == ".scs")
+    {
+      loader.loadScsFile(*context, filePath);  // TODO: need to fix in sc-machine
+      result = true;
+    }
+  }
+
   return result;
 }
 

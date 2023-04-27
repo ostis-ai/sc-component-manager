@@ -218,8 +218,8 @@ v = w * (x + z);
 ## Tips and Hints
 
 - If you see outdated code which can be improved - DO IT NOW (but in the separate pull request).
-- Your code should work at least on [mac|linux][x86|x86_64] platforms.
-- Your code should compile well with gcc 4.8+ and clang 3.5+
+  Your code should work at least on: Ubuntu 20.04 and 22.04; Debian 11; MacOS platforms.
+- Your code should compile well with the last gcc and clang.
 - Try to avoid using any new 3rd party library if it is not fully tested and supported on supported platforms.
 - Cover your code with unit tests.
 - If you don't have enough time to make it right, leave a `// TODO(DeveloperName): need to fix it` comment.

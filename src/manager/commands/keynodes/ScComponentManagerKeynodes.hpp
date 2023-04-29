@@ -37,6 +37,9 @@ public:
   SC_PROPERTY(Keynode("concept_github_url"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_github_url;
 
+  SC_PROPERTY(Keynode("concept_need_to_install_components"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_need_to_install_components;
+
   SC_PROPERTY(Keynode("concept_google_drive_url"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_google_drive_url;
 

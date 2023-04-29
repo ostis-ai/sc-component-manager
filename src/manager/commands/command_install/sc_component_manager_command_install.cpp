@@ -73,23 +73,21 @@ ExecutionResult ScComponentManagerCommandInstall::Execute(
     CommandParameters const & commandParameters)
 {
   ExecutionResult executionResult;
-  std::vector<std::string> componentsToInstall;
+  std::vector<std::string> componentsToInstallIdentifiers;
+  ScAddrVector componentsToInstall;
 
   try
   {
-    componentsToInstall = commandParameters.at(PARAMETER_NAME);
+    componentsToInstallIdentifiers = commandParameters.at(PARAMETER_NAME);
+    componentsToInstall = GetAvailableComponents(context, componentsToInstallIdentifiers);
   }
-  catch (std::exception const & exception)
+  catch (std::out_of_range const & exception)
   {
-    // TODO: Implement install all components method
     SC_LOG_INFO("No identifier provided, installing all to install components");
-
-    return executionResult;
+    componentsToInstall = componentUtils::SearchUtils::GetNeedToInstallComponents(context);
   }
 
-  ScAddrVector availableComponents = GetAvailableComponents(context, componentsToInstall);
-
-  for (ScAddr componentAddr : availableComponents)
+  for (ScAddr componentAddr : componentsToInstall)
   {
     InstallDependencies(context, componentAddr);
     DownloadComponent(context, componentAddr);

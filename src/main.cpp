@@ -65,9 +65,8 @@ sc_int main(sc_int argc, sc_char * argv[])
     if (!options.Has({"interactive", "i"}))
     {
       // TODO: Implement interactive mode
-      SC_LOG_INFO("Shutting down, not interacting mode");
-      scComponentManager->Emit("components init");
-      scComponentManager->Emit("components install --idtf knowledge_base_ims");
+      SC_LOG_INFO("Quiet installation mode");
+      scComponentManager->QuietInstall();
       return EXIT_SUCCESS;
     }
     scComponentManager->Run();

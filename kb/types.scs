@@ -17,7 +17,7 @@ sc_node_role_relation
 	-> rrel_components_specifications;
 	-> rrel_repositories_specifications;;
 
-qsc_node_class
+sc_node_class
 	-> concept_reusable_component;
 	-> concept_atomic_reusable_component;
 	-> concept_independent_reusable_component;
@@ -30,4 +30,5 @@ qsc_node_class
 	-> concept_github_url;
 	-> concept_google_drive_url;
 	-> concept_complex_address;
-	-> concept_single_address;;
+	-> concept_single_address;
+	-> concept_need_to_install_components;;

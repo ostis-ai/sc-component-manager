@@ -185,6 +185,16 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 };
 
 /**
+ * Get sc-addr vector of components that need to be installed
+ * @param context current sc-memory context
+ * @return vector of component's sc-addrs
+*/
+ScAddrVector SearchUtils::GetNeedToInstallComponents(ScMemoryContext * context)
+{
+  return utils::IteratorUtils::getAllWithType(context, keynodes::ScComponentManagerKeynodes::concept_need_to_install_components, ScType::NodeConst);
+}
+
+/**
  * Check if component is reusable
  * @param context current sc-memory context
  * @param componentAddr component addr

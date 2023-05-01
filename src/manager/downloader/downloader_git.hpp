@@ -11,7 +11,7 @@
 #include "sc-memory/utils/sc_exec.hpp"
 
 #include "downloader.hpp"
-#include "src/manager/commands/command_init/constants/command_init_constants.hpp"
+#include "src/manager/commands/constants/command_constants.hpp"
 
 class DownloaderGit : public Downloader
 {

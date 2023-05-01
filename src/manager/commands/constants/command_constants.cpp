@@ -4,7 +4,7 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "command_init_constants.hpp"
+#include "command_constants.hpp"
 
 std::string const SpecificationConstants::SPECIFICATION_FILENAME = "specification.scs";
 std::string const SpecificationConstants::DIRECTORY_DELIMETR = "/";

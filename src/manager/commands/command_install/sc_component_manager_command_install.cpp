@@ -9,7 +9,7 @@
 #include <sc-builder/src/scs_loader.hpp>
 #include "src/manager/utils/sc_component_utils.hpp"
 
-#include "src/manager/commands/command_init/constants/command_init_constants.hpp"
+#include "src/manager/commands/constants/command_constants.hpp"
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::string specificationsPath)
   : m_specificationsPath(std::move(specificationsPath))
@@ -177,10 +177,10 @@ void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
 {
   downloaderHandler->Download(context, componentAddr);
 
-  //  std::string componentDirName =
-  //      componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_specificationsPath);
-  //  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
-  //  {
-  //    SC_LOG_WARNING("Not all files are loaded from" + componentDirName);
-  //  }
+   std::string componentDirName =
+       componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_specificationsPath);
+   if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
+   {
+     SC_LOG_WARNING("Not all files are loaded from " + componentDirName);
+   }
 }

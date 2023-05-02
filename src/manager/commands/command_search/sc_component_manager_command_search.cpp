@@ -10,6 +10,8 @@
 
 bool ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
 {
+  bool result = true;
+
   for (auto const & param : commandParameters)
   {
     if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first) ==
@@ -53,10 +55,15 @@ bool ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, Command
     linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
   }
 
-  std::vector<std::string> result;
-  result = SearchComponents(context, searchComponentTemplate, linksValues);
+  std::vector<std::string> componentsIdtfs;
+  componentsIdtfs = SearchComponents(context, searchComponentTemplate, linksValues);
 
-  return result.empty();
+  for (std::string const & componentIdtf : componentsIdtfs)
+  {
+    SC_LOG_INFO("ScComponentManager: " + componentIdtf);
+  }
+
+  return result;
 }
 
 void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(

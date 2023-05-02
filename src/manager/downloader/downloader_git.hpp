@@ -16,7 +16,7 @@
 class DownloaderGit : public Downloader
 {
 public:
-  void Download(std::string const & downloadPath, std::string const & urlAddress, std::string const & pathPostfix = "")
+  bool Download(std::string const & downloadPath, std::string const & urlAddress, std::string const & pathPostfix = "")
       override
   {
     std::string path = downloadPath;
@@ -32,9 +32,10 @@ public:
     if (!sc_fs_mkdirs(path.c_str()))
     {
       SC_LOG_ERROR("Can't download. Can't create folder.");
-      return;
+      return false;
     }
 
     ScExec exec{{"cd", path, "&&", "svn", "export", query.str()}};
+    return true;
   }
 };

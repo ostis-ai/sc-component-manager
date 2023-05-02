@@ -31,7 +31,7 @@ public:
 
   ~DownloaderHandler();
 
-  void Download(ScMemoryContext * context, ScAddr const & nodeAddr);
+  bool Download(ScMemoryContext * context, ScAddr const & nodeAddr);
 
 protected:
   std::string m_downloadDir;

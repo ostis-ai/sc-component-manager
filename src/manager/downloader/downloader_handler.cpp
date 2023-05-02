@@ -69,7 +69,7 @@ DownloaderHandler::~DownloaderHandler()
     delete it.second;
 }
 
-void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeAddr)
+bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeAddr)
 {
   ScAddrVector nodeAddressLinkAddrs;
   std::string pathPostfix;
@@ -80,7 +80,7 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
   if (!nodeClassAddr.IsValid())
   {
     SC_LOG_ERROR("Can't download. Downloadable class not found");
-    return;
+    return false;
   }
 
   std::string nodeSystIdtf = context->HelperGetSystemIdtf(nodeAddr);
@@ -128,4 +128,6 @@ void DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
       downloader->Download(downloadPath, url, pathPostfix);
     }
   }
+
+  return true;
 }

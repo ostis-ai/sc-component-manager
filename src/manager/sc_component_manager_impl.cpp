@@ -12,8 +12,9 @@ bool ScComponentManagerImpl::Emit(std::string const & command)
   std::pair<std::string, CommandParameters> parsed = ScComponentManagerParser::Parse(command);
   bool executionResult = m_handler->Handle(parsed.first, parsed.second);
 
-  SC_LOG_DEBUG("ScComponentManagerImpl: execution result is " + std::to_string(executionResult));
-  // call formatter to format result
+  std::string log_message = executionResult ? "successfully" : "unsuccessfully";
+
+  SC_LOG_DEBUG("ScComponentManagerImpl: command executed " + log_message);
 
   return executionResult;
 }

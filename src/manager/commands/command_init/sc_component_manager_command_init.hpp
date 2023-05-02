@@ -23,7 +23,7 @@ public:
 
   bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
-  void ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
+  bool ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 
   static ScAddrVector GetSpecificationsAddrs(
       ScMemoryContext * context,

@@ -18,9 +18,7 @@ bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandPa
   ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
       context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
 
-  ProcessRepositories(context, availableRepositories);
-
-  bool executionResult;
+  bool executionResult = ProcessRepositories(context, availableRepositories);
 
   return executionResult;
 }
@@ -31,10 +29,10 @@ bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandPa
  * @param context current sc-memory context
  * @param avaibleRepositories vector of avaible repositories addrs
  */
-void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories)
+bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories)
 {
   if (availableRepositories.empty())
-    return;
+    return true;
 
   ScAddr const repository = availableRepositories.back();
 
@@ -46,7 +44,7 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   }
   catch (utils::ScException const & exception)
   {
-    SC_LOG_DEBUG("Problem getting repositories specifications");
+    SC_LOG_DEBUG("ScComponentManagerCommandInit: Problem getting repositories specifications");
     SC_LOG_DEBUG(exception.Message());
   }
 
@@ -61,7 +59,7 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   }
   catch (utils::ScException const & exception)
   {
-    SC_LOG_DEBUG("Problem getting component specifications");
+    SC_LOG_DEBUG("ScComponentManagerCommandInit: Problem getting component specifications");
     SC_LOG_DEBUG(exception.Message());
   }
 
@@ -80,6 +78,8 @@ void ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
 
   availableRepositories.pop_back();
   ProcessRepositories(context, availableRepositories);
+
+  return true;
 }
 
 /**

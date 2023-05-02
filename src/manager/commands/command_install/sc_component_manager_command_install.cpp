@@ -68,9 +68,7 @@ void ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
   }
 }
 
-bool ScComponentManagerCommandInstall::Execute(
-    ScMemoryContext * context,
-    CommandParameters const & commandParameters)
+bool ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
 {
   bool executionResult;
   std::vector<std::string> componentsToInstallIdentifiers;
@@ -140,9 +138,7 @@ void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
  * if installation successfull, otherwise
  * returns empty vector.
  */
-bool ScComponentManagerCommandInstall::InstallDependencies(
-    ScMemoryContext * context,
-    ScAddr const & componentAddr)
+bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   bool result = false;
   // Get component dependencies and install them recursively
@@ -177,10 +173,10 @@ void ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
 {
   downloaderHandler->Download(context, componentAddr);
 
-   std::string componentDirName =
-       componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_specificationsPath);
-   if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
-   {
-     SC_LOG_WARNING("Not all files are loaded from " + componentDirName);
-   }
+  std::string componentDirName =
+      componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_specificationsPath);
+  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
+  {
+    SC_LOG_WARNING("Not all files are loaded from " + componentDirName);
+  }
 }

@@ -11,9 +11,7 @@
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
 #include "src/manager/utils/sc_component_utils.hpp"
 
-bool ScComponentManagerCommandInit::Execute(
-    ScMemoryContext * context,
-    CommandParameters const & commandParameters)
+bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
 {
   ScAddrVector processedRepositories;
 

@@ -8,9 +8,7 @@
 
 #include "sc_component_manager_command_search.hpp"
 
-bool ScComponentManagerCommandSearch::Execute(
-    ScMemoryContext * context,
-    CommandParameters const & commandParameters)
+bool ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
 {
   for (auto const & param : commandParameters)
   {

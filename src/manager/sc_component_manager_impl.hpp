@@ -23,5 +23,4 @@ public:
 
 protected:
   bool Emit(std::string const & command) override;
-
 };

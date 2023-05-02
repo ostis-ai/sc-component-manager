@@ -10,7 +10,6 @@
 
 namespace componentUtils
 {
-
 class SearchUtils
 {
 public:

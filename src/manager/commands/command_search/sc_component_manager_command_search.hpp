@@ -14,7 +14,7 @@ class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 public:
   ScComponentManagerCommandSearch() = default;
 
-  ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
 protected:
   std::string const COMPONENT_ALIAS = "_component";
@@ -45,16 +45,16 @@ protected:
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 
-  ExecutionResult SearchComponents(
+  std::vector<std::string> SearchComponents(
       ScMemoryContext * context,
       ScTemplate & searchComponentTemplate,
       std::map<std::string, ScAddrVector> const & linksValues);
 
-  ExecutionResult SearchComponentsWithoutLinks(
+  std::vector<std::string> SearchComponentsWithoutLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult);
 
-  ExecutionResult SearchComponentsWithLinks(
+  std::vector<std::string> SearchComponentsWithLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult,
       std::map<std::string, ScAddrVector> const & linksValues);

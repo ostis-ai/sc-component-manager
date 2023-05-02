@@ -29,7 +29,7 @@ public:
 
   void Run();
 
-  virtual ExecutionResult Emit(std::string const & command) = 0;
+  virtual bool Emit(std::string const & command) = 0;
 
   void Stop();
 
@@ -43,8 +43,6 @@ public:
 protected:
   std::string m_specificationsPath;
   void Start();
-
-  virtual void DisplayResult(ExecutionResult const & executionResult) = 0;
 
   ScComponentManagerCommandHandler * m_handler;
 

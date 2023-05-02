@@ -13,7 +13,7 @@
 class ScComponentManagerHandler
 {
 public:
-  virtual ExecutionResult Handle(std::string const & commandType, CommandParameters const & commandParameters) = 0;
+  virtual bool Handle(std::string const & commandType, CommandParameters const & commandParameters) = 0;
 
   virtual ~ScComponentManagerHandler() = default;
 };

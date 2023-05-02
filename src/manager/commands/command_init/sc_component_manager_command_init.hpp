@@ -21,7 +21,7 @@ public:
   {
   }
 
-  ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
   void ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 

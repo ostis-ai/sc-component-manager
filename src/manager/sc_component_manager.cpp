@@ -28,8 +28,7 @@ void ScComponentManager::Start()
 
     try
     {
-      ExecutionResult executionResult = Emit(command);
-      DisplayResult(executionResult);
+      bool executionResult = Emit(command);
     }
     catch (utils::ScException const & exception)
     {
@@ -49,8 +48,8 @@ void ScComponentManager::QuietInstall()
 {
   try
   {
-    ExecutionResult executionResult = Emit("components init");
-    executionResult = Emit("components install");
+    Emit("components init");
+    Emit("components install");
   }
   catch (utils::ScException const & exception)
   {

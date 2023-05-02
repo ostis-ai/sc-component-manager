@@ -8,7 +8,7 @@
 
 #include "sc_component_manager_command_search.hpp"
 
-ExecutionResult ScComponentManagerCommandSearch::Execute(
+bool ScComponentManagerCommandSearch::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
 {
@@ -55,10 +55,10 @@ ExecutionResult ScComponentManagerCommandSearch::Execute(
     linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
   }
 
-  ExecutionResult result;
+  std::vector<std::string> result;
   result = SearchComponents(context, searchComponentTemplate, linksValues);
 
-  return result;
+  return result.empty();
 }
 
 void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
@@ -127,12 +127,12 @@ ScAddrVector ScComponentManagerCommandSearch::SearchComponentsByRelationLink(
   return links;
 }
 
-ExecutionResult ScComponentManagerCommandSearch::SearchComponents(
+std::vector<std::string> ScComponentManagerCommandSearch::SearchComponents(
     ScMemoryContext * context,
     ScTemplate & searchComponentTemplate,
     std::map<std::string, ScAddrVector> const & linksValues)
 {
-  ExecutionResult result;
+  std::vector<std::string> result;
   ScTemplateSearchResult searchComponentResult;
   context->HelperSearchTemplate(searchComponentTemplate, searchComponentResult);
 
@@ -148,11 +148,11 @@ ExecutionResult ScComponentManagerCommandSearch::SearchComponents(
   return result;
 }
 
-ExecutionResult ScComponentManagerCommandSearch::SearchComponentsWithoutLinks(
+std::vector<std::string> ScComponentManagerCommandSearch::SearchComponentsWithoutLinks(
     ScMemoryContext * context,
     ScTemplateSearchResult const & searchComponentResult)
 {
-  ExecutionResult result;
+  std::vector<std::string> result;
   for (size_t i = 0; i < searchComponentResult.Size(); i++)
   {
     ScAddr reusableComponent = searchComponentResult[i][COMPONENT_ALIAS];
@@ -162,12 +162,12 @@ ExecutionResult ScComponentManagerCommandSearch::SearchComponentsWithoutLinks(
   return result;
 }
 
-ExecutionResult ScComponentManagerCommandSearch::SearchComponentsWithLinks(
+std::vector<std::string> ScComponentManagerCommandSearch::SearchComponentsWithLinks(
     ScMemoryContext * context,
     ScTemplateSearchResult const & searchComponentResult,
     std::map<std::string, ScAddrVector> const & linksValues)
 {
-  ExecutionResult result;
+  std::vector<std::string> result;
   for (size_t i = 0; i < searchComponentResult.Size(); i++)
   {
     for (auto const & linkValue : linksValues)

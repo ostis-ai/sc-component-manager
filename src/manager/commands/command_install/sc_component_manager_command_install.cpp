@@ -68,11 +68,11 @@ void ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
   }
 }
 
-ExecutionResult ScComponentManagerCommandInstall::Execute(
+bool ScComponentManagerCommandInstall::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
 {
-  ExecutionResult executionResult;
+  bool executionResult;
   std::vector<std::string> componentsToInstallIdentifiers;
   ScAddrVector componentsToInstall;
 
@@ -140,11 +140,11 @@ void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
  * if installation successfull, otherwise
  * returns empty vector.
  */
-ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
+bool ScComponentManagerCommandInstall::InstallDependencies(
     ScMemoryContext * context,
     ScAddr const & componentAddr)
 {
-  ExecutionResult result;
+  bool result = false;
   // Get component dependencies and install them recursively
   ScAddrVector const & componentDependencies =
       componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
@@ -153,17 +153,17 @@ ExecutionResult ScComponentManagerCommandInstall::InstallDependencies(
     std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
     SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
     CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
-    ExecutionResult dependencyResult = Execute(context, dependencyParameters);
+    bool dependencyResult = Execute(context, dependencyParameters);
 
     // Return empty if you couldn't install one from all dependencies why?
-    if (dependencyResult.empty())
+    if (!dependencyResult)
     {
       SC_LOG_ERROR("Dependency \"" + dependencyIdtf + "\" is not installed");
       // return dependencyResult;
     }
     else
     {
-      result.insert(result.cbegin(), dependencyResult.cbegin(), dependencyResult.cend());
+      result = true;
     }
   }
 

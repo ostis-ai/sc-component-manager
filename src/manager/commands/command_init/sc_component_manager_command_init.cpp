@@ -11,7 +11,7 @@
 #include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
 #include "src/manager/utils/sc_component_utils.hpp"
 
-ExecutionResult ScComponentManagerCommandInit::Execute(
+bool ScComponentManagerCommandInit::Execute(
     ScMemoryContext * context,
     CommandParameters const & commandParameters)
 {
@@ -22,7 +22,7 @@ ExecutionResult ScComponentManagerCommandInit::Execute(
 
   ProcessRepositories(context, availableRepositories);
 
-  ExecutionResult executionResult;
+  bool executionResult;
 
   return executionResult;
 }

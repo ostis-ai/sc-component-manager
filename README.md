@@ -1,5 +1,7 @@
 # SC-component-manager
 
+**SC-component-manager** is a part of [**SC-machine**](https://github.com/ostis-ai/sc-machine). It allows to install reusable  components for intelligent systems made with using the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
+
 ## Installation
 
   Install ostis-web-platform with branch **feature/component_manager**.

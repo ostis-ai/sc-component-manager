@@ -23,9 +23,9 @@ public:
     m_context = new ScMemoryContext("sc-component-manager-command-handler");
   }
 
-  ExecutionResult Handle(std::string const & commandType, CommandParameters const & commandParameters) override
+  bool Handle(std::string const & commandType, CommandParameters const & commandParameters) override
   {
-    ExecutionResult executionResult;
+    bool executionResult;
     m_commandParameters = commandParameters;
 
     auto const & it = m_actions.find(commandType);

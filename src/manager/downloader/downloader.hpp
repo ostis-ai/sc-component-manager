@@ -11,7 +11,7 @@
 class Downloader
 {
 public:
-  virtual void Download(
+  virtual bool Download(
       std::string const & downloadPath,
       std::string const & urlAddress,
       std::string const & pathPostfix = "") = 0;

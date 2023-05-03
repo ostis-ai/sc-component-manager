@@ -20,7 +20,6 @@
 
 namespace componentUtils
 {
-
 /**
  * @brief Get content of component address link content
  * @param context current sc-memory context
@@ -190,10 +189,11 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
  * Get sc-addr vector of components that need to be installed
  * @param context current sc-memory context
  * @return vector of component's sc-addrs
-*/
+ */
 ScAddrVector SearchUtils::GetNeedToInstallComponents(ScMemoryContext * context)
 {
-  return utils::IteratorUtils::getAllWithType(context, keynodes::ScComponentManagerKeynodes::concept_need_to_install_components, ScType::NodeConst);
+  return utils::IteratorUtils::getAllWithType(
+      context, keynodes::ScComponentManagerKeynodes::concept_need_to_install_components, ScType::NodeConst);
 }
 
 /**
@@ -314,10 +314,9 @@ bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const &
   for (std::filesystem::directory_entry const & dirEntry : std::filesystem::recursive_directory_iterator(dirPath))
   {
     std::filesystem::path const & filePath = dirEntry.path();
-    SC_LOG_DEBUG(filePath);
     if (filePath.extension() == ".scs")
     {
-      loader.loadScsFile(*context, filePath);  // TODO: need to fix in sc-machine
+      loader.loadScsFile(*context, filePath);  // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
       result = true;
     }
   }

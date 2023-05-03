@@ -22,7 +22,5 @@ public:
   ~ScComponentManagerImpl() override = default;
 
 protected:
-  ExecutionResult Emit(std::string const & command) override;
-
-  void DisplayResult(ExecutionResult const & executionResult) override;
+  bool Emit(std::string const & command) override;
 };

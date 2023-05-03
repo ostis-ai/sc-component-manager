@@ -26,18 +26,18 @@ class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 public:
   explicit ScComponentManagerCommandInstall(std::string specificationsPath);
 
-  ExecutionResult Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
 protected:
   static void ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  void DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+  bool DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  ExecutionResult InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
+  bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
   ScAddrVector GetAvailableComponents(ScMemoryContext * context, std::vector<std::string> componentsToInstall);
 
-  void InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
+  bool InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 
   // Install components that are in `need to install` set
   void QuietInstall(ScMemoryContext * context);

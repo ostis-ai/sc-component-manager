@@ -11,19 +11,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add scn documentation environment
+- Add quiet installation mode
+- Add SCn documentation
+- Add SCn documentation environment
 - Add contributing document
 - Add codestyle document
 - Add git workflow
 - Add changelog
 - Add license
+- Add utils
+- Add loading for downloaded scs files
+- Add logging
+- Add components install command
+- Add components search command
+- Add components init command
+- Add storage config and config parser
+- Create base environment to run commands
 
 ### Changed
 
 - Replace ExecutionResult with bool and update logging.
+- Decompose install command to functions
+- Move storage configs to kb
 
 ### Fixed
+
+- Use nrel_authors instead of nrel_author
 
 ### Removed
 
 - Remove trunk folder when download git repository
+- Remove storage parser

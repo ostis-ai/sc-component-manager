@@ -140,6 +140,23 @@ void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
   }
 }
 
+bool askInstallDependencies(ScMemoryContext * context, ScAddrVector const & componentDependencies)
+{
+  std::string installDepsFlag;
+
+  SC_LOG_INFO("ScComponentManagerCommandInstall: There are unmet dependencies: ");
+
+  for (ScAddr const & dependencyAddr : componentDependencies)
+  {
+    SC_LOG_INFO(context->HelperGetSystemIdtf(dependencyAddr));
+  }
+
+  SC_LOG_INFO("ScComponentManagerCommandInstall: Install dependencies? (y/n)");
+  getline(std::cin, installDepsFlag);
+
+  return installDepsFlag == "y" ? true : false;
+}
+
 /**
  * Tries to install component dependencies.
  * @return Returns {DependencyIdtf1, DependencyIdtf2, ...}
@@ -152,20 +169,34 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
   // Get component dependencies and install them recursively
   ScAddrVector const & componentDependencies =
       componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
-  for (ScAddr const & componentDependency : componentDependencies)
-  {
-    std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
-    SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
-    CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
-    bool dependencyResult = Execute(context, dependencyParameters);
 
-    // Return empty if you couldn't install one from all dependencies why?
-    if (!dependencyResult)
-    {
-      SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependency \"" + dependencyIdtf + "\" is not installed");
-      // return dependencyResult;
-      result = false;
-    }
+  if (componentDependencies.empty())
+    return result;
+
+  result &= askInstallDependencies(context, componentDependencies);
+
+  if (result)
+  {
+    std::for_each(
+        componentDependencies.begin(),
+        componentDependencies.end(),
+        [&context, &result, this](ScAddr const & componentDependency) {
+          std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
+          SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
+          CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
+          bool dependencyResult = Execute(context, dependencyParameters);
+
+          // Return empty if you couldn't install one from all dependencies why?
+          if (!dependencyResult)
+          {
+            SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependency \"" + dependencyIdtf + "\" is not installed");
+            result &= false;
+            return;
+          }
+
+          result &= true;
+
+        });
   }
 
   return result;

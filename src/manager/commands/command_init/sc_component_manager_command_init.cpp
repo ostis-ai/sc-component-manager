@@ -24,10 +24,10 @@ bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandPa
 }
 
 /**
- * @brief Recursivly iterates through repositories
- * and download avaible components specifications.
+ * @brief Recursively iterates through repositories
+ * and download available components specifications.
  * @param context current sc-memory context
- * @param avaibleRepositories vector of avaible repositories addrs
+ * @param availableRepositories vector of available repositories addrs
  */
 bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories)
 {
@@ -89,7 +89,7 @@ bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
  * @param nodeAddr sc-addr of node that connected with set
  * @param rrelAddr sc-addr of relation that connects nodeAddr with set
  * @return Vector of all sc-addrs of all NodeConst nodes
- * that are in set that is connected with nodeAddr by rrelAdd rrelation.
+ * that are in set that is connected with nodeAddr by rrelAdd relation.
  */
 ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
     ScMemoryContext * context,

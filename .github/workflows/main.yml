@@ -25,14 +25,14 @@ jobs:
       - name: Clone repositories
         run: |
             git clone https://github.com/ostis-ai/ostis-web-platform
-            && cd ostis-web-platform 
-            && git checkout feature/component_manager
-            && git submodule update --init --recursive 
-            && cd scripts
-            && ./prepare.sh 
-            && cd ../sc-machine/sc-tools/sc-component-manager
-            && git fetch origin pull/${{ github.event.number }}/head:pr 
-            && git checkout pr
+            cd ostis-web-platform 
+            git checkout feature/component_manager
+            git submodule update --init --recursive 
+            cd scripts
+            ./prepare.sh 
+            cd ../sc-machine/sc-tools/sc-component-manager
+            git fetch origin pull/${{ github.event.number }}/head:pr 
+            git checkout pr
 
 
       - name: Install dependencies (MacOS)

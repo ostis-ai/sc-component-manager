@@ -1,8 +1,8 @@
 name: Sanitizers
 
 on:
-  #pull_request:
-    #branches: [main]
+  pull_request:
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -28,7 +28,13 @@ jobs:
     steps:
       - name: Clone repositories
         run: |
-            git clone https://github.com/ostis-ai/sc-machine.git && cd sc-machine && git checkout feature/component_manager && git submodule update --init --recursive && cd sc-tools/sc-component-manager && git pull origin pull/${{ github.event.number }}/head && cd ../.. && ./scripts/install_deps_ubuntu.sh --dev
+            git clone https://github.com/ostis-ai/sc-machine.git 
+            && cd sc-machine && git checkout feature/component_manager 
+            && git submodule update --init --recursive 
+            && cd sc-tools/sc-component-manager 
+            && git pull origin pull/${{ github.event.number }}/head 
+            && cd ../.. 
+            && ./scripts/install_deps_ubuntu.sh --dev
 
       - name: Restore build caches
         uses: hendrikmuhs/ccache-action@v1.2
@@ -44,8 +50,8 @@ jobs:
           BUILD_TYPE: ${{ matrix.config.build_type }}
           COVERAGE: OFF
           SANITIZER_TYPE: ${{ matrix.config.sanitizer }}
-        run: cd sc-machine && scripts/ci/make-tests.sh
+        run: cd sc-machine && sc-tools/sc-component-manager/scripts/ci/make-tests.sh
 
       - name: Run tests
         id: run_tests
-        run: cd sc-machine && scripts/ci/run-tests.sh
+        run: cd sc-machine && sc-tools/sc-component-manager/scripts/ci/run-tests.sh

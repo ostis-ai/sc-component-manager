@@ -35,9 +35,19 @@ jobs:
             cd sc-tools/sc-component-manager
             git fetch origin pull/${{ github.event.number }}/head:pr 
             git checkout pr
-            cd ../../scripts
-            ./install_deps_ubuntu.sh
       
+      - name: Install dependencies (MacOS)
+        if: startswith(matrix.os, 'macos')
+        run: |
+          cd ostis-web-platform/sc-machine && scripts/install_deps_macOS.sh
+          pip3 install --user -r requirements.txt
+
+      - name: Install dependencies (Ubuntu)
+        if: startswith(matrix.os, 'ubuntu')
+        run: cd ostis-web-platform/sc-machine && scripts/install_deps_ubuntu.sh --dev
+
+      - name: Build all
+        run: cd ostis-web-platform/sc-machine/scripts && ./make_all.sh -m
 
       - name: Restore build caches
         uses: hendrikmuhs/ccache-action@v1.2

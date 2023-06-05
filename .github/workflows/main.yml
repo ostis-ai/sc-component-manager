@@ -35,7 +35,8 @@ jobs:
             cd sc-tools/sc-component-manager
             git fetch origin pull/${{ github.event.number }}/head:pr 
             git checkout pr
-            cd ../../scripts/install_deps_ubuntu.sh
+            cd ../../scripts
+            ./install_deps_ubuntu.sh
       
 
       - name: Restore build caches

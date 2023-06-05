@@ -29,7 +29,7 @@ public:
       path = downloadPath.substr(0, componentDirNameIndex);
     }
 
-    if (!sc_fs_mkdirs(path.c_str()))
+    if (!sc_fs_create_directory(path.c_str()))
     {
       SC_LOG_ERROR("Can't download. Can't create folder.");
       return false;

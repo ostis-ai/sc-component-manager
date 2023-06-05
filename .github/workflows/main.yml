@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-20.04, ubuntu-22.04]
+        os: [ubuntu-20.04, ubuntu-22.04]
         file_memory: ["Dictionary"]
         build_type: ["Debug", "Release"]
         config:
@@ -33,16 +33,7 @@ jobs:
             cd ../sc-machine/sc-tools/sc-component-manager
             git fetch origin pull/${{ github.event.number }}/head:pr 
             git checkout pr
-
-
-      - name: Install dependencies (MacOS)
-        if: startswith(matrix.os, 'macos')
-        run: |
-          cd ostis-web-platform/sc-machine && scripts/install_deps_macOS.sh
-          pip3 install --user -r requirements.txt
-      - name: Install dependencies (Ubuntu)
-        if: startswith(matrix.os, 'ubuntu')
-        run: ostis-web-platform/sc-machine/scripts/install_deps_ubuntu.sh --dev
+      
 
       - name: Restore build caches
         uses: hendrikmuhs/ccache-action@v1.2

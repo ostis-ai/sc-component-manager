@@ -1,2 +1,2 @@
 * [ ] Update changelog if needed
-* [ ] Update SCn documentation of needed
+* [ ] Update SCn documentation if needed

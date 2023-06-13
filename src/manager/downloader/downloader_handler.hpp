@@ -11,7 +11,7 @@
 
 extern "C"
 {
-#include "sc-core/sc-store/sc-fs-storage/sc_file_system.h"
+#include "sc-core/sc-store/sc-fs-memory/sc_file_system.h"
 }
 
 #include "sc-memory/sc_scs_helper.hpp"

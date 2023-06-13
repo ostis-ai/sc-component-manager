@@ -66,7 +66,7 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
     std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
     std::string path = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf;
     script = "." + script;
-    sc_fs_mkdirs(path.c_str());
+    sc_fs_create_directory(path.c_str());
     ScExec exec{{"cd", path, "&&", script}};
   }
 

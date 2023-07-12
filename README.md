@@ -1,25 +1,44 @@
 # SC-component-manager
 
-**SC-component-manager** is a part of [**SC-machine**](https://github.com/ostis-ai/sc-machine). It allows to install reusable  components for intelligent systems made with using the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
+**SC-component-manager** is a part of [**sc-machine**](https://github.com/ostis-ai/sc-machine). 
+It allows to install reusable components for intelligent systems made with using the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
 
 ## Installation
 
-  Install ostis-web-platform with branch **feature/component_manager**.
-  
-  Also install subversion version control system.
-  If you use Debian-based distro:
+Install [**sc-machine**](https://github.com/ostis-ai/sc-machine) with branch **component_manager**.
 
-  `sudo apt install subversion`
+```sh
+# install subversion version control system to install specifications
+sudo apt install subversion
+
+# clone sc-machine
+git clone git@github.com:ostis-ai/sc-machine.git
+
+# checkout to the component_manager branch
+git checkout component_manager
+```
+
+## Build
+``./scripts/build_sc_machine.sh -cm``
+
+Code highlighting:
+1. Go to the `sc-machine/sc-tools/CMakeLists.txt`;
+2. Set `SC_COMPONENT_MANAGER` option to the `ON`;
+3. Reload CMake project.
+
+To see sc-component manager debug logs go to the `sc-machine.ini`, `[sc-memory]` section and set `log_level` to `Debug`.
 
 ## Usage
 
 ### Start sc-component manager
 
-To start sc-component manager:
+To start sc-component manager run:
 
-``cd ostis-web-platform/scripts``
+``./scripts/run_sc_component_manager.sh -c <CONFIG_PATH>``
 
-``./run_sc_component_manager.sh``
+Possible run flags:
+- `-i` - interactive mode;
+- `-b` <KB_SRC_PATH> - build kb before start.
 
 ### Commands
 

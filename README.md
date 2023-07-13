@@ -1,38 +1,54 @@
 # SC-component-manager
 
-**SC-component-manager** is a part of [**sc-machine**](https://github.com/ostis-ai/sc-machine). 
+**SC-component-manager** is a part of [**sc-machine**](https://github.com/ostis-ai/sc-machine).
 It allows to install reusable components for intelligent systems made with using the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
 
-## Installation
+## Preparation
 
-Install [**sc-machine**](https://github.com/ostis-ai/sc-machine) with branch **component_manager**.
+Install [**Subversion**](https://subversion.apache.org/) version control system.
 
 ```sh
 # install subversion version control system to install specifications
 sudo apt install subversion
+```
 
+## Installation
+
+Clone [**sc-machine**](https://github.com/ostis-ai/sc-machine) with branch **component_manager**.
+
+```sh
 # clone sc-machine
 git clone git@github.com:ostis-ai/sc-machine.git
+cd sc-machine
 
 # checkout to the component_manager branch
 git checkout component_manager
 ```
 
 ## Build
-``./scripts/build_sc_machine.sh -cm``
+To build sc-machine with sc-component-manager run build script with component manager flag:
 
-Code highlighting:
+```sh
+./scripts/build_sc_machine.sh -cm
+```
+
+## Post Install
+
+### Code Highlighting
+To enable code highlighting:
+
 1. Go to the `sc-machine/sc-tools/CMakeLists.txt`;
 2. Set `SC_COMPONENT_MANAGER` option to the `ON`;
 3. Reload CMake project.
 
-To see sc-component manager debug logs go to the `sc-machine.ini`, `[sc-memory]` section and set `log_level` to `Debug`.
+### Debug Logs
+To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory]` section in `sc-machine.ini`
 
 ## Usage
 
 ### Start sc-component manager
 
-To start sc-component manager run:
+To start sc-component-manager run:
 
 ``./scripts/run_sc_component_manager.sh -c <CONFIG_PATH>``
 
@@ -42,9 +58,9 @@ Possible run flags:
 
 ### Commands
 
-- `components init` - downloading specifications from repositories. `kb/specifications.scs` contains example of how to describe repository.
-- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - searching component specification in knowledge base. You can search components by author, class or explanation substring.
-- `components install [--idtf \<system_idtf\>]` - installing component by it's system identifier.  
+- `components init` - download specifications from repositories. `kb/specifications.scs` contains example of how to describe repository.
+- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - search component specification in knowledge base. You can search components by author, class or explanation substring.
+- `components install [--idtf \<system_idtf\>]` - install component by it's system identifier.
 
 ## Repository and components
 

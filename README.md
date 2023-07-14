@@ -25,6 +25,7 @@ cd sc-machine
 git checkout component_manager
 # install submodules
 git submodule update --init --recursive
+./scripts/install_deps_ubuntu.sh --dev
 ```
 
 ## Build

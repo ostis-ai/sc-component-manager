@@ -3,6 +3,7 @@ generated
 
 # devs
 .vscode
+.idea
 .cache
 
 # docs

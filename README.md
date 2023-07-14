@@ -1,7 +1,7 @@
 # SC-component-manager
 
 **SC-component-manager** is a part of [**sc-machine**](https://github.com/ostis-ai/sc-machine).
-It allows to install reusable components for intelligent systems made with using the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
+It allows ostis-systems to install reusable components for intelligent systems made with the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
 
 ## Preparation
 
@@ -23,6 +23,8 @@ cd sc-machine
 
 # checkout to the component_manager branch
 git checkout component_manager
+# install submodules
+git submodule update --init --recursive
 ```
 
 ## Build
@@ -34,15 +36,8 @@ To build sc-machine with sc-component-manager run build script with component ma
 
 ## Post Install
 
-### Code Highlighting
-To enable code highlighting:
-
-1. Go to the `sc-machine/sc-tools/CMakeLists.txt`;
-2. Set `SC_COMPONENT_MANAGER` option to the `ON`;
-3. Reload CMake project.
-
 ### Debug Logs
-To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory]` section in `sc-machine.ini`
+To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory]` section of `sc-machine.ini`
 
 ## Usage
 
@@ -58,9 +53,9 @@ Possible run flags:
 
 ### Commands
 
-- `components init` - download specifications from repositories. `kb/specifications.scs` contains example of how to describe repository.
-- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - search component specification in knowledge base. You can search components by author, class or explanation substring.
-- `components install [--idtf \<system_idtf\>]` - install component by it's system identifier.
+- `components init` - download specifications from repositories. `kb/specifications.scs` contains an example of a repository specification.
+- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - search a component specification in the knowledge base. You can search components by author, class or explanation substring.
+- `components install [--idtf \<system_idtf\>]` - install component by its system identifier.
 
 ## Repository and components
 

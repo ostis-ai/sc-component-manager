@@ -29,9 +29,13 @@ public:
   {
   }
 
+  DownloaderHandler() = default;
+
   ~DownloaderHandler();
 
   bool Download(ScMemoryContext * context, ScAddr const & nodeAddr);
+
+  void setDownloadDir(std::string const & downloadDir);
 
 protected:
   std::string m_downloadDir;

@@ -83,9 +83,6 @@ bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
     return false;
   }
 
-  std::string nodeSystIdtf = context->HelperGetSystemIdtf(nodeAddr);
-  std::string downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf;
-
   // TODO: Optimize choosing get address method
   if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification)
   {
@@ -116,6 +113,9 @@ bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
     }
   }
 
+  std::string const & nodeSystemIdentifier = context->HelperGetSystemIdtf(nodeAddr);
+  std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystemIdentifier;
+  SC_LOG_WARNING(downloadPath);
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
     ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method
@@ -130,4 +130,9 @@ bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
   }
 
   return true;
+}
+
+void DownloaderHandler::setDownloadDir(std::string const & downloadDir)
+{
+  m_downloadDir = downloadDir;
 }

@@ -24,7 +24,7 @@ class ScComponentManagerCommandInstall : public ScComponentManagerCommand
   std::string const PARAMETER_NAME = "idtf";
 
 public:
-  explicit ScComponentManagerCommandInstall(std::string specificationsPath);
+  explicit ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath);
 
   bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 
@@ -42,7 +42,9 @@ protected:
   // Install components that are in `need to install` set
   void QuietInstall(ScMemoryContext * context);
 
-  std::string m_specificationsPath;
+  std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath;
 
-  std::unique_ptr<DownloaderHandler> downloaderHandler = std::make_unique<DownloaderHandler>(m_specificationsPath);
+  std::string m_downloadDir;
+
+  std::unique_ptr<DownloaderHandler> downloaderHandler;
 };

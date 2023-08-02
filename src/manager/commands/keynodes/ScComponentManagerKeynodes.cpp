@@ -11,6 +11,9 @@
 namespace keynodes
 {
 ScAddr ScComponentManagerKeynodes::concept_reusable_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_kb_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_ps_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_interface_component;
 ScAddr ScComponentManagerKeynodes::concept_repository;
 ScAddr ScComponentManagerKeynodes::concept_reusable_component_specification;
 ScAddr ScComponentManagerKeynodes::concept_complex_address;

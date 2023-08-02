@@ -34,13 +34,13 @@ sc_int main(sc_int argc, sc_char * argv[])
     return EXIT_SUCCESS;
   }
 
-  std::string configFile;
+  std::string configFilePath;
   if (options.Has({"config", "c"}))
-    configFile = options[{"config", "c"}].second;
+    configFilePath = options[{ "config", "c"}].second;
 
   ScParams params{options, {}};
 
-  ScConfig config{configFile, {"specifications_path", "repo_path", "extensions_path", "log_file"}};
+  ScConfig config{ configFilePath, {"repo_path", "extensions_path", "log_file"}};
   ScConfigGroup configManager = config["sc-component-manager"];
   for (std::string const & key : *configManager)
     params.insert({key, configManager[key]});
@@ -49,7 +49,11 @@ sc_int main(sc_int argc, sc_char * argv[])
       {"extensions_path", "e"}, {"repo_path", "r"}, {"verbose", "v"}, {"clear"}};
   ScParams memoryParams{options, keys};
 
-  ScMemoryConfig memoryConfig{config, std::move(memoryParams)};
+  ScMemoryConfig memoryConfig{config, memoryParams};
+
+  // Инициализация памяти и ключевых узлов где должна быть?
+  ScMemory::Initialize(memoryConfig.GetParams());
+  keynodes::ScComponentManagerKeynodes::InitGlobal();
 
   std::unique_ptr<ScComponentManager> scComponentManager =
       ScComponentManagerFactory::ConfigureScComponentManager(params, memoryConfig.GetParams());

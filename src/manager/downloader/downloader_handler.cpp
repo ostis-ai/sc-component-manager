@@ -115,7 +115,6 @@ bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
 
   std::string const & nodeSystemIdentifier = context->HelperGetSystemIdtf(nodeAddr);
   std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystemIdentifier;
-  SC_LOG_WARNING(downloadPath);
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
     ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method

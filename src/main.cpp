@@ -40,7 +40,7 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   ScParams params{options, {}};
 
-  ScConfig config{ configFilePath, {"repo_path", "extensions_path", "log_file"}};
+  ScConfig config{ configFilePath, {"knowledge_base_components_path", "problem_solver_components_path", "interface_components_path", "repo_path", "extensions_path", "log_file"}};
   ScConfigGroup configManager = config["sc-component-manager"];
   for (std::string const & key : *configManager)
     params.insert({key, configManager[key]});
@@ -51,7 +51,6 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   ScMemoryConfig memoryConfig{config, memoryParams};
 
-  // Инициализация памяти и ключевых узлов где должна быть?
   ScMemory::Initialize(memoryConfig.GetParams());
   keynodes::ScComponentManagerKeynodes::InitGlobal();
 

@@ -189,12 +189,10 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
     }
   }
 
-  SC_LOG_WARNING("downloadDir=" << m_downloadDir);
   downloaderHandler->setDownloadDir(m_downloadDir);
   bool result = downloaderHandler->Download(context, componentAddr);
   std::string componentDirName =
       componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
-  SC_LOG_WARNING("componentDirName=" << componentDirName);
 
   if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
   {

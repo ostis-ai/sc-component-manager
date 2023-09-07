@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add installation of kb/ps/interface components to the relevant directories
 - Add quiet installation mode
 - Add SCn documentation
 - Add SCn documentation environment

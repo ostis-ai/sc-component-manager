@@ -24,7 +24,7 @@ class ScComponentManagerCommandInstall : public ScComponentManagerCommand
   std::string const PARAMETER_NAME = "idtf";
 
 public:
-  explicit ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath);
+  explicit ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath);
 
   bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
 

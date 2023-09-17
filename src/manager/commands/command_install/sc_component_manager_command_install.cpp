@@ -11,7 +11,7 @@
 
 #include "src/manager/commands/constants/command_constants.hpp"
 
-ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddLessFunc> componentsPath)
+ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
 {
   downloaderHandler = std::make_unique<DownloaderHandler>();
@@ -60,15 +60,16 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 {
   std::vector<std::string> scripts = componentUtils::InstallUtils::GetInstallScripts(context, componentAddr);
 
-  for (auto script : scripts)
+  std::stringstream path;
+  for (std::string script : scripts)
   {
     std::string componentDirName =
         componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
     std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
-    std::string path = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystIdtf;
+    path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMETR << nodeSystIdtf;
     script = "." + script;
-    sc_fs_create_directory(path.c_str());
-    ScExec exec{{"cd", path, "&&", script}};
+    sc_fs_create_directory(path.str().c_str());
+    ScExec exec{{"cd", path.str(), "&&", script}};
   }
 
   return true;

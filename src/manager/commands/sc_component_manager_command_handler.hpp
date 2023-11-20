@@ -17,10 +17,15 @@
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {
 public:
-  explicit ScComponentManagerCommandHandler(std::string specificationsPath)
-    : m_specificationsPath(std::move(specificationsPath))
+  explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddLessFunc> componentsPath)
+    : m_componentsPath(std::move(componentsPath))
   {
     m_context = new ScMemoryContext("sc-component-manager-command-handler");
+    std::string const & specificationPath = m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
+    m_actions = {
+          {"init", new ScComponentManagerCommandInit(specificationPath)},
+          {"search", new ScComponentManagerCommandSearch()},
+          {"install", new ScComponentManagerCommandInstall(m_componentsPath)}};
   }
 
   bool Handle(std::string const & commandType, CommandParameters const & commandParameters) override
@@ -56,12 +61,7 @@ public:
 
 protected:
   ScMemoryContext * m_context{};
-
   CommandParameters m_commandParameters;
-  std::string m_specificationsPath;
-
-  std::map<std::string, ScComponentManagerCommand *> m_actions = {
-      {"init", new ScComponentManagerCommandInit(m_specificationsPath)},
-      {"search", new ScComponentManagerCommandSearch()},
-      {"install", new ScComponentManagerCommandInstall(m_specificationsPath)}};
+  std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath;
+  std::map<std::string, ScComponentManagerCommand *> m_actions;
 };

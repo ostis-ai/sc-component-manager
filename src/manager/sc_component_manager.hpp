@@ -18,11 +18,10 @@
 class ScComponentManager
 {
 public:
-  explicit ScComponentManager(std::string specificationsPath, sc_memory_params memoryParams)
-    : m_specificationsPath(std::move(specificationsPath))
+  explicit ScComponentManager(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath, sc_memory_params memoryParams)
+    : m_componentsPath(std::move(componentsPath))
   {
-    ScMemory::Initialize(memoryParams);
-    m_handler = new ScComponentManagerCommandHandler(m_specificationsPath);
+    m_handler = new ScComponentManagerCommandHandler(m_componentsPath);
   }
 
   void QuietInstall();
@@ -41,7 +40,7 @@ public:
   }
 
 protected:
-  std::string m_specificationsPath;
+  std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath;
   void Start();
 
   ScComponentManagerCommandHandler * m_handler;

@@ -22,6 +22,15 @@ public:
   SC_PROPERTY(Keynode("concept_reusable_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_component;
 
+  SC_PROPERTY(Keynode("concept_reusable_kb_component"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_kb_component;
+
+  SC_PROPERTY(Keynode("concept_reusable_ps_component"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_ps_component;
+
+  SC_PROPERTY(Keynode("concept_reusable_interface_component"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_interface_component;
+
   SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_repository;
 

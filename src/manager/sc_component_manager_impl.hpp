@@ -13,10 +13,9 @@
 class ScComponentManagerImpl : public ScComponentManager
 {
 public:
-  ScComponentManagerImpl(std::string specificationsPath, sc_memory_params memoryParams)
-    : ScComponentManager(std::move(specificationsPath), memoryParams)
+  ScComponentManagerImpl(std::map<ScAddr, std::string, ScAddLessFunc> componentsPath, sc_memory_params memoryParams)
+    : ScComponentManager(std::move(componentsPath), memoryParams)
   {
-    keynodes::ScComponentManagerKeynodes::InitGlobal();
   }
 
   ~ScComponentManagerImpl() override = default;

@@ -30,8 +30,6 @@ public:
       ScAddr const & repositoryAddr,
       ScAddr const & rrelAddr);
 
-  static void DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
-
 protected:
   std::string m_specificationsPath;
   std::unique_ptr<DownloaderHandler> downloaderHandler = std::make_unique<DownloaderHandler>(m_specificationsPath);

@@ -31,7 +31,7 @@ public:
 
     if (!sc_fs_create_directory(path.c_str()))
     {
-      SC_LOG_ERROR("Can't download. Can't create folder.");
+      SC_LOG_ERROR("Can't download. Can't create folder. " << path);
       return false;
     }
 

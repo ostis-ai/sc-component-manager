@@ -18,7 +18,9 @@
 class ScComponentManager
 {
 public:
-  explicit ScComponentManager(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath, sc_memory_params memoryParams)
+  explicit ScComponentManager(
+      std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath,
+      sc_memory_params memoryParams)
     : m_componentsPath(std::move(componentsPath))
   {
     m_handler = new ScComponentManagerCommandHandler(m_componentsPath);

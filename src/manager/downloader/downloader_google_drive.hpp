@@ -25,7 +25,6 @@ public:
     //                                          GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX + gDriveFileId + "\'"
     //                                          + gDriveInstallCommandParameter;
 
-  
     // ScExec exec{{gDriveInstallCommand}};
     return false;
   }

@@ -11,7 +11,8 @@
 
 #include "src/manager/commands/constants/command_constants.hpp"
 
-ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
+ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
+    std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
 {
   downloaderHandler = std::make_unique<DownloaderHandler>();
@@ -179,7 +180,8 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
 bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddr componentClass;
-  ScIterator3Ptr const & componentClassIterator = context->Iterator3(ScType::NodeConstClass, ScType::EdgeAccessConstPosPerm, componentAddr);
+  ScIterator3Ptr const & componentClassIterator =
+      context->Iterator3(ScType::NodeConstClass, ScType::EdgeAccessConstPosPerm, componentAddr);
   while (componentClassIterator->Next())
   {
     componentClass = componentClassIterator->Get(0);

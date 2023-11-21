@@ -316,7 +316,9 @@ bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const &
     std::filesystem::path const & filePath = dirEntry.path();
     if (filePath.extension() == ".scs")
     {
-      loader.loadScsFile(*context, filePath);  // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
+      loader.loadScsFile(
+          *context,
+          filePath);  // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
       result = true;
     }
   }

@@ -24,24 +24,22 @@ jobs:
     steps:
       - name: Clone repositories
         run: |
-            git clone https://github.com/ostis-ai/ostis-web-platform
-            cd ostis-web-platform 
-            git checkout feature/update_component_manager_installation
+            git clone https://github.com/ostis-ai/sc-machine.git 
+            cd sc-machine 
+            git checkout component_manager 
             git submodule update --init --recursive 
-            cd scripts
-            ./install_sc_machine_submodule.sh
-            cd ../sc-machine
-            git checkout component_manager
             cd sc-tools/sc-component-manager
             git fetch origin pull/${{ github.event.number }}/head:pr 
             git checkout pr
 
       - name: Install dependencies (Ubuntu)
         if: startswith(matrix.os, 'ubuntu')
-        run: cd ostis-web-platform/scripts && ./install_sc_machine_dependencies.sh --dev -cm
+        run: |
+              cd sc-machine/scripts
+              ./install_deps_ubuntu.sh --dev
 
       - name: Build all
-        run: cd ostis-web-platform/sc-machine/scripts && ./build_sc_machine.sh -cm && ./build_kb.sh
+        run: cd sc-machine/scripts && ./build_sc_machine.sh -cm && ./build_kb.sh
 
       - name: Restore build caches
         uses: hendrikmuhs/ccache-action@v1.2
@@ -57,14 +55,14 @@ jobs:
           BUILD_TYPE: ${{ matrix.build_type }}
           COVERAGE: OFF
           SANITIZER_TYPE: none
-        run: cd ostis-web-platform/sc-machine && scripts/ci/make-tests.sh
+        run: cd sc-machine && scripts/ci/make-tests.sh
 
       - name: Run tests
         id: run_tests
-        run: cd ostis-web-platform/sc-machine && scripts/ci/run-tests.sh
+        run: cd sc-machine && scripts/ci/run-tests.sh
 
       - name: Run sc-component-manager
         id: run_sc_component_manager
         run: |
-          cd ostis-web-platform/sc-machine/scripts
-          ./run_sc_component_manager.sh -c ../../ostis-web-platform.ini -b ../../repo.path
+          cd sc-machine/scripts
+          ./run_sc_component_manager.sh -c ../sc-machine.ini

@@ -47,6 +47,6 @@ jobs:
             cd sc-tools/sc-component-manager 
             git pull origin pull/${{ github.event.number }}/head 
             cd ../../scripts
-            ./install_deps_ubuntu.sh --dev && ./install_sc_component_manager_dependencies.sh && ./build_sc_machine.sh -cm
+            ./install_deps_ubuntu.sh --dev && ./build_sc_machine.sh -cm
             cd ../
             ./scripts/clang/check_formatting.sh

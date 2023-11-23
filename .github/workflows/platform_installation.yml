@@ -26,7 +26,7 @@ jobs:
         run: |
             git clone https://github.com/ostis-ai/ostis-web-platform
             cd ostis-web-platform
-            git checkout feature/update_component_manager_installation
+            git checkout feature/component_manager
             git submodule update --init --recursive
             cd scripts
             ./install_sc_machine_submodule.sh

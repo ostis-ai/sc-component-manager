@@ -24,7 +24,6 @@ jobs:
     steps:
       - name: Clone repositories
         run: |
-            ./install_deps_ubuntu.sh --dev && ./install_sc_component_manager_dependencies.sh && ./build_sc_machine.sh -cm
             git clone https://github.com/ostis-ai/sc-machine.git 
             cd sc-machine 
             git checkout component_manager 

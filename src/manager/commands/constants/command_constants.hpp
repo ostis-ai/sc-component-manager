@@ -27,6 +27,7 @@ public:
 class GitHubConstants
 {
 public:
-  static std::string const SVN_TRUNK;
+  static std::string const RAW_GITHUB_PREFIX;
   static std::string const GITHUB_PREFIX;
+  static std::string const GITHUB_CURL_COMMAND;
 };

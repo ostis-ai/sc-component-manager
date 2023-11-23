@@ -9,8 +9,9 @@
 std::string const SpecificationConstants::SPECIFICATION_FILENAME = "specification.scs";
 std::string const SpecificationConstants::DIRECTORY_DELIMETR = "/";
 
-std::string const GitHubConstants::SVN_TRUNK = "/trunk";
+std::string const GitHubConstants::RAW_GITHUB_PREFIX = "https://raw.githubusercontent.com/";
 std::string const GitHubConstants::GITHUB_PREFIX = "https://github.com/";
+std::string const GitHubConstants::GITHUB_CURL_COMMAND = "curl -H 'Accept: application/vnd.github.v3.raw' -o ";
 
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_PREFIX = "https://drive.google.com/";
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_FILE_PREFIX = "https://drive.google.com/file/d/";

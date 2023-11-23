@@ -115,6 +115,7 @@ bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
 
   std::string const & nodeSystemIdentifier = context->HelperGetSystemIdtf(nodeAddr);
   std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystemIdentifier;
+  std::unique_ptr<Downloader> downloader = std::make_unique<DownloaderGit>();
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
     ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method
@@ -123,7 +124,6 @@ bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeA
       context->GetLinkContent(currentAddressLinkAddr, url);
       pathPostfix = specificationPostfix;
 
-      std::unique_ptr<Downloader> downloader = std::make_unique<DownloaderGit>();
       downloader->Download(downloadPath, url, pathPostfix);
     }
   }

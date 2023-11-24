@@ -31,7 +31,7 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
   }
   catch (utils::ScException const & exception)
   {
-    SC_LOG_ERROR("ScComponentManagerFactory: ScComponentManager configuration error.");
+    SC_LOG_ERROR("ScComponentManagerFacory: ScComponentManager configuration error.");
   }
 
   return {};

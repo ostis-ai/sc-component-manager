@@ -7,8 +7,9 @@
 #include "command_constants.hpp"
 
 std::string const SpecificationConstants::SPECIFICATION_FILENAME = "specification.scs";
-std::string const SpecificationConstants::DIRECTORY_DELIMETR = "/";
+std::string const SpecificationConstants::DIRECTORY_DELIMITER = "/";
 
+std::string const GitHubConstants::GIT_CLONE = "git clone";
 std::string const GitHubConstants::RAW_GITHUB_PREFIX = "https://raw.githubusercontent.com/";
 std::string const GitHubConstants::GITHUB_PREFIX = "https://github.com/";
 std::string const GitHubConstants::GITHUB_CURL_COMMAND = "curl -H 'Accept: application/vnd.github.v3.raw' -o ";

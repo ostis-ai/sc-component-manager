@@ -6,15 +6,15 @@
 
 #include "sc_component_manager_command_install.hpp"
 #include <sc-memory/utils/sc_exec.hpp>
-#include <sc-builder/src/scs_loader.hpp>
 #include "src/manager/utils/sc_component_utils.hpp"
 
 #include "src/manager/commands/constants/command_constants.hpp"
 
-ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
+ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
+    std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
 {
-  downloaderHandler = std::make_unique<DownloaderHandler>();
+  downloaderHandler = std::make_unique<DownloaderHandler>(m_downloadDir);
 }
 
 /**
@@ -25,10 +25,10 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(std::map<ScAd
  */
 ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
     ScMemoryContext * context,
-    std::vector<std::string> componentsToInstall)
+    std::vector<std::string> const & componentsToInstallIdentifiers)
 {
   ScAddrVector availableComponents;
-  for (std::string const & componentToInstallIdentifier : componentsToInstall)
+  for (std::string const & componentToInstallIdentifier : componentsToInstallIdentifiers)
   {
     ScAddr componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
 
@@ -66,7 +66,7 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
     std::string componentDirName =
         componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
     std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
-    path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMETR << nodeSystIdtf;
+    path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << nodeSystIdtf;
     script = "." + script;
     sc_fs_create_directory(path.str().c_str());
     ScExec exec{{"cd", path.str(), "&&", script}};
@@ -179,7 +179,8 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
 bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddr componentClass;
-  ScIterator3Ptr const & componentClassIterator = context->Iterator3(ScType::NodeConstClass, ScType::EdgeAccessConstPosPerm, componentAddr);
+  ScIterator3Ptr const & componentClassIterator =
+      context->Iterator3(ScType::NodeConstClass, ScType::EdgeAccessConstPosPerm, componentAddr);
   while (componentClassIterator->Next())
   {
     componentClass = componentClassIterator->Get(0);
@@ -191,13 +192,10 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
   }
 
   downloaderHandler->setDownloadDir(m_downloadDir);
-  bool result = downloaderHandler->Download(context, componentAddr);
-  std::string componentDirName =
-      componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
-
-  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, componentDirName))
+  bool result = downloaderHandler->DownloadComponent(context, componentAddr);
+  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, m_downloadDir))
   {
-    SC_LOG_WARNING("ScComponentManagerCommandInstall: Not all files are loaded from " + componentDirName);
+    SC_LOG_WARNING("ScComponentManagerCommandInstall: Not all *.scs files are loaded from " << m_downloadDir);
   }
 
   return result;

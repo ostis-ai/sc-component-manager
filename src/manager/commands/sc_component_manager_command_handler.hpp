@@ -21,11 +21,12 @@ public:
     : m_componentsPath(std::move(componentsPath))
   {
     m_context = new ScMemoryContext("sc-component-manager-command-handler");
-    std::string const & specificationPath = m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
+    std::string const & specificationPath =
+        m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
     m_actions = {
-          {"init", new ScComponentManagerCommandInit(specificationPath)},
-          {"search", new ScComponentManagerCommandSearch()},
-          {"install", new ScComponentManagerCommandInstall(m_componentsPath)}};
+        {"init", new ScComponentManagerCommandInit(specificationPath)},
+        {"search", new ScComponentManagerCommandSearch()},
+        {"install", new ScComponentManagerCommandInstall(m_componentsPath)}};
   }
 
   bool Handle(std::string const & commandType, CommandParameters const & commandParameters) override

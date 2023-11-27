@@ -30,5 +30,6 @@ public:
   static std::string const GIT_CLONE;
   static std::string const RAW_GITHUB_PREFIX;
   static std::string const GITHUB_PREFIX;
-  static std::string const GITHUB_CURL_COMMAND;
+  static std::string const GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX;
+  static std::string const GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX;
 };

@@ -41,10 +41,10 @@ public:
     std::string const repositoryName = componentUsernameRepositoryName.substr(usernameRepositoryNameDelimiter + 1);
     std::string const defaultBranch = GetDefaultBranch(username, repositoryName);
 
-    query << GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX << downloadPath << SpecificationConstants::DIRECTORY_DELIMITER
-          << pathPostfix << " " << GitHubConstants::RAW_GITHUB_PREFIX << componentUsernameRepositoryName
-          << SpecificationConstants::DIRECTORY_DELIMITER << defaultBranch << SpecificationConstants::DIRECTORY_DELIMITER
-          << pathPostfix;
+    query << GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX << downloadPath
+          << SpecificationConstants::DIRECTORY_DELIMITER << pathPostfix << " " << GitHubConstants::RAW_GITHUB_PREFIX
+          << componentUsernameRepositoryName << SpecificationConstants::DIRECTORY_DELIMITER << defaultBranch
+          << SpecificationConstants::DIRECTORY_DELIMITER << pathPostfix;
 
     if (!sc_fs_create_directory(downloadPath.c_str()))
     {
@@ -59,7 +59,8 @@ public:
   static std::string GetDefaultBranch(std::string const & username, std::string const & repositoryName)
   {
     std::stringstream query;
-    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/" << username
+    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX
+          << "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/" << username
           << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
           << R"( | grep -w "default_branch" | cut -d ":" -f 2 | tr -d '," ')";
 

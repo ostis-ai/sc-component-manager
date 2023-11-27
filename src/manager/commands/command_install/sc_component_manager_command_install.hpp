@@ -35,7 +35,9 @@ protected:
 
   bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  ScAddrVector GetAvailableComponents(ScMemoryContext * context, std::vector<std::string> componentsToInstall);
+  static ScAddrVector GetAvailableComponents(
+      ScMemoryContext * context,
+      std::vector<std::string> const & componentsToInstallIdentifiers);
 
   bool InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 

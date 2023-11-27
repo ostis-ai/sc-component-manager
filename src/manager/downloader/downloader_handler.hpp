@@ -27,23 +27,18 @@ public:
   explicit DownloaderHandler(std::string specificationsPath)
     : m_downloadDir(std::move(specificationsPath))
   {
+    m_downloader = std::make_shared<DownloaderGit>();
   }
 
-  DownloaderHandler() = default;
-
-  ~DownloaderHandler();
-
-  bool Download(ScMemoryContext * context, ScAddr const & nodeAddr);
+  bool DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr);
+  bool DownloadComponent(ScMemoryContext * context, ScAddr const & nodeAddr);
 
   void setDownloadDir(std::string const & downloadDir);
 
 protected:
   std::string m_downloadDir;
-  static char const DIRECTORY_DELIMITER = '/';
-  std::map<ScAddr, Downloader *, ScAddrLessFunc> m_downloaders = {
-      {keynodes::ScComponentManagerKeynodes::concept_github_url, new DownloaderGit()},
-      {keynodes::ScComponentManagerKeynodes::concept_google_drive_url, new DownloaderGoogleDrive()}};
+  std::shared_ptr<Downloader> m_downloader;
 
-  ScAddr getDownloadableClass(ScMemoryContext * context, ScAddr const & nodeAddr);
-  ScAddr getUrlLinkClass(ScMemoryContext * context, ScAddr const & linkAddr);
+  static ScAddr getDownloadableClass(ScMemoryContext * context, ScAddr const & nodeAddr);
+  static ScAddr getUrlLinkClass(ScMemoryContext * context, ScAddr const & linkAddr);
 };

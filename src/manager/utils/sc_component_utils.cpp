@@ -146,7 +146,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
   }
 
   return specificationAddressLinks;
-};
+}
 
 /**
  * @brief Get sc-addr of sc-link with repository address.
@@ -292,7 +292,7 @@ std::string InstallUtils::GetComponentDirName(
     const std::string & specificationsPath)
 {
   std::string componentIdtf = context->HelperGetSystemIdtf(componentAddr);
-  std::string componentDirName = specificationsPath + SpecificationConstants::DIRECTORY_DELIMETR + componentIdtf;
+  std::string componentDirName = specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER + componentIdtf;
   return componentDirName;
 }
 
@@ -316,7 +316,8 @@ bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const &
     std::filesystem::path const & filePath = dirEntry.path();
     if (filePath.extension() == ".scs")
     {
-      loader.loadScsFile(*context, filePath);  // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
+      // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
+      loader.loadScsFile(*context, filePath);
       result = true;
     }
   }

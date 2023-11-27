@@ -13,7 +13,7 @@
 class DownloaderGoogleDrive : public Downloader
 {
 public:
-  bool Download(std::string const & urlAddress, std::string const & downloadPath, std::string const & pathPostfix = "")
+  bool DownloadFile(std::string const & urlAddress, std::string const & downloadPath, std::string const & pathPostfix)
       override
   {
     // std::string const gDriveFileId = componentPath.substr(
@@ -25,7 +25,6 @@ public:
     //                                          GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX + gDriveFileId + "\'"
     //                                          + gDriveInstallCommandParameter;
 
-  
     // ScExec exec{{gDriveInstallCommand}};
     return false;
   }

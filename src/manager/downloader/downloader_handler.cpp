@@ -4,7 +4,6 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <sc-builder/src/scs_loader.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 #include "src/manager/utils/sc_component_utils.hpp"
 #include "downloader_handler.hpp"
@@ -63,70 +62,44 @@ ScAddr DownloaderHandler::getUrlLinkClass(ScMemoryContext * context, ScAddr cons
   return urlLinkClass;
 }
 
-DownloaderHandler::~DownloaderHandler()
-{
-  for (auto const & it : m_downloaders)
-    delete it.second;
-}
-
-bool DownloaderHandler::Download(ScMemoryContext * context, ScAddr const & nodeAddr)
+bool DownloaderHandler::DownloadSpecification(ScMemoryContext * context, ScAddr const & componentSpecificationAddr)
 {
   ScAddrVector nodeAddressLinkAddrs;
-  std::string pathPostfix;
-  std::string specificationPostfix;
-  std::string url;
 
-  ScAddr const & nodeClassAddr = getDownloadableClass(context, nodeAddr);
-  if (!nodeClassAddr.IsValid())
+  try
   {
-    SC_LOG_ERROR("Can't download. Downloadable class not found");
-    return false;
+    nodeAddressLinkAddrs = componentUtils::SearchUtils::GetSpecificationAddress(context, componentSpecificationAddr);
+  }
+  catch (utils::ScException const & exception)
+  {
+    SC_LOG_ERROR(exception.Message());
+    SC_LOG_ERROR(exception.Description());
   }
 
-  // TODO: Optimize choosing get address method
-  if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification)
-  {
-    try
-    {
-      nodeAddressLinkAddrs = componentUtils::SearchUtils::GetSpecificationAddress(context, nodeAddr);
-    }
-    catch (utils::ScException const & exception)
-    {
-      SC_LOG_ERROR(exception.Message());
-      SC_LOG_ERROR(exception.Description());
-    }
-
-    specificationPostfix = SpecificationConstants::SPECIFICATION_FILENAME;
-  }
-
-  if (nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_repository ||
-      nodeClassAddr == keynodes::ScComponentManagerKeynodes::concept_reusable_component)
-  {
-    try
-    {
-      nodeAddressLinkAddrs = {componentUtils::SearchUtils::GetComponentAddress(context, nodeAddr)};
-    }
-    catch (utils::ScException const & exception)
-    {
-      SC_LOG_ERROR(exception.Message());
-      SC_LOG_ERROR(exception.Description());
-    }
-  }
-
-  std::string const & nodeSystemIdentifier = context->HelperGetSystemIdtf(nodeAddr);
-  std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMETR + nodeSystemIdentifier;
+  std::string urlAddress;
+  std::string const & nodeSystemIdentifier = context->HelperGetSystemIdtf(componentSpecificationAddr);
+  std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMITER + nodeSystemIdentifier;
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
     ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method
     if (linkAddressClassAddr == keynodes::ScComponentManagerKeynodes::concept_github_url)
     {
-      context->GetLinkContent(currentAddressLinkAddr, url);
-      pathPostfix = specificationPostfix;
-
-      std::unique_ptr<Downloader> downloader = std::make_unique<DownloaderGit>();
-      downloader->Download(downloadPath, url, pathPostfix);
+      context->GetLinkContent(currentAddressLinkAddr, urlAddress);
+      m_downloader->DownloadFile(downloadPath, urlAddress, SpecificationConstants::SPECIFICATION_FILENAME);
     }
   }
+
+  return true;
+}
+
+bool DownloaderHandler::DownloadComponent(ScMemoryContext * context, const ScAddr & componentAddr)
+{
+  std::string urlAddress;
+
+  ScAddr const & componentAddress = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  context->GetLinkContent(componentAddress, urlAddress);
+
+  m_downloader->DownloadRepository(m_downloadDir, urlAddress);
 
   return true;
 }

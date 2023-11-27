@@ -12,7 +12,7 @@ class SpecificationConstants
 {
 public:
   static std::string const SPECIFICATION_FILENAME;
-  static std::string const DIRECTORY_DELIMETR;
+  static std::string const DIRECTORY_DELIMITER;
 };
 
 class GoogleDriveConstants
@@ -27,6 +27,9 @@ public:
 class GitHubConstants
 {
 public:
-  static std::string const SVN_TRUNK;
+  static std::string const GIT_CLONE;
+  static std::string const RAW_GITHUB_PREFIX;
   static std::string const GITHUB_PREFIX;
+  static std::string const GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX;
+  static std::string const GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX;
 };

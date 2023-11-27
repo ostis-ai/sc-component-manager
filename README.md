@@ -3,18 +3,18 @@
 **SC-component-manager** is a part of [**sc-machine**](https://github.com/ostis-ai/sc-machine).
 It allows ostis-systems to install reusable components for intelligent systems made with the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
 
-## Preparation
+## Installation
+There are two possible ways:
 
-Install [**Subversion**](https://subversion.apache.org/) version control system.
-
+1. Using ostis-web-platform
 ```sh
-# install subversion version control system to install specifications
-sudo apt install subversion
+   git clone https://github.com/ostis-ai/ostis-web-platform
+   cd ostis-web-platform/scripts
+   git checkout feature/component_manager
+   ./install_platform_with_component_manager.sh
 ```
 
-## Installation
-
-Clone [**sc-machine**](https://github.com/ostis-ai/sc-machine) with branch **component_manager**.
+2. Using sc-machine
 
 ```sh
 # clone sc-machine
@@ -35,6 +35,8 @@ To build sc-machine with sc-component-manager run build script with component ma
 ./scripts/build_sc_machine.sh -cm
 ```
 
+To build knowledge base, run ```./build_kb``` in sc-machine or in ostis-web-platform scripts
+
 ## Post Install
 
 ### Debug Logs
@@ -50,7 +52,7 @@ To start sc-component-manager run:
 
 Possible run flags:
 - `-i` - interactive mode;
-- `-b` <KB_SRC_PATH> - build kb before start.
+- `-b` <KB_SRC_PATH (or path to repo.path file)> - build kb before start.
 
 ### Commands
 

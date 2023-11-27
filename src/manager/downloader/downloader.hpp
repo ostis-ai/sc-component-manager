@@ -11,10 +11,12 @@
 class Downloader
 {
 public:
-  virtual bool Download(
+  virtual bool DownloadFile(
       std::string const & downloadPath,
       std::string const & urlAddress,
-      std::string const & pathPostfix = "") = 0;
+      std::string const & pathPostfix) = 0;
+
+  virtual bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) = 0;
 
   virtual ~Downloader() = default;
 };

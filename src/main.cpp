@@ -10,7 +10,7 @@
 
 #include "sc-memory/sc_debug.hpp"
 #include "sc-config/sc_config.hpp"
-#include "sc_options.hpp"
+#include "sc_options.hpp" // new comment for testing
 #include "sc_memory_config.hpp"
 #include "sc-memory/utils/sc_signal_handler.hpp"
 

@@ -2,7 +2,7 @@ name: Platform installation
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, fix/ci]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Install dependencies (Ubuntu)
         if: startswith(matrix.os, 'ubuntu')
-        run: cd ostis-web-platform/scripts && ./install_sc_machine_dependencies.sh --dev -cm
+        run: cd ostis-web-platform/scripts && ./install_sc_machine_dependencies.sh --dev
 
       - name: Build all
         run: cd ostis-web-platform/sc-machine/scripts && ./build_sc_machine.sh -cm && ./build_kb.sh

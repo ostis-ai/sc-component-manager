@@ -2,7 +2,7 @@ name: Tests
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, fix/ci]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
         if: startswith(matrix.os, 'ubuntu')
         run: |
               cd sc-machine/scripts
-              ./install_deps_ubuntu.sh --dev && ./install_sc_component_manager_dependencies.sh
+              ./install_deps_ubuntu.sh --dev
 
       - name: Build all
         run: cd sc-machine/scripts && ./build_sc_machine.sh -cm && ./build_kb.sh

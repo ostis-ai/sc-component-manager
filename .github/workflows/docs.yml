@@ -2,7 +2,7 @@ name: Build tex docs
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, fix/ci]
   workflow_dispatch:
 
 jobs:

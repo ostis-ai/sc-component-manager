@@ -2,7 +2,7 @@ name: Sanitizers
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, fix/ci]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -35,7 +35,6 @@ jobs:
             git pull origin pull/${{ github.event.number }}/head 
             cd ../.. 
             ./scripts/install_deps_ubuntu.sh --dev
-            ./scripts/install_sc_component_manager_dependencies.sh
 
       - name: Restore build caches
         uses: hendrikmuhs/ccache-action@v1.2

@@ -12,8 +12,10 @@ std::string const SpecificationConstants::DIRECTORY_DELIMITER = "/";
 std::string const GitHubConstants::GIT_CLONE = "git clone";
 std::string const GitHubConstants::RAW_GITHUB_PREFIX = "https://raw.githubusercontent.com/";
 std::string const GitHubConstants::GITHUB_PREFIX = "https://github.com/";
-std::string const GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX = "curl -H 'Accept: application/vnd.github.v3.raw' -o ";
-std::string const GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX = "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/";
+std::string const GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX =
+    "curl -H 'Accept: application/vnd.github.v3.raw' -o ";
+std::string const GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX =
+    "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/";
 
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_PREFIX = "https://drive.google.com/";
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_FILE_PREFIX = "https://drive.google.com/file/d/";

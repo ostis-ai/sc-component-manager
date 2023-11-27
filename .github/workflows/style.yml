@@ -46,5 +46,7 @@ jobs:
             git submodule update --init --recursive 
             cd sc-tools/sc-component-manager 
             git pull origin pull/${{ github.event.number }}/head 
-            cd ../.. && ./scripts/install_deps_ubuntu.sh --dev 
+            cd ../../scripts
+            ./install_deps_ubuntu.sh --dev && ./build_sc_machine.sh -cm
+            cd ../
             ./scripts/clang/check_formatting.sh

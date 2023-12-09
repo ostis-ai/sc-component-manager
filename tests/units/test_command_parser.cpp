@@ -9,7 +9,7 @@
 #include "sc_component_manager_test.hpp"
 #include "src/manager/commands/sc_component_manager_command.hpp"
 
-TEST_F(ScComponentManagerParserTest, ParseCommandTypes)
+TEST_F(ScComponentManagerTest, ParseCommandTypes)
 {
   std::string commandType;
 
@@ -32,7 +32,7 @@ TEST_F(ScComponentManagerParserTest, ParseCommandTypes)
   EXPECT_EQ(commandType, "install");
 }
 
-TEST_F(ScComponentManagerParserTest, ParseCommandParameters)
+TEST_F(ScComponentManagerTest, ParseCommandParameters)
 {
   std::pair<std::string, CommandParameters> parsed =
       m_commandParser->Parse("components search --class concept_kb_component");
@@ -47,7 +47,7 @@ TEST_F(ScComponentManagerParserTest, ParseCommandParameters)
   EXPECT_EQ(parsed.second.at("r").size(), (size_t)0);
 }
 
-TEST_F(ScComponentManagerParserTest, ParseIncorrectCommands)
+TEST_F(ScComponentManagerTest, ParseIncorrectCommands)
 {
   EXPECT_ANY_THROW(m_commandParser->Parse("components"));
   EXPECT_ANY_THROW(m_commandParser->Parse("foo init"));

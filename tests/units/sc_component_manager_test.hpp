@@ -14,7 +14,7 @@
 
 #include <memory>
 
-class ScComponentManagerParserTest : public testing::Test
+class ScComponentManagerTest : public testing::Test
 {
 protected:
   void SetUp() override

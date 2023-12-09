@@ -7,62 +7,131 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 #include "sc-memory/utils/sc_exec.hpp"
 #include "sc-core/sc-store/sc-fs-memory/sc_file_system.h"
 
 #include "downloader.hpp"
 #include "src/manager/commands/constants/command_constants.hpp"
+#include "src/manager/commands/url_parser/repository_url_parser.hpp"
 
 class DownloaderGit : public Downloader
 {
 public:
-  // TODO(MksmOrlov): Make a model of github repository (fields username, repository name, default branch).
-  // No need to support because of ostis-library.
+  /**
+   * @brief Download only one file from the url address
+   * Executing the next commands:
+   *
+   * @param downloadPath path to download component into
+   * @param urlAddress component address to install
+   * @param pathPostfix filename to download is "specification.scs" by default
+   * @return true if downloaded successfully
+   */
   bool DownloadFile(std::string const & downloadPath, std::string const & urlAddress, std::string const & pathPostfix)
       override
   {
-    std::stringstream query;
-    size_t const usernameRepositoryNamePosition =
-        urlAddress.find(GitHubConstants::GITHUB_PREFIX) + GitHubConstants::GITHUB_PREFIX.size();
-    if (usernameRepositoryNamePosition == std::string::npos)
-    {
-      return false;
-    }
-    std::string const componentUsernameRepositoryName = urlAddress.substr(usernameRepositoryNamePosition);
-
-    size_t const usernameRepositoryNameDelimiter =
-        componentUsernameRepositoryName.find(SpecificationConstants::DIRECTORY_DELIMITER);
-    if (usernameRepositoryNameDelimiter == std::string::npos)
-    {
-      return false;
-    }
-    std::string const username = componentUsernameRepositoryName.substr(0, usernameRepositoryNameDelimiter);
-    std::string const repositoryName = componentUsernameRepositoryName.substr(usernameRepositoryNameDelimiter + 1);
-    std::string const defaultBranch = GetDefaultBranch(username, repositoryName);
-
-    query << GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX << downloadPath
-          << SpecificationConstants::DIRECTORY_DELIMITER << pathPostfix << " " << GitHubConstants::RAW_GITHUB_PREFIX
-          << componentUsernameRepositoryName << SpecificationConstants::DIRECTORY_DELIMITER << defaultBranch
-          << SpecificationConstants::DIRECTORY_DELIMITER << pathPostfix;
-
     if (!sc_fs_create_directory(downloadPath.c_str()))
     {
       SC_LOG_ERROR("Can't download. Can't create folder. " << downloadPath);
       return false;
     }
 
+    std::stringstream query;
+
+    RepositoryUrlParser parser;
+    parser.Parse(urlAddress);
+    std::string const username = parser.GetUsername();
+    std::string const repositoryName = parser.GetRepositoryName();
+    std::string const directoryName = parser.GetDirectoryName();
+    std::string const defaultBranch = GetDefaultBranch(username, repositoryName);
+
+    // curl command to download file
+    query << GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX;
+    // path to download file into
+    query << downloadPath << SpecificationConstants::DIRECTORY_DELIMITER << pathPostfix << " ";
+    // github url to download file from
+    query << GitHubConstants::RAW_GITHUB_PREFIX << username << SpecificationConstants::DIRECTORY_DELIMITER
+          << repositoryName << SpecificationConstants::DIRECTORY_DELIMITER << defaultBranch
+          << SpecificationConstants::DIRECTORY_DELIMITER;
+    // add directory if needed
+    if (!directoryName.empty())
+    {
+      query << directoryName << SpecificationConstants::DIRECTORY_DELIMITER;
+    }
+    // filename to download
+    query << pathPostfix;
+
     ScExec exec{{query.str()}};
     return true;
   }
 
+  /**
+   * @brief Download repository from the url address. If it is a subdirectory, download only subdirectory
+   * Executing the next commands (directory is optional):
+   * git clone --no-checkout --depth=1 --filter=tree:0 https://github.com/username/repo/directory
+   * cd repo
+   * git sparse-checkout set --no-cone directory
+   * git checkout
+   * @param downloadPath path to download component into
+   * @param urlAddress component address to install
+   * @return true if downloaded successfully
+   */
+  bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) override
+  {
+    if (!sc_fs_create_directory(downloadPath.c_str()))
+    {
+      SC_LOG_ERROR("Can't download. Can't create folder. " << downloadPath);
+      return false;
+    }
+
+    RepositoryUrlParser parser;
+    parser.Parse(urlAddress);
+    std::string const repositoryAddress = parser.GetRepositoryUrl();
+    std::string const repositoryName = parser.GetRepositoryName();
+    std::string const directoryName = parser.GetDirectoryName();
+
+    // Form the query to download a repository using git
+    std::stringstream query;
+
+    // Navigate to the corresponding component directory
+    query << "cd " << downloadPath << " && ";
+
+    // Get all subdirectories of existing components from repo to add them to the sparse checkout
+    std::stringstream existingComponentsName;
+    existingComponentsName << directoryName;
+    bool const isComponentRepositoryExists =
+        fillExistingComponents(existingComponentsName, downloadPath, repositoryName);
+
+    // Do not clone repository if it exists
+    if (!isComponentRepositoryExists)
+    {
+      fillGitCloneQuery(query, repositoryAddress);
+      // The last argument is the repository address to clone
+      query << " && ";
+    }
+
+    // Navigate to the component inner directory to execute commands here
+    query << "cd " << repositoryName << " && ";
+
+    // Sparse checkout to prepare current directory content
+    query << GitHubConstants::GIT_SPARSE_CHECKOUT << " " << existingComponentsName.str() << " && ";
+
+    // Git checkout to get current directory content
+    query << GitHubConstants::GIT_CHECKOUT;
+
+    ScExec exec{{query.str()}};
+    return true;
+  }
+
+protected:
   static std::string GetDefaultBranch(std::string const & username, std::string const & repositoryName)
   {
     std::stringstream query;
     query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX
-          << "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/" << username
+          << GitHubConstants::CURL_GET_BRANCH_COMMAND << username
           << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
-          << R"( | grep -w "default_branch" | cut -d ":" -f 2 | tr -d '," ')";
+          << GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND;
 
     ScExec exec{{query.str()}};
     std::string const branches(std::istreambuf_iterator<char>(exec), {});
@@ -71,18 +140,50 @@ public:
     return branches.substr(0, actualBranchIndex);
   }
 
-  bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) override
+  static void fillGitCloneQuery(std::stringstream & query, std::string const & repositoryAddress)
   {
-    std::stringstream query;
-    query << "cd " << downloadPath << " && " << GitHubConstants::GIT_CLONE << " " << urlAddress;
+    // Get a local copy of the remote repository
+    query << GitHubConstants::GIT_CLONE << " ";
 
-    if (!sc_fs_create_directory(downloadPath.c_str()))
+    // Create the repository only with .github, no copy all files now
+    query << GitHubConstants::FLAG_NO_CHECKOUT << " ";
+
+    // Get only the most recent commits and the current branch. Do not copy all history
+    query << GitHubConstants::FLAG_DEPTH << "1"
+          << " ";
+
+    // Clone only metadata about files and directories of the repository
+    query << GitHubConstants::FLAG_FILTER_TREE << "0"
+          << " ";
+
+    // The last argument is the repository address to clone
+    query << repositoryAddress;
+  }
+
+  // Get all subdirectories of existing components from repo to add them to the sparse checkout
+  static bool fillExistingComponents(
+      std::stringstream & existingComponentsName,
+      std::string const & downloadPath,
+      std::string const & repositoryName)
+  {
+    std::stringstream componentPathFromRepo;
+    componentPathFromRepo << downloadPath << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName;
+    bool isComponentRepositoryExists = std::filesystem::exists(componentPathFromRepo.str());
+    if (isComponentRepositoryExists)
     {
-      SC_LOG_ERROR("Can't download. Can't create folder. " << downloadPath);
-      return false;
+      std::string existingComponentName;
+      size_t const existingComponentNameStartIndex = downloadPath.size() + repositoryName.size() + 2; // Two '/' symbols
+      for (auto const & directory : std::filesystem::directory_iterator(componentPathFromRepo.str()))
+      {
+        existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
+        // Do not process .git directory
+        if (existingComponentName[0] != '.')
+        {
+          existingComponentsName << " " << existingComponentName;
+        }
+      }
     }
 
-    ScExec exec{{query.str()}};
-    return true;
+    return isComponentRepositoryExists;
   }
 };

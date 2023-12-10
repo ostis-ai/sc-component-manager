@@ -13,8 +13,10 @@ std::string const GitHubConstants::GIT_CLONE = "git clone";
 std::string const GitHubConstants::RAW_GITHUB_PREFIX = "https://raw.githubusercontent.com/";
 std::string const GitHubConstants::GITHUB_PREFIX = "https://github.com/";
 std::string const GitHubConstants::TREE = "tree";
-std::string const GitHubConstants::CURL_GET_BRANCH_COMMAND = "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/";
-std::string const GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND = R"( | grep -w "default_branch" | cut -d ":" -f 2 | tr -d '," ')";
+std::string const GitHubConstants::CURL_GET_BRANCH_COMMAND =
+    "curl -s -H \"Accept: application/vnd.github.v3+json\" https://api.github.com/repos/";
+std::string const GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND =
+    R"( | grep -w "default_branch" | cut -d ":" -f 2 | tr -d '," ')";
 std::string const GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX =
     "curl -H 'Accept: application/vnd.github.v3.raw' -o ";
 std::string const GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX =

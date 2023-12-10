@@ -128,9 +128,8 @@ protected:
   static std::string GetDefaultBranch(std::string const & username, std::string const & repositoryName)
   {
     std::stringstream query;
-    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX
-          << GitHubConstants::CURL_GET_BRANCH_COMMAND << username
-          << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
+    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << GitHubConstants::CURL_GET_BRANCH_COMMAND
+          << username << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
           << GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND;
 
     ScExec exec{{query.str()}};
@@ -172,7 +171,8 @@ protected:
     if (isComponentRepositoryExists)
     {
       std::string existingComponentName;
-      size_t const existingComponentNameStartIndex = downloadPath.size() + repositoryName.size() + 2; // Two '/' symbols
+      size_t const existingComponentNameStartIndex =
+          downloadPath.size() + repositoryName.size() + 2;  // Two '/' symbols
       for (auto const & directory : std::filesystem::directory_iterator(componentPathFromRepo.str()))
       {
         existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);

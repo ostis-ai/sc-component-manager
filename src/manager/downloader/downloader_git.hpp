@@ -50,7 +50,7 @@ public:
     query << GitHubConstants::GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX;
     // path to download file into
     query << downloadPath << SpecificationConstants::DIRECTORY_DELIMITER << pathPostfix << " ";
-    // github url to download file from
+    // gitHub url to download file from
     query << GitHubConstants::RAW_GITHUB_PREFIX << username << SpecificationConstants::DIRECTORY_DELIMITER
           << repositoryName << SpecificationConstants::DIRECTORY_DELIMITER << defaultBranch
           << SpecificationConstants::DIRECTORY_DELIMITER;
@@ -98,13 +98,12 @@ public:
     query << "cd " << downloadPath << " && ";
 
     // Get all subdirectories of existing components from repo to add them to the sparse checkout
-    std::stringstream existingComponentsName;
+    std::stringstream existingComponentsName = fillExistingComponents(downloadPath, repositoryName);
     existingComponentsName << directoryName;
-    bool const isComponentRepositoryExists =
-        fillExistingComponents(existingComponentsName, downloadPath, repositoryName);
+    std::string const directoryPath =  getDirectoryPathFromRepo(downloadPath, repositoryName);
 
     // Do not clone repository if it exists
-    if (!isComponentRepositoryExists)
+    if (directoryPath.empty())
     {
       fillGitCloneQuery(query, repositoryAddress);
       // The last argument is the repository address to clone
@@ -144,7 +143,7 @@ protected:
     // Get a local copy of the remote repository
     query << GitHubConstants::GIT_CLONE << " ";
 
-    // Create the repository only with .github, no copy all files now
+    // Create the repository only with .gitHub, no copy all files now
     query << GitHubConstants::FLAG_NO_CHECKOUT << " ";
 
     // Get only the most recent commits and the current branch. Do not copy all history
@@ -160,30 +159,36 @@ protected:
   }
 
   // Get all subdirectories of existing components from repo to add them to the sparse checkout
-  static bool fillExistingComponents(
-      std::stringstream & existingComponentsName,
-      std::string const & downloadPath,
-      std::string const & repositoryName)
+  static std::stringstream fillExistingComponents(std::string const & downloadPath, std::string const & repositoryName)
   {
-    std::stringstream componentPathFromRepo;
-    componentPathFromRepo << downloadPath << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName;
-    bool isComponentRepositoryExists = std::filesystem::exists(componentPathFromRepo.str());
-    if (isComponentRepositoryExists)
+    std::string const componentPathFromRepo = getDirectoryPathFromRepo(downloadPath, repositoryName);
+    std::stringstream existingComponentsName;
+    if (!componentPathFromRepo.empty())
     {
-      std::string existingComponentName;
-      size_t const existingComponentNameStartIndex =
-          downloadPath.size() + repositoryName.size() + 2;  // Two '/' symbols
-      for (auto const & directory : std::filesystem::directory_iterator(componentPathFromRepo.str()))
-      {
-        existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
-        // Do not process .git directory
-        if (existingComponentName[0] != '.')
+        std::string existingComponentName;
+        size_t const existingComponentNameStartIndex =
+                downloadPath.size() + repositoryName.size() + 2; // Two '/' symbols
+        for (auto const & directory: std::filesystem::directory_iterator(componentPathFromRepo))
         {
-          existingComponentsName << " " << existingComponentName;
+            // Do not process .git directory
+            existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
+            if (existingComponentName[0] != '.')
+            {
+                existingComponentsName << " " << existingComponentName;
+            }
         }
-      }
     }
 
-    return isComponentRepositoryExists;
+    return existingComponentsName;
+  }
+
+  static std::string getDirectoryPathFromRepo(std::string const & path, std::string const & dirName) {
+      std::stringstream directoryPath;
+      if (std::filesystem::exists(path + SpecificationConstants::DIRECTORY_DELIMITER + dirName))
+      {
+          directoryPath << path << SpecificationConstants::DIRECTORY_DELIMITER << dirName;
+      }
+
+      return directoryPath.str();
   }
 };

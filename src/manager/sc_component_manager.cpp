@@ -28,7 +28,7 @@ void ScComponentManager::Start()
 
     try
     {
-      bool executionResult = Emit(command);
+      Emit(command);
     }
     catch (utils::ScException const & exception)
     {

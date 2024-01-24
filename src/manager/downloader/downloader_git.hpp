@@ -112,11 +112,13 @@ public:
 
     // Navigate to the component inner directory to execute commands here
     query << "cd " << repositoryName << " && ";
+
     // Sparse checkout to prepare current directory content
     query << GitHubConstants::GIT_SPARSE_CHECKOUT << " " << existingComponentsName.str() << " && ";
 
     // Git checkout to get current directory content
     query << GitHubConstants::GIT_CHECKOUT;
+
     ScExec exec{{query.str()}};
     return true;
   }
@@ -163,18 +165,18 @@ protected:
     std::stringstream existingComponentsName;
     if (!componentPathFromRepo.empty())
     {
-      std::string existingComponentName;
-      size_t const existingComponentNameStartIndex =
-              downloadPath.size() + repositoryName.size() + 2; // Two '/' symbols
-      for (auto const & directory : std::filesystem::directory_iterator(componentPathFromRepo))
-      {
-          // Do not process .git directory
-          existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
-          if (existingComponentName[0] != '.')
-          {
-              existingComponentsName << " " << existingComponentName;
-          }
-      }
+        std::string existingComponentName;
+        size_t const existingComponentNameStartIndex =
+                downloadPath.size() + repositoryName.size() + 2; // Two '/' symbols
+        for (auto const &directory: std::filesystem::directory_iterator(componentPathFromRepo))
+        {
+            // Do not process .git directory
+            existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
+            if (existingComponentName[0] != '.')
+            {
+                existingComponentsName << " " << existingComponentName;
+            }
+        }
     }
 
     return existingComponentsName;

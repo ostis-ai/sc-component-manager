@@ -11,7 +11,7 @@
 #include <utility>
 
 #include "sc-memory/sc_debug.hpp"
-#include "sc_memory_config.hpp"
+#include "sc-config-utils/sc_memory_config.hpp"
 
 #include "commands/sc_component_manager_command_handler.hpp"
 
@@ -42,7 +42,7 @@ public:
   }
 
 protected:
-  std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath;
+  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
   void Start();
 
   ScComponentManagerCommandHandler * m_handler;

@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "src/manager/sc_component_manager.hpp"
-#include "sc_memory_config.hpp"
+#include "../sc_component_manager.hpp"
+#include "sc-config-utils/sc_memory_config.hpp"
 
 class ScComponentManagerFactory
 {

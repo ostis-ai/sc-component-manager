@@ -9,9 +9,8 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
-#include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/downloader/downloader.hpp"
-#include "src/manager/downloader/downloader_handler.hpp"
+#include "../sc_component_manager_command.hpp"
+#include "../../downloader/downloader_handler.hpp"
 
 class ScComponentManagerCommandInit : public ScComponentManagerCommand
 {

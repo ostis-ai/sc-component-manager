@@ -10,14 +10,14 @@
 
 #include "sc_component_manager_handler.hpp"
 #include "sc_component_manager_command.hpp"
-#include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
-#include "src/manager/commands/command_search/sc_component_manager_command_search.hpp"
-#include "src/manager/commands/command_install/sc_component_manager_command_install.hpp"
+#include "command_init/sc_component_manager_command_init.hpp"
+#include "command_search/sc_component_manager_command_search.hpp"
+#include "command_install/sc_component_manager_command_install.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {
 public:
-  explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddLessFunc> componentsPath)
+  explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
     : m_componentsPath(std::move(componentsPath))
   {
     m_context = new ScMemoryContext("sc-component-manager-command-handler");
@@ -63,6 +63,6 @@ public:
 protected:
   ScMemoryContext * m_context{};
   CommandParameters m_commandParameters;
-  std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath;
+  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
   std::map<std::string, ScComponentManagerCommand *> m_actions;
 };

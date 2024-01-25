@@ -62,8 +62,7 @@ To start sc-component-manager run:
 ``./scripts/run_sc_component_manager.sh -c <CONFIG_PATH>``
 
 Possible run flags:
-- `-i` - interactive mode;
-- `-b` <KB_SRC_PATH (or path to repo.path file)> - build kb before start.
+- `-i` - interactive mode to run command manually;
 
 ### Commands
 

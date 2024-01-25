@@ -9,10 +9,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
-#include "src/manager/downloader/downloader.hpp"
-#include "src/manager/downloader/downloader_handler.hpp"
+#include "../sc_component_manager_command.hpp"
+#include "../keynodes/ScComponentManagerKeynodes.hpp"
+#include "../../downloader/downloader.hpp"
+#include "../../downloader/downloader_handler.hpp"
 
 extern "C"
 {
@@ -44,7 +44,7 @@ protected:
   // Install components that are in `need to install` set
   void QuietInstall(ScMemoryContext * context);
 
-  std::map<ScAddr, std::string, ScAddLessFunc> m_componentsPath;
+  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
 
   std::string m_downloadDir;
 

@@ -10,7 +10,6 @@
 
 #include "sc_component_manager.hpp"
 #include "sc-memory/sc_debug.hpp"
-#include "src/manager/commands/sc_component_manager_command.hpp"
 
 void ScComponentManager::Run()
 {

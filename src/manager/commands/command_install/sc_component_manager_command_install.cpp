@@ -6,9 +6,7 @@
 
 #include "sc_component_manager_command_install.hpp"
 #include <sc-memory/utils/sc_exec.hpp>
-#include "src/manager/utils/sc_component_utils.hpp"
-
-#include "src/manager/commands/constants/command_constants.hpp"
+#include "../../utils/sc_component_utils.hpp"
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)

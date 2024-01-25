@@ -1,6 +1,9 @@
 tests/units/test_defines.hpp
 generated
 
+build
+cmake-build-debug
+
 # devs
 .vscode
 .idea

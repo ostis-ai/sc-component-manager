@@ -237,7 +237,7 @@ std::vector<std::string> InstallUtils::GetInstallScripts(ScMemoryContext * conte
     std::string script;
     const ScAddr & scriptAddrs = installScriptsIterator->Get(2);
     context->GetLinkContent(scriptAddrs, script);
-    if (!script.empty())
+    if (!script.empty() && !std::count(scripts.begin(), scripts.end(), script))
     {
       scripts.push_back(script);
     }

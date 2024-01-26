@@ -15,6 +15,7 @@
 #include "downloader.hpp"
 #include "src/manager/commands/constants/command_constants.hpp"
 #include "src/manager/commands/url_parser/repository_url_parser.hpp"
+#include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
 
 class DownloaderGit : public Downloader
 {
@@ -77,7 +78,10 @@ public:
    * @param urlAddress component address to install
    * @return true if downloaded successfully
    */
-  bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) override
+  bool DownloadRepository(
+      std::string const & downloadPath,
+      std::string const & urlAddress,
+      std::string const & nameOfComponent) override
   {
     if (!sc_fs_create_directory(downloadPath.c_str()))
     {
@@ -100,18 +104,25 @@ public:
     // Get all subdirectories of existing components from repo to add them to the sparse checkout
     std::stringstream existingComponentsName = fillExistingComponents(downloadPath, repositoryName);
     existingComponentsName << directoryName;
-    std::string const isComponentRepositoryExists =  getDirectoryPathFromRepo(downloadPath, repositoryName);
-
+    std::string const isComponentRepositoryExists =  getDirectoryPathFromRepo(
+            downloadPath,
+            nameOfComponent);
+    std::string nameOfComponentDirectory = repositoryName;
     // Do not clone repository if it exists
     if (isComponentRepositoryExists.empty())
     {
-      fillGitCloneQuery(query, repositoryAddress);
-      // The last argument is the repository address to clone
-      query << " && ";
+        // Define the name of created directory of a component: as in a specification or as in the GitHub
+        if (directoryName.empty())
+        {
+            nameOfComponentDirectory = nameOfComponent;
+        }
+        fillGitCloneQuery(query, repositoryAddress, nameOfComponentDirectory);
+        // The last argument is the repository address to clone
+        query << " && ";
     }
 
     // Navigate to the component inner directory to execute commands here
-    query << "cd " << repositoryName << " && ";
+    query << "cd " << nameOfComponentDirectory << " && ";
 
     // Sparse checkout to prepare current directory content
     query << GitHubConstants::GIT_SPARSE_CHECKOUT << " " << existingComponentsName.str() << " && ";
@@ -119,7 +130,9 @@ public:
     // Git checkout to get current directory content
     query << GitHubConstants::GIT_CHECKOUT;
 
+    SC_LOG_WARNING(query.str());
     ScExec exec{{query.str()}};
+    ScExec ex{{"npm run build"}};
     return true;
   }
 
@@ -128,7 +141,7 @@ protected:
   {
     std::stringstream query;
     query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << GitHubConstants::CURL_GET_BRANCH_COMMAND
-          << username << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
+          << username << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName //TODO
           << GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND;
 
     ScExec exec{{query.str()}};
@@ -138,7 +151,10 @@ protected:
     return branches.substr(0, actualBranchIndex);
   }
 
-  static void fillGitCloneQuery(std::stringstream & query, std::string const & repositoryAddress)
+  static void fillGitCloneQuery(
+      std::stringstream & query,
+      std::string const & repositoryAddress,
+      std::string const & nameOfComponent)
   {
     // Get a local copy of the remote repository
     query << GitHubConstants::GIT_CLONE << " ";
@@ -155,7 +171,7 @@ protected:
           << " ";
 
     // The last argument is the repository address to clone
-    query << repositoryAddress;
+    query << repositoryAddress << " " << nameOfComponent;
   }
 
   // Get all subdirectories of existing components from repo to add them to the sparse checkout

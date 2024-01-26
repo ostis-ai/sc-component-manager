@@ -10,6 +10,8 @@
 
 #include "src/manager/commands/constants/command_constants.hpp"
 
+#include <cstdlib>
+
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
@@ -60,16 +62,18 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 {
   std::vector<std::string> scripts = componentUtils::InstallUtils::GetInstallScripts(context, componentAddr);
 
-  std::stringstream path;
   for (std::string script : scripts)
   {
+    std::stringstream path;
     std::string componentDirName =
         componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
     std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
     path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << nodeSystIdtf;
     script = "." + script;
-    sc_fs_create_directory(path.str().c_str());
-    ScExec exec{{"cd", path.str(), "&&", script}};
+
+    SC_LOG_WARNING("cd " + path.str() + " && " + script);
+    std::string command = "cd " + path.str() + " && " + script;
+    ::system(command.c_str());
   }
 
   return true;

@@ -16,7 +16,10 @@ public:
       std::string const & urlAddress,
       std::string const & pathPostfix) = 0;
 
-  virtual bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) = 0;
+  virtual bool DownloadRepository(
+      std::string const & downloadPath,
+      std::string const & urlAddress,
+      std::string const & nameOfComponent) = 0;
 
   virtual ~Downloader() = default;
 };

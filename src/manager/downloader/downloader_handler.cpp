@@ -99,7 +99,9 @@ bool DownloaderHandler::DownloadComponent(ScMemoryContext * context, const ScAdd
   ScAddr const & componentAddress = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
   context->GetLinkContent(componentAddress, urlAddress);
 
-  m_downloader->DownloadRepository(m_downloadDir, urlAddress);
+  std::string const & nameOfComponent = context->HelperGetSystemIdtf(componentAddr);
+
+  m_downloader->DownloadRepository(m_downloadDir, urlAddress, nameOfComponent);
 
   return true;
 }

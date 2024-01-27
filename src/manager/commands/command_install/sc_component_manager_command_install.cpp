@@ -10,7 +10,6 @@
 
 #include "src/manager/commands/constants/command_constants.hpp"
 
-#include <cstdlib>
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
@@ -62,18 +61,30 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 {
   std::vector<std::string> scripts = componentUtils::InstallUtils::GetInstallScripts(context, componentAddr);
 
-  for (std::string script : scripts)
-  {
-    std::stringstream path;
-    std::string componentDirName =
-        componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
-    std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
-    path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << nodeSystIdtf;
-    script = "." + script;
+  for (std::string script : scripts) {
+      std::stringstream path;
+      std::string componentDirName =
+              componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
+      std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
+      path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << nodeSystIdtf;
+      script = "." + script;
 
-    SC_LOG_WARNING("cd " + path.str() + " && " + script);
-    std::string command = "cd " + path.str() + " && " + script;
-    ::system(command.c_str());
+      std::stringstream command;
+      command << "cd " << path.str() << " && " << script << " 2>&1";
+      SC_LOG_WARNING(command.str());
+      ScExec Exec({"cd ", path.str(), " && ", script});
+
+      SC_LOG_WARNING("Another way");
+      FILE *p;
+      char line[256];
+      if (!(p = (FILE *) popen(command.str().c_str(), "r"))) {
+          std::cerr << "Q";
+      }
+      while (fgets(line, sizeof line, p)) {
+          std::cout << "--- " << line;
+      }
+      pclose(p);
+      //::system(command.str().c_str());
   }
 
   return true;

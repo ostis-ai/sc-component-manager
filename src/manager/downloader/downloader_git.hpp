@@ -132,7 +132,7 @@ public:
 
     SC_LOG_WARNING(query.str());
     ScExec exec{{query.str()}};
-    ScExec ex{{"npm run build"}};
+    //ScExec ex{{"npm run build"}};
     return true;
   }
 

@@ -5,7 +5,7 @@
  */
 
 #include "sc_component_manager_factory.hpp"
-#include "src/manager/sc_component_manager_impl.hpp"
+#include "../sc_component_manager_impl.hpp"
 
 std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScComponentManager(
     ScParams const & scComponentManagerParams,
@@ -17,7 +17,7 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
 
   try
   {
-    std::map<ScAddr, std::string, ScAddLessFunc> const & componentsPath = {
+    std::map<ScAddr, std::string, ScAddrLessFunc> const & componentsPath = {
         {{keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
           scComponentManagerParams.at(KB_COMPONENT_PATH)},
          {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,

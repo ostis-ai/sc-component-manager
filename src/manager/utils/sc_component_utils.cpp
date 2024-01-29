@@ -14,9 +14,9 @@
 #include <sc-builder/src/scs_loader.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
-#include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
+#include "../commands/keynodes/ScComponentManagerKeynodes.hpp"
 #include "sc_component_utils.hpp"
-#include "src/manager/commands/constants/command_constants.hpp"
+#include "../commands/constants/command_constants.hpp"
 
 namespace componentUtils
 {
@@ -130,7 +130,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
     SC_THROW_EXCEPTION(utils::ExceptionAssert, "Alternative addresses set is empty");
   }
 
-  ScAddr specificationAddressAddr = utils::IteratorUtils::getFirstFromSet(context, alternativeAddressesSet, true);
+  ScAddr specificationAddressAddr = utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, scAgentsCommon::CoreKeynodes::rrel_1);
 
   if (!specificationAddressAddr.IsValid())
   {

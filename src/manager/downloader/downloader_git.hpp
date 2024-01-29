@@ -13,8 +13,8 @@
 #include "sc-core/sc-store/sc-fs-memory/sc_file_system.h"
 
 #include "downloader.hpp"
-#include "src/manager/commands/constants/command_constants.hpp"
-#include "src/manager/commands/url_parser/repository_url_parser.hpp"
+#include "../commands/constants/command_constants.hpp"
+#include "../commands/url_parser/repository_url_parser.hpp"
 
 class DownloaderGit : public Downloader
 {

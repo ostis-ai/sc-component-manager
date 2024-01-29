@@ -19,7 +19,7 @@ extern "C"
 #include "downloader.hpp"
 #include "downloader_git.hpp"
 #include "downloader_google_drive.hpp"
-#include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
+#include "../commands/keynodes/ScComponentManagerKeynodes.hpp"
 
 class DownloaderHandler
 {

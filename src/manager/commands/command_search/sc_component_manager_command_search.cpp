@@ -73,7 +73,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
     ScTemplate & searchComponentTemplate,
     std::vector<std::string> const & parameters)
 {
-  searchComponentTemplate.TripleWithRelation(
+  searchComponentTemplate.Quintuple(
       COMPONENT_ALIAS,
       ScType::EdgeDCommonVar,
       ScType::NodeVar >> setAlias,  // NodeVarTuple
@@ -122,7 +122,7 @@ ScAddrVector ScComponentManagerCommandSearch::SearchComponentsByRelationLink(
   }
   ScAddrVector links = context->FindLinksByContentSubstring(parameters.at(0));
 
-  searchComponentTemplate.TripleWithRelation(
+  searchComponentTemplate.Quintuple(
       COMPONENT_ALIAS,
       ScType::EdgeDCommonVar,
       ScType::LinkVar >> linkAlias,

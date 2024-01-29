@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
+#include "../sc_component_manager_command.hpp"
+#include "../keynodes/ScComponentManagerKeynodes.hpp"
 
 class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 {

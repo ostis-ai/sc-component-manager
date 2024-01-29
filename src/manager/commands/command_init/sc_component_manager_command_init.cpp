@@ -5,11 +5,9 @@
  */
 
 #include <sc-agents-common/utils/IteratorUtils.hpp>
-
-#include "src/manager/commands/sc_component_manager_command.hpp"
-#include "src/manager/downloader/downloader_handler.hpp"
-#include "src/manager/commands/command_init/sc_component_manager_command_init.hpp"
-#include "src/manager/utils/sc_component_utils.hpp"
+#include "../../downloader/downloader.hpp"
+#include "../command_init/sc_component_manager_command_init.hpp"
+#include "../../utils/sc_component_utils.hpp"
 
 bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
 {

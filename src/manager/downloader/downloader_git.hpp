@@ -97,28 +97,16 @@ public:
     // Navigate to the corresponding component directory
     query << "cd " << downloadPath << " && ";
 
-    // Get all subdirectories of existing components from repo to add them to the sparse checkout
-    std::stringstream existingComponentsName;
-    existingComponentsName << directoryName;
-    bool const isComponentRepositoryExists =
-        fillExistingComponents(existingComponentsName, downloadPath, repositoryName);
-
-    // Do not clone repository if it exists
-    if (!isComponentRepositoryExists)
+    if (directoryName.empty())
     {
-      fillGitCloneQuery(query, repositoryAddress);
-      // The last argument is the repository address to clone
-      query << " && ";
+      // Execute git clone whole repo if there is no need to download only subdirectory
+      query << GitHubConstants::GIT_CLONE << " " << repositoryAddress;
     }
-
-    // Navigate to the component inner directory to execute commands here
-    query << "cd " << repositoryName << " && ";
-
-    // Sparse checkout to prepare current directory content
-    query << GitHubConstants::GIT_SPARSE_CHECKOUT << " " << existingComponentsName.str() << " && ";
-
-    // Git checkout to get current directory content
-    query << GitHubConstants::GIT_CHECKOUT;
+    else
+    {
+      // Clone specified subdirectories that represent separate component
+      fillGitCloneSubdirectoryQuery(query, directoryName, downloadPath, repositoryName, repositoryAddress);
+    }
 
     ScExec exec{{query.str()}};
     return true;
@@ -137,6 +125,32 @@ protected:
     size_t const actualBranchIndex = branches.find('\n');
 
     return branches.substr(0, actualBranchIndex);
+  }
+
+  static void fillGitCloneSubdirectoryQuery(std::stringstream & query, std::string const & directoryName, std::string const & downloadPath, std::string const & repositoryName, std::string const & repositoryAddress)
+  {
+    // Get all subdirectories of existing components from repo to add them to the sparse checkout
+    std::stringstream existingComponentsName;
+    existingComponentsName << directoryName;
+    bool const isComponentRepositoryExists =
+          fillExistingComponents(existingComponentsName, downloadPath, repositoryName);
+
+    // Do not clone repository if it exists
+    if (!isComponentRepositoryExists)
+    {
+      fillGitCloneQuery(query, repositoryAddress);
+      // The last argument is the repository address to clone
+      query << " && ";
+    }
+
+    // Navigate to the component inner directory to execute commands here
+    query << "cd " << repositoryName << " && ";
+
+    // Sparse checkout to prepare current directory content
+    query << GitHubConstants::GIT_SPARSE_CHECKOUT << " " << existingComponentsName.str() << " && ";
+
+    // Git checkout to get current directory content
+    query << GitHubConstants::GIT_CHECKOUT;
   }
 
   static void fillGitCloneQuery(std::stringstream & query, std::string const & repositoryAddress)

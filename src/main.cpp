@@ -36,11 +36,18 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   std::string configFilePath;
   if (options.Has({"config", "c"}))
-    configFilePath = options[{ "config", "c"}].second;
+    configFilePath = options[{"config", "c"}].second;
 
   ScParams params{options, {}};
 
-  ScConfig config{ configFilePath, {"knowledge_base_components_path", "problem_solver_components_path", "interface_components_path", "repo_path", "extensions_path", "log_file"}};
+  ScConfig config{
+      configFilePath,
+      {"knowledge_base_components_path",
+       "problem_solver_components_path",
+       "interface_components_path",
+       "repo_path",
+       "extensions_path",
+       "log_file"}};
   ScConfigGroup configManager = config["sc-component-manager"];
   for (std::string const & key : *configManager)
     params.insert({key, configManager[key]});

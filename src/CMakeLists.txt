@@ -22,3 +22,8 @@ set_target_properties(sc-component-manager
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${SC_BIN_PATH}
 )
+
+if(${SC_CLANG_FORMAT_CODE})
+    target_clangformat_setup(sc-component-manager-lib)
+    target_clangformat_setup(sc-component-manager)
+endif()

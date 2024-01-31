@@ -32,21 +32,3 @@ jobs:
           checkAllCommitMessages: true # optional, default is false
           # you must provide GITHUB_TOKEN to this input if checkAllCommitMessages is true
           accessToken: ${{ secrets.GITHUB_TOKEN }} # optional, default is false
-
-  check_formatting:
-    name: Check formatting
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checking the code with clang
-        run: |
-            git clone https://github.com/ostis-ai/sc-machine.git 
-            cd sc-machine 
-            git checkout component_manager 
-            git submodule update --init --recursive 
-            cd sc-tools/sc-component-manager 
-            git pull origin pull/${{ github.event.number }}/head 
-            cd ../../scripts
-            ./install_deps_ubuntu.sh --dev && ./build_sc_machine.sh -cm
-            cd ../
-            ./scripts/clang/check_formatting.sh

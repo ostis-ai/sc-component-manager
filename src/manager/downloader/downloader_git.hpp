@@ -143,7 +143,7 @@ protected:
     // Get a local copy of the remote repository
     query << GitHubConstants::GIT_CLONE << " ";
 
-    // Create the repository only with .gitHub, no copy all files now
+    // Create the repository only with .github, no copy all files now
     query << GitHubConstants::FLAG_NO_CHECKOUT << " ";
 
     // Get only the most recent commits and the current branch. Do not copy all history

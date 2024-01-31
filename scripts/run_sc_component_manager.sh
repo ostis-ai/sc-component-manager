@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e pipefail
+set -eo pipefail
 
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)
 source "${CURRENT_DIR}/formats.sh"
@@ -33,4 +33,4 @@ if [ -z "$CONFIG_ABSOLUTE_PATH" ]; then
     CONFIG_ABSOLUTE_PATH="${CONFIG_PATH}"
 fi
 
-"${BINARY_PATH}/sc-component-manager" -c "${CONFIG_ABSOLUTE_PATH}" $INTERACTIVE_MODE
+"${BINARY_PATH}/sc-component-manager" -c "${CONFIG_ABSOLUTE_PATH}" "${INTERACTIVE_MODE}"

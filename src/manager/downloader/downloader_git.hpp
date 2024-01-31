@@ -69,6 +69,8 @@ public:
   /**
    * @brief Download repository from the url address. If it is a subdirectory, download only subdirectory
    * Executing the next commands (directory is optional):
+   * git clone https://github.com/username/repo/directory (if there is no subdirectory in the url)
+   * otherwise, the next command
    * git clone --no-checkout --depth=1 --filter=tree:0 https://github.com/username/repo/directory
    * cd repo
    * git sparse-checkout set --no-cone directory

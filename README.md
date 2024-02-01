@@ -4,38 +4,22 @@
 It allows ostis-systems to install reusable components for intelligent systems made with the [**OSTIS Technology**](https://github.com/ostis-ai/ostis-project).
 
 ## Installation
-There are two possible ways:
 
-1. Using ostis-web-platform
+Using ostis-web-platform
 ```sh
    git clone https://github.com/ostis-ai/ostis-web-platform
    cd ostis-web-platform/scripts
-   git checkout feature/component_manager
    ./install_platform_with_component_manager.sh
 ```
 
-2. Using sc-machine
-
-```sh
-# clone sc-machine
-git clone git@github.com:ostis-ai/sc-machine.git
-cd sc-machine
-
-# checkout to the component_manager branch
-git checkout component_manager
-# install submodules
-git submodule update --init --recursive
-./scripts/install_deps_ubuntu.sh --dev
-```
-
 ## Build
-To build sc-machine with sc-component-manager run build script with component manager flag:
+To build sc-component-manager run build script:
 
 ```sh
-./scripts/build_sc_machine.sh -cm
+./scripts/build_sc_component_manager.sh
 ```
 
-To build knowledge base, run ```./build_kb``` in sc-machine or in ostis-web-platform scripts
+To build knowledge base, run ```./build_kb``` in ostis-web-platform scripts
 
 ## Post Install
 
@@ -59,9 +43,10 @@ To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory
 
 To start sc-component-manager run:
 
-``./scripts/run_sc_component_manager.sh -c <CONFIG_PATH>``
+``./scripts/run_sc_component_manager.sh``
 
 Possible run flags:
+- `-c` <CONFIG_PATH>
 - `-i` - interactive mode to run command manually;
 
 ### Commands

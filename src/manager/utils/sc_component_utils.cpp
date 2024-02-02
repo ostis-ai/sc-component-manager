@@ -130,7 +130,8 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
     SC_THROW_EXCEPTION(utils::ExceptionAssert, "Alternative addresses set is empty");
   }
 
-  ScAddr specificationAddressAddr = utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, scAgentsCommon::CoreKeynodes::rrel_1);
+  ScAddr specificationAddressAddr =
+      utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, scAgentsCommon::CoreKeynodes::rrel_1);
 
   if (!specificationAddressAddr.IsValid())
   {

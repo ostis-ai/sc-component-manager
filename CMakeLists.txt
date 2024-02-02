@@ -1,5 +1,6 @@
-project(sc-component-manager)
 cmake_minimum_required(VERSION 2.8)
+project(sc-component-manager)
+set(CMAKE_CXX_STANDARD 17)
 
 get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 
@@ -16,6 +17,12 @@ endif(${WIN32})
 
 include("${SC_MACHINE_ROOT}/cmake/codegen.cmake")
 set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator")
+
+option(SC_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
+
+if(${SC_CLANG_FORMAT_CODE})
+	include(${SC_MACHINE_ROOT}/cmake/ClangFormat.cmake)
+endif()
 
 # for multi-config builds (e.g. msvc)
 foreach(OUTPUT_CONFIG ${CMAKE_CONFIGURATION_TYPES})

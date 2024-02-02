@@ -8,6 +8,6 @@ then
   source "${SC_MACHINE_PATH}/scripts/set_vars.sh"
 fi
 
-export ROOT_CMAKE_PATH="${ROOT_CMAKE_PATH:-${SC_COMPONENT_MANAGER_PATH}}"
+export ROOT_CMAKE_PATH="${SC_COMPONENT_MANAGER_PATH}"
 export BINARY_PATH="${BINARY_PATH:-${ROOT_CMAKE_PATH}/bin}"
-export BUILD_PATH="${BUILD_PATH:-${ROOT_CMAKE_PATH}/build}"
+export BUILD_PATH="${ROOT_CMAKE_PATH}/build}"

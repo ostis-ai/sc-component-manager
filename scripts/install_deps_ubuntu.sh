@@ -3,10 +3,6 @@
 set -eo pipefail
 
 packages=(
-  libglib2.0-dev
-  libboost-system-dev
-  libboost-filesystem-dev
-  libboost-program-options-dev
   make
   cmake
   ccache

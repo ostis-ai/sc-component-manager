@@ -9,7 +9,7 @@ include_directories(${SC_COMPONENT_MANAGER_SRC} ${GLIB2_INCLUDE_DIRS} ${SC_MEMOR
 
 add_library(sc-component-manager-lib SHARED ${SOURCES} ${HEADERS})
 
-target_link_libraries(sc-component-manager-lib sc-memory sc-config-utils sc-agents-common sc-builder-lib)
+target_link_libraries(sc-component-manager-lib sc-memory sc-core sc-config-utils sc-agents-common sc-builder-lib)
 sc_codegen_ex(sc-component-manager-lib ${SC_COMPONENT_MANAGER_SRC} "${SC_COMPONENT_MANAGER_SRC}/generated")
 add_executable(
     sc-component-manager

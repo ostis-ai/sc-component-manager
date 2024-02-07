@@ -51,9 +51,9 @@ Possible run flags:
 
 ### Commands
 
-- `components init` - download specifications from repositories. `kb/specifications.scs` contains an example of a repository specification.
-- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - search a component specification in the knowledge base. You can search components by author, class or explanation substring.
-- `components install [--idtf \<system_idtf\>]` - install component by its system identifier.
+- `components init` or `ci` - download specifications from repositories. `kb/specifications.scs` contains an example of a repository specification.
+- `components search  [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` or `cs [--author \<author\>][--class \<class\>][--explanation \<"explanation"\>]` - search a component specification in the knowledge base. You can search components by author, class or explanation substring.
+- `components install [--idtf \<system_idtf\>]` or `cii \<system_idtf\>` - install component by its system identifier.
 
 ## Repository and components
 

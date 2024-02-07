@@ -61,7 +61,6 @@ public:
     }
     // filename to download
     query << pathPostfix;
-
     ScExec exec{{query.str()}};
     return true;
   }
@@ -79,6 +78,7 @@ public:
    * @param urlAddress component address to install
    * @return true if downloaded successfully
    */
+
   bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) override
   {
     if (!sc_fs_create_directory(downloadPath.c_str()))
@@ -130,11 +130,11 @@ protected:
   }
 
   static void fillGitCloneSubdirectoryQuery(
-          std::stringstream & query,
-          std::string const & directoryName,
-          std::string const & downloadPath,
-          std::string const & repositoryName,
-          std::string const & repositoryAddress)
+      std::stringstream & query,
+      std::string const & directoryName,
+      std::string const & downloadPath,
+      std::string const & repositoryName,
+      std::string const & repositoryAddress)
   {
     // Get all subdirectories of existing components from repo to add them to the sparse checkout
     std::stringstream existingComponentsName;
@@ -182,36 +182,36 @@ protected:
   // Get all subdirectories of existing components from repo to add them to the sparse checkout
   static std::string fillExistingComponents(std::string const & downloadPath, std::string const & repositoryName)
   {
-      std::string const componentPathFromRepo = getDirectoryPathFromRepo(downloadPath, repositoryName);
-      std::stringstream existingComponentsName;
-      if (!componentPathFromRepo.empty())
+    std::string const componentPathFromRepo = getDirectoryPathFromRepo(downloadPath, repositoryName);
+    std::stringstream existingComponentsName;
+    if (!componentPathFromRepo.empty())
+    {
+      std::string existingComponentName;
+      size_t const existingComponentNameStartIndex =
+          downloadPath.size() + repositoryName.size() + 2;  // Two '/' symbols
+      for (auto const & directory : std::filesystem::directory_iterator(componentPathFromRepo))
       {
-          std::string existingComponentName;
-          size_t const existingComponentNameStartIndex =
-                  downloadPath.size() + repositoryName.size() + 2; // Two '/' symbols
-          for (auto const &directory: std::filesystem::directory_iterator(componentPathFromRepo))
-          {
-              // Do not process .git directory
-              existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
-              if (existingComponentName[0] != '.')
-              {
-                  existingComponentsName << " " << existingComponentName;
-              }
-          }
+        // Do not process .git directory
+        existingComponentName = directory.path().string().substr(existingComponentNameStartIndex);
+        if (existingComponentName[0] != '.')
+        {
+          existingComponentsName << " " << existingComponentName;
+        }
       }
+    }
 
     return existingComponentsName.str();
   }
 
-    static std::string getDirectoryPathFromRepo(std::string const & path, std::string const & dirName)
+  static std::string getDirectoryPathFromRepo(std::string const & path, std::string const & dirName)
+  {
+    std::stringstream directoryPath;
+    directoryPath << path << SpecificationConstants::DIRECTORY_DELIMITER << dirName;
+    if (std::filesystem::exists(directoryPath.str()))
     {
-        std::stringstream directoryPath;
-        directoryPath << path << SpecificationConstants::DIRECTORY_DELIMITER << dirName;
-        if (std::filesystem::exists(directoryPath.str()))
-        {
-            return directoryPath.str();
-        }
-
-        return "";
+      return directoryPath.str();
     }
+
+    return "";
+  }
 };

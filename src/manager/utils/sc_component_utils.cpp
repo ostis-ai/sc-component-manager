@@ -4,8 +4,6 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <dirent.h>
-#include <sys/stat.h>
 #include <filesystem>
 
 #include <sc-memory/sc_addr.hpp>
@@ -17,6 +15,7 @@
 #include "../commands/keynodes/ScComponentManagerKeynodes.hpp"
 #include "sc_component_utils.hpp"
 #include "../commands/constants/command_constants.hpp"
+#include "../commands/url_parser/repository_url_parser.hpp"
 
 namespace componentUtils
 {
@@ -292,9 +291,18 @@ std::string InstallUtils::GetComponentDirName(
     ScAddr const & componentAddr,
     const std::string & specificationsPath)
 {
-  std::string componentIdtf = context->HelperGetSystemIdtf(componentAddr);
-  std::string componentDirName = specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER + componentIdtf;
-  return componentDirName;
+  // Find a repositoryLink as https://github.com/MakarenkoAI/sc-web
+  std::string componentAddressStr = GetComponentAddressStr(context, componentAddr);
+
+  RepositoryUrlParser parser;
+  parser.Parse(componentAddressStr);
+  // Find a repositoryName as sc-web
+  std::string const directoryName = parser.GetRepositoryName();
+
+  std::stringstream componentsPath;
+  componentsPath << specificationsPath << SpecificationConstants::DIRECTORY_DELIMITER << directoryName;
+
+  return componentsPath.str();
 }
 
 /**

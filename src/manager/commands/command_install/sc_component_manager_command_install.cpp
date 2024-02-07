@@ -58,16 +58,23 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 {
   std::vector<std::string> scripts = componentUtils::InstallUtils::GetInstallScripts(context, componentAddr);
 
-  std::stringstream path;
-  for (std::string script : scripts)
+  // TODO: remove cycle after removing the init-command
+  std::set<std::string> setOfScripts;
+  for (const std::string & script : scripts)
   {
-    std::string componentDirName =
+    setOfScripts.insert(script);
+  }
+
+  for (const std::string & script : setOfScripts)
+  {
+    const std::string & componentDirName =
         componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
-    std::string nodeSystIdtf = context->HelperGetSystemIdtf(componentAddr);
-    path << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << nodeSystIdtf;
-    script = "." + script;
-    sc_fs_create_directory(path.str().c_str());
-    ScExec exec{{"cd", path.str(), "&&", script}};
+
+    std::stringstream command;
+    command << "cd " << componentDirName << " && "
+            << "." << script;
+
+    ScExec Exec({command.str()});
   }
 
   return true;

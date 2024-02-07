@@ -19,11 +19,30 @@ public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
+    std::string const COMMAND_COMPONENTS_INIT = "ci";
+    std::string const COMMAND_COMPONENTS_SEARCH = "cs";
+    std::string const COMMAND_COMPONENTS_INSTALL_IDTF = "cii";
     size_t const COMMAND_KEYWORDS_SIZE = 2;
 
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
     commandTokens = ParseCommand(command);
+
+    if (commandTokens.at(0) == COMMAND_COMPONENTS_INIT)
+      {
+        commandTokens.erase(commandTokens.begin());
+        commandTokens.insert(commandTokens.begin(), {"components","init"});
+      }
+    if (commandTokens.at(0) == COMMAND_COMPONENTS_SEARCH)
+      {
+        commandTokens.erase(commandTokens.begin());
+        commandTokens.insert(commandTokens.begin(), {"components", "search"});
+      }
+    if (commandTokens.at(0) == COMMAND_COMPONENTS_INSTALL_IDTF)
+      {
+        commandTokens.erase(commandTokens.begin());
+        commandTokens.insert(commandTokens.begin(), {"components", "install", "--idtf"});
+      }
 
     if (commandTokens.size() < COMMAND_KEYWORDS_SIZE)
       SC_THROW_EXCEPTION(

@@ -21,8 +21,8 @@ public:
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
     std::vector<std::string> const COMMAND_COMPONENTS_INIT = {"components init", "ci", "comp init"};
     std::vector<std::string> const COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
-    std::vector<std::string> const COMMAND_COMPONENTS_INSTALL_IDTF = {"components install", "cinst","comp inst"};
-    std::vector<std::vector <std::string>> const COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL_IDTF};
+    std::vector<std::string> const COMMAND_COMPONENTS_INSTALL = {"components install", "cinst","comp inst"};
+    std::vector<std::vector <std::string>> const COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL};
     size_t const COMMAND_KEYWORDS_SIZE = 2;
 
     std::string cutCommand;
@@ -57,7 +57,7 @@ public:
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
     commandTokens = ParseCommand(fullCommand);
-    
+
     if (commandTokens.size() < COMMAND_KEYWORDS_SIZE)
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError, "Incorrect command. Command type not found in \"" + command + "\"");

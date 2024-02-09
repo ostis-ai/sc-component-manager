@@ -12,7 +12,8 @@ fi
 
 INTERACTIVE_MODE=""
 
-while getopts 'c:ih' OPTION; do
+while getopts 'c:ih' OPTION;
+do
   case "$OPTION" in
     c)
       CONFIG_PATH="$OPTARG"
@@ -27,9 +28,10 @@ while getopts 'c:ih' OPTION; do
       ;;
   esac
 done
-shift "$(($OPTIND -1))"
+shift "$((OPTIND -1))"
 
-if [ -z "$CONFIG_ABSOLUTE_PATH" ]; then
+if [ -z "$CONFIG_ABSOLUTE_PATH" ];
+then
     CONFIG_ABSOLUTE_PATH="${CONFIG_PATH}"
 fi
 

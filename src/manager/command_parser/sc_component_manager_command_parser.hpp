@@ -19,31 +19,45 @@ public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
-    std::string const COMMAND_COMPONENTS_INIT = "ci";
-    std::string const COMMAND_COMPONENTS_SEARCH = "cs";
-    std::string const COMMAND_COMPONENTS_INSTALL_IDTF = "cii";
+    std::vector<std::string> const COMMAND_COMPONENTS_INIT = {"components init", "ci", "comp init"};
+    std::vector<std::string> const COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
+    std::vector<std::string> const COMMAND_COMPONENTS_INSTALL_IDTF = {"components install", "cinst","comp inst"};
+    std::vector<std::vector <std::string>> const COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL_IDTF};
     size_t const COMMAND_KEYWORDS_SIZE = 2;
+
+    std::string cutCommand;
+    size_t firstPapameter = command.find('-');
+    if (firstPapameter != std::string::npos)
+    {
+      cutCommand = command.substr(0, firstPapameter - 1);
+    }
+    else 
+    {
+      cutCommand = command;
+    }
+    size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
+    if (endOfCommandPos != std::string::npos) 
+    {
+        cutCommand.erase(endOfCommandPos + 1);
+    }
+
+    std::string fullCommand = command;
+    for (int indexCommand = 0; indexCommand < COMMAND_LIST.size(); indexCommand++)
+    {
+      for (int indexReducedCommand = 1; indexReducedCommand < COMMAND_LIST[indexCommand].size(); indexReducedCommand++)
+      {
+        if (cutCommand == COMMAND_LIST[indexCommand][indexReducedCommand])
+        {
+          fullCommand.replace(0, cutCommand.size(), COMMAND_LIST[indexCommand][0]);
+          break;
+        }
+      }
+    }
 
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
-    commandTokens = ParseCommand(command);
-
-    if (commandTokens.at(0) == COMMAND_COMPONENTS_INIT)
-      {
-        commandTokens.erase(commandTokens.begin());
-        commandTokens.insert(commandTokens.begin(), {"components","init"});
-      }
-    if (commandTokens.at(0) == COMMAND_COMPONENTS_SEARCH)
-      {
-        commandTokens.erase(commandTokens.begin());
-        commandTokens.insert(commandTokens.begin(), {"components", "search"});
-      }
-    if (commandTokens.at(0) == COMMAND_COMPONENTS_INSTALL_IDTF)
-      {
-        commandTokens.erase(commandTokens.begin());
-        commandTokens.insert(commandTokens.begin(), {"components", "install", "--idtf"});
-      }
-
+    commandTokens = ParseCommand(fullCommand);
+    
     if (commandTokens.size() < COMMAND_KEYWORDS_SIZE)
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError, "Incorrect command. Command type not found in \"" + command + "\"");

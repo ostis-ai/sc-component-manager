@@ -19,10 +19,10 @@ public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
-    std::vector<std::string> const COMMAND_COMPONENTS_INIT = {"components init", "ci", "comp init"};
-    std::vector<std::string> const COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
-    std::vector<std::string> const COMMAND_COMPONENTS_INSTALL = {"components install", "cinst","comp inst"};
-    std::vector<std::vector <std::string>> const COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL};
+    static std::vector<std::string> const COMMAND_COMPONENTS_INIT = {"components init", "ci", "comp init"};
+    static std::vector<std::string> const COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
+    static std::vector<std::string> const COMMAND_COMPONENTS_INSTALL = {"components install", "cinst","comp inst"};
+    static std::vector<std::vector <std::string>> const COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL};
     size_t const COMMAND_KEYWORDS_SIZE = 2;
 
     std::string cutCommand;
@@ -49,6 +49,7 @@ public:
         if (cutCommand == COMMAND_LIST[indexCommand][indexReducedCommand])
         {
           fullCommand.replace(0, cutCommand.size(), COMMAND_LIST[indexCommand][0]);
+          indexCommand = COMMAND_LIST.size();
           break;
         }
       }

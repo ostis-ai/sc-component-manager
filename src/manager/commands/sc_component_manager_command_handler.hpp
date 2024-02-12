@@ -20,7 +20,7 @@ public:
   explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
     : m_componentsPath(std::move(componentsPath))
   {
-    m_context = new ScMemoryContext("sc-component-manager-command-handler");
+    m_context = new ScMemoryContext();
     std::string const & specificationPath =
         m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
     m_actions = {

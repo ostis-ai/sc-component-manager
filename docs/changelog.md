@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Separated envs from envs of sc-machine
 - Replace ExecutionResult with bool and update logging.
 - Decompose install command to functions
 - Move storage configs to kb

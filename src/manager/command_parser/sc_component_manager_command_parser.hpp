@@ -98,7 +98,7 @@ protected:
       {
         if (currentCommandToken.at(0) == '\"')
         {
-          currentCommandToken = currentCommandToken.substr(1, currentCommandToken.size() - 1);
+          currentCommandToken = currentCommandToken.substr(1, currentCommandToken.size() - 2);
         }
         parameterValue.push_back(currentCommandToken);
       }

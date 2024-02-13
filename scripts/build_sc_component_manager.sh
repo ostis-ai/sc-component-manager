@@ -24,7 +24,8 @@ USAGE
 }
 
 outer_cmake_args=()
-while [ "$1" != "" ]; do
+while [ "$1" != "" ];
+do
   case $1 in
     "-f"|"--force" )
       build_force=1
@@ -52,17 +53,16 @@ done
 if ((build_force == 1));
 then
   stage "Clear latest build"
-  rm -rf "${BIN_PATH}"
-  rm -rf "${BUILD_PATH}"
+  rm -rf "${SC_COMPONENT_MANAGER_BUILD_PATH}"
   find "${SC_COMPONENT_MANAGER_PATH}" -type d -name generated -exec rm -rf {} +
 fi
 
 release_mode="-DCMAKE_BUILD_TYPE=Release"
 
-stage "Build Sc-component-manager"
+stage "Build sc-component-manager"
 
-cd "${ROOT_CMAKE_PATH}"
-cmake -B "${BUILD_PATH}" "${ROOT_CMAKE_PATH}" ${build_release:+${release_mode}} "${outer_cmake_args[@]}"
-cmake --build "${BUILD_PATH}" -j"$(nproc)"
+cd "${SC_COMPONENT_MANAGER_CMAKE_PATH}"
+cmake -B "${SC_COMPONENT_MANAGER_BUILD_PATH}" "${SC_COMPONENT_MANAGER_CMAKE_PATH}" ${build_release:+${release_mode}} "${outer_cmake_args[@]}"
+cmake --build "${SC_COMPONENT_MANAGER_BUILD_PATH}" -j"$(nproc)"
 
 stage "Sc-component-manager built successfully"

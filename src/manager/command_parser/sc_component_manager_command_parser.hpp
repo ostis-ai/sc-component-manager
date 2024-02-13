@@ -72,6 +72,8 @@ public:
   }
 
 protected:
+  inline static std::string const PARAMETER_IDTF = "idtf";
+
   static CommandParameters GetCommandParameters(std::vector<std::string> const & commandTokens)
   {
     size_t const COMMAND_KEYWORDS_SIZE = 2;
@@ -105,6 +107,11 @@ protected:
 
     if (!parameterName.empty())
       commandParameters.insert({parameterName, parameterValue});
+    else
+    {
+      if (!parameterValue.empty())
+        commandParameters.insert({PARAMETER_IDTF, parameterValue});
+    }
 
     InsertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);
 

@@ -7,7 +7,7 @@
 #pragma once
 
 #include <string>
-#include <regex>
+#include <vector>
 
 class SpecificationConstants
 {
@@ -50,4 +50,5 @@ public:
   static std::vector<std::string> const COMMAND_COMPONENTS_SEARCH;
   static std::vector<std::string> const COMMAND_COMPONENTS_INSTALL;
   static std::vector<std::vector <std::string>> const COMMAND_LIST;
+  static std::string const COMPONENTS_COMMAND_PREFIX;
 };

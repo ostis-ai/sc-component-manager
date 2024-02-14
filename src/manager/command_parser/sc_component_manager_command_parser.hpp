@@ -19,7 +19,6 @@ class ScComponentManagerParser
 public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
-    std::string const COMPONENTS_COMMAND_PREFIX = "components";
     size_t const COMMAND_KEYWORDS_SIZE = 2;
 
     std::string cutCommand;
@@ -60,10 +59,10 @@ public:
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError, "Incorrect command. Command type not found in \"" + command + "\"");
 
-    if (commandTokens.at(0) != COMPONENTS_COMMAND_PREFIX)
+    if (commandTokens.at(0) != CommandConstants::COMPONENTS_COMMAND_PREFIX)
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError,
-          "\"" + command + "\" is not a command. Maybe you mean " + COMPONENTS_COMMAND_PREFIX + "?");
+          "\"" + command + "\" is not a command. Maybe you mean " + CommandConstants::COMPONENTS_COMMAND_PREFIX + "?");
 
     parsedCommand.first = commandTokens.at(1);
     CommandParameters commandParameters = GetCommandParameters(commandTokens);

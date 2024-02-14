@@ -36,3 +36,4 @@ std::vector<std::string> const CommandConstants::COMMAND_COMPONENTS_INIT = {"com
 std::vector<std::string> const CommandConstants::COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
 std::vector<std::string> const CommandConstants::COMMAND_COMPONENTS_INSTALL = {"components install", "cinst","comp inst"};
 std::vector<std::vector <std::string>> const CommandConstants::COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL};
+std::string const CommandConstants::COMPONENTS_COMMAND_PREFIX = "components";

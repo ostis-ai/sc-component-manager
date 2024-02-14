@@ -12,27 +12,57 @@
 #include <regex>
 
 #include "../commands/sc_component_manager_command.hpp"
+#include "../commands/constants/command_constants.hpp"
 
 class ScComponentManagerParser
 {
 public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
-    std::string const COMPONENTS_COMMAND_PREFIX = "components";
     size_t const COMMAND_KEYWORDS_SIZE = 2;
+
+    std::string cutCommand;
+    size_t firstPapameter = command.find('-');
+    if (firstPapameter != std::string::npos)
+    {
+      cutCommand = command.substr(0, firstPapameter - 1);
+    }
+    else 
+    {
+      cutCommand = command;
+    }
+    size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
+    if (endOfCommandPos != std::string::npos) 
+    {
+        cutCommand.erase(endOfCommandPos + 1);
+    }
+
+    std::string fullCommand = command;
+    for (int indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
+    {
+      for (int indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size(); indexReducedCommand++)
+      {
+        if (cutCommand == CommandConstants::COMMAND_LIST[indexCommand][indexReducedCommand])
+        {
+          fullCommand.replace(0, cutCommand.size(), CommandConstants::COMMAND_LIST[indexCommand][0]);
+          indexCommand = CommandConstants::COMMAND_LIST.size();
+          break;
+        }
+      }
+    }
 
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
-    commandTokens = ParseCommand(command);
+    commandTokens = ParseCommand(fullCommand);
 
     if (commandTokens.size() < COMMAND_KEYWORDS_SIZE)
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError, "Incorrect command. Command type not found in \"" + command + "\"");
 
-    if (commandTokens.at(0) != COMPONENTS_COMMAND_PREFIX)
+    if (commandTokens.at(0) != CommandConstants::COMPONENTS_COMMAND_PREFIX)
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError,
-          "\"" + command + "\" is not a command. Maybe you mean " + COMPONENTS_COMMAND_PREFIX + "?");
+          "\"" + command + "\" is not a command. Maybe you mean " + CommandConstants::COMPONENTS_COMMAND_PREFIX + "?");
 
     parsedCommand.first = commandTokens.at(1);
     CommandParameters commandParameters = GetCommandParameters(commandTokens);

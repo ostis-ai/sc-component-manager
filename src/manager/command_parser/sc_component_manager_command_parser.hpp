@@ -12,6 +12,7 @@
 #include <regex>
 
 #include "../commands/sc_component_manager_command.hpp"
+#include "../commands/constants/command_constants.hpp"
 
 class ScComponentManagerParser
 {
@@ -19,10 +20,6 @@ public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
     std::string const COMPONENTS_COMMAND_PREFIX = "components";
-    static std::vector<std::string> const COMMAND_COMPONENTS_INIT = {"components init", "ci", "comp init"};
-    static std::vector<std::string> const COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
-    static std::vector<std::string> const COMMAND_COMPONENTS_INSTALL = {"components install", "cinst","comp inst"};
-    static std::vector<std::vector <std::string>> const COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL};
     size_t const COMMAND_KEYWORDS_SIZE = 2;
 
     std::string cutCommand;
@@ -42,14 +39,14 @@ public:
     }
 
     std::string fullCommand = command;
-    for (int indexCommand = 0; indexCommand < COMMAND_LIST.size(); indexCommand++)
+    for (int indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
     {
-      for (int indexReducedCommand = 1; indexReducedCommand < COMMAND_LIST[indexCommand].size(); indexReducedCommand++)
+      for (int indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size(); indexReducedCommand++)
       {
-        if (cutCommand == COMMAND_LIST[indexCommand][indexReducedCommand])
+        if (cutCommand == CommandConstants::COMMAND_LIST[indexCommand][indexReducedCommand])
         {
-          fullCommand.replace(0, cutCommand.size(), COMMAND_LIST[indexCommand][0]);
-          indexCommand = COMMAND_LIST.size();
+          fullCommand.replace(0, cutCommand.size(), CommandConstants::COMMAND_LIST[indexCommand][0]);
+          indexCommand = CommandConstants::COMMAND_LIST.size();
           break;
         }
       }

@@ -31,3 +31,8 @@ std::string const GoogleDriveConstants::GOOGLE_DRIVE_PREFIX = "https://drive.goo
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_FILE_PREFIX = "https://drive.google.com/file/d/";
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_DOWNLOAD_PREFIX = "https://docs.google.com/uc?export=download&id=";
 std::string const GoogleDriveConstants::GOOGLE_DRIVE_POSTFIX = "/view?usp=sharing";
+
+std::vector<std::string> const CommandConstants::COMMAND_COMPONENTS_INIT = {"components init", "ci", "comp init"};
+std::vector<std::string> const CommandConstants::COMMAND_COMPONENTS_SEARCH = {"components search", "cs", "comp search", "comp s"};
+std::vector<std::string> const CommandConstants::COMMAND_COMPONENTS_INSTALL = {"components install", "cinst","comp inst"};
+std::vector<std::vector <std::string>> const CommandConstants::COMMAND_LIST = {COMMAND_COMPONENTS_INIT, COMMAND_COMPONENTS_SEARCH, COMMAND_COMPONENTS_INSTALL};

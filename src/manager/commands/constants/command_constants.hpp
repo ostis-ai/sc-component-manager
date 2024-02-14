@@ -7,6 +7,7 @@
 #pragma once
 
 #include <string>
+#include <regex>
 
 class SpecificationConstants
 {
@@ -40,4 +41,13 @@ public:
   static std::string const GREP_DEFAULT_BRANCH_COMMAND;
   static std::string const GITHUB_DOWNLOAD_FILE_COMMAND_PREFIX;
   static std::string const GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX;
+};
+
+class CommandConstants
+{
+public:
+  static std::vector<std::string> const COMMAND_COMPONENTS_INIT;
+  static std::vector<std::string> const COMMAND_COMPONENTS_SEARCH;
+  static std::vector<std::string> const COMMAND_COMPONENTS_INSTALL;
+  static std::vector<std::vector <std::string>> const COMMAND_LIST;
 };

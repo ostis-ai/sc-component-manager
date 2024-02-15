@@ -27,20 +27,21 @@ public:
     {
       cutCommand = command.substr(0, firstPapameter - 1);
     }
-    else 
+    else
     {
       cutCommand = command;
     }
     size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
-    if (endOfCommandPos != std::string::npos) 
+    if (endOfCommandPos != std::string::npos)
     {
-        cutCommand.erase(endOfCommandPos + 1);
+      cutCommand.erase(endOfCommandPos + 1);
     }
 
     std::string fullCommand = command;
-    for (int indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
+    for (size_t indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
     {
-      for (int indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size(); indexReducedCommand++)
+      for (size_t indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size();
+           indexReducedCommand++)
       {
         if (cutCommand == CommandConstants::COMMAND_LIST[indexCommand][indexReducedCommand])
         {
@@ -72,8 +73,6 @@ public:
   }
 
 protected:
-  inline static std::string const PARAMETER_IDTF = "idtf";
-
   static CommandParameters GetCommandParameters(std::vector<std::string> const & commandTokens)
   {
     size_t const COMMAND_KEYWORDS_SIZE = 2;
@@ -110,7 +109,7 @@ protected:
     else
     {
       if (!parameterValue.empty())
-        commandParameters.insert({PARAMETER_IDTF, parameterValue});
+        commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
     }
 
     InsertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);

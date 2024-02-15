@@ -74,7 +74,8 @@ TEST_F(ScComponentManagerTest, ParseRepositoryUrlWithDirectory)
 
 TEST_F(ScComponentManagerTest, ParseRepositoryUrlWithSubdirectory)
 {
-  std::string const repositoryUrlAddress = "https://github.com/username/repository-name/tree/main/directory/subdirectory";
+  std::string const repositoryUrlAddress =
+      "https://github.com/username/repository-name/tree/main/directory/subdirectory";
   RepositoryUrlParser parser;
   parser.Parse(repositoryUrlAddress);
 

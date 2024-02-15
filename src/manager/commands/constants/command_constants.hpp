@@ -49,6 +49,13 @@ public:
   static std::vector<std::string> const COMMAND_COMPONENTS_INIT;
   static std::vector<std::string> const COMMAND_COMPONENTS_SEARCH;
   static std::vector<std::string> const COMMAND_COMPONENTS_INSTALL;
-  static std::vector<std::vector <std::string>> const COMMAND_LIST;
+  static std::vector<std::vector<std::string>> const COMMAND_LIST;
   static std::string const COMPONENTS_COMMAND_PREFIX;
+};
+
+class CommandsConstantsFlags
+{
+public:
+  static std::string const IDTF;
+  static std::string const EXPLANATION;
 };

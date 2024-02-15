@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 
-option(SC_BUILD_TESTS "Flag to build unit tests" ON)
+option(SC_BUILD_TESTS "Flag to build unit tests" OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
 set(SC_BIN_PATH "${PARENT_DIR}/sc-machine/bin/")
@@ -62,8 +62,8 @@ file(MAKE_DIRECTORY ${SC_EXTENSION_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSION_DIRECTORY})
 
 if(${SC_BUILD_TESTS})
-	add_subdirectory(thirdparty)
-	include(tests/tests.cmake)
+    add_subdirectory(thirdparty)
+    include(tests/tests.cmake)
 endif()
 
 add_subdirectory(src)

@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 get_filename_component(PARENT_DIR ${CMAKE_SOURCE_DIR} DIRECTORY)
 
+option(SC_BUILD_TESTS "Flag to build unit tests" ON)
+
 set(CMAKE_BUILD_TYPE Debug)
 set(SC_BIN_PATH "${PARENT_DIR}/sc-machine/bin/")
 set(SC_MACHINE_ROOT "${PARENT_DIR}/sc-machine/")
@@ -16,6 +18,7 @@ if(${WIN32})
 endif(${WIN32})
 
 include("${SC_MACHINE_ROOT}/cmake/codegen.cmake")
+include("${SC_MACHINE_ROOT}/cmake/tests.cmake")
 set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator")
 
 option(SC_CLANG_FORMAT_CODE "Flag to add clangformat and clangformat_check targets" OFF)
@@ -57,5 +60,10 @@ link_directories(${SC_BIN_PATH} ${SC_EXTENSION_DIRECTORY})
 
 file(MAKE_DIRECTORY ${SC_EXTENSION_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSION_DIRECTORY})
+
+if(${SC_BUILD_TESTS})
+	add_subdirectory(thirdparty)
+	include(tests/tests.cmake)
+endif()
 
 add_subdirectory(src)

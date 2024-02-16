@@ -105,11 +105,17 @@ protected:
     }
 
     if (!parameterName.empty())
+    {
       commandParameters.insert({parameterName, parameterValue});
+    }
     else
     {
-      if (!parameterValue.empty())
+      std::stringstream fullCommand;
+      fullCommand << commandTokens[0] << " " << commandTokens[1];
+      if (fullCommand.str() == CommandConstants::COMMAND_COMPONENTS_INSTALL[0] && !parameterValue.empty())
+      {
         commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
+      }
     }
 
     InsertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);

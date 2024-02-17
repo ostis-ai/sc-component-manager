@@ -1,3 +1,7 @@
 [submodule "docs/scn"]
 	path = docs/scn
 	url = https://github.com/ostis-ai/scn-latex-plugin
+
+[submodule "thirdparty/googletest"]
+	path = thirdparty/googletest
+	url = https://github.com/google/googletest.git

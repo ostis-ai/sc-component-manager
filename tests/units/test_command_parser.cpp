@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 
 #include "sc_component_manager_test.hpp"
-#include "src/manager/commands/sc_component_manager_command.hpp"
 
 TEST_F(ScComponentManagerTest, ParseCommandTypes)
 {
@@ -54,4 +53,31 @@ TEST_F(ScComponentManagerTest, ParseIncorrectCommands)
   EXPECT_ANY_THROW(m_commandParser->Parse("copmonents init"));
   EXPECT_ANY_THROW(m_commandParser->Parse("componentsinit"));
   EXPECT_ANY_THROW(m_commandParser->Parse("search components"));
+}
+
+TEST_F(ScComponentManagerTest, ParseInstallCommandsFlag)
+{
+  std::string commandType;
+  std::map<std::string, std::vector<std::string>> commandValues;
+  std::pair<std::string, std::map<std::string, std::vector<std::string>>> commandWithValues;
+
+  commandWithValues = m_commandParser->Parse("components install sc_web");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(commandValues["idtf"][0], "sc_web");
+  EXPECT_EQ(1u, commandValues.size());
+
+  commandWithValues = m_commandParser->Parse("components install --idtf sc_web");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(commandValues["idtf"][0], "sc_web");
+  EXPECT_EQ(1u, commandValues.size());
+
+  commandWithValues = m_commandParser->Parse("components install");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(0u, commandValues.size());
 }

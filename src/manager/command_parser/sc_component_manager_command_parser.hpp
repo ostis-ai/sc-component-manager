@@ -27,20 +27,21 @@ public:
     {
       cutCommand = command.substr(0, firstPapameter - 1);
     }
-    else 
+    else
     {
       cutCommand = command;
     }
     size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
-    if (endOfCommandPos != std::string::npos) 
+    if (endOfCommandPos != std::string::npos)
     {
-        cutCommand.erase(endOfCommandPos + 1);
+      cutCommand.erase(endOfCommandPos + 1);
     }
 
     std::string fullCommand = command;
-    for (int indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
+    for (size_t indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
     {
-      for (int indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size(); indexReducedCommand++)
+      for (size_t indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size();
+           indexReducedCommand++)
       {
         if (cutCommand == CommandConstants::COMMAND_LIST[indexCommand][indexReducedCommand])
         {
@@ -104,7 +105,18 @@ protected:
     }
 
     if (!parameterName.empty())
+    {
       commandParameters.insert({parameterName, parameterValue});
+    }
+    else
+    {
+      std::stringstream fullCommand;
+      fullCommand << commandTokens[0] << " " << commandTokens[1];
+      if (fullCommand.str() == CommandConstants::COMMAND_COMPONENTS_INSTALL[0] && !parameterValue.empty())
+      {
+        commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
+      }
+    }
 
     InsertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);
 

@@ -24,6 +24,7 @@ USAGE
 }
 
 outer_cmake_args=()
+outer_cmake_args+=("-DSC_BIN_PATH=${BINARY_PATH}")
 while [ "$1" != "" ];
 do
   case $1 in

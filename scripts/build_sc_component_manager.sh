@@ -3,7 +3,11 @@ set -eo pipefail
 
 CURRENT_DIR=$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)
 source "${CURRENT_DIR}/formats.sh"
-source "${CURRENT_DIR}/set_vars.sh"
+
+if [[ -z "${BINARY_PATH}" || -z "${SC_COMPONENT_MANAGER_CMAKE_PATH}" || -z "${SC_COMPONENT_MANAGER_BUILD_PATH}" ]];
+then
+  source "${CURRENT_DIR}/set_vars.sh"
+fi
 
 relative()
 {
@@ -24,6 +28,7 @@ USAGE
 }
 
 outer_cmake_args=()
+outer_cmake_args+=("-DSC_BIN_PATH=${BINARY_PATH}")
 while [ "$1" != "" ];
 do
   case $1 in

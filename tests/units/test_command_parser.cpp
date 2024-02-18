@@ -35,15 +35,15 @@ TEST_F(ScComponentManagerTest, ParseCommandParameters)
 {
   std::pair<std::string, CommandParameters> parsed =
       m_commandParser->Parse("components search --class concept_kb_component");
-  EXPECT_EQ(parsed.second.size(), (size_t)1);
-  EXPECT_EQ(parsed.second.at("class").size(), (size_t)1);
+  EXPECT_EQ(parsed.second.size(), 1u);
+  EXPECT_EQ(parsed.second.at("class").size(), 1u);
   EXPECT_TRUE(parsed.second.at("class").at(0) == "concept_kb_component");
 
   parsed = m_commandParser->Parse("components search --class class1 class2 -a author1 -r");
-  EXPECT_EQ(parsed.second.size(), (size_t)3);
-  EXPECT_EQ(parsed.second.at("class").size(), (size_t)2);
-  EXPECT_EQ(parsed.second.at("a").size(), (size_t)1);
-  EXPECT_EQ(parsed.second.at("r").size(), (size_t)0);
+  EXPECT_EQ(parsed.second.size(), 3u);
+  EXPECT_EQ(parsed.second.at("class").size(), 2u);
+  EXPECT_EQ(parsed.second.at("a").size(), 1u);
+  EXPECT_EQ(parsed.second.at("r").size(), 0u);
 }
 
 TEST_F(ScComponentManagerTest, ParseIncorrectCommands)
@@ -66,18 +66,46 @@ TEST_F(ScComponentManagerTest, ParseInstallCommandsFlag)
   commandValues = commandWithValues.second;
   EXPECT_EQ(commandType, "install");
   EXPECT_EQ(commandValues["idtf"][0], "sc_web");
-  EXPECT_EQ(1u, commandValues.size());
+  EXPECT_EQ(commandValues.size(), 1u);
 
   commandWithValues = m_commandParser->Parse("components install --idtf sc_web");
   commandType = commandWithValues.first;
   commandValues = commandWithValues.second;
   EXPECT_EQ(commandType, "install");
   EXPECT_EQ(commandValues["idtf"][0], "sc_web");
-  EXPECT_EQ(1u, commandValues.size());
+  EXPECT_EQ(commandValues.size(), 1u);
 
   commandWithValues = m_commandParser->Parse("components install");
   commandType = commandWithValues.first;
   commandValues = commandWithValues.second;
   EXPECT_EQ(commandType, "install");
-  EXPECT_EQ(0u, commandValues.size());
+  EXPECT_EQ(commandValues.size(), 0u);
+}
+
+TEST_F(ScComponentManagerTest, ParseSearchCommandExplanationFlag)
+{
+  std::string commandType;
+  std::map<std::string, std::vector<std::string>> commandValues;
+  std::pair<std::string, std::map<std::string, std::vector<std::string>>> commandWithValues;
+
+  commandWithValues = m_commandParser->Parse("components search --explanation SC");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "search");
+  EXPECT_EQ(commandValues["explanation"][0], "SC");
+  EXPECT_EQ(commandValues.size(), 1u);
+
+  commandWithValues = m_commandParser->Parse("components search --explanation \"SC\"");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "search");
+  EXPECT_EQ(commandValues["explanation"][0], "SC");
+  EXPECT_EQ(commandValues.size(), 1u);
+
+  EXPECT_NO_THROW(m_commandParser->Parse("components search --explanation"));
+  commandWithValues = m_commandParser->Parse("components search --explanation");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "search");
+  EXPECT_EQ(commandValues["explanation"].size(), 0u);
 }

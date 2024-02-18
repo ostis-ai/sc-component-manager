@@ -44,7 +44,8 @@ bool ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, Command
   }
 
   std::map<std::string, ScAddrVector> linksValues;
-  if (commandParameters.find(EXPLANATION) != commandParameters.cend())
+  if (commandParameters.find(EXPLANATION) != commandParameters.cend() &&
+      !commandParameters.find(EXPLANATION)->second.empty())
   {
     ScAddrVector explanationLinks = SearchComponentsByRelationLink(
         context,

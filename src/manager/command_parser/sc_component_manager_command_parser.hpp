@@ -27,10 +27,29 @@ public:
     {
       cutCommand = command.substr(0, firstPapameter - 1);
     }
-    else
-    {
+    else {
       cutCommand = command;
+
+      // From "cinst sc_web" to "{"cinst, "sc_web"}
+      std::stringstream commandsStream(command);
+      std::vector<std::string> tokens;
+      while (!commandsStream.eof()) {
+        std::string substring;
+        commandsStream >> substring;
+        tokens.push_back(substring);
+      }
+
+      // Try to find abbreviation of command, "cinst" or "cinst sc_web"
+      std::stringstream subCommand;
+      for (std::string & token: tokens) {
+        subCommand << token;
+        for (auto & listOfCommands: CommandConstants::COMMAND_LIST)
+          for (size_t j = 0; j < listOfCommands.size(); j++)
+            if (std::find(listOfCommands.begin(), listOfCommands.end(), subCommand.str()) != listOfCommands.end())
+              cutCommand = subCommand.str(); // "cinst" is element of abbreviation list
+      }
     }
+
     size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
     if (endOfCommandPos != std::string::npos)
     {

@@ -88,4 +88,3 @@ _**All commit, that not applies to this rules, should be split by this rules. An
  - Author make review fixes at `Review fixes` commits;
  - Author re-request review;
  - Reviewer resolve conversations if they were fixed and approve PR.
-

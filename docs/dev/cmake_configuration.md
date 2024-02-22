@@ -4,14 +4,14 @@ To develop sc-component-manager in __Clion IDE__, you should configure cmake.
 ## Sources configuration
 1. In __File | Settings | Build, Execution, Deployment | CMake__ in __CMake options__ set __-DSC_BIN_PATH__ variable as below:
     ```angular2html
-    -DSC_BIN_PATH="~/ostis-metasystem/bin"
+    -DSC_BIN_PATH="<path-to-binary-folder>"
     ```
    * __Note__: Instead of "~" write your own absolute path to a certain project (ostis-metasystem or ostis-web-platform).
    * __Example__:
    ![](../images/cmake_options.png)
 2. In __Run/Debug Configuration__ in __Program arguments__ field insert flag -c and path to ini-file:
    ```angular2html
-   -c ostis-metasystem.ini
+   -c  <path-to-config-ini-file>
    ```
    * __Note__: ini-file can be different.
    * __Example__:

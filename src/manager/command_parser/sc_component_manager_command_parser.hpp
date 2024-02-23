@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <algorithm>
 #include <regex>
 
 #include "../commands/sc_component_manager_command.hpp"
@@ -20,36 +17,19 @@ public:
   static std::pair<std::string, CommandParameters> Parse(std::string const & command)
   {
     size_t const COMMAND_KEYWORDS_SIZE = 2;
+    std::string const fullCommand = GetFullCommand(command);
+    std::string cutCommand = fullCommand;
 
-    std::string cutCommand;
-    size_t firstPapameter = command.find('-');
+    size_t firstPapameter = fullCommand.find('-');
     if (firstPapameter != std::string::npos)
     {
-      cutCommand = command.substr(0, firstPapameter - 1);
+      cutCommand = fullCommand.substr(0, firstPapameter - 1);
     }
-    else
-    {
-      cutCommand = command;
-    }
+
     size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
     if (endOfCommandPos != std::string::npos)
     {
       cutCommand.erase(endOfCommandPos + 1);
-    }
-
-    std::string fullCommand = command;
-    for (size_t indexCommand = 0; indexCommand < CommandConstants::COMMAND_LIST.size(); indexCommand++)
-    {
-      for (size_t indexReducedCommand = 1; indexReducedCommand < CommandConstants::COMMAND_LIST[indexCommand].size();
-           indexReducedCommand++)
-      {
-        if (cutCommand == CommandConstants::COMMAND_LIST[indexCommand][indexReducedCommand])
-        {
-          fullCommand.replace(0, cutCommand.size(), CommandConstants::COMMAND_LIST[indexCommand][0]);
-          indexCommand = CommandConstants::COMMAND_LIST.size();
-          break;
-        }
-      }
     }
 
     std::pair<std::string, CommandParameters> parsedCommand;
@@ -110,9 +90,8 @@ protected:
     }
     else
     {
-      std::stringstream fullCommand;
-      fullCommand << commandTokens[0] << " " << commandTokens[1];
-      if (fullCommand.str() == CommandConstants::COMMAND_COMPONENTS_INSTALL[0] && !parameterValue.empty())
+      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX &&
+          commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && !parameterValue.empty())
       {
         commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
       }
@@ -184,5 +163,64 @@ protected:
     }
 
     return result;
+  }
+
+  static std::vector<std::string> DivideStrIntoLexems(std::string const & command)
+  {
+    std::stringstream commandsStream(command);
+    std::vector<std::string> tokens;
+    while (!commandsStream.eof())
+    {
+      std::string substring;
+      commandsStream >> substring;
+      tokens.push_back(substring);
+    }
+    return tokens;
+  }
+
+  static std::string DeleteMultipleSpaces(std::string const & command)
+  {
+    std::string shortCommand;
+    for (size_t index = 0; index < command.size() - 1; index++)
+    {
+      if (command[index] == ' ' && command[index + 1] != ' ')
+      {
+        shortCommand.push_back(command[index]);
+        continue;
+      }
+
+      shortCommand.push_back(command[index]);
+    }
+    if (command[command.size() - 1] != ' ')
+    {
+      shortCommand.push_back(command[command.size() - 1]);
+    }
+
+    return shortCommand;
+  }
+
+  static std::string GetFullCommand(std::string const & command)
+  {
+    std::string fullCommand = DeleteMultipleSpaces(command);
+    std::stringstream subCommand;
+    std::vector<std::string> tokens = DivideStrIntoLexems(command);
+
+    for (std::string & token : tokens)
+    {
+      if (!subCommand.str().empty())
+      {
+        subCommand << " ";
+      }
+      subCommand << token;
+      if (CommandConstants::COMMAND_MAP.count(subCommand.str()))
+      {
+        std::stringstream newFullCommand;
+        newFullCommand << CommandConstants::COMMAND_MAP[subCommand.str()]
+                       << command.substr(subCommand.str().size(), command.size());
+        fullCommand = newFullCommand.str();
+        break;
+      }
+    }
+    return fullCommand;
   }
 };

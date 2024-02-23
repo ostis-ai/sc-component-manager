@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Processing commands with multiple string spaces
 - Install a component while running `components install [name]` with no `--idtf` flag
 - Exception while running `components search --explanation` with an empty substring
 - Use nrel_authors instead of nrel_author

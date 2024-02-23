@@ -61,7 +61,7 @@ TEST_F(ScComponentManagerTest, ParseInstallCommandsFlag)
   std::map<std::string, std::vector<std::string>> commandValues;
   std::pair<std::string, std::map<std::string, std::vector<std::string>>> commandWithValues;
 
-  commandWithValues = m_commandParser->Parse("components install sc_web");
+  commandWithValues = m_commandParser->Parse("components install   sc_web ");
   commandType = commandWithValues.first;
   commandValues = commandWithValues.second;
   EXPECT_EQ(commandType, "install");
@@ -75,7 +75,35 @@ TEST_F(ScComponentManagerTest, ParseInstallCommandsFlag)
   EXPECT_EQ(commandValues["idtf"][0], "sc_web");
   EXPECT_EQ(commandValues.size(), 1u);
 
-  commandWithValues = m_commandParser->Parse("components install");
+  commandWithValues = m_commandParser->Parse("cinst  --idtf  sc_web");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(commandValues["idtf"][0], "sc_web");
+  EXPECT_EQ(1u, commandValues.size());
+
+  commandWithValues = m_commandParser->Parse("cinst  sc_web");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(commandValues["idtf"][0], "sc_web");
+  EXPECT_EQ(1u, commandValues.size());
+
+  commandWithValues = m_commandParser->Parse("comp inst --idtf sc_web");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(commandValues["idtf"][0], "sc_web");
+  EXPECT_EQ(1u, commandValues.size());
+
+  commandWithValues = m_commandParser->Parse("comp inst  sc_web");
+  commandType = commandWithValues.first;
+  commandValues = commandWithValues.second;
+  EXPECT_EQ(commandType, "install");
+  EXPECT_EQ(commandValues["idtf"][0], "sc_web");
+  EXPECT_EQ(1u, commandValues.size());
+
+  commandWithValues = m_commandParser->Parse(" components install");
   commandType = commandWithValues.first;
   commandValues = commandWithValues.second;
   EXPECT_EQ(commandType, "install");

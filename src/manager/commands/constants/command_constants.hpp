@@ -8,6 +8,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class SpecificationConstants
 {
@@ -46,11 +47,11 @@ public:
 class CommandConstants
 {
 public:
-  static std::vector<std::string> const COMMAND_COMPONENTS_INIT;
-  static std::vector<std::string> const COMMAND_COMPONENTS_SEARCH;
-  static std::vector<std::string> const COMMAND_COMPONENTS_INSTALL;
-  static std::vector<std::vector<std::string>> const COMMAND_LIST;
   static std::string const COMPONENTS_COMMAND_PREFIX;
+  static std::string const COMPONENTS_COMMAND_INIT;
+  static std::string const COMPONENTS_COMMAND_INSTALL;
+  static std::string const COMPONENTS_COMMAND_SEARCH;
+  static std::map<std::string, std::string> COMMAND_MAP;
 };
 
 class CommandsConstantsFlags

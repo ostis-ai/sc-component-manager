@@ -1,7 +1,7 @@
 set(SC_COMPONENT_MANAGER_SRC "${CMAKE_SOURCE_DIR}/src")
 
-file(GLOB_RECURSE SOURCES "*.cpp")
-file(GLOB_RECURSE HEADERS "*.hpp")
+file(GLOB_RECURSE SOURCES "${SC_COMPONENT_MANAGER_SRC}/manager/*.cpp")
+file(GLOB_RECURSE HEADERS "${SC_COMPONENT_MANAGER_SRC}/manager/*.hpp")
 list(REMOVE_ITEM SOURCES "${SC_COMPONENT_MANAGER_SRC}/main.cpp")
 
 include_directories(${SC_COMPONENT_MANAGER_SRC} ${GLIB2_INCLUDE_DIRS} ${SC_MEMORY_SRC})
@@ -25,3 +25,5 @@ if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(sc-component-manager-lib)
     target_clangformat_setup(sc-component-manager)
 endif()
+
+add_subdirectory(commandsModule)

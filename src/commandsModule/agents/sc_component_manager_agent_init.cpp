@@ -23,7 +23,6 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
   // TODO: change config_path
   std::string const config_path = "/home/anna/projects/ostis-metasystem/sc-models/knowledge-base";
   ScComponentManagerCommandInit command = ScComponentManagerCommandInit(config_path);
-  SC_LOG_ERROR(config_path);
   command.Execute(&m_memoryCtx, {});
   SC_LOG_DEBUG("ScComponentManagerInitAgent finished");
   return SC_RESULT_OK;

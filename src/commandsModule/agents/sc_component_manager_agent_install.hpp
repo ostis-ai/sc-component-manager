@@ -14,5 +14,9 @@ class ScComponentManagerInstallAgent : public ScAgent
 
 private:
   bool checkAction(ScAddr const & actionAddr);
+  static ScAddr getParameternodeUnderRelation(
+      ScMemoryContext & m_memoryCtx,
+      ScAddr const & actionAddr,
+      ScAddr const & relation);
 };
 }  // namespace commandsModule

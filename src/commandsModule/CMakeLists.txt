@@ -3,6 +3,10 @@ set(COMMANDS_MODULE_SRC "${CMAKE_SOURCE_DIR}/commandsModule")
 set(SOURCES
     "agents/sc_component_manager_agent_init.cpp"
     "agents/sc_component_manager_agent_init.hpp"
+    "agents/sc_component_manager_agent_install.cpp"
+    "agents/sc_component_manager_agent_install.hpp"
+    "agents/sc_component_manager_agent_search.cpp"
+    "agents/sc_component_manager_agent_search.hpp"
     "keynodes/commands_keynodes.cpp"
     "keynodes/commands_keynodes.hpp"
     "commands_module.cpp"

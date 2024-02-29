@@ -30,5 +30,8 @@ public:
 
   SC_PROPERTY(Keynode("rrel_explanations"), ForceCreate)
   static ScAddr rrel_explanations;
+
+  SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate)
+  static ScAddr rrel_identifier;
 };
 }  // namespace commandsModule

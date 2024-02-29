@@ -1,0 +1,23 @@
+rrel_identifier
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+	[идентификатор'] (* <- lang_ru;; *);
+  [identifier'] (* <- lang_en;; *);;
+
+rrel_classes
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+	[classes'] (* <- lang_ru;; *);
+  [класс'] (* <- lang_en;; *);;
+
+rrel_authors
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+	[автор'] (* <- lang_ru;; *);
+  [author'] (* <- lang_en;; *);;
+
+rrel_explanations
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+	[примечание'] (* <- lang_ru;; *);
+  [explanation'] (* <- lang_en;; *);;

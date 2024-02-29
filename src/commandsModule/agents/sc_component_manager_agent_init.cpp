@@ -1,9 +1,9 @@
 #include "sc-agents-common/utils/CommonUtils.hpp"
 
 #include "../../manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
-#include "keynodes/commands_keynodes.hpp"
 #include "manager/commands/command_init/sc_component_manager_command_init.hpp"
 
+#include "keynodes/commands_keynodes.hpp"
 #include "sc_component_manager_agent_init.hpp"
 
 using namespace commandsModule;

@@ -72,6 +72,108 @@ sc_component_manager_repository
            					*);;
            			*);;
            	*);;
+        *);
+	-> part_agent_of_finding_intersection_of_sets_specification
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_agents/agent_of_finding_intersection_of_sets]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> part_figure_specification
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_figure]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> part_menu_of_agent_of_finding_intersection_of_sets_specification
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_menu/menu_of_agent_of_finding_intersection_of_sets]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> part_menu_of_logical_interface_specification
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_menu/menu_of_logical_inference]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> part_lr_about_relation_specification
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_lr/lr_about_relation]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> part_lr_about_square_specification
+	    (*
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_lr/lr_about_square]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
         *);;
 
 ..repositories_addresses

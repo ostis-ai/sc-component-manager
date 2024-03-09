@@ -22,14 +22,14 @@ public:
   SC_PROPERTY(Keynode("action_components_install"), ForceCreate)
   static ScAddr action_components_install;
 
-  SC_PROPERTY(Keynode("rrel_authors"), ForceCreate)
-  static ScAddr rrel_authors;
+  SC_PROPERTY(Keynode("rrel_author"), ForceCreate)
+  static ScAddr rrel_author;
 
-  SC_PROPERTY(Keynode("rrel_classes"), ForceCreate)
-  static ScAddr rrel_classes;
+  SC_PROPERTY(Keynode("rrel_class"), ForceCreate)
+  static ScAddr rrel_class;
 
-  SC_PROPERTY(Keynode("rrel_explanations"), ForceCreate)
-  static ScAddr rrel_explanations;
+  SC_PROPERTY(Keynode("rrel_explanation"), ForceCreate)
+  static ScAddr rrel_explanation;
 
   SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate)
   static ScAddr rrel_identifier;

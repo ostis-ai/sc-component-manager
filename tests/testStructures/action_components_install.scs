@@ -1,0 +1,4 @@
+test_action_node
+<- question;
+<- action_components_init;
+-> rrel_identifier: ... (* -> sc_web;; *);;

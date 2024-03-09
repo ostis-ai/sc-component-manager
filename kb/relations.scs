@@ -4,19 +4,19 @@ rrel_identifier
 	[идентификатор'] (* <- lang_ru;; *);
   [identifier'] (* <- lang_en;; *);;
 
-rrel_classes
+rrel_class
 <- sc_node_role_relation;
 => nrel_main_idtf:
-	[classes'] (* <- lang_ru;; *);
-  [класс'] (* <- lang_en;; *);;
+	[класс'] (* <- lang_ru;; *);
+  [class'] (* <- lang_en;; *);;
 
-rrel_authors
+rrel_author
 <- sc_node_role_relation;
 => nrel_main_idtf:
 	[автор'] (* <- lang_ru;; *);
   [author'] (* <- lang_en;; *);;
 
-rrel_explanations
+rrel_explanation
 <- sc_node_role_relation;
 => nrel_main_idtf:
 	[примечание'] (* <- lang_ru;; *);

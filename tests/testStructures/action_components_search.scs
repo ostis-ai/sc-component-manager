@@ -1,0 +1,6 @@
+test_action_node
+<- question;
+<- action_components_init;
+-> rrel_classes: ... (* -> class_1;; -> class_2;; *);
+-> rrel_authors: ... (* -> author_1;; *);
+-> rrel_explanations: ... (* -> [text];; *);;

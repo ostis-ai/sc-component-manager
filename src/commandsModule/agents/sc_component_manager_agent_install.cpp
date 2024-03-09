@@ -1,4 +1,5 @@
 #include "sc-agents-common/utils/CommonUtils.hpp"
+#include "sc-agents-common/utils/AgentUtils.hpp"
 
 #include "../../manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
 #include "manager/commands/command_install/sc_component_manager_command_install.hpp"
@@ -42,7 +43,16 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
   {
     commandParameters.insert({"idtf", {m_memoryCtx.HelperGetSystemIdtf(identifierNode)}});
   }
+  else
+  {
+    SC_LOG_DEBUG("ScComponentManagerInstallAgent finished");
+    utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, true);
+    return SC_RESULT_OK;
+  }
   command.Execute(&m_memoryCtx, commandParameters);
+
+  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, {identifierNode}, true);
+
   SC_LOG_DEBUG("ScComponentManagerInstallAgent finished");
   return SC_RESULT_OK;
 };

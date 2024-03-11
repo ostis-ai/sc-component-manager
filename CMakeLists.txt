@@ -36,6 +36,19 @@ if(${WIN32})
     message(SEND_ERROR "sc-component-manager isn't supported on Windows OS.")
 endif(${WIN32})
 
+# find dependencies
+if (${UNIX})
+    include(FindPkgConfig)
+    pkg_check_modules(GLIB2 REQUIRED glib-2.0)
+    pkg_check_modules(GLIB2_MODULE REQUIRED gmodule-2.0)
+
+    set(GLIB2_INCLUDE_DIRS "${GLIB2_INCLUDE_DIRS}" "/usr/lib/x86_64-linux-gnu/glib-2.0/include/" "${GLIB2_MODULE}")
+    set(GLIB2_LIBRARIES "${GLIB2_LIBRARIES}" "${GLIB2_MODULE_LIBRARIES}")
+
+    # for std::thread support
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif(${UNIX})
+
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "-std=c++17 -Wall")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")        ## Optimize

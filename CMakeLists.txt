@@ -33,7 +33,7 @@ set(SC_TOOLS_SRC "${SC_MACHINE_PATH}/sc-tools/")
 include_directories(${SC_MEMORY_SRC} ${SC_KPM_SRC} ${SC_TOOLS_SRC})
 
 if(${WIN32})
-    message(SEND_ERROR "SC-component-manager isn't supported on Windows OS.")
+    message(SEND_ERROR "sc-component-manager isn't supported on Windows OS.")
 endif(${WIN32})
 
 if(CMAKE_COMPILER_IS_GNUCXX)

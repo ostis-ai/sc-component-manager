@@ -16,4 +16,4 @@ BUILD_SCRIPTS="${SC_COMPONENT_MANAGER_CMAKE_PATH}/../sc-machine/scripts/build-sc
 "${BUILD_SCRIPTS}/build_cxx_project.sh" -p "${SC_COMPONENT_MANAGER_CMAKE_PATH}" -s "${SC_COMPONENT_MANAGER_CXX_SOURCES_PATH}" \
   -b "${SC_COMPONENT_MANAGER_BUILD_PATH}" --cmake-arg "-DSC_BIN_PATH=${BINARY_PATH}" "$@"
 
-stage "SC-component-manager built successfully"
+stage "sc-component-manager is built successfully"

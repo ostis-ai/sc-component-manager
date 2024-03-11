@@ -1,15 +1,15 @@
-# SC-component-manager
+# sc-component-manager
 
-**SC-component-manager** is a part of [**OSTIS Platform**](https://github.com/ostis-ai/ostis-web-platform).
+This repository is a storage of the Component manager of the [OSTIS Project](https://github.com/ostis-ai/ostis-project).
 It allows ostis-systems to install reusable components for intelligent systems made with the [**OSTIS Technology**](https://github.com/ostis-ai).
 
 ## Installation
 
 Using ostis-web-platform
 ```sh
-   git clone https://github.com/ostis-ai/ostis-web-platform
-   cd ostis-web-platform/scripts
-   ./install_platform_with_component_manager.sh
+git clone https://github.com/ostis-ai/ostis-web-platform
+cd ostis-web-platform
+./scripts/install_platform_with_component_manager.sh
 ```
 
 ## Build
@@ -19,7 +19,7 @@ To build sc-component-manager run build script:
 ./scripts/build_sc_component_manager.sh
 ```
 
-To build knowledge base, run ```./build_kb``` in ostis-web-platform scripts
+To build knowledge base, run ```./build_kb.sh``` in ostis-web-platform scripts
 
 ## Post Install
 
@@ -62,7 +62,7 @@ Possible run flags:
 
 File specification.scs contains description of two sections: **components** and **repositories**.
 
-**Repositories** have links for source (GitHub, google drive etc.) with specification file, **components** have links to source with specification of component.
+**Repositories** have links for source (GitHub, Google Drive etc.) with specification file, **components** have links to source with specification of component.
 
 ### Repository specification
 

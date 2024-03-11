@@ -22,7 +22,7 @@ do
     i)
       INTERACTIVE_MODE="-i"
       ;;
-    h)
+    h | *)
       echo "script usage: $(basename \$0) [-c CONFIG_PATH] [-i]" >&2
       exit 1
       ;;
@@ -32,7 +32,7 @@ shift "$((OPTIND -1))"
 
 if [ -z "$CONFIG_ABSOLUTE_PATH" ];
 then
-    CONFIG_ABSOLUTE_PATH="${CONFIG_PATH}"
+  CONFIG_ABSOLUTE_PATH="${CONFIG_PATH}"
 fi
 
 "${BINARY_PATH}/sc-component-manager" -c "${CONFIG_ABSOLUTE_PATH}" "${INTERACTIVE_MODE}"

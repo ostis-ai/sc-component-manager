@@ -12,21 +12,21 @@
 #include "sc-agents-common/utils/CommonUtils.hpp"
 #include "sc-agents-common/utils/AgentUtils.hpp"
 
-#include "../../src/commandsModule/keynodes/commands_keynodes.hpp"
-#include "../../src/commandsModule/agents/sc_component_manager_agent_init.hpp"
-#include "../../src/commandsModule/agents/sc_component_manager_agent_search.hpp"
-#include "../../src/commandsModule/agents/sc_component_manager_agent_install.hpp"
+#include "../manager/commands/command_init/sc_component_manager_agent_init.hpp"
+#include "../manager/commands/command_search/sc_component_manager_agent_search.hpp"
+#include "../manager/commands/command_install/sc_component_manager_agent_install.hpp"
+#include "../manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
 
 using AgentTest = ScMemoryTest;
 ScsLoader loader;
 const std::string TEST_FILES_DIR_PATH = MODULE_TEST_SRC_PATH "/testStructures/";
 
-const int WAIT_TIME = 9000;
+const int WAIT_TIME = 10000;
 
 void initialize()
 {
   scAgentsCommon::CoreKeynodes::InitGlobal();
-  commandsModule::CommandsKeynodes::InitGlobal();
+  keynodes::ScComponentManagerKeynodes::InitGlobal();
 }
 
 TEST_F(AgentTest, AgentInit)
@@ -55,7 +55,6 @@ TEST_F(AgentTest, AgentSearch)
 {
   ScMemoryContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_search.scs");
-  loader.loadScsFile(context, MODULE_KB_PATH "cat_kb_component_spec/specification.scs");
   ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
 
   ScAgentInit(true);
@@ -77,7 +76,6 @@ TEST_F(AgentTest, AgentInstall)
 {
   ScMemoryContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_install.scs");
-  loader.loadScsFile(context, MODULE_KB_PATH "cat_kb_component_spec/specification.scs");
   ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
 
   ScAgentInit(true);

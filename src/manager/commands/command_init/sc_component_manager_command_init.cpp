@@ -9,7 +9,7 @@
 #include "../command_init/sc_component_manager_command_init.hpp"
 #include "../../utils/sc_component_utils.hpp"
 
-bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
+ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   ScAddrVector processedRepositories;
 
@@ -18,7 +18,19 @@ bool ScComponentManagerCommandInit::Execute(ScMemoryContext * context, CommandPa
 
   bool executionResult = ProcessRepositories(context, availableRepositories);
 
-  return executionResult;
+  ScAddrVector components;
+  ScIterator3Ptr const & componentsIterator = context->Iterator3(
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component,
+      ScType::EdgeAccessConstPosPerm,
+      ScType::NodeConst);
+  while (componentsIterator->Next())
+  {
+    SC_LOG_DEBUG(context->HelperGetSystemIdtf(componentsIterator->Get(2)));
+    components.push_back(componentsIterator->Get(2));
+  }
+  if (executionResult)
+    return components;
+  return {};
 }
 
 /**

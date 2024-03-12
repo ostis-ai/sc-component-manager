@@ -13,7 +13,6 @@
 #include "sc-config-utils/sc_options.hpp"
 #include "sc-config-utils/sc_memory_config.hpp"
 #include "sc-memory/utils/sc_signal_handler.hpp"
-
 #include "manager/sc_component_manager_impl.hpp"
 #include "manager/sc-component-manager-factory/sc_component_manager_factory.hpp"
 
@@ -60,7 +59,6 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   ScMemory::Initialize(memoryConfig.GetParams());
   keynodes::ScComponentManagerKeynodes::InitGlobal();
-
   std::unique_ptr<ScComponentManager> scComponentManager =
       ScComponentManagerFactory::ConfigureScComponentManager(params, memoryConfig.GetParams());
 

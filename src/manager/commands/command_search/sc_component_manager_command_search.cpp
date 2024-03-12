@@ -7,11 +7,12 @@
 #include <algorithm>
 
 #include "sc_component_manager_command_search.hpp"
+#include "sc_component_manager_agent_search.hpp"
 
-bool ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
+ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
-  bool result = true;
-
+  std::map<std::string, std::vector<std::string>> commandParameters =
+      commandsModule::ScComponentManagerSearchAgent::GetCommandParameters(*context, actionAddr);
   for (auto const & param : commandParameters)
   {
     if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first) ==
@@ -58,13 +59,14 @@ bool ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, Command
 
   std::vector<std::string> componentsIdtfs;
   componentsIdtfs = SearchComponents(context, searchComponentTemplate, linksValues);
-
+  ScAddrVector components;
   for (std::string const & componentIdtf : componentsIdtfs)
   {
     SC_LOG_INFO("ScComponentManager: " + componentIdtf);
+    components.push_back(context->HelperFindBySystemIdtf(componentIdtf));
   }
 
-  return result;
+  return components;
 }
 
 void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(

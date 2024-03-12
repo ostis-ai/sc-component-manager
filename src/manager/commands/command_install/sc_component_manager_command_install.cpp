@@ -7,6 +7,9 @@
 #include "sc_component_manager_command_install.hpp"
 #include <sc-memory/utils/sc_exec.hpp>
 #include "../../utils/sc_component_utils.hpp"
+#include "sc_component_manager_agent_install.hpp"
+#include "../command_search/sc_component_manager_agent_search.hpp"
+#include "sc-agents-common/utils/AgentUtils.hpp"
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
@@ -80,22 +83,32 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
   return true;
 }
 
-bool ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, CommandParameters const & commandParameters)
+ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   bool executionResult = true;
   std::vector<std::string> componentsToInstallIdentifiers;
   ScAddrVector componentsToInstall;
+  ScAddrVector identifiersNodes = commandsModule::ScComponentManagerInstallAgent::GetParameterNodeUnderRelation(
+      *context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_identifier);
 
-  try
-  {
-    componentsToInstallIdentifiers = commandParameters.at(PARAMETER_NAME);
-    componentsToInstall = GetAvailableComponents(context, componentsToInstallIdentifiers);
-  }
-  catch (std::out_of_range const & exception)
+  if (identifiersNodes.empty())
   {
     SC_LOG_INFO("ScComponentManagerCommandInstall: No identifier provided, installing all to install components");
+    ScIterator3Ptr const & elementsIterator = context->Iterator3(
+        keynodes::ScComponentManagerKeynodes::concept_reusable_component,
+        ScType::EdgeAccessConstPosPerm,
+        ScType::NodeConst);
+    while (elementsIterator->Next())
+    {
+      identifiersNodes.push_back(elementsIterator->Get(2));
+    }
     componentsToInstall = componentUtils::SearchUtils::GetNeedToInstallComponents(context);
   }
+  for (ScAddr const & identifierNode : identifiersNodes)
+  {
+    componentsToInstallIdentifiers.push_back(context->HelperGetSystemIdtf(identifierNode));
+  }
+  componentsToInstall = GetAvailableComponents(context, componentsToInstallIdentifiers);
 
   for (ScAddr componentAddr : componentsToInstall)
   {
@@ -104,8 +117,9 @@ bool ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, Comman
     executionResult &= InstallComponent(context, componentAddr);
     // TODO: need to process installation method from component specification in kb
   }
-
-  return executionResult;
+  if (executionResult)
+    return identifiersNodes;
+  return {};
 }
 
 /**
@@ -164,7 +178,12 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
     std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
     SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
     CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
-    bool dependencyResult = Execute(context, dependencyParameters);
+
+    ScAddr actionAddr =
+        utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
+    commandsModule::ScComponentManagerSearchAgent::TransformToScStruct(*context, actionAddr, dependencyParameters);
+
+    bool dependencyResult = Execute(context, actionAddr).empty();
 
     // Return empty if you couldn't install one from all dependencies why?
     if (!dependencyResult)

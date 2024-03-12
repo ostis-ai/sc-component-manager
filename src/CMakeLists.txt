@@ -25,5 +25,3 @@ if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(sc-component-manager-lib)
     target_clangformat_setup(sc-component-manager)
 endif()
-
-add_subdirectory(commandsModule)

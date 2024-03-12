@@ -26,7 +26,7 @@ class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 public:
   explicit ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath);
 
-  bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
   static void ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);

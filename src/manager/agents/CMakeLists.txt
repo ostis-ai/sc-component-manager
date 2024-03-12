@@ -1,0 +1,5 @@
+set(COMMON_MODULE_SRC ${CMAKE_CURRENT_LIST_DIR}/common-module)
+add_subdirectory(common-module)
+add_subdirectory(search-module)
+add_subdirectory(install-module)
+add_subdirectory(init-module)

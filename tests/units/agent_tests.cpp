@@ -44,9 +44,21 @@ TEST_F(AgentTest, AgentInit)
   context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
 
   utils::AgentUtils::applyAction(&context, testActionNode, WAIT_TIME);
-
   EXPECT_TRUE(context.HelperCheckEdge(
       scAgentsCommon::CoreKeynodes::question_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
+  std::vector<std::string> namesOfComponents = {"part_platform", "part_ui", "part_methods_tools", "concept_cat"};
+  ScAddrVector components;
+  ScIterator3Ptr const & componentsIterator = context.Iterator3(
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component,
+      ScType::EdgeAccessConstPosPerm,
+      ScType::NodeConst);
+  bool isComponentExists;
+  while (componentsIterator->Next())
+  {
+    isComponentExists = std::count(
+        namesOfComponents.begin(), namesOfComponents.end(), context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+    EXPECT_TRUE(isComponentExists);
+  }
 
   SC_AGENT_UNREGISTER(commandsModule::ScComponentManagerInitAgent)
 }
@@ -55,6 +67,7 @@ TEST_F(AgentTest, AgentSearch)
 {
   ScMemoryContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_search.scs");
+  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "specification.scs");
   ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
 
   ScAgentInit(true);
@@ -64,11 +77,21 @@ TEST_F(AgentTest, AgentSearch)
 
   context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
 
-  utils::AgentUtils::applyAction(&context, testActionNode, WAIT_TIME);
+  ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
 
   EXPECT_TRUE(context.HelperCheckEdge(
       scAgentsCommon::CoreKeynodes::question_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
 
+  ScIterator3Ptr const & componentsIterator =
+      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  if (componentsIterator->Next())
+  {
+    EXPECT_EQ("sc_web", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+  }
+  else
+  {
+    EXPECT_TRUE(false);
+  }
   SC_AGENT_UNREGISTER(commandsModule::ScComponentManagerSearchAgent)
 }
 
@@ -76,6 +99,7 @@ TEST_F(AgentTest, AgentInstall)
 {
   ScMemoryContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_install.scs");
+  loader.loadScsFile(context, MODULE_KB_PATH "specifications.scs");
   ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
 
   ScAgentInit(true);
@@ -85,10 +109,21 @@ TEST_F(AgentTest, AgentInstall)
 
   context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
 
-  utils::AgentUtils::applyAction(&context, testActionNode, WAIT_TIME);
+  ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
 
   EXPECT_TRUE(context.HelperCheckEdge(
       scAgentsCommon::CoreKeynodes::question_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
+
+  ScIterator3Ptr const & componentsIterator =
+      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  if (componentsIterator->Next())
+  {
+    EXPECT_EQ("part_ui", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+  }
+  else
+  {
+    EXPECT_TRUE(false);
+  }
 
   SC_AGENT_UNREGISTER(commandsModule::ScComponentManagerInstallAgent)
 }

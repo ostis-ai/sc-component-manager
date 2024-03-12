@@ -31,4 +31,11 @@ ScAddr ScComponentManagerKeynodes::nrel_installation_method;
 ScAddr ScComponentManagerKeynodes::nrel_alternative_addresses;
 ScAddr ScComponentManagerKeynodes::nrel_repository_address;
 ScAddr ScComponentManagerKeynodes::nrel_installation_script;
+ScAddr ScComponentManagerKeynodes::action_components_init;
+ScAddr ScComponentManagerKeynodes::action_components_search;
+ScAddr ScComponentManagerKeynodes::action_components_install;
+ScAddr ScComponentManagerKeynodes::rrel_author;
+ScAddr ScComponentManagerKeynodes::rrel_class;
+ScAddr ScComponentManagerKeynodes::rrel_explanation;
+ScAddr ScComponentManagerKeynodes::rrel_identifier;
 }  // namespace keynodes

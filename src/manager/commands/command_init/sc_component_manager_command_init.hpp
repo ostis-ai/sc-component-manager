@@ -20,7 +20,7 @@ public:
   {
   }
 
-  bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
   bool ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 

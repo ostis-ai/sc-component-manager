@@ -6,17 +6,16 @@
 
 #pragma once
 
-#include "commandsModule/keynodes/commands_keynodes.hpp"
-#include "commandsModule/agents/sc_component_manager_agent_search.hpp"
-
 #include <utility>
 
 #include "sc-agents-common/utils/CommonUtils.hpp"
+#include "sc-agents-common/utils/AgentUtils.hpp"
 
 #include "sc_component_manager_handler.hpp"
 #include "sc_component_manager_command.hpp"
 #include "command_init/sc_component_manager_command_init.hpp"
 #include "command_search/sc_component_manager_command_search.hpp"
+#include "command_search/sc_component_manager_agent_search.hpp"
 #include "command_install/sc_component_manager_command_install.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
@@ -41,18 +40,23 @@ public:
     auto const & it = m_actions.find(commandType);
     if (it != m_actions.end())
     {
-      ScComponentManagerCommand * commander = it->second;
+      ScAddr actionAddrClass;
+      if (it->first == "search")
+        actionAddrClass = keynodes::ScComponentManagerKeynodes::action_components_search;
+      if (it->first == "init")
+        actionAddrClass = keynodes::ScComponentManagerKeynodes::action_components_init;
+      if (it->first == "install")
+        actionAddrClass = keynodes::ScComponentManagerKeynodes::action_components_install;
+
       SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
-//      if (it->first == "search")
-//      {
-//        ScAddr actionAddr = CreateActionAddrWithClass(m_context, "action_components_search");
-          // there's an error
-//        ScComponentManagerSearchAgent::TransformToScStruct(*m_context, actionAddr, commandParameters);
-//        m_context->CreateEdge(
-//            ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, actionAddr);
-//        executionResult = true;
-//      }
-        executionResult = commander->Execute(m_context, m_commandParameters);
+
+      ScAddr actionAddr = utils::AgentUtils::formActionNode(m_context, actionAddrClass, {});
+      commandsModule::ScComponentManagerSearchAgent::TransformToScStruct(*m_context, actionAddr, commandParameters);
+
+      utils::AgentUtils::applyAction(m_context, actionAddr, 30000);
+
+      executionResult = m_context->HelperCheckEdge(
+          scAgentsCommon::CoreKeynodes::question_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
     }
     else
     {
@@ -62,13 +66,13 @@ public:
     return executionResult;
   }
 
-//  ScAddr CreateActionAddrWithClass(ScMemoryContext * context, std::string const & actionClassName)
-//  {
-//    ScAddr actionAddr = context->CreateNode(ScType::NodeConst);
-//    ScAddr actionClass = context->HelperFindBySystemIdtf(actionClassName);
-//    context->CreateEdge(ScType::EdgeAccessConstPosPerm, actionClass, actionAddr);
-//    return actionAddr;
-//  }
+  static ScAddr CreateActionAddrWithClass(ScMemoryContext * context, std::string const & actionClassName)
+  {
+    ScAddr actionAddr = context->CreateNode(ScType::NodeConst);
+    ScAddr actionClass = context->HelperFindBySystemIdtf(actionClassName);
+    context->CreateEdge(ScType::EdgeAccessConstPosPerm, actionClass, actionAddr);
+    return actionAddr;
+  }
 
   ~ScComponentManagerCommandHandler() override
   {

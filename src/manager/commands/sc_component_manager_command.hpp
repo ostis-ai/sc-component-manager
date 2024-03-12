@@ -16,7 +16,7 @@ using CommandParameters = std::map<std::string, std::vector<std::string>>;
 class ScComponentManagerCommand
 {
 public:
-  virtual bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) = 0;
+  virtual ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) = 0;
 
   virtual ~ScComponentManagerCommand() = default;
 };

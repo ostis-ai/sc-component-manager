@@ -14,7 +14,7 @@ class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 public:
   ScComponentManagerCommandSearch() = default;
 
-  bool Execute(ScMemoryContext * context, CommandParameters const & commandParameters) override;
+  ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
   std::string const COMPONENT_ALIAS = "_component";

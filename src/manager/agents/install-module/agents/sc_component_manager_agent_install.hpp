@@ -20,4 +20,4 @@ class ScComponentManagerInstallAgent : public ScAgent
 private:
   bool CheckAction(ScAddr const & actionAddr);
 };
-}  // namespace commandsModule
+}  // namespace installModule

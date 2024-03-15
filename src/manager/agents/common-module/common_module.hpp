@@ -15,4 +15,4 @@ class CommonModule : public ScModule
 
   sc_result ShutdownImpl() override;
 };
-}
+}  // namespace commonModule

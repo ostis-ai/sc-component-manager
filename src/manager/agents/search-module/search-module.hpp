@@ -15,4 +15,4 @@ class SearchModule : public ScModule
 
   sc_result ShutdownImpl() override;
 };
-}
+}  // namespace searchModule

@@ -21,9 +21,9 @@ class CommonUtils : public ScObject
 public:
   static std::map<std::string, std::string> managerParametersWithAgentRelations;
   static bool TransformToScStruct(
-    ScMemoryContext & m_memoryCtx,
-    ScAddr const & actionAddr,
-    std::map<std::string, std::vector<std::string>> const & commandParameters);
+      ScMemoryContext & m_memoryCtx,
+      ScAddr const & actionAddr,
+      std::map<std::string, std::vector<std::string>> const & commandParameters);
 };
 
-}  // namespace keynodes
+}  // namespace common_utils

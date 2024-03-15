@@ -14,7 +14,6 @@ sc_result InitModule::InitializeImpl()
     return SC_RESULT_ERROR;
   }
 
-
   SC_AGENT_REGISTER(ScComponentManagerInitAgent);
 
   return SC_RESULT_OK;

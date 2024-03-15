@@ -25,4 +25,4 @@ class ScComponentManagerSearchAgent : public ScAgent
 private:
   static bool CheckAction(ScMemoryContext & m_memoryCtx, ScAddr const & actionAddr, ScAddr const & actionAddrClass);
 };
-}
+}  // namespace searchModule

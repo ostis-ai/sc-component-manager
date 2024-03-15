@@ -1,14 +1,14 @@
 action_components_init
-<- sc_node_not_relation;
+<- sc_node_class;
 => nrel_main_idtf: [действие. Установить спецификации многократно используемых компонентов] (* <- lang_ru;; *);
 => nrel_main_idtf: [action. Components init] (* <- lang_en;; *);;
 
 action_components_install
-<- sc_node_not_relation;
+<- sc_node_clas;
 => nrel_main_idtf: [действие. Установить компоненты] (* <- lang_ru;; *);
 => nrel_main_idtf: [action. Components install] (* <- lang_en;; *);;
 
 action_components_search
-<- sc_node_not_relation;
-=> nrel_main_idtf: [действие. Найти компоненты] (* <- lang_ru;; *);
+<- sc_node_class;
+=> nrel_main_idtf: [действие. Найти спецификации компонентов] (* <- lang_ru;; *);
 => nrel_main_idtf: [action. Components search] (* <- lang_en;; *);;

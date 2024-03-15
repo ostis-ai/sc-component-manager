@@ -1,5 +1,5 @@
 #include <sc-agents-common/utils/AgentUtils.hpp>
-#include "keynodes/ScComponentManagerKeynodes.hpp"
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
 #include "utils/sc_component_manager_command_search.hpp"
 
 #include "sc_component_manager_agent_search.hpp"

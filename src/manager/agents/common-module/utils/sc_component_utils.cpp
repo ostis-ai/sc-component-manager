@@ -12,8 +12,10 @@
 #include <sc-builder/src/scs_loader.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
-#include "../../agents/common-module/keynodes/ScComponentManagerKeynodes.hpp"
+
 #include "sc_component_utils.hpp"
+
+#include "../../agents/common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 #include "../../agents/common-module/constants/command_constants.hpp"
 #include "../../agents/common-module/url_parser/repository_url_parser.hpp"
 

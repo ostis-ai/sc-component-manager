@@ -17,7 +17,7 @@
 #include "../agents/search-module/utils/sc_component_manager_command_search.hpp"
 #include "../agents/install-module/utils/sc_component_manager_command_install.hpp"
 
-#include "../agents/common-module/utils/common_utils.hpp"
+#include "../agents/common-module/module/utils/common_utils.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {

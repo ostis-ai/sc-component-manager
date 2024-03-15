@@ -1,6 +1,6 @@
 make_tests_from_folder(${CMAKE_CURRENT_LIST_DIR}/units
     NAME sc-component-manager-tests
-    DEPENDS sc-agents-common sc-memory sc-component-manager-lib
+    DEPENDS sc-agents-common sc-memory common-lib search-lib install-lib init-lib sc-component-manager
     INCLUDES ${SC_MEMORY_SRC}/tests/sc-memory/_test ${GLIB2_LIBRARIES}
 )
 

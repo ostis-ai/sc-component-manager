@@ -15,4 +15,4 @@ class InitModule : public ScModule
 
   sc_result ShutdownImpl() override;
 };
-}
+}  // namespace initModule

@@ -15,4 +15,4 @@ class InstallModule : public ScModule
 
   sc_result ShutdownImpl() override;
 };
-}
+}  // namespace installModule

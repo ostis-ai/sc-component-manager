@@ -5,7 +5,7 @@
  */
 
 #include <sc-agents-common/utils/CommonUtils.hpp>
-#include "../../../interface_manager/utils/sc_component_utils.hpp"
+#include "utils/sc_component_utils.hpp"
 #include "downloader_handler.hpp"
 
 /**

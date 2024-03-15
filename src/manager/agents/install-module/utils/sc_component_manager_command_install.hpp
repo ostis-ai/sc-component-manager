@@ -9,7 +9,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "keynodes/ScComponentManagerKeynodes.hpp"
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 #include "../../common-module/sc_component_manager_command.hpp"
 

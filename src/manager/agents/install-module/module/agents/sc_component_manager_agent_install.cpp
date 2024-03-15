@@ -29,7 +29,8 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
 
   componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component, config_path_kb});
   componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component, config_path_ps});
-  componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component, config_path_ui});
+  componentWithConfigPath.insert(
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component, config_path_ui});
 
   ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);
   ScAddrVector identifiersNodes = command.Execute(&m_memoryCtx, actionAddr);

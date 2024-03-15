@@ -6,11 +6,10 @@
 
 #include "sc_component_manager_command_install.hpp"
 #include <sc-memory/utils/sc_exec.hpp>
-#include "../../interface_manager/utils/sc_component_utils.hpp"
-#include "../agents/sc_component_manager_agent_install.hpp"
+#include "utils/sc_component_utils.hpp"
 
 #include "sc-agents-common/utils/AgentUtils.hpp"
-#include "../../agents/common-module/utils/common_utils.hpp"
+#include "../../agents/common-module/module/utils/common_utils.hpp"
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)

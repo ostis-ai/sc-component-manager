@@ -9,13 +9,13 @@
 #include <sc-agents-common/keynodes/coreKeynodes.hpp>
 #include "sc_test.hpp"
 
-#include "sc-agents-common/utils/CommonUtils.hpp"
 #include "sc-agents-common/utils/AgentUtils.hpp"
 
-#include "../manager/commands/command_init/sc_component_manager_agent_init.hpp"
-#include "../manager/commands/command_search/sc_component_manager_agent_search.hpp"
-#include "../manager/commands/command_install/sc_component_manager_agent_install.hpp"
-#include "../manager/commands/keynodes/ScComponentManagerKeynodes.hpp"
+#include "../../src/manager/agents/common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
+
+#include "../../src/manager/agents/init-module/module/agents/sc_component_manager_agent_init.hpp"
+#include "../../src/manager/agents/search-module/module/agents/sc_component_manager_agent_search.hpp"
+#include "../../src/manager/agents/install-module/module/agents/sc_component_manager_agent_install.hpp"
 
 using AgentTest = ScMemoryTest;
 ScsLoader loader;
@@ -39,7 +39,7 @@ TEST_F(AgentTest, AgentInit)
   ScAgentInit(true);
   initialize();
 
-  SC_AGENT_REGISTER(commandsModule::ScComponentManagerInitAgent)
+  SC_AGENT_REGISTER(initModule::ScComponentManagerInitAgent)
 
   context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
 
@@ -60,7 +60,7 @@ TEST_F(AgentTest, AgentInit)
     EXPECT_TRUE(isComponentExists);
   }
 
-  SC_AGENT_UNREGISTER(commandsModule::ScComponentManagerInitAgent)
+  SC_AGENT_UNREGISTER(initModule::ScComponentManagerInitAgent)
 }
 
 TEST_F(AgentTest, AgentSearch)
@@ -73,7 +73,7 @@ TEST_F(AgentTest, AgentSearch)
   ScAgentInit(true);
   initialize();
 
-  SC_AGENT_REGISTER(commandsModule::ScComponentManagerSearchAgent)
+  SC_AGENT_REGISTER(searchModule::ScComponentManagerSearchAgent)
 
   context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
 
@@ -84,15 +84,11 @@ TEST_F(AgentTest, AgentSearch)
 
   ScIterator3Ptr const & componentsIterator =
       context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-  if (componentsIterator->Next())
-  {
-    EXPECT_EQ("sc_web", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
-  }
-  else
-  {
-    EXPECT_TRUE(false);
-  }
-  SC_AGENT_UNREGISTER(commandsModule::ScComponentManagerSearchAgent)
+  EXPECT_TRUE(componentsIterator->Next());
+
+  EXPECT_EQ("sc_web", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+
+  SC_AGENT_UNREGISTER(searchModule::ScComponentManagerSearchAgent)
 }
 
 TEST_F(AgentTest, AgentInstall)
@@ -105,7 +101,7 @@ TEST_F(AgentTest, AgentInstall)
   ScAgentInit(true);
   initialize();
 
-  SC_AGENT_REGISTER(commandsModule::ScComponentManagerInstallAgent)
+  SC_AGENT_REGISTER(installModule::ScComponentManagerInstallAgent)
 
   context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
 
@@ -116,14 +112,9 @@ TEST_F(AgentTest, AgentInstall)
 
   ScIterator3Ptr const & componentsIterator =
       context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-  if (componentsIterator->Next())
-  {
-    EXPECT_EQ("part_ui", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
-  }
-  else
-  {
-    EXPECT_TRUE(false);
-  }
+  EXPECT_TRUE(componentsIterator->Next());
 
-  SC_AGENT_UNREGISTER(commandsModule::ScComponentManagerInstallAgent)
+  EXPECT_EQ("part_ui", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+
+  SC_AGENT_UNREGISTER(installModule::ScComponentManagerInstallAgent)
 }

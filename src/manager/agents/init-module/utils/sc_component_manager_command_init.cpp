@@ -7,7 +7,7 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include "../../common-module/downloader/downloader.hpp"
 #include "sc_component_manager_command_init.hpp"
-#include "../../interface_manager/utils/sc_component_utils.hpp"
+#include "utils/sc_component_utils.hpp"
 
 ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {

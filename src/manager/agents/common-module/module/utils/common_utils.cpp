@@ -7,7 +7,7 @@
 #include "common_utils.hpp"
 
 #include "sc-memory/sc_memory.hpp"
-#include "keynodes/ScComponentManagerKeynodes.hpp"
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 namespace common_utils
 {
@@ -56,10 +56,7 @@ bool CommonUtils::TransformToScStruct(
       {
         value = m_memoryCtx.HelperFindBySystemIdtf(valueOfParameter);
         if (!value.IsValid())
-        {
-          value = m_memoryCtx.CreateNode(ScType::NodeConst);
-          m_memoryCtx.HelperSetSystemIdtf(valueOfParameter, value);
-        }
+          continue;
       }
       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, set, value);
     }

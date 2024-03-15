@@ -9,7 +9,7 @@ set(SC_COMPONENT_MANAGER_SRC "${CMAKE_SOURCE_DIR}/src")
 include_directories(${SC_COMPONENT_MANAGER_SRC} ${SC_MEMORY_SRC} ${GLIB2_INCLUDE_DIRS} ${SC_TOOLS_SRC} ${COMMON_MODULE_SRC} ${INTERFACE_SRC})
 
 add_executable(sc-component-manager "${SC_COMPONENT_MANAGER_SRC}/main.cpp")
-target_link_libraries(sc-component-manager sc-memory ${GLIB2_LIBRARIES} sc-config-utils interface)
+target_link_libraries(sc-component-manager sc-memory ${GLIB2_LIBRARIES} sc-config-utils console-interface)
 
 set_target_properties(sc-component-manager PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${SC_BIN_PATH})
 

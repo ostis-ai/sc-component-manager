@@ -16,7 +16,7 @@ ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, S
   ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
       context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
 
-  bool executionResult = ProcessRepositories(context, availableRepositories);
+  ProcessRepositories(context, availableRepositories);
 
   ScAddrVector components;
   ScIterator3Ptr const & componentsIterator = context->Iterator3(
@@ -28,9 +28,8 @@ ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, S
     SC_LOG_DEBUG(context->HelperGetSystemIdtf(componentsIterator->Get(2)));
     components.push_back(componentsIterator->Get(2));
   }
-  if (executionResult)
-    return components;
-  return {};
+
+  return components;
 }
 
 /**

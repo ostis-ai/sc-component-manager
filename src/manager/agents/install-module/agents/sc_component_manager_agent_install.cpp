@@ -25,13 +25,13 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
   std::string const config_path_ps =
       "/home/anna/projects/ostis-metasystem/platform-dependent-components/problem-solver";
   std::string const config_path_ui = "/home/anna/projects/ostis-metasystem/platform-dependent-components/interface";
-  std::map<ScAddr, std::string, ScAddrLessFunc> config_path;
+  std::map<ScAddr, std::string, ScAddrLessFunc> componentWithConfigPath;
 
-  config_path.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component, config_path_kb});
-  config_path.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component, config_path_ps});
-  config_path.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component, config_path_ui});
+  componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component, config_path_kb});
+  componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component, config_path_ps});
+  componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component, config_path_ui});
 
-  ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(config_path);
+  ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);
   ScAddrVector identifiersNodes = command.Execute(&m_memoryCtx, actionAddr);
 
   utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, identifiersNodes, true);
@@ -44,26 +44,4 @@ bool ScComponentManagerInstallAgent::CheckAction(ScAddr const & actionAddr)
 {
   return m_memoryCtx.HelperCheckEdge(
       keynodes::ScComponentManagerKeynodes::action_components_install, actionAddr, ScType::EdgeAccessConstPosPerm);
-}
-
-ScAddrVector ScComponentManagerInstallAgent::GetParameterNodeUnderRelation(
-    ScMemoryContext & m_memoryCtx,
-    ScAddr const & actionAddr,
-    ScAddr const & relation)
-{
-  ScAddr parameterNode;
-  ScAddrVector components;
-  ScIterator5Ptr const & parameterIterator = m_memoryCtx.Iterator5(
-      actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
-  if (parameterIterator->Next())
-  {
-    parameterNode = parameterIterator->Get(2);
-    ScIterator3Ptr const & componentsIterator =
-        m_memoryCtx.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-    while (componentsIterator->Next())
-    {
-      components.push_back(componentsIterator->Get(2));
-    }
-  }
-  return components;
 }

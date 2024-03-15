@@ -10,7 +10,7 @@ sc_result InitModule::InitializeImpl()
 {
   if (!InitModule::InitGlobal())
   {
-    SC_LOG_ERROR("InstallModule is deactivated");
+    SC_LOG_ERROR("InitModule is deactivated");
     return SC_RESULT_ERROR;
   }
 

@@ -89,7 +89,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
   bool executionResult = true;
   std::vector<std::string> componentsToInstallIdentifiers;
   ScAddrVector componentsToInstall;
-  ScAddrVector identifiersNodes = installModule::ScComponentManagerInstallAgent::GetParameterNodeUnderRelation(
+  ScAddrVector identifiersNodes = common_utils::CommonUtils::GetNodesUnderParameter(
       *context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_identifier);
 
   if (identifiersNodes.empty())
@@ -118,9 +118,8 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
     executionResult &= InstallComponent(context, componentAddr);
     // TODO: need to process installation method from component specification in kb
   }
-  if (executionResult)
-    return identifiersNodes;
-  return {};
+
+  return identifiersNodes;
 }
 
 /**
@@ -180,7 +179,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
     SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
     CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
 
-    ScAddr actionAddr =
+    ScAddr const actionAddr =
         utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
     common_utils::CommonUtils::TransformToScStruct(*context, actionAddr, dependencyParameters);
 

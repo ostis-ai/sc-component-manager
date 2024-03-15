@@ -12,11 +12,6 @@ class ScComponentManagerInstallAgent : public ScAgent
   SC_CLASS(Agent, Event(scAgentsCommon::CoreKeynodes::question_initiated, ScEvent::Type::AddOutputEdge))
   SC_GENERATED_BODY()
 
-  static ScAddrVector GetParameterNodeUnderRelation(
-      ScMemoryContext & m_memoryCtx,
-      ScAddr const & actionAddr,
-      ScAddr const & relation);
-
 private:
   bool CheckAction(ScAddr const & actionAddr);
 };

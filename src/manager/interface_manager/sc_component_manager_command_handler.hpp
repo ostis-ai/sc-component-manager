@@ -42,12 +42,8 @@ public:
     if (it != m_actions.end())
     {
       ScAddr actionAddrClass;
-      if (it->first == "search")
-        actionAddrClass = keynodes::ScComponentManagerKeynodes::action_components_search;
-      if (it->first == "init")
-        actionAddrClass = keynodes::ScComponentManagerKeynodes::action_components_init;
-      if (it->first == "install")
-        actionAddrClass = keynodes::ScComponentManagerKeynodes::action_components_install;
+
+      actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(it->first);
 
       SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
 
@@ -65,14 +61,6 @@ public:
     }
 
     return executionResult;
-  }
-
-  static ScAddr CreateActionAddrWithClass(ScMemoryContext * context, std::string const & actionClassName)
-  {
-    ScAddr actionAddr = context->CreateNode(ScType::NodeConst);
-    ScAddr actionClass = context->HelperFindBySystemIdtf(actionClassName);
-    context->CreateEdge(ScType::EdgeAccessConstPosPerm, actionClass, actionAddr);
-    return actionAddr;
   }
 
   ~ScComponentManagerCommandHandler() override

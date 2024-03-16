@@ -1,6 +1,6 @@
 # sc-component-manager
 
-This repository is a storage of the Component manager of the [OSTIS Project](https://github.com/ostis-ai/ostis-project).
+It is the repository for the Component manager of the [OSTIS Project](https://github.com/ostis-ai).
 It allows ostis-systems to install reusable components for intelligent systems made with the [**OSTIS Technology**](https://github.com/ostis-ai).
 
 ## Installation
@@ -62,7 +62,7 @@ Possible run flags:
 
 File specification.scs contains description of two sections: **components** and **repositories**.
 
-**Repositories** have links for source (GitHub, Google Drive etc.) with specification file, **components** have links to source with specification of component.
+**Repositories** have links for source on GitHub with specification file, **components** have links to source with specification of component.
 
 ### Repository specification
 

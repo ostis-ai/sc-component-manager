@@ -19,11 +19,11 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
   {
     std::map<ScAddr, std::string, ScAddrLessFunc> const & componentsPath = {
         {{keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
-          scComponentManagerParams.at(KB_COMPONENT_PATH)},
+          scComponentManagerParams.Get<std::string>(KB_COMPONENT_PATH)},
          {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
-          scComponentManagerParams.at(PS_COMPONENT_PATH)},
+          scComponentManagerParams.Get<std::string>(PS_COMPONENT_PATH)},
          {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component,
-          scComponentManagerParams.at(INTERFACE_COMPONENT_PATH)}}};
+          scComponentManagerParams.Get<std::string>(INTERFACE_COMPONENT_PATH)}}};
 
     std::unique_ptr<ScComponentManager> scComponentManager =
         std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(componentsPath, memoryParams));

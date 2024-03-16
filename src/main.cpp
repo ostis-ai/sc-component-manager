@@ -50,7 +50,7 @@ sc_int main(sc_int argc, sc_char * argv[])
        "log_file"}};
   ScConfigGroup configManager = config["sc-component-manager"];
   for (std::string const & key : *configManager)
-    params.insert({key, configManager[key]});
+    params.Insert({key, configManager[key]});
 
   std::vector<std::vector<std::string>> keys = {
       {"extensions_path", "e"}, {"repo_path", "r"}, {"verbose", "v"}, {"clear"}};

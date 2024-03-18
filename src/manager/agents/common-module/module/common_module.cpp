@@ -1,6 +1,7 @@
 #include "common_module.hpp"
 
 #include "keynodes/ScComponentManagerKeynodes.hpp"
+#include "utils/common_utils.hpp"
 
 using namespace commonModule;
 
@@ -15,6 +16,7 @@ sc_result CommonModule::InitializeImpl()
   }
 
   keynodes::ScComponentManagerKeynodes::InitGlobal();
+  common_utils::CommonUtils::InitParametersMap();
 
   return SC_RESULT_OK;
 }

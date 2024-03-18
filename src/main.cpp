@@ -38,6 +38,8 @@ sc_int main(sc_int argc, sc_char * argv[])
   if (options.Has({"config", "c"}))
     configFilePath = options[{"config", "c"}].second;
 
+  ScMemory::ms_configPath = configFilePath;
+
   ScParams params{options, {}};
 
   ScConfig config{
@@ -59,6 +61,9 @@ sc_int main(sc_int argc, sc_char * argv[])
   ScMemoryConfig memoryConfig{config, memoryParams};
 
   ScMemory::Initialize(memoryConfig.GetParams());
+
+  common_utils::CommonUtils::InitParametersMap();
+  ;
   keynodes::ScComponentManagerKeynodes::InitGlobal();
 
   std::unique_ptr<ScComponentManager> scComponentManager =

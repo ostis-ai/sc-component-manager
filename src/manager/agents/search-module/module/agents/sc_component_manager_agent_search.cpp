@@ -4,6 +4,8 @@
 
 #include "sc_component_manager_agent_search.hpp"
 
+#include "sc-config-utils/sc-config/sc_config.hpp"
+
 using namespace searchModule;
 using namespace keynodes;
 
@@ -11,14 +13,12 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerSearchAgent)
 {
   ScAddr const & actionAddr = otherAddr;
 
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
   if (!CheckAction(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::action_components_search))
   {
     return SC_RESULT_OK;
   }
 
   SC_LOG_DEBUG("ScComponentManagerSearchAgent started");
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
 
   ScComponentManagerCommandSearch command = ScComponentManagerCommandSearch();
   ScAddrVector components = command.Execute(&m_memoryCtx, actionAddr);

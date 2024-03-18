@@ -3,12 +3,13 @@
 
 #include "sc_component_manager_agent_init.hpp"
 
+#include "sc-config-utils/sc-config/sc_config.hpp"
+
 using namespace initModule;
 using namespace keynodes;
 
 SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
 {
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
   ScAddr const & actionAddr = otherAddr;
 
   if (!CheckAction(actionAddr))
@@ -18,11 +19,13 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
 
   SC_LOG_DEBUG("ScComponentManagerInitAgent started");
 
-  //  TODO: change config_path
-  std::string const config_path = "/home/anna/projects/ostis-metasystem/sc-models/knowledge-base";
+  ScConfig config{ScMemory::ms_configPath, {"knowledge_base_components_path"}};
+  ScConfigGroup configManager = config["sc-component-manager"];
 
-  ScComponentManagerCommandInit command = ScComponentManagerCommandInit(config_path);
-  ScAddrVector components = command.Execute(&m_memoryCtx, {});
+  ScComponentManagerCommandInit command =
+      ScComponentManagerCommandInit(configManager["knowledge_base_components_path"]);
+
+  ScAddrVector components = command.Execute(&m_memoryCtx, actionAddr);
 
   utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, components, true);
 

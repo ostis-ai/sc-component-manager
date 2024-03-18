@@ -4,6 +4,8 @@
 
 #include "sc_component_manager_agent_install.hpp"
 
+#include "sc-config-utils/sc-config/sc_config.hpp"
+
 using namespace installModule;
 using namespace keynodes;
 
@@ -18,19 +20,23 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
   }
 
   SC_LOG_DEBUG("ScComponentManagerInstallAgent started");
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
 
-  // TODO: change config_path_**
-  std::string const config_path_kb = "/home/anna/projects/ostis-metasystem/sc-models/knowledge-base";
-  std::string const config_path_ps =
-      "/home/anna/projects/ostis-metasystem/platform-dependent-components/problem-solver";
-  std::string const config_path_ui = "/home/anna/projects/ostis-metasystem/platform-dependent-components/interface";
   std::map<ScAddr, std::string, ScAddrLessFunc> componentWithConfigPath;
 
-  componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component, config_path_kb});
-  componentWithConfigPath.insert({keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component, config_path_ps});
+  ScConfig config{
+      ScMemory::ms_configPath,
+      {"knowledge_base_components_path", "problem_solver_components_path", "interface_components_path"}};
+  ScConfigGroup configManager = config["sc-component-manager"];
+
   componentWithConfigPath.insert(
-      {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component, config_path_ui});
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
+       configManager["knowledge_base_components_path"]});
+  componentWithConfigPath.insert(
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
+       configManager["problem_solver_components_path"]});
+  componentWithConfigPath.insert(
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component,
+       configManager["interface_components_path"]});
 
   ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);
   ScAddrVector identifiersNodes = command.Execute(&m_memoryCtx, actionAddr);

@@ -18,6 +18,7 @@
 #include "../agents/install-module/utils/sc_component_manager_command_install.hpp"
 
 #include "../agents/common-module/module/utils/common_utils.hpp"
+#include "../agents/common-module/module/common_module.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {
@@ -42,11 +43,15 @@ public:
     if (it != m_actions.end())
     {
       ScAddr actionAddrClass;
-
-      actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(it->first);
-
-      SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
-
+      try
+      {
+        actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(it->first);
+        SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
+      }
+      catch (std::out_of_range const & ex)
+      {
+        SC_LOG_ERROR(ex.what());
+      }
       ScAddr actionAddr = utils::AgentUtils::formActionNode(m_context, actionAddrClass, {});
       common_utils::CommonUtils::TransformToScStruct(*m_context, actionAddr, commandParameters);
 

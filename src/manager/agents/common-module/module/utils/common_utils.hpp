@@ -9,17 +9,14 @@
 #include "sc-memory/sc_addr.hpp"
 #include "sc-memory/sc_object.hpp"
 
-#include "common_utils.generated.hpp"
-
 namespace common_utils
 {
-class CommonUtils : public ScObject
+class CommonUtils
 {
-  SC_CLASS()
-  SC_GENERATED_BODY()
-
 public:
   static std::map<std::string, ScAddr> managerParametersWithAgentRelations;
+
+  static void InitParametersMap();
 
   static bool TransformToScStruct(
       ScMemoryContext & m_memoryCtx,
@@ -35,8 +32,11 @@ public:
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,
       ScAddr const & relation);
+
   static std::map<std::string, ScAddr> GetElementsOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & set);
+
   static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & set);
+
   static std::map<std::string, std::vector<std::string>> GetCommandParameters(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr);

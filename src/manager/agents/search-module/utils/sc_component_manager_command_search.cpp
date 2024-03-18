@@ -61,10 +61,24 @@ ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context,
   std::vector<std::string> componentsIdtfs;
   componentsIdtfs = SearchComponents(context, searchComponentTemplate, linksValues);
   ScAddrVector components;
+  ScAddr component;
   for (std::string const & componentIdtf : componentsIdtfs)
   {
-    SC_LOG_INFO("ScComponentManager: " + componentIdtf);
-    components.push_back(context->HelperFindBySystemIdtf(componentIdtf));
+    component = context->HelperFindBySystemIdtf(componentIdtf);
+    ScIterator3Ptr itSpecification =
+        context->Iterator3(ScType::NodeConstStruct, ScType::EdgeAccessConstPosPerm, component);
+    while (itSpecification->Next())
+    {
+      if (context->HelperCheckEdge(
+              keynodes::ScComponentManagerKeynodes::concept_reusable_component_specification,
+              itSpecification->Get(0),
+              ScType::EdgeAccessConstPosPerm))
+      {
+        SC_LOG_INFO("ScComponentManager: " + context->HelperGetSystemIdtf(itSpecification->Get(0)));
+        components.push_back(itSpecification->Get(0));
+        break;
+      }
+    }
   }
 
   return components;

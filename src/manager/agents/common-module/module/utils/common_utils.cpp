@@ -11,14 +11,19 @@
 
 namespace common_utils
 {
-std::map<std::string, ScAddr> CommonUtils::managerParametersWithAgentRelations = {
-    {"author", keynodes::ScComponentManagerKeynodes::rrel_author},
-    {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
-    {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
-    {"idtf", keynodes::ScComponentManagerKeynodes::rrel_identifier},
-    {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
-    {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
-    {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};
+std::map<std::string, ScAddr> CommonUtils::managerParametersWithAgentRelations;
+
+void CommonUtils::InitParametersMap()
+{
+  managerParametersWithAgentRelations = {
+      {"author", keynodes::ScComponentManagerKeynodes::rrel_author},
+      {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
+      {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
+      {"idtf", keynodes::ScComponentManagerKeynodes::rrel_identifier},
+      {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
+      {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
+      {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};
+}
 
 bool CommonUtils::TransformToScStruct(
     ScMemoryContext & m_memoryCtx,
@@ -56,7 +61,10 @@ bool CommonUtils::TransformToScStruct(
       {
         value = m_memoryCtx.HelperFindBySystemIdtf(valueOfParameter);
         if (!value.IsValid())
+        {
+          SC_LOG_WARNING("Transform to sc-structure: Unknown value: " + valueOfParameter);
           continue;
+        }
       }
       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, set, value);
     }

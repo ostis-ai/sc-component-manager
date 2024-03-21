@@ -196,11 +196,25 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
     }
   }
 
-  downloaderHandler->setDownloadDir(m_downloadDir);
-  bool result = downloaderHandler->DownloadComponent(context, componentAddr);
-  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, m_downloadDir))
+  // Get url address from where to download component
+  std::string urlAddress;
+  ScAddr const & componentAddress = componentUtils::SearchUtils::GetComponentAddress(context, componentAddr);
+  context->GetLinkContent(componentAddress, urlAddress);
+
+  // Download component source code from GitHub repository
+  std::shared_ptr<Downloader> m_downloader = std::make_shared<DownloaderGit>();
+  bool result = m_downloader->DownloadRepository(m_downloadDir, urlAddress);
+
+  // Load scs files from the new component directory
+  std::stringstream downloadPath;
+  RepositoryUrlParser parser;
+  parser.Parse(urlAddress);
+  std::string const repositoryName = parser.GetRepositoryName();
+  std::string const directoryName = parser.GetDirectoryName();
+  downloadPath << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName << SpecificationConstants::DIRECTORY_DELIMITER << directoryName;
+  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, downloadPath.str(), SpecificationConstants::SPECIFICATION_FILENAME))
   {
-    SC_LOG_WARNING("ScComponentManagerCommandInstall: Not all *.scs files are loaded from " << m_downloadDir);
+    SC_LOG_WARNING("ScComponentManagerCommandInstall: there is no *.scs files to load from " << m_downloadDir);
   }
 
   return result;

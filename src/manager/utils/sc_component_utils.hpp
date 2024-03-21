@@ -46,7 +46,7 @@ public:
 class LoadUtils
 {
 public:
-  static bool LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath);
+  static bool LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath, std::string const & excludedFiles = "");
 };
 
 }  // namespace componentUtils

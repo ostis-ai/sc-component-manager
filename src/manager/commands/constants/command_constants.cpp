@@ -7,7 +7,7 @@
 #include "command_constants.hpp"
 
 std::string const SpecificationConstants::SPECIFICATION_FILENAME = "specification.scs";
-std::string const SpecificationConstants::SCS_EXTENSION = "scs";
+std::string const SpecificationConstants::SCS_EXTENSION = ".scs";
 char const SpecificationConstants::DIRECTORY_DELIMITER = '/';
 
 std::string const GitHubConstants::GIT_CLONE = "git clone";

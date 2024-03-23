@@ -66,7 +66,8 @@ bool CommonUtils::TransformToScStruct(
         if (!value.IsValid())
         {
           SC_LOG_WARNING("Transform to sc-structure: Unknown value: " + valueOfParameter);
-          continue;
+          value = m_memoryCtx.CreateNode(ScType::NodeConst);
+          m_memoryCtx.HelperSetSystemIdtf(valueOfParameter, value);
         }
       }
       m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, set, value);

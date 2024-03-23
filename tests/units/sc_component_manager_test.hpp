@@ -10,7 +10,7 @@
 
 #include "sc-memory/sc_memory.hpp"
 
-#include "../../src/manager/interface_manager/command_parser/sc_component_manager_command_parser.hpp"
+#include "../../src/manager/console-interface/command_parser/sc_component_manager_command_parser.hpp"
 
 #include <memory>
 
@@ -22,9 +22,7 @@ protected:
     m_commandParser = std::make_unique<ScComponentManagerParser>();
   }
 
-  void TearDown() override
-  {
-  }
+  void TearDown() override {}
 
 protected:
   std::unique_ptr<ScComponentManagerParser> m_commandParser;

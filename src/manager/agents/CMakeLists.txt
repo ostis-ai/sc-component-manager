@@ -1,5 +1,5 @@
-set(COMMON_MODULE_SRC "${CMAKE_CURRENT_LIST_DIR}/common-module")
 set(AGENTS_SRC "${SC_COMPONENT_MANAGER_SRC}/agents")
+
 add_subdirectory(common-module)
 add_subdirectory(search-module)
 add_subdirectory(install-module)

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.11)
 project(sc-component-manager)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -31,24 +31,8 @@ set(SC_MEMORY_SRC "${SC_MACHINE_PATH}/sc-memory/")
 set(SC_KPM_SRC "${SC_MACHINE_PATH}/sc-kpm/")
 set(SC_TOOLS_SRC "${SC_MACHINE_PATH}/sc-tools/")
 
-include_directories(${SC_MEMORY_SRC} ${SC_KPM_SRC} ${SC_TOOLS_SRC})
-
-if(${WIN32})
-    message(SEND_ERROR "sc-component-manager isn't supported on Windows OS.")
-endif(${WIN32})
-
-# find dependencies
-if (${UNIX})
-    include(FindPkgConfig)
-    pkg_check_modules(GLIB2 REQUIRED glib-2.0)
-    pkg_check_modules(GLIB2_MODULE REQUIRED gmodule-2.0)
-
-    set(GLIB2_INCLUDE_DIRS "${GLIB2_INCLUDE_DIRS}" "/usr/lib/x86_64-linux-gnu/glib-2.0/include/" "${GLIB2_MODULE}")
-    set(GLIB2_LIBRARIES "${GLIB2_LIBRARIES}" "${GLIB2_MODULE_LIBRARIES}")
-
-    # for std::thread support
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-endif(${UNIX})
+include("${CMAKE_CURRENT_SOURCE_DIR}/dependencies.cmake")
+sc_target_dependencies()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "-std=c++17 -Wall")

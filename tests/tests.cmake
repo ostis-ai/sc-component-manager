@@ -1,10 +1,7 @@
-SET(AGENTS_SRC "${CMAKE_CURRENT_LIST_DIR}/../src/manager/agents")
-SET(CONSOLE_SRC "${CMAKE_CURRENT_LIST_DIR}/../src/manager/console-interface")
-
 make_tests_from_folder(${CMAKE_CURRENT_LIST_DIR}/units
     NAME sc-component-manager-tests
-    DEPENDS sc-agents-common sc-memory sc-core common-lib search-lib install-lib init-lib
-    INCLUDES ${SC_MEMORY_SRC}/tests/sc-memory/_test ${GLIB2_LIBRARIES} ${AGENTS_SRC} ${CONSOLE_SRC}
+    DEPENDS sc-memory sc-core console-interface
+    INCLUDES ${SC_MEMORY_SRC}/tests/sc-memory/_test
 )
 
 if(${SC_CLANG_FORMAT_CODE})

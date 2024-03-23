@@ -9,6 +9,8 @@
 #include "utils/sc_component_utils.hpp"
 
 #include "sc-agents-common/utils/AgentUtils.hpp"
+#include "sc-agents-common/keynodes/coreKeynodes.hpp"
+
 #include "../../agents/common-module/module/utils/common_utils.hpp"
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
@@ -88,8 +90,8 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
   bool executionResult = true;
   std::vector<std::string> componentsToInstallIdentifiers;
   ScAddrVector componentsToInstall;
-  ScAddrVector identifiersNodes = common_utils::CommonUtils::GetNodesUnderParameter(
-      *context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_identifier);
+  ScAddrVector identifiersNodes =
+      common_utils::CommonUtils::GetNodesUnderParameter(*context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
 
   if (identifiersNodes.empty())
   {

@@ -311,8 +311,6 @@ std::string InstallUtils::GetComponentDirName(
  * Load all .scs files in directory
  * @param context current sc-memory context
  * @param dirPath directory path
- * @param excludedFiles filenames that will be skip while loading scs files.
- * It made to prevent double loading specification.scs after init command
  */
 bool LoadUtils::LoadScsFilesInDir(
     ScMemoryContext * context,
@@ -324,7 +322,6 @@ bool LoadUtils::LoadScsFilesInDir(
 
   if (!std::filesystem::exists(dirPath))
   {
-    SC_LOG_WARNING("LoadScsFiles: directory " << dirPath << " is not exists");
     return result;
   }
 

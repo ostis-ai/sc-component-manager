@@ -92,7 +92,11 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
         m_memoryCtx.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentsIterator->Next())
     {
-      components.push_back(componentsIterator->Get(2));
+      //we can't download "empty" nodes
+      if(!m_memoryCtx.HelperGetSystemIdtf(componentsIterator->Get(2)).empty())
+      {
+        components.push_back(componentsIterator->Get(2));
+      }
     }
   }
   return components;

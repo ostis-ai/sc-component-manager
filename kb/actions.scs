@@ -4,7 +4,7 @@ action_components_init
 => nrel_main_idtf: [action. Components init] (* <- lang_en;; *);;
 
 action_components_install
-<- sc_node_clas;
+<- sc_node_class;
 => nrel_main_idtf: [действие. Установить компоненты] (* <- lang_ru;; *);
 => nrel_main_idtf: [action. Components install] (* <- lang_en;; *);;
 

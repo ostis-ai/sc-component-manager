@@ -1,4 +1,4 @@
 test_action_node
 <- question;
 <- action_components_init;
--> rrel_identifier: ... (* -> part_ui;; *);;
+-> rrel_1: ... (* -> part_ui;; *);;

@@ -6,7 +6,10 @@
 
 #include "common_utils.hpp"
 
+#include "sc-agents-common/keynodes/coreKeynodes.hpp"
+
 #include "sc-memory/sc_memory.hpp"
+
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 namespace common_utils
@@ -19,7 +22,7 @@ void CommonUtils::InitParametersMap()
       {"author", keynodes::ScComponentManagerKeynodes::rrel_author},
       {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
       {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
-      {"idtf", keynodes::ScComponentManagerKeynodes::rrel_identifier},
+      {"idtf", scAgentsCommon::CoreKeynodes::rrel_1},
       {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
       {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
       {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};

@@ -9,4 +9,3 @@ if(${SC_CLANG_FORMAT_CODE})
 endif()
 
 add_definitions(-DMODULE_TEST_SRC_PATH="${CMAKE_CURRENT_LIST_DIR}")
-add_definitions(-DMODULE_KB_PATH="${CMAKE_CURRENT_LIST_DIR}/../kb/")

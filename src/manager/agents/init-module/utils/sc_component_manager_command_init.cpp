@@ -75,8 +75,8 @@ bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
   {
     downloaderHandler->DownloadSpecification(context, componentSpecificationAddr);
-    std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER +
-                                          context->HelperGetSystemIdtf(componentSpecificationAddr);
+    std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER
+                                          + context->HelperGetSystemIdtf(componentSpecificationAddr);
     componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
 
     ScAddrVector componentDependencies =

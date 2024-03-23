@@ -34,7 +34,7 @@ bool CommonUtils::TransformToScStruct(
   ScAddr parameterRRelNode;
   ScAddr edge;
   ScAddr set;
-  for (const auto & parameter : commandParameters)
+  for (auto const & parameter : commandParameters)
   {
     try
     {

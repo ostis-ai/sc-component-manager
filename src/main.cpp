@@ -71,7 +71,8 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   std::atomic_bool isRun = {SC_TRUE};
   utils::ScSignalHandler::Initialize();
-  utils::ScSignalHandler::m_onTerminate = [&isRun]() {
+  utils::ScSignalHandler::m_onTerminate = [&isRun]()
+  {
     isRun = SC_FALSE;
   };
 

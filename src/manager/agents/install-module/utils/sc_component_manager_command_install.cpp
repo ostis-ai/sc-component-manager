@@ -63,14 +63,14 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 
   // TODO: remove cycle after removing the init-command
   std::set<std::string> setOfScripts;
-  for (const std::string & script : scripts)
+  for (std::string const & script : scripts)
   {
     setOfScripts.insert(script);
   }
 
-  for (const std::string & script : setOfScripts)
+  for (std::string const & script : setOfScripts)
   {
-    const std::string & componentDirName =
+    std::string const & componentDirName =
         componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
 
     std::stringstream command;
@@ -229,8 +229,10 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
   parser.Parse(urlAddress);
   std::string const repositoryName = parser.GetRepositoryName();
   std::string const directoryName = parser.GetDirectoryName();
-  downloadPath << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName << SpecificationConstants::DIRECTORY_DELIMITER << directoryName;
-  if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, downloadPath.str(), SpecificationConstants::SPECIFICATION_FILENAME))
+  downloadPath << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
+               << SpecificationConstants::DIRECTORY_DELIMITER << directoryName;
+  if (!componentUtils::LoadUtils::LoadScsFilesInDir(
+          context, downloadPath.str(), SpecificationConstants::SPECIFICATION_FILENAME))
   {
     SC_LOG_WARNING("ScComponentManagerCommandInstall: there is no *.scs files to load from " << downloadPath.str());
   }

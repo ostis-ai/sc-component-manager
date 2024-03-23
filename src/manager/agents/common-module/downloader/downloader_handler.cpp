@@ -92,7 +92,7 @@ bool DownloaderHandler::DownloadSpecification(ScMemoryContext * context, ScAddr 
   return true;
 }
 
-bool DownloaderHandler::DownloadComponent(ScMemoryContext * context, const ScAddr & componentAddr)
+bool DownloaderHandler::DownloadComponent(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   std::string urlAddress;
 

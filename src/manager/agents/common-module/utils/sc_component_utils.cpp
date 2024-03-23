@@ -237,7 +237,7 @@ std::vector<std::string> InstallUtils::GetInstallScripts(ScMemoryContext * conte
   while (installScriptsIterator->Next())
   {
     std::string script;
-    const ScAddr & scriptAddrs = installScriptsIterator->Get(2);
+    ScAddr const & scriptAddrs = installScriptsIterator->Get(2);
     context->GetLinkContent(scriptAddrs, script);
     if (!script.empty())
     {
@@ -291,7 +291,7 @@ std::string InstallUtils::GetComponentAddressStr(ScMemoryContext * context, ScAd
 std::string InstallUtils::GetComponentDirName(
     ScMemoryContext * context,
     ScAddr const & componentAddr,
-    const std::string & specificationsPath)
+    std::string const & specificationsPath)
 {
   // Find a repositoryLink as https://github.com/MakarenkoAI/sc-web
   std::string componentAddressStr = GetComponentAddressStr(context, componentAddr);
@@ -314,7 +314,10 @@ std::string InstallUtils::GetComponentDirName(
  * @param excludedFiles filenames that will be skip while loading scs files.
  * It made to prevent double loading specification.scs after init command
  */
-bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath, std::string const & excludedFiles)
+bool LoadUtils::LoadScsFilesInDir(
+    ScMemoryContext * context,
+    std::string const & dirPath,
+    std::string const & excludedFiles)
 {
   bool result = false;
   ScsLoader loader;

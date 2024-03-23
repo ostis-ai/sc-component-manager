@@ -38,7 +38,7 @@ public:
   static std::string GetComponentDirName(
       ScMemoryContext * context,
       ScAddr const & componentAddr,
-      const std::string & specificationsPath);
+      std::string const & specificationsPath);
 
   static std::vector<std::string> GetInstallScripts(ScMemoryContext * context, ScAddr const & componentAddr);
 };
@@ -46,7 +46,10 @@ public:
 class LoadUtils
 {
 public:
-  static bool LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath, std::string const & excludedFiles = "");
+  static bool LoadScsFilesInDir(
+      ScMemoryContext * context,
+      std::string const & dirPath,
+      std::string const & excludedFiles = "");
 };
 
 }  // namespace componentUtils

@@ -33,7 +33,8 @@ void ScComponentManager::Start()
     {
       SC_LOG_ERROR(exception.Message());
     }
-  } while (m_isRunning);
+  }
+  while (m_isRunning);
 }
 
 void ScComponentManager::Stop()

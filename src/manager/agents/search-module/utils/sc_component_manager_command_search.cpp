@@ -16,8 +16,8 @@ ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context,
       common_utils::CommonUtils::GetCommandParameters(*context, actionAddr);
   for (auto const & param : commandParameters)
   {
-    if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first) ==
-        possibleSearchParameters.cend())
+    if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first)
+        == possibleSearchParameters.cend())
     {
       SC_THROW_EXCEPTION(
           utils::ExceptionParseError, "ScComponentManagerCommandSearch: Unsupported search parameter " << param.first);
@@ -46,8 +46,8 @@ ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context,
   }
 
   std::map<std::string, ScAddrVector> linksValues;
-  if (commandParameters.find(EXPLANATION) != commandParameters.cend() &&
-      !commandParameters.find(EXPLANATION)->second.empty())
+  if (commandParameters.find(EXPLANATION) != commandParameters.cend()
+      && !commandParameters.find(EXPLANATION)->second.empty())
   {
     ScAddrVector explanationLinks = SearchComponentsByRelationLink(
         context,

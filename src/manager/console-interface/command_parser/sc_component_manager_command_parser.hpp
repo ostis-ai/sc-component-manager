@@ -90,8 +90,8 @@ protected:
     }
     else
     {
-      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX &&
-          commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && !parameterValue.empty())
+      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX
+          && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && !parameterValue.empty())
       {
         commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
       }
@@ -130,8 +130,8 @@ protected:
       parameterName = GetParameterName(commandToken, parameterDelimiter);
       if (!parameterName.empty())
       {
-        if (std::find(std::begin(commandParametersName), std::end(commandParametersName), parameterName) ==
-            std::end(commandParametersName))
+        if (std::find(std::begin(commandParametersName), std::end(commandParametersName), parameterName)
+            == std::end(commandParametersName))
           commandParameters.insert({parameterName, {}});
       }
     }

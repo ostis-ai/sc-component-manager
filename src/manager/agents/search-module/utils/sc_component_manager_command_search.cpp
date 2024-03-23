@@ -74,7 +74,7 @@ ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context,
               itSpecification->Get(0),
               ScType::EdgeAccessConstPosPerm))
       {
-        SC_LOG_INFO("ScComponentManager: " + context->HelperGetSystemIdtf(itSpecification->Get(0)));
+        SC_LOG_INFO("ScComponentManager: " + context->HelperGetSystemIdtf(itSpecification->Get(0)) + " " + componentIdtf);
         components.push_back(itSpecification->Get(0));
         break;
       }

@@ -31,13 +31,15 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
     std::vector<std::string> const & componentsToInstallIdentifiers)
 {
   ScAddrVector availableComponents;
+  ScAddr componentAddr;
   for (std::string const & componentToInstallIdentifier : componentsToInstallIdentifiers)
   {
-    ScAddr componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
-
-    SC_LOG_DEBUG("ScComponentManagerCommandInstall: Validating component \"" + componentToInstallIdentifier + "\"");
     try
     {
+      componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
+
+      SC_LOG_DEBUG("ScComponentManagerCommandInstall: Validating component \"" + componentToInstallIdentifier + "\"");
+
       ValidateComponent(context, componentAddr);
     }
     catch (utils::ScException const & exception)

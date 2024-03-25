@@ -97,16 +97,8 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
 
   if (identifiersNodes.empty())
   {
-    SC_LOG_INFO("ScComponentManagerCommandInstall: No identifier provided, installing all to install components");
-    ScIterator3Ptr const & elementsIterator = context->Iterator3(
-        keynodes::ScComponentManagerKeynodes::concept_reusable_component,
-        ScType::EdgeAccessConstPosPerm,
-        ScType::NodeConst);
-    while (elementsIterator->Next())
-    {
-      identifiersNodes.push_back(elementsIterator->Get(2));
-    }
-    componentsToInstall = componentUtils::SearchUtils::GetNeedToInstallComponents(context);
+    SC_LOG_INFO("ScComponentManagerCommandInstall: No identifier provided, can't install");
+    return identifiersNodes;
   }
   for (ScAddr const & identifierNode : identifiersNodes)
   {
@@ -118,7 +110,9 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
   {
     executionResult = InstallDependencies(context, componentAddr);
     executionResult &= DownloadComponent(context, componentAddr);
-    executionResult &= InstallComponent(context, componentAddr);
+    if(executionResult) {
+      executionResult &= InstallComponent(context, componentAddr);
+    }
     // TODO: need to process installation method from component specification in kb
   }
 

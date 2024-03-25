@@ -92,7 +92,19 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
         m_memoryCtx.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentsIterator->Next())
     {
-      components.push_back(componentsIterator->Get(2));
+      if (m_memoryCtx.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass)
+      {
+        ScIterator3Ptr const & elementsIterator =
+            m_memoryCtx.Iterator3(componentsIterator->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        while (elementsIterator->Next())
+        {
+          components.push_back(elementsIterator->Get(2));
+        }
+      }
+      else
+      {
+        components.push_back(componentsIterator->Get(2));
+      }
     }
   }
   return components;

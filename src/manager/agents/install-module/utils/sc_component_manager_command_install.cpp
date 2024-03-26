@@ -28,30 +28,28 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
  */
 ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
     ScMemoryContext * context,
-    std::vector<std::string> const & componentsToInstallIdentifiers)
+    std::vector<ScAddr> const & componentsToInstall)
 {
   ScAddrVector availableComponents;
-  ScAddr componentAddr;
-  for (std::string const & componentToInstallIdentifier : componentsToInstallIdentifiers)
+  for (ScAddr const & componentToInstall : componentsToInstall)
   {
     try
     {
-      componentAddr = context->HelperFindBySystemIdtf(componentToInstallIdentifier);
-
-      SC_LOG_DEBUG("ScComponentManagerCommandInstall: Validating component \"" + componentToInstallIdentifier + "\"");
-
-      ValidateComponent(context, componentAddr);
+      SC_LOG_DEBUG(
+          "ScComponentManagerCommandInstall: Validating component \"" + context->HelperGetSystemIdtf(componentToInstall)
+          + "\"");
+      ValidateComponent(context, componentToInstall);
     }
     catch (utils::ScException const & exception)
     {
-      SC_LOG_ERROR(
-          "ScComponentManagerCommandInstall: Unable to install component \"" + componentToInstallIdentifier + "\"");
+      SC_LOG_ERROR("ScComponentManagerCommandInstall: Unable to install component");
       SC_LOG_DEBUG(exception.Message());
       continue;
     }
     SC_LOG_DEBUG(
-        "ScComponentManagerCommandInstall: Component \"" + componentToInstallIdentifier + "\" is specified correctly");
-    availableComponents.push_back(componentAddr);
+        "ScComponentManagerCommandInstall: Component \"" + context->HelperGetSystemIdtf(componentToInstall)
+        + "\" is specified correctly");
+    availableComponents.push_back(componentToInstall);
   }
   return availableComponents;
 }
@@ -91,20 +89,16 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
 {
   bool executionResult = true;
   std::vector<std::string> componentsToInstallIdentifiers;
-  ScAddrVector componentsToInstall;
-  ScAddrVector identifiersNodes =
+  ScAddrVector componentsToInstall =
       common_utils::CommonUtils::GetNodesUnderParameter(*context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
 
-  if (identifiersNodes.empty())
+  if (componentsToInstall.empty())
   {
     SC_LOG_INFO("ScComponentManagerCommandInstall: No identifier provided, can't install");
-    return identifiersNodes;
+    return componentsToInstall;
   }
-  for (ScAddr const & identifierNode : identifiersNodes)
-  {
-    componentsToInstallIdentifiers.push_back(context->HelperGetSystemIdtf(identifierNode));
-  }
-  componentsToInstall = GetAvailableComponents(context, componentsToInstallIdentifiers);
+
+  componentsToInstall = GetAvailableComponents(context, componentsToInstall);
 
   for (ScAddr componentAddr : componentsToInstall)
   {
@@ -117,7 +111,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
     // TODO: need to process installation method from component specification in kb
   }
 
-  return identifiersNodes;
+  return componentsToInstall;
 }
 
 /**

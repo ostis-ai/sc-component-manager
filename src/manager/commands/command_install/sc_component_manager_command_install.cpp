@@ -214,7 +214,7 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
   downloadPath << m_downloadDir << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName << SpecificationConstants::DIRECTORY_DELIMITER << directoryName;
   if (!componentUtils::LoadUtils::LoadScsFilesInDir(context, downloadPath.str(), SpecificationConstants::SPECIFICATION_FILENAME))
   {
-    SC_LOG_WARNING("ScComponentManagerCommandInstall: there is no *.scs files to load from " << m_downloadDir);
+    SC_LOG_WARNING("ScComponentManagerCommandInstall: there is no *.scs files to load from " << downloadPath.str());
   }
 
   return result;

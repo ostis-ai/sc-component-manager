@@ -110,7 +110,8 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
   {
     executionResult = InstallDependencies(context, componentAddr);
     executionResult &= DownloadComponent(context, componentAddr);
-    if(executionResult) {
+    if (executionResult)
+    {
       executionResult &= InstallComponent(context, componentAddr);
     }
     // TODO: need to process installation method from component specification in kb

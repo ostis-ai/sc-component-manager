@@ -330,7 +330,9 @@ bool LoadUtils::LoadScsFilesInDir(
     std::filesystem::path const & filePath = dirEntry.path();
     if (filePath.extension() == SpecificationConstants::SCS_EXTENSION && filePath.filename().string() != excludedFiles)
     {
-      result |= loader.loadScsFile(*context, filePath);
+      // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
+      loader.loadScsFile(*context, filePath);
+      result = true;
     }
   }
 

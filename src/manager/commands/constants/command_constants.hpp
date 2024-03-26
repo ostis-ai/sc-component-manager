@@ -14,6 +14,7 @@ class SpecificationConstants
 {
 public:
   static std::string const SPECIFICATION_FILENAME;
+  static std::string const SCS_EXTENSION;
   static char const DIRECTORY_DELIMITER;
 };
 

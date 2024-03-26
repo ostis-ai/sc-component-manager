@@ -309,25 +309,26 @@ std::string InstallUtils::GetComponentDirName(
  * Load all .scs files in directory
  * @param context current sc-memory context
  * @param dirPath directory path
+ * @param excludedFiles filenames that will be skip while loading scs files.
+ * It made to prevent double loading specification.scs after init command
  */
-bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath)
+bool LoadUtils::LoadScsFilesInDir(ScMemoryContext * context, std::string const & dirPath, std::string const & excludedFiles)
 {
   bool result = false;
   ScsLoader loader;
 
   if (!std::filesystem::exists(dirPath))
   {
+    SC_LOG_WARNING("LoadScsFiles: directory " << dirPath << " is not exists");
     return result;
   }
 
   for (std::filesystem::directory_entry const & dirEntry : std::filesystem::recursive_directory_iterator(dirPath))
   {
     std::filesystem::path const & filePath = dirEntry.path();
-    if (filePath.extension() == ".scs")
+    if (filePath.extension() == SpecificationConstants::SCS_EXTENSION && filePath.filename().string() != excludedFiles)
     {
-      // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
-      loader.loadScsFile(*context, filePath);
-      result = true;
+      result |= loader.loadScsFile(*context, filePath);
     }
   }
 

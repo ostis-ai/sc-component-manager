@@ -8,7 +8,7 @@
 	\scnfileitem{Скачать спецификаций на устройство.}
 \end{scnrelfromvector}	
 \scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/ci.png}}
-\begin{scnrelfromset}{возможные аргументы агента}
+\begin{scnrelfromset}{аргументы агента}
 	\scnitem{пустое множество}
 \end{scnrelfromset}
 \scnrelfrom{ответ агента}{ответ агента установки спецификаций многократно используемых компонентов}
@@ -25,18 +25,10 @@
 	\scnfileitem{Скачивание и установка (опционально) на устройство.}
 \end{scnrelfromvector}
 	\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/cinst.png}}
-\begin{scnrelfromset}{возможные аргументы агента}
-	\scnitem{компонент}
+\begin{scnrelfromset}{аргументы агента}
+	\scnitem{множество компонентов}
 	\begin{scnindent}
-		\scntext{примечание}{В этом случае отыскивается компонент по его названию и скачивается.}
-	\end{scnindent}
-	\scnitem{класс компонентов}
-	\begin{scnindent}
-		\scntext{примечание}{В этом случае отыскиваются все компоненты, принадлежащие указанному классу, и скачиваются.}
-	\end{scnindent}
-	\scnitem{пустое множество}
-	\begin{scnindent}
-		\scntext{примечание}{В этом случае агент не будет скачивать компоненты.}
+		\scntext{примечание}{В этом случае отыскиваются все компоненты, принадлежащие указанному множеству, и скачиваются.}
 	\end{scnindent}
 \end{scnrelfromset}
 \scnrelfrom{ответ агента}{ответ агента установки компонентов}
@@ -52,7 +44,7 @@
 	\scnfileitem{Отыскать спецификации компонентов в базе знаний по заданным критериям.}
 \end{scnrelfromvector}
 \scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/cs.png}}
-\begin{scnrelfromset}{возможные аргументы агента}
+\begin{scnrelfromset}{аргументы агента}
 	\scnitem{authors}
 	\begin{scnindent}
 		\scntext{примечание}{В этом случае отыскивается спецификация компонента по автору, который создал компонент.}

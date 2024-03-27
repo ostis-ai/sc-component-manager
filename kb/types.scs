@@ -33,4 +33,8 @@ sc_node_class
 	-> concept_google_drive_url;
 	-> concept_complex_address;
 	-> concept_single_address;
-	-> concept_need_to_install_components;;
+	-> concept_need_to_install_components;
+	-> ostis_system_knowledge_base;
+	-> ostis_system_problem_solver;
+	-> ostis_system_user_interface;
+	-> subsystems_set;;

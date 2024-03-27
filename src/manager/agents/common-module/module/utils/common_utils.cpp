@@ -30,12 +30,14 @@ void CommonUtils::InitParametersMap()
       {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};
 
   componentsClasses = {
-      {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component,
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
        keynodes::ScComponentManagerKeynodes::ostis_system_interface},
       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
        keynodes::ScComponentManagerKeynodes::ostis_system_problem_solver},
       {keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
-       keynodes::ScComponentManagerKeynodes::ostis_system_knowledge_base}};
+       keynodes::ScComponentManagerKeynodes::ostis_system_knowledge_base},
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_embedded_ostis_system,
+        keynodes::ScComponentManagerKeynodes::subsystems_set}};
 }
 
 bool CommonUtils::TransformToScStruct(

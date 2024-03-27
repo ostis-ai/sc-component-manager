@@ -22,7 +22,7 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
           scComponentManagerParams.Get<std::string>(KB_COMPONENT_PATH)},
          {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
           scComponentManagerParams.Get<std::string>(PS_COMPONENT_PATH)},
-         {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component,
+         {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
           scComponentManagerParams.Get<std::string>(INTERFACE_COMPONENT_PATH)}}};
 
     std::unique_ptr<ScComponentManager> scComponentManager =

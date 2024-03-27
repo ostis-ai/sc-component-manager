@@ -13,7 +13,8 @@ namespace keynodes
 ScAddr ScComponentManagerKeynodes::concept_reusable_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_kb_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_ps_component;
-ScAddr ScComponentManagerKeynodes::concept_reusable_interface_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_ui_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_embedded_ostis_system;
 ScAddr ScComponentManagerKeynodes::concept_repository;
 ScAddr ScComponentManagerKeynodes::concept_reusable_component_specification;
 ScAddr ScComponentManagerKeynodes::concept_complex_address;
@@ -24,6 +25,7 @@ ScAddr ScComponentManagerKeynodes::concept_need_to_install_components;
 ScAddr ScComponentManagerKeynodes::ostis_system_knowledge_base;
 ScAddr ScComponentManagerKeynodes::ostis_system_interface;
 ScAddr ScComponentManagerKeynodes::ostis_system_problem_solver;
+ScAddr ScComponentManagerKeynodes::subsystems_set;
 ScAddr ScComponentManagerKeynodes::rrel_repositories_specifications;
 ScAddr ScComponentManagerKeynodes::rrel_components_specifications;
 ScAddr ScComponentManagerKeynodes::nrel_authors;

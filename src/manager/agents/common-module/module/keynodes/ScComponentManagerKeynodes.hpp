@@ -28,8 +28,11 @@ public:
   SC_PROPERTY(Keynode("concept_reusable_ps_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_ps_component;
 
-  SC_PROPERTY(Keynode("concept_reusable_interface_component"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_interface_component;
+  SC_PROPERTY(Keynode("concept_reusable_ui_component"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_ui_component;
+
+  SC_PROPERTY(Keynode("concept_reusable_embedded_ostis_system"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_embedded_ostis_system;
 
   SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_repository;
@@ -60,6 +63,9 @@ public:
 
   SC_PROPERTY(Keynode("ostis_system_problem_solver"), ForceCreate(ScType::NodeConstClass))
   static ScAddr ostis_system_problem_solver;
+
+  SC_PROPERTY(Keynode("subsystems_set"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr subsystems_set;
 
   SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_repositories_specifications;

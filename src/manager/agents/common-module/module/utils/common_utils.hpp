@@ -15,6 +15,7 @@ class CommonUtils
 {
 public:
   static std::map<std::string, ScAddr> managerParametersWithAgentRelations;
+  static std::vector<std::vector<ScAddr>> componentsClasses;
 
   static void InitParametersMap();
 
@@ -40,5 +41,9 @@ public:
   static std::map<std::string, std::vector<std::string>> GetCommandParameters(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr);
+
+  static ScAddr GetAddrComponentOfMyself(ScMemoryContext & m_memoryCtx, ScAddr const & component);
+  static bool CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component);
+  static ScAddr GetComponentBySpecification(ScMemoryContext & m_memoryCtx, ScAddr const & specification);
 };
 }  // namespace common_utils

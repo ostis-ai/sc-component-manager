@@ -52,6 +52,15 @@ public:
   SC_PROPERTY(Keynode("concept_google_drive_url"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_google_drive_url;
 
+  SC_PROPERTY(Keynode("ostis_system_knowledge_base"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr ostis_system_knowledge_base;
+
+  SC_PROPERTY(Keynode("ostis_system_interface"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr ostis_system_interface;
+
+  SC_PROPERTY(Keynode("ostis_system_problem_solver"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr ostis_system_problem_solver;
+
   SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_repositories_specifications;
 
@@ -81,6 +90,9 @@ public:
 
   SC_PROPERTY(Keynode("nrel_installation_script"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_installation_script;
+
+  SC_PROPERTY(Keynode("nrel_decomposition"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_decomposition;
 
   SC_PROPERTY(Keynode("action_components_init"), ForceCreate)
   static ScAddr action_components_init;

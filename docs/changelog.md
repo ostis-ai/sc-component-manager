@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Use common scripts to build project from ostis-scripts
 - Make sc-component-manager as shared library
 - Separated envs from envs of sc-machine
 - Replace ExecutionResult with bool and update logging.

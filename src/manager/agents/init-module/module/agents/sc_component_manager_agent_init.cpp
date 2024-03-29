@@ -28,8 +28,7 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
   ScConfig config{ScMemory::ms_configPath, {PathKeysOfConfigPath::KB_PATH}};
   ScConfigGroup configManager = config["sc-component-manager"];
 
-  ScComponentManagerCommandInit command =
-      ScComponentManagerCommandInit(configManager[PathKeysOfConfigPath::KB_PATH]);
+  ScComponentManagerCommandInit command = ScComponentManagerCommandInit(configManager[PathKeysOfConfigPath::KB_PATH]);
 
   ScAddrVector const & components = command.Execute(&m_memoryCtx, actionAddr);
 

@@ -84,7 +84,7 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
   ScAddr parameterNode;
   ScAddrVector components;
   ScIterator5Ptr const & parameterIterator = m_memoryCtx.Iterator5(
-    actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relationAddr);
+      actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relationAddr);
   if (parameterIterator->Next())
   {
     parameterNode = parameterIterator->Get(2);
@@ -169,7 +169,8 @@ ScAddr CommonUtils::GetParameterNodeUnderRelation(
 std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr)
 {
   std::map<std::string, ScAddr> elementsIdtfAndAddr;
-  if (!setAddr.IsValid()) return elementsIdtfAndAddr;
+  if (!setAddr.IsValid())
+    return elementsIdtfAndAddr;
   ScIterator3Ptr const & elementsIterator =
       m_memoryCtx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (elementsIterator->Next())
@@ -178,7 +179,7 @@ std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & m_me
     {
       elementsIdtfAndAddr.insert({m_memoryCtx.HelperGetSystemIdtf(elementsIterator->Get(2)), elementsIterator->Get(2)});
     }
-    catch(std::exception const & exception)
+    catch (std::exception const & exception)
     {
       SC_LOG_WARNING("CommonUtils::GetSetElements : met element without system identifier");
       continue;
@@ -190,7 +191,8 @@ std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & m_me
 std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr)
 {
   std::map<std::string, ScAddr> elementsIdtfAndAddr;
-  if (!setAddr.IsValid()) return elementsIdtfAndAddr;
+  if (!setAddr.IsValid())
+    return elementsIdtfAndAddr;
   std::string elementIdtf;
   ScIterator3Ptr const & elementsIterator =
       m_memoryCtx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);

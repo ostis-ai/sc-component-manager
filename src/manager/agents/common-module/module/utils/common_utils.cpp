@@ -9,7 +9,7 @@
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "sc-memory/sc_memory.hpp"
-
+#include "../../constants/command_constants.hpp"
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 namespace common_utils
@@ -33,44 +33,44 @@ bool CommonUtils::TransformToScStruct(
     ScAddr const & actionAddr,
     std::map<std::string, std::vector<std::string>> const & commandParameters)
 {
-  ScAddr value;
-  ScAddr parameterRRelNode;
-  ScAddr edge;
-  ScAddr set;
+  ScAddr parameterValueAddr;
+  ScAddr parameterRrelNodeAddr;
+  ScAddr edgeAddr;
+  ScAddr setAddr;
   for (auto const & parameter : commandParameters)
   {
     try
     {
-      parameterRRelNode = managerParametersWithAgentRelations.at(parameter.first);
+      parameterRrelNodeAddr = managerParametersWithAgentRelations.at(parameter.first);
     }
     catch (std::out_of_range const & exception)
     {
       SC_LOG_INFO("Transform to sc-structure: Unknown parameter " + parameter.first);
       continue;
     }
-    set = m_memoryCtx.CreateNode(ScType::NodeConst);
-    edge = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, actionAddr, set);
+    setAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+    edgeAddr = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, actionAddr, setAddr);
 
-    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, parameterRRelNode, edge);
+    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, parameterRrelNodeAddr, edgeAddr);
 
-    for (std::string const & valueOfParameter : parameter.second)
+    for (std::string const & parameterValue : parameter.second)
     {
-      if (parameter.first == "explanation")
+      if (parameter.first == CommandsConstantsFlags::EXPLANATION)
       {
-        value = m_memoryCtx.CreateNode(ScType::LinkConst);
-        m_memoryCtx.SetLinkContent(value, valueOfParameter);
+        parameterValueAddr = m_memoryCtx.CreateNode(ScType::LinkConst);
+        m_memoryCtx.SetLinkContent(parameterValueAddr, parameterValue);
       }
       else
       {
-        value = m_memoryCtx.HelperFindBySystemIdtf(valueOfParameter);
-        if (!value.IsValid())
+        parameterValueAddr = m_memoryCtx.HelperFindBySystemIdtf(parameterValue);
+        if (!parameterValueAddr.IsValid())
         {
-          SC_LOG_WARNING("Transform to sc-structure: Unknown value: " + valueOfParameter);
-          value = m_memoryCtx.CreateNode(ScType::NodeConst);
-          m_memoryCtx.HelperSetSystemIdtf(valueOfParameter, value);
+          SC_LOG_WARNING("Transform to sc-structure: Unknown value: " + parameterValue);
+          parameterValueAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+          m_memoryCtx.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
         }
       }
-      m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, set, value);
+      m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
     }
   }
   return true;
@@ -79,12 +79,12 @@ bool CommonUtils::TransformToScStruct(
 ScAddrVector CommonUtils::GetNodesUnderParameter(
     ScMemoryContext & m_memoryCtx,
     ScAddr const & actionAddr,
-    ScAddr const & relation)
+    ScAddr const & relationAddr)
 {
   ScAddr parameterNode;
   ScAddrVector components;
   ScIterator5Ptr const & parameterIterator = m_memoryCtx.Iterator5(
-      actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
+    actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relationAddr);
   if (parameterIterator->Next())
   {
     parameterNode = parameterIterator->Get(2);
@@ -116,37 +116,37 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
 {
   std::map<std::string, std::vector<std::string>> commandParameters;
 
-  ScAddr setOfAuthors =
+  ScAddr const & authorsSetAddr =
       GetParameterNodeUnderRelation(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_author);
-  std::map<std::string, ScAddr> authors = GetElementsOfSet(m_memoryCtx, setOfAuthors);
+  std::map<std::string, ScAddr> const & authors = GetSetElements(m_memoryCtx, authorsSetAddr);
 
-  ScAddr setOfClasses =
+  ScAddr const & classesSetAddr =
       GetParameterNodeUnderRelation(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
-  std::map<std::string, ScAddr> classes = GetElementsOfSet(m_memoryCtx, setOfClasses);
+  std::map<std::string, ScAddr> const & classes = GetSetElements(m_memoryCtx, classesSetAddr);
 
-  ScAddr setOfExplanations =
+  ScAddr const & explanationsSetAddr =
       GetParameterNodeUnderRelation(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
-  std::map<std::string, ScAddr> explanations = GetElementsLinksOfSet(m_memoryCtx, setOfExplanations);
+  std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(m_memoryCtx, explanationsSetAddr);
 
   std::vector<std::string> authorsList, classesList, explanationsList;
 
-  if (setOfAuthors.IsValid())
+  if (authorsSetAddr.IsValid())
   {
     for (auto & el : authors)
       authorsList.push_back(el.first);
-    commandParameters.insert({"author", authorsList});
+    commandParameters.insert({CommandsConstantsFlags::AUTHOR, authorsList});
   }
-  if (setOfClasses.IsValid())
+  if (classesSetAddr.IsValid())
   {
     for (auto & el : classes)
       classesList.push_back(el.first);
-    commandParameters.insert({"class", classesList});
+    commandParameters.insert({CommandsConstantsFlags::CLASS, classesList});
   }
-  if (setOfExplanations.IsValid())
+  if (explanationsSetAddr.IsValid())
   {
     for (auto & el : explanations)
       explanationsList.push_back(el.first);
-    commandParameters.insert({"explanation", explanationsList});
+    commandParameters.insert({CommandsConstantsFlags::EXPLANATION, explanationsList});
   }
   return commandParameters;
 }
@@ -166,30 +166,40 @@ ScAddr CommonUtils::GetParameterNodeUnderRelation(
   return parameterNode;
 }
 
-std::map<std::string, ScAddr> CommonUtils::GetElementsOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & set)
+std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr)
 {
-  std::map<std::string, ScAddr> elements;
+  std::map<std::string, ScAddr> elementsIdtfAndAddr;
+  if (!setAddr.IsValid()) return elementsIdtfAndAddr;
   ScIterator3Ptr const & elementsIterator =
-      m_memoryCtx.Iterator3(set, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      m_memoryCtx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (elementsIterator->Next())
   {
-    elements.insert({m_memoryCtx.HelperGetSystemIdtf(elementsIterator->Get(2)), elementsIterator->Get(2)});
+    try
+    {
+      elementsIdtfAndAddr.insert({m_memoryCtx.HelperGetSystemIdtf(elementsIterator->Get(2)), elementsIterator->Get(2)});
+    }
+    catch(std::exception const & exception)
+    {
+      SC_LOG_WARNING("CommonUtils::GetSetElements : met element without system identifier");
+      continue;
+    }
   }
-  return elements;
+  return elementsIdtfAndAddr;
 }
 
-std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & set)
+std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr)
 {
-  std::map<std::string, ScAddr> elements;
+  std::map<std::string, ScAddr> elementsIdtfAndAddr;
+  if (!setAddr.IsValid()) return elementsIdtfAndAddr;
   std::string elementIdtf;
   ScIterator3Ptr const & elementsIterator =
-      m_memoryCtx.Iterator3(set, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
+      m_memoryCtx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
   while (elementsIterator->Next())
   {
     m_memoryCtx.GetLinkContent(elementsIterator->Get(2), elementIdtf);
-    elements.insert({elementIdtf, elementsIterator->Get(2)});
+    elementsIdtfAndAddr.insert({elementIdtf, elementsIterator->Get(2)});
   }
-  return elements;
+  return elementsIdtfAndAddr;
 }
 
 }  // namespace common_utils

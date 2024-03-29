@@ -26,16 +26,16 @@ public:
   static ScAddrVector GetNodesUnderParameter(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,
-      ScAddr const & relation);
+      ScAddr const & relationAddr);
 
   static ScAddr GetParameterNodeUnderRelation(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,
       ScAddr const & relation);
 
-  static std::map<std::string, ScAddr> GetElementsOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & set);
+  static std::map<std::string, ScAddr> GetSetElements(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr);
 
-  static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & set);
+  static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr);
 
   static std::map<std::string, std::vector<std::string>> GetCommandParameters(
       ScMemoryContext & m_memoryCtx,

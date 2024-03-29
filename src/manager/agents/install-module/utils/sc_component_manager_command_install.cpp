@@ -88,7 +88,6 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   bool executionResult = true;
-  std::vector<std::string> componentsToInstallIdentifiers;
   ScAddrVector componentsToInstall =
       common_utils::CommonUtils::GetNodesUnderParameter(*context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
 
@@ -100,7 +99,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
 
   componentsToInstall = GetAvailableComponents(context, componentsToInstall);
 
-  for (ScAddr componentAddr : componentsToInstall)
+  for (ScAddr const & componentAddr : componentsToInstall)
   {
     executionResult = InstallDependencies(context, componentAddr);
     executionResult &= DownloadComponent(context, componentAddr);

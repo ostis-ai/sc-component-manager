@@ -19,7 +19,6 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
 {
   ScAddr const & actionAddr = otherAddr;
 
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
   if (!CheckAction(actionAddr))
   {
     return SC_RESULT_OK;
@@ -31,21 +30,21 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
 
   ScConfig config{
       ScMemory::ms_configPath,
-      {"knowledge_base_components_path", "problem_solver_components_path", "interface_components_path"}};
+      {PathKeysOfConfigPath::KB_PATH, PathKeysOfConfigPath::PS_PATH, PathKeysOfConfigPath::UI_PATH}};
   ScConfigGroup configManager = config["sc-component-manager"];
 
   componentWithConfigPath.insert(
       {keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
-       configManager["knowledge_base_components_path"]});
+       configManager[PathKeysOfConfigPath::KB_PATH]});
   componentWithConfigPath.insert(
       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
-       configManager["problem_solver_components_path"]});
+       configManager[PathKeysOfConfigPath::PS_PATH]});
   componentWithConfigPath.insert(
       {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component,
-       configManager["interface_components_path"]});
+       configManager[PathKeysOfConfigPath::UI_PATH]});
 
   ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);
-  ScAddrVector identifiersNodes = command.Execute(&m_memoryCtx, actionAddr);
+  ScAddrVector const & identifiersNodes = command.Execute(&m_memoryCtx, actionAddr);
 
   utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, identifiersNodes, true);
 

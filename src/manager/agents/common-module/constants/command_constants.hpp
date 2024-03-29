@@ -63,3 +63,11 @@ public:
   static std::string const AUTHOR;
   static std::string const CLASS;
 };
+
+class PathKeysOfConfigPath
+{
+public:
+  static std::string const KB_PATH;
+  static std::string const PS_PATH;
+  static std::string const UI_PATH;
+};

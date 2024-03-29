@@ -25,13 +25,13 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
 
   SC_LOG_DEBUG("ScComponentManagerInitAgent started");
 
-  ScConfig config{ScMemory::ms_configPath, {"knowledge_base_components_path"}};
+  ScConfig config{ScMemory::ms_configPath, {PathKeysOfConfigPath::KB_PATH}};
   ScConfigGroup configManager = config["sc-component-manager"];
 
   ScComponentManagerCommandInit command =
-      ScComponentManagerCommandInit(configManager["knowledge_base_components_path"]);
+      ScComponentManagerCommandInit(configManager[PathKeysOfConfigPath::KB_PATH]);
 
-  ScAddrVector components = command.Execute(&m_memoryCtx, actionAddr);
+  ScAddrVector const & components = command.Execute(&m_memoryCtx, actionAddr);
 
   utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, components, true);
 

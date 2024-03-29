@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../sc_component_manager.hpp"
+#include "sc_component_manager.hpp"
 #include "sc-config-utils/sc_memory_config.hpp"
 
 class ScComponentManagerFactory

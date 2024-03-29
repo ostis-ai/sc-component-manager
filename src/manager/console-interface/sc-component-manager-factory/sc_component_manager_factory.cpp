@@ -5,7 +5,7 @@
  */
 
 #include "sc_component_manager_factory.hpp"
-#include "../sc_component_manager_impl.hpp"
+#include "sc_component_manager_impl.hpp"
 
 std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScComponentManager(
     ScParams const & scComponentManagerParams,

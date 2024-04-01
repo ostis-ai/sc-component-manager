@@ -7,8 +7,8 @@
 #include <algorithm>
 
 #include "sc_component_manager_command_search.hpp"
-#include "../../common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
-#include "../../common-module/module/utils/common_utils.hpp"
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
+#include "module/utils/common_utils.hpp"
 
 ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {

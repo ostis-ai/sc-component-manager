@@ -8,7 +8,7 @@
 
 #include <utility>
 
-#include "manager/agents/common-module/sc_component_manager_command.hpp"
+#include "common-module/commands/sc_component_manager_command.hpp"
 
 class ScComponentManagerHandler
 {

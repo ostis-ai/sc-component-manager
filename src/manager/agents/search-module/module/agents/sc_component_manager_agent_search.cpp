@@ -10,8 +10,6 @@
 
 #include "sc_component_manager_agent_search.hpp"
 
-#include "sc-config-utils/sc-config/sc_config.hpp"
-
 using namespace searchModule;
 using namespace keynodes;
 

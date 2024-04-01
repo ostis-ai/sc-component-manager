@@ -11,7 +11,7 @@
 #include "sc-agents-common/utils/AgentUtils.hpp"
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
-#include "../../agents/common-module/module/utils/common_utils.hpp"
+#include "module/utils/common_utils.hpp"
 
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)

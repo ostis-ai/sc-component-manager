@@ -15,9 +15,9 @@
 
 #include "sc_component_utils.hpp"
 
-#include "../../agents/common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
-#include "../../agents/common-module/constants/command_constants.hpp"
-#include "../../agents/common-module/url_parser/repository_url_parser.hpp"
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
+#include "constants/command_constants.hpp"
+#include "url_parser/repository_url_parser.hpp"
 
 namespace componentUtils
 {

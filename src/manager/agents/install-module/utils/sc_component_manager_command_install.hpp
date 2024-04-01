@@ -11,10 +11,10 @@
 
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
-#include "../../common-module/sc_component_manager_command.hpp"
+#include "commands/sc_component_manager_command.hpp"
 
-#include "../../common-module/downloader/downloader.hpp"
-#include "../../common-module/downloader/downloader_handler.hpp"
+#include "downloader/downloader.hpp"
+#include "downloader/downloader_handler.hpp"
 
 extern "C"
 {

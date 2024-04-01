@@ -6,7 +6,7 @@
 
 #include <sc-agents-common/utils/AgentUtils.hpp>
 
-#include "../utils/sc_component_manager_command_install.hpp"
+#include "utils/sc_component_manager_command_install.hpp"
 
 #include "sc_component_manager_agent_install.hpp"
 

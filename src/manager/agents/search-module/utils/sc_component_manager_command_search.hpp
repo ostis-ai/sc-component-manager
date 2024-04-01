@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "../../common-module/sc_component_manager_command.hpp"
+#include "commands/sc_component_manager_command.hpp"
 
 class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 {

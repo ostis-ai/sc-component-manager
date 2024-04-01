@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 
 #include "sc_component_manager_test.hpp"
-#include "../../src/manager/agents/common-module/url_parser/repository_url_parser.hpp"
+#include "common-module/url_parser/repository_url_parser.hpp"
 
 TEST_F(ScComponentManagerTest, ParseRepositoryUrl)
 {

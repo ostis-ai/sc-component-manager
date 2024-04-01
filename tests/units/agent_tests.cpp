@@ -11,11 +11,11 @@
 
 #include "sc-agents-common/utils/AgentUtils.hpp"
 
-#include "../../src/manager/agents/common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
+#include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 
-#include "../../src/manager/agents/init-module/module/agents/sc_component_manager_agent_init.hpp"
-#include "../../src/manager/agents/search-module/module/agents/sc_component_manager_agent_search.hpp"
-#include "../../src/manager/agents/install-module/module/agents/sc_component_manager_agent_install.hpp"
+#include "init-module/module/agents/sc_component_manager_agent_init.hpp"
+#include "search-module/module/agents/sc_component_manager_agent_search.hpp"
+#include "install-module/module/agents/sc_component_manager_agent_install.hpp"
 
 using AgentTest = ScMemoryTest;
 ScsLoader loader;

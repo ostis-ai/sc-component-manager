@@ -10,7 +10,7 @@
 
 #include "sc-memory/sc_memory.hpp"
 
-#include "../../src/manager/console-interface/command_parser/sc_component_manager_command_parser.hpp"
+#include "command_parser/sc_component_manager_command_parser.hpp"
 
 #include <memory>
 

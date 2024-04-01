@@ -9,7 +9,8 @@
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "sc-memory/sc_memory.hpp"
-#include "../../constants/command_constants.hpp"
+
+#include "constants/command_constants.hpp"
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 namespace common_utils

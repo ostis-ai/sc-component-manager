@@ -13,12 +13,12 @@
 
 #include "sc_component_manager_handler.hpp"
 
-#include "manager/agents/common-module/module/utils/common_utils.hpp"
-#include "manager/agents/common-module/module/common_module.hpp"
+#include "common-module/module/utils/common_utils.hpp"
+#include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 
-#include "manager/agents/init-module/utils/sc_component_manager_command_init.hpp"
-#include "manager/agents/search-module/utils/sc_component_manager_command_search.hpp"
-#include "manager/agents/install-module/utils/sc_component_manager_command_install.hpp"
+#include "init-module/utils/sc_component_manager_command_init.hpp"
+#include "search-module/utils/sc_component_manager_command_search.hpp"
+#include "install-module/utils/sc_component_manager_command_install.hpp"
 
 class ScComponentManagerCommandHandler : public ScComponentManagerHandler
 {

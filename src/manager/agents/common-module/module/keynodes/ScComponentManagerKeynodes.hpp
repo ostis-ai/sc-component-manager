@@ -55,17 +55,17 @@ public:
   SC_PROPERTY(Keynode("concept_google_drive_url"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_google_drive_url;
 
-  SC_PROPERTY(Keynode("ostis_system_knowledge_base"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr ostis_system_knowledge_base;
+  SC_PROPERTY(Keynode("sc_model_of_knowledge_base"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr sc_model_of_knowledge_base;
 
-  SC_PROPERTY(Keynode("ostis_system_interface"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr ostis_system_interface;
+  SC_PROPERTY(Keynode("sc_model_of_interface"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr sc_model_of_interface;
 
-  SC_PROPERTY(Keynode("ostis_system_problem_solver"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr ostis_system_problem_solver;
+  SC_PROPERTY(Keynode("sc_model_of_problem_solver"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr sc_model_of_problem_solver;
 
-  SC_PROPERTY(Keynode("subsystems_set"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr subsystems_set;
+  SC_PROPERTY(Keynode("concept_subsystems_set"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_subsystems_set;
 
   SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_repositories_specifications;

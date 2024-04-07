@@ -80,7 +80,7 @@ bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
     component = common_utils::CommonUtils::GetComponentBySpecification(*context, componentSpecificationAddr);
     if (common_utils::CommonUtils::CheckIfInstalled(*context, component))
     {
-      SC_LOG_DEBUG("Component \"" + context->HelperGetSystemIdtf(component) + "\" is already installed");
+      SC_LOG_WARNING("Component \"" << context->HelperGetSystemIdtf(component) << "\" is already installed");
       continue;
     }
     downloaderHandler->DownloadSpecification(context, componentSpecificationAddr);

@@ -42,7 +42,7 @@ public:
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr);
 
-  static ScAddr GetDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component);
+  static ScAddr GetSubsystemDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component);
   static bool CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component);
   static ScAddr GetComponentBySpecification(ScMemoryContext & m_memoryCtx, ScAddr const & specification);
 };

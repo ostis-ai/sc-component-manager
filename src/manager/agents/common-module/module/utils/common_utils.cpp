@@ -31,13 +31,13 @@ void CommonUtils::InitParametersMap()
 
   componentsClasses = {
       {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
-       keynodes::ScComponentManagerKeynodes::ostis_system_interface},
+       keynodes::ScComponentManagerKeynodes::sc_model_of_interface},
       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
-       keynodes::ScComponentManagerKeynodes::ostis_system_problem_solver},
+       keynodes::ScComponentManagerKeynodes::sc_model_of_problem_solver},
       {keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
-       keynodes::ScComponentManagerKeynodes::ostis_system_knowledge_base},
+       keynodes::ScComponentManagerKeynodes::sc_model_of_knowledge_base},
       {keynodes::ScComponentManagerKeynodes::concept_reusable_embedded_ostis_system,
-       keynodes::ScComponentManagerKeynodes::subsystems_set}};
+       keynodes::ScComponentManagerKeynodes::concept_subsystems_set}};
 }
 
 bool CommonUtils::TransformToScStruct(
@@ -57,7 +57,7 @@ bool CommonUtils::TransformToScStruct(
     }
     catch (std::out_of_range const & exception)
     {
-      SC_LOG_INFO("Transform to sc-structure: Unknown parameter " + parameter.first);
+      SC_LOG_INFO("Transform to sc-structure: Unknown parameter " << parameter.first);
       continue;
     }
     setAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
@@ -77,7 +77,7 @@ bool CommonUtils::TransformToScStruct(
         parameterValueAddr = m_memoryCtx.HelperFindBySystemIdtf(parameterValue);
         if (!parameterValueAddr.IsValid())
         {
-          SC_LOG_WARNING("Transform to sc-structure: Unknown value: " + parameterValue);
+          SC_LOG_WARNING("Transform to sc-structure: Unknown value: " << parameterValue);
           parameterValueAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
           m_memoryCtx.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
         }
@@ -216,7 +216,7 @@ std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext
   return elementsIdtfAndAddr;
 }
 
-ScAddr CommonUtils::GetDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component)
+ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component)
 {
   ScAddr myselfAddr = m_memoryCtx.HelperFindBySystemIdtf("myself");
   ScAddr componentDecomposition;
@@ -266,7 +266,7 @@ ScAddr CommonUtils::GetDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr c
 
 bool CommonUtils::CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component)
 {
-  ScAddr decompositionAddr = GetDecompositionAddr(m_memoryCtx, component);
+  ScAddr decompositionAddr = GetSubsystemDecompositionAddr(m_memoryCtx, component);
   if (!decompositionAddr.IsValid() || !component.IsValid())
     return false;
   return m_memoryCtx.HelperCheckEdge(decompositionAddr, component, ScType::EdgeAccessConstPosPerm);
@@ -276,21 +276,14 @@ ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & m_memoryCtx, S
 {
   ScAddr component;
   ScIterator5Ptr itComponent = m_memoryCtx.Iterator5(
-    specification,
-    ScType::EdgeAccessConstPosPerm,
-    ScType::NodeConst,
-    ScType::EdgeAccessConstPosPerm,
-    scAgentsCommon::CoreKeynodes::rrel_key_sc_element
-    );
+      specification,
+      ScType::EdgeAccessConstPosPerm,
+      ScType::NodeConst,
+      ScType::EdgeAccessConstPosPerm,
+      scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
   if (itComponent->Next())
   {
-    if (m_memoryCtx.HelperCheckEdge(
-            keynodes::ScComponentManagerKeynodes::concept_reusable_component,
-            itComponent->Get(2),
-            ScType::EdgeAccessConstPosPerm))
-    {
-      return itComponent->Get(2);
-    }
+    return itComponent->Get(2);
   }
   return component;
 }

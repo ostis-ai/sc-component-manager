@@ -102,7 +102,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
   ScAddr decompositionAddr;
   for (ScAddr componentAddr : componentsToInstall)
   {
-    if (!common_utils::CommonUtils::CheckIfInstalled(*context, componentAddr))
+    if (common_utils::CommonUtils::CheckIfInstalled(*context, componentAddr))
     {
       SC_LOG_DEBUG("Component \"" + context->HelperGetSystemIdtf(componentAddr) + "\" is already installed");
       continue;
@@ -114,7 +114,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
       executionResult &= InstallComponent(context, componentAddr);
     }
     // TODO: need to process installation method from component specification in kb
-    decompositionAddr = common_utils::CommonUtils::GetAddrComponentOfMyself(*context, componentAddr);
+    decompositionAddr = common_utils::CommonUtils::GetDecompositionAddr(*context, componentAddr);
     context->CreateEdge(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
   }
 

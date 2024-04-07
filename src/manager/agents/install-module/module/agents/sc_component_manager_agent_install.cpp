@@ -40,7 +40,7 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
        configManager[PathKeysOfConfigPath::PS_PATH]});
   componentWithConfigPath.insert(
-      {keynodes::ScComponentManagerKeynodes::concept_reusable_interface_component,
+      {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
        configManager[PathKeysOfConfigPath::UI_PATH]});
 
   ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);

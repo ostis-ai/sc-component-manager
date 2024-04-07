@@ -37,7 +37,7 @@ void CommonUtils::InitParametersMap()
       {keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
        keynodes::ScComponentManagerKeynodes::ostis_system_knowledge_base},
       {keynodes::ScComponentManagerKeynodes::concept_reusable_embedded_ostis_system,
-        keynodes::ScComponentManagerKeynodes::subsystems_set}};
+       keynodes::ScComponentManagerKeynodes::subsystems_set}};
 }
 
 bool CommonUtils::TransformToScStruct(
@@ -216,51 +216,58 @@ std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext
   return elementsIdtfAndAddr;
 }
 
-ScAddr CommonUtils::GetAddrComponentOfMyself(ScMemoryContext & m_memoryCtx, ScAddr const & component)
+ScAddr CommonUtils::GetDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component)
 {
   ScAddr myselfAddr = m_memoryCtx.HelperFindBySystemIdtf("myself");
   ScAddr componentDecomposition;
+  ScAddr componentClass;
+
   if (!myselfAddr.IsValid())
     return componentDecomposition;
-  for (std::vector<ScAddr> const & componentClass : common_utils::CommonUtils::componentsClasses)
+
+  for (std::vector<ScAddr> const & commonComponentClass : common_utils::CommonUtils::componentsClasses)
   {
-    if (!m_memoryCtx.HelperCheckEdge(componentClass[0], component, ScType::EdgeAccessConstPosPerm))
+    if (m_memoryCtx.HelperCheckEdge(commonComponentClass[0], component, ScType::EdgeAccessConstPosPerm))
+    {
+      componentClass = commonComponentClass[1];
+      break;
+    }
+  }
+  ScIterator5Ptr myselfDecomposition = m_memoryCtx.Iterator5(
+      myselfAddr,
+      ScType::EdgeDCommonConst,
+      ScType::NodeConst,
+      ScType::EdgeAccessConstPosPerm,
+      keynodes::ScComponentManagerKeynodes::nrel_decomposition);
+  if (!myselfDecomposition->Next())
+    return componentDecomposition;
+
+  ScIterator3Ptr partsDecomposition =
+      m_memoryCtx.Iterator3(myselfDecomposition->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+
+  while (partsDecomposition->Next())
+  {
+    if (!m_memoryCtx.HelperCheckEdge(componentClass, partsDecomposition->Get(2), ScType::EdgeAccessConstPosPerm))
       continue;
 
-    ScIterator5Ptr myselfDecomposition = m_memoryCtx.Iterator5(
-        myselfAddr,
+    ScIterator5Ptr partDecomposition = m_memoryCtx.Iterator5(
+        partsDecomposition->Get(2),
         ScType::EdgeDCommonConst,
         ScType::NodeConst,
         ScType::EdgeAccessConstPosPerm,
         keynodes::ScComponentManagerKeynodes::nrel_decomposition);
-    if (!myselfDecomposition->Next())
-      continue;
+    if (!partDecomposition->Next())
+      return componentDecomposition;
 
-    ScIterator3Ptr partsDecomposition =
-        m_memoryCtx.Iterator3(myselfDecomposition->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-    while (partsDecomposition->Next())
-    {
-      if (!m_memoryCtx.HelperCheckEdge(componentClass[1], partsDecomposition->Get(2), ScType::EdgeAccessConstPosPerm))
-        continue;
-
-      ScIterator5Ptr partDecomposition = m_memoryCtx.Iterator5(
-          partsDecomposition->Get(2),
-          ScType::EdgeDCommonConst,
-          ScType::NodeConst,
-          ScType::EdgeAccessConstPosPerm,
-          keynodes::ScComponentManagerKeynodes::nrel_decomposition);
-      if (!partDecomposition->Next())
-        continue;
-      return partDecomposition->Get(2);
-    }
+    componentDecomposition = partDecomposition->Get(2);
   }
   return componentDecomposition;
 }
 
 bool CommonUtils::CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component)
 {
-  ScAddr decompositionAddr = GetAddrComponentOfMyself(m_memoryCtx, component);
-  if (!decompositionAddr.IsValid() || component.IsValid())
+  ScAddr decompositionAddr = GetDecompositionAddr(m_memoryCtx, component);
+  if (!decompositionAddr.IsValid() || !component.IsValid())
     return false;
   return m_memoryCtx.HelperCheckEdge(decompositionAddr, component, ScType::EdgeAccessConstPosPerm);
 }
@@ -268,9 +275,14 @@ bool CommonUtils::CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const &
 ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & m_memoryCtx, ScAddr const & specification)
 {
   ScAddr component;
-  SC_LOG_DEBUG(m_memoryCtx.HelperGetSystemIdtf(specification));
-  ScIterator3Ptr itComponent = m_memoryCtx.Iterator3(specification, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-  while (itComponent->Next())
+  ScIterator5Ptr itComponent = m_memoryCtx.Iterator5(
+    specification,
+    ScType::EdgeAccessConstPosPerm,
+    ScType::NodeConst,
+    ScType::EdgeAccessConstPosPerm,
+    scAgentsCommon::CoreKeynodes::rrel_key_sc_element
+    );
+  if (itComponent->Next())
   {
     if (m_memoryCtx.HelperCheckEdge(
             keynodes::ScComponentManagerKeynodes::concept_reusable_component,

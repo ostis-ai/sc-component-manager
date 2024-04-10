@@ -19,6 +19,9 @@ class ScComponentManagerKeynodes : public ScObject
   SC_GENERATED_BODY()
 
 public:
+  SC_PROPERTY(Keynode("myself"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr myself;
+
   SC_PROPERTY(Keynode("concept_reusable_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_component;
 
@@ -99,6 +102,9 @@ public:
 
   SC_PROPERTY(Keynode("nrel_decomposition"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_decomposition;
+
+  SC_PROPERTY(Keynode("nrel_ostis_system_decomposition"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_ostis_system_decomposition;
 
   SC_PROPERTY(Keynode("action_components_init"), ForceCreate)
   static ScAddr action_components_init;

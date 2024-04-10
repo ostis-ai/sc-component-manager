@@ -18,32 +18,25 @@ public:
   static std::vector<std::vector<ScAddr>> componentsClasses;
 
   static void InitParametersMap();
-
   static bool TransformToScStruct(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,
       std::map<std::string, std::vector<std::string>> const & commandParameters);
-
+  static ScAddr CheckIfMyselfDecompositionAddrExists(ScMemoryContext & m_memoryCtx);
   static void CreateMyselfDecomposition(ScMemoryContext & m_memoryCtx);
-
   static ScAddrVector GetNodesUnderParameter(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,
       ScAddr const & relationAddr);
-
   static ScAddr GetParameterNodeUnderRelation(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,
       ScAddr const & relation);
-
   static std::map<std::string, ScAddr> GetSetElements(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr);
-
   static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr);
-
   static std::map<std::string, std::vector<std::string>> GetCommandParameters(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr);
-
   static ScAddr GetSubsystemDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component);
   static bool CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component);
   static ScAddr GetComponentBySpecification(ScMemoryContext & m_memoryCtx, ScAddr const & specification);

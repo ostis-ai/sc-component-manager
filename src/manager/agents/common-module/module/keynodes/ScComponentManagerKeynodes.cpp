@@ -10,6 +10,7 @@
 
 namespace keynodes
 {
+ScAddr ScComponentManagerKeynodes::myself;
 ScAddr ScComponentManagerKeynodes::concept_reusable_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_kb_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_ps_component;
@@ -37,6 +38,7 @@ ScAddr ScComponentManagerKeynodes::nrel_alternative_addresses;
 ScAddr ScComponentManagerKeynodes::nrel_repository_address;
 ScAddr ScComponentManagerKeynodes::nrel_installation_script;
 ScAddr ScComponentManagerKeynodes::nrel_decomposition;
+ScAddr ScComponentManagerKeynodes::nrel_ostis_system_decomposition;
 ScAddr ScComponentManagerKeynodes::action_components_init;
 ScAddr ScComponentManagerKeynodes::action_components_search;
 ScAddr ScComponentManagerKeynodes::action_components_install;

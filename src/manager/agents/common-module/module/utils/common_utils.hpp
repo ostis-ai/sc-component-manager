@@ -24,6 +24,8 @@ public:
       ScAddr const & actionAddr,
       std::map<std::string, std::vector<std::string>> const & commandParameters);
 
+  static void CreateMyselfDecomposition(ScMemoryContext & m_memoryCtx);
+
   static ScAddrVector GetNodesUnderParameter(
       ScMemoryContext & m_memoryCtx,
       ScAddr const & actionAddr,

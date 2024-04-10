@@ -18,6 +18,33 @@ namespace common_utils
 std::map<std::string, ScAddr> CommonUtils::managerParametersWithAgentRelations;
 std::vector<std::vector<ScAddr>> CommonUtils::componentsClasses;
 
+void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & m_memoryCtx)
+{
+  ScAddrVector components = {
+    keynodes::ScComponentManagerKeynodes::sc_model_of_knowledge_base,
+    keynodes::ScComponentManagerKeynodes::sc_model_of_problem_solver,
+    keynodes::ScComponentManagerKeynodes::sc_model_of_interface,
+    keynodes::ScComponentManagerKeynodes::concept_subsystems_set
+  };
+
+  ScAddr myself = m_memoryCtx.HelperFindBySystemIdtf("myself");
+  ScAddr myselfDecomposition = m_memoryCtx.CreateNode(ScType::NodeConst);
+  ScAddr edge = m_memoryCtx.CreateEdge(ScType::EdgeDCommonConst, myself, myselfDecomposition);
+  m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::nrel_decomposition, edge);
+
+  ScAddr component;
+  ScAddr componentDecomposition;
+
+  for(ScAddr const & el : components)
+  {
+    component =  m_memoryCtx.CreateNode(ScType::NodeConst);
+    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, el, component);
+    componentDecomposition = m_memoryCtx.CreateNode(ScType::NodeConst);
+    edge = m_memoryCtx.CreateEdge(ScType::EdgeDCommonConst, component, componentDecomposition);
+    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::nrel_decomposition, edge);
+  }
+}
+
 void CommonUtils::InitParametersMap()
 {
   managerParametersWithAgentRelations = {

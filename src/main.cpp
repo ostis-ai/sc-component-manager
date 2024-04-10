@@ -62,9 +62,6 @@ sc_int main(sc_int argc, sc_char * argv[])
 
   ScMemory::Initialize(memoryConfig.GetParams());
 
-  common_utils::CommonUtils::InitParametersMap();
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
-
   std::unique_ptr<ScComponentManager> scComponentManager =
       ScComponentManagerFactory::ConfigureScComponentManager(params, memoryConfig.GetParams());
 

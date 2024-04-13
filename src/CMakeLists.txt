@@ -1,6 +1,6 @@
 set(COMMON_MODULE_SRC ${CMAKE_CURRENT_LIST_DIR}/manager/agents/common-module)
 set(INTERFACE_SRC ${CMAKE_CURRENT_LIST_DIR}/manager/console-interface)
-set(SC_COMPONENT_MANAGER_SRC "${CMAKE_SOURCE_DIR}/src")
+set(SC_COMPONENT_MANAGER_SRC "${CMAKE_CURRENT_LIST_DIR}")
 
 add_subdirectory(manager/agents)
 add_subdirectory(manager/console-interface)

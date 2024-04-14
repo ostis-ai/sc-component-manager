@@ -2,6 +2,7 @@ file(GLOB_RECURSE SOURCES "*.cpp" "*.hpp")
 
 add_library(common-lib SHARED ${SOURCES})
 target_link_libraries(common-lib
+    LINK_PUBLIC sc-memory
     LINK_PUBLIC sc-agents-common
     LINK_PUBLIC sc-builder-lib
 )

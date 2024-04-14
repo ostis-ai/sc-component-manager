@@ -25,7 +25,7 @@ sc_result CommonModule::InitializeImpl()
   ScMemoryContext context;
   keynodes::ScComponentManagerKeynodes::InitGlobal();
   common_utils::CommonUtils::InitParametersMap();
-  if (!common_utils::CommonUtils::GetMyselfDecompositionAddr(context).IsValid())
+  if (!context.IsElement(common_utils::CommonUtils::GetMyselfDecompositionAddr(context)))
   {
     common_utils::CommonUtils::CreateMyselfDecomposition(context);
   }

@@ -262,6 +262,10 @@ ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & context, ScA
 {
   ScAddr componentDecomposition;
   ScAddr componentClass;
+  if (!context.IsElement(component))
+  {
+    return componentDecomposition;
+  }
 
   for (std::vector<ScAddr> const & commonComponentClass : common_utils::CommonUtils::componentsClasses)
   {

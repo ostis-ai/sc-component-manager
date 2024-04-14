@@ -5,6 +5,7 @@ target_link_libraries(common-lib
     LINK_PUBLIC sc-memory
     LINK_PUBLIC sc-agents-common
     LINK_PUBLIC sc-builder-lib
+    LINK_PUBLIC sc-config-utils
 )
 target_include_directories(common-lib
     PUBLIC ${CMAKE_CURRENT_LIST_DIR}

@@ -15,8 +15,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
 link_directories(${SC_BIN_PATH} ${SC_EXTENSIONS_DIRECTORY})
 
 if (NOT DEFINED ${SC_MACHINE_PATH})
-    include("${SC_MACHINE_PATH}/cmake/codegen.cmake")
+    set(SC_MACHINE_PATH "${CMAKE_CURRENT_LIST_DIR}/../sc-machine")
 endif()
+include("${SC_MACHINE_PATH}/cmake/codegen.cmake")
+
 set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator")
 set(CMAKE_MODULE_PATH "${SC_MACHINE_PATH}/cmake")
 

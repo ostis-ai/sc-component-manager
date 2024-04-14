@@ -19,26 +19,26 @@ public:
 
   static void InitParametersMap();
   static bool TransformToScStruct(
-      ScMemoryContext & m_memoryCtx,
+      ScMemoryContext & context,
       ScAddr const & actionAddr,
       std::map<std::string, std::vector<std::string>> const & commandParameters);
-  static ScAddr CheckIfMyselfDecompositionAddrExists(ScMemoryContext & m_memoryCtx);
-  static void CreateMyselfDecomposition(ScMemoryContext & m_memoryCtx);
+  static ScAddr GetMyselfDecompositionAddr(ScMemoryContext & context);
+  static void CreateMyselfDecomposition(ScMemoryContext & context);
   static ScAddrVector GetNodesUnderParameter(
-      ScMemoryContext & m_memoryCtx,
+      ScMemoryContext & context,
       ScAddr const & actionAddr,
       ScAddr const & relationAddr);
   static ScAddr GetParameterNodeUnderRelation(
-      ScMemoryContext & m_memoryCtx,
+      ScMemoryContext & context,
       ScAddr const & actionAddr,
       ScAddr const & relation);
-  static std::map<std::string, ScAddr> GetSetElements(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr);
-  static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr);
+  static std::map<std::string, ScAddr> GetSetElements(ScMemoryContext & context, ScAddr const & setAddr);
+  static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & context, ScAddr const & setAddr);
   static std::map<std::string, std::vector<std::string>> GetCommandParameters(
-      ScMemoryContext & m_memoryCtx,
+      ScMemoryContext & context,
       ScAddr const & actionAddr);
-  static ScAddr GetSubsystemDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component);
-  static bool CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component);
-  static ScAddr GetComponentBySpecification(ScMemoryContext & m_memoryCtx, ScAddr const & specification);
+  static ScAddr GetSubsystemDecompositionAddr(ScMemoryContext & context, ScAddr const & component);
+  static bool CheckIfInstalled(ScMemoryContext & context, ScAddr const & component);
+  static ScAddr GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification);
 };
 }  // namespace common_utils

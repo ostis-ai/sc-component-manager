@@ -35,7 +35,7 @@ sc_node_class
 	-> concept_complex_address;
 	-> concept_single_address;
 	-> concept_need_to_install_components;
-	-> ostis_system_knowledge_base;
-	-> ostis_system_problem_solver;
-	-> ostis_system_user_interface;
-	-> subsystems_set;;
+	-> sc_model_of_knowledge_base;
+	-> sc_model_of_problem_solver;
+	-> sc_model_of_interface;
+	-> concept_subsystems_set;;

@@ -5,7 +5,8 @@
  */
 
 #include "common_utils.hpp"
-
+#include <sc-agents-common/utils/GenerationUtils.hpp>
+#include <sc-agents-common/utils/IteratorUtils.hpp>
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "sc-memory/sc_memory.hpp"
@@ -18,11 +19,11 @@ namespace common_utils
 std::map<std::string, ScAddr> CommonUtils::managerParametersWithAgentRelations;
 std::vector<std::vector<ScAddr>> CommonUtils::componentsClasses;
 
-ScAddr CommonUtils::CheckIfMyselfDecompositionAddrExists(ScMemoryContext & m_memoryCtx)
+ScAddr CommonUtils::GetMyselfDecompositionAddr(ScMemoryContext & context)
 {
   ScAddr myselfDecompositionAddr;
 
-  ScIterator5Ptr decompositionIt = m_memoryCtx.Iterator5(
+  ScIterator5Ptr decompositionIt = context.Iterator5(
       keynodes::ScComponentManagerKeynodes::myself,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
@@ -35,14 +36,14 @@ ScAddr CommonUtils::CheckIfMyselfDecompositionAddrExists(ScMemoryContext & m_mem
   return myselfDecompositionAddr;
 }
 
-void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & m_memoryCtx)
+void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & context)
 {
-  ScAddr myselfDecompositionAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
-  ScAddr edgeAddr = m_memoryCtx.CreateEdge(
-      ScType::EdgeDCommonConst, keynodes::ScComponentManagerKeynodes::myself, myselfDecompositionAddr);
-  m_memoryCtx.CreateEdge(
-      ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::nrel_ostis_system_decomposition, edgeAddr);
-
+  ScAddr myselfDecompositionAddr = context.CreateNode(ScType::NodeConst);
+  utils::GenerationUtils::generateRelationBetween(
+      &context,
+      keynodes::ScComponentManagerKeynodes::myself,
+      myselfDecompositionAddr,
+      keynodes::ScComponentManagerKeynodes::nrel_ostis_system_decomposition);
   ScAddr componentAddr;
   ScAddr componentClassAddr;
   ScAddr componentDecompositionAddr;
@@ -50,15 +51,14 @@ void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & m_memoryCtx)
   for (ScAddrVector const & subsystemAndComponentClass : componentsClasses)
   {
     componentClassAddr = subsystemAndComponentClass[1];
-    componentAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
-    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, componentClassAddr, componentAddr);
-    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, myselfDecompositionAddr, componentAddr);
+    componentAddr = context.CreateNode(ScType::NodeConst);
 
-    componentDecompositionAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
+    context.CreateEdge(ScType::EdgeAccessConstPosPerm, componentClassAddr, componentAddr);
+    context.CreateEdge(ScType::EdgeAccessConstPosPerm, myselfDecompositionAddr, componentAddr);
 
-    edgeAddr = m_memoryCtx.CreateEdge(ScType::EdgeDCommonConst, componentAddr, componentDecompositionAddr);
-    m_memoryCtx.CreateEdge(
-        ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::nrel_decomposition, edgeAddr);
+    componentDecompositionAddr = context.CreateNode(ScType::NodeConst);
+    utils::GenerationUtils::generateRelationBetween(
+        &context, componentAddr, componentDecompositionAddr, keynodes::ScComponentManagerKeynodes::nrel_decomposition);
   }
 }
 
@@ -85,7 +85,7 @@ void CommonUtils::InitParametersMap()
 }
 
 bool CommonUtils::TransformToScStruct(
-    ScMemoryContext & m_memoryCtx,
+    ScMemoryContext & context,
     ScAddr const & actionAddr,
     std::map<std::string, std::vector<std::string>> const & commandParameters)
 {
@@ -104,54 +104,52 @@ bool CommonUtils::TransformToScStruct(
       SC_LOG_INFO("Transform to sc-structure: Unknown parameter " << parameter.first);
       continue;
     }
-    setAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
-    edgeAddr = m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, actionAddr, setAddr);
-
-    m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, parameterRrelNodeAddr, edgeAddr);
+    setAddr = context.CreateNode(ScType::NodeConst);
+    utils::GenerationUtils::generateRelationBetween(&context, actionAddr, setAddr, parameterRrelNodeAddr);
 
     for (std::string const & parameterValue : parameter.second)
     {
       if (parameter.first == CommandsConstantsFlags::EXPLANATION)
       {
-        parameterValueAddr = m_memoryCtx.CreateNode(ScType::LinkConst);
-        m_memoryCtx.SetLinkContent(parameterValueAddr, parameterValue);
+        parameterValueAddr = context.CreateNode(ScType::LinkConst);
+        context.SetLinkContent(parameterValueAddr, parameterValue);
       }
       else
       {
-        parameterValueAddr = m_memoryCtx.HelperFindBySystemIdtf(parameterValue);
-        if (!parameterValueAddr.IsValid())
+        parameterValueAddr = context.HelperFindBySystemIdtf(parameterValue);
+        if (!context.IsElement(parameterValueAddr))
         {
           SC_LOG_WARNING("Transform to sc-structure: Unknown value: " << parameterValue);
-          parameterValueAddr = m_memoryCtx.CreateNode(ScType::NodeConst);
-          m_memoryCtx.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
+          parameterValueAddr = context.CreateNode(ScType::NodeConst);
+          context.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
         }
       }
-      m_memoryCtx.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
+      context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
     }
   }
   return true;
 }
 
 ScAddrVector CommonUtils::GetNodesUnderParameter(
-    ScMemoryContext & m_memoryCtx,
+    ScMemoryContext & context,
     ScAddr const & actionAddr,
     ScAddr const & relationAddr)
 {
   ScAddr parameterNode;
   ScAddrVector components;
-  ScIterator5Ptr const & parameterIterator = m_memoryCtx.Iterator5(
+  ScIterator5Ptr const & parameterIterator = context.Iterator5(
       actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relationAddr);
   if (parameterIterator->Next())
   {
     parameterNode = parameterIterator->Get(2);
     ScIterator3Ptr const & componentsIterator =
-        m_memoryCtx.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        context.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentsIterator->Next())
     {
-      if (m_memoryCtx.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass)
+      if (context.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass)
       {
         ScIterator3Ptr const & elementsIterator =
-            m_memoryCtx.Iterator3(componentsIterator->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+            context.Iterator3(componentsIterator->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
         while (elementsIterator->Next())
         {
           components.push_back(elementsIterator->Get(2));
@@ -167,38 +165,38 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
 }
 
 std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameters(
-    ScMemoryContext & m_memoryCtx,
+    ScMemoryContext & context,
     ScAddr const & actionAddr)
 {
   std::map<std::string, std::vector<std::string>> commandParameters;
 
   ScAddr const & authorsSetAddr =
-      GetParameterNodeUnderRelation(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_author);
-  std::map<std::string, ScAddr> const & authors = GetSetElements(m_memoryCtx, authorsSetAddr);
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_author);
+  std::map<std::string, ScAddr> const & authors = GetSetElements(context, authorsSetAddr);
 
   ScAddr const & classesSetAddr =
-      GetParameterNodeUnderRelation(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
-  std::map<std::string, ScAddr> const & classes = GetSetElements(m_memoryCtx, classesSetAddr);
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
+  std::map<std::string, ScAddr> const & classes = GetSetElements(context, classesSetAddr);
 
   ScAddr const & explanationsSetAddr =
-      GetParameterNodeUnderRelation(m_memoryCtx, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
-  std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(m_memoryCtx, explanationsSetAddr);
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
+  std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(context, explanationsSetAddr);
 
   std::vector<std::string> authorsList, classesList, explanationsList;
 
-  if (authorsSetAddr.IsValid())
+  if (context.IsElement(authorsSetAddr))
   {
     for (auto & el : authors)
       authorsList.push_back(el.first);
     commandParameters.insert({CommandsConstantsFlags::AUTHOR, authorsList});
   }
-  if (classesSetAddr.IsValid())
+  if (context.IsElement(classesSetAddr))
   {
     for (auto & el : classes)
       classesList.push_back(el.first);
     commandParameters.insert({CommandsConstantsFlags::CLASS, classesList});
   }
-  if (explanationsSetAddr.IsValid())
+  if (context.IsElement(explanationsSetAddr))
   {
     for (auto & el : explanations)
       explanationsList.push_back(el.first);
@@ -208,12 +206,12 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
 }
 
 ScAddr CommonUtils::GetParameterNodeUnderRelation(
-    ScMemoryContext & m_memoryCtx,
+    ScMemoryContext & context,
     ScAddr const & actionAddr,
     ScAddr const & relation)
 {
   ScAddr parameterNode;
-  ScIterator5Ptr const & parameterIterator = m_memoryCtx.Iterator5(
+  ScIterator5Ptr const & parameterIterator = context.Iterator5(
       actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
   if (parameterIterator->Next())
   {
@@ -222,18 +220,18 @@ ScAddr CommonUtils::GetParameterNodeUnderRelation(
   return parameterNode;
 }
 
-std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr)
+std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & context, ScAddr const & setAddr)
 {
   std::map<std::string, ScAddr> elementsIdtfAndAddr;
-  if (!setAddr.IsValid())
+  if (!context.IsElement(setAddr))
     return elementsIdtfAndAddr;
   ScIterator3Ptr const & elementsIterator =
-      m_memoryCtx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (elementsIterator->Next())
   {
     try
     {
-      elementsIdtfAndAddr.insert({m_memoryCtx.HelperGetSystemIdtf(elementsIterator->Get(2)), elementsIterator->Get(2)});
+      elementsIdtfAndAddr.insert({context.HelperGetSystemIdtf(elementsIterator->Get(2)), elementsIterator->Get(2)});
     }
     catch (std::exception const & exception)
     {
@@ -244,89 +242,70 @@ std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & m_me
   return elementsIdtfAndAddr;
 }
 
-std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext & m_memoryCtx, ScAddr const & setAddr)
+std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext & context, ScAddr const & setAddr)
 {
   std::map<std::string, ScAddr> elementsIdtfAndAddr;
-  if (!setAddr.IsValid())
+  if (!context.IsElement(setAddr))
     return elementsIdtfAndAddr;
   std::string elementIdtf;
   ScIterator3Ptr const & elementsIterator =
-      m_memoryCtx.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
+      context.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
   while (elementsIterator->Next())
   {
-    m_memoryCtx.GetLinkContent(elementsIterator->Get(2), elementIdtf);
+    context.GetLinkContent(elementsIterator->Get(2), elementIdtf);
     elementsIdtfAndAddr.insert({elementIdtf, elementsIterator->Get(2)});
   }
   return elementsIdtfAndAddr;
 }
 
-ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & m_memoryCtx, ScAddr const & component)
+ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & context, ScAddr const & component)
 {
   ScAddr componentDecomposition;
   ScAddr componentClass;
 
   for (std::vector<ScAddr> const & commonComponentClass : common_utils::CommonUtils::componentsClasses)
   {
-    if (m_memoryCtx.HelperCheckEdge(commonComponentClass[0], component, ScType::EdgeAccessConstPosPerm))
+    if (context.HelperCheckEdge(commonComponentClass[0], component, ScType::EdgeAccessConstPosPerm))
     {
       componentClass = commonComponentClass[1];
       break;
     }
   }
-  ScIterator5Ptr myselfDecomposition = m_memoryCtx.Iterator5(
+  ScAddr myselfDecomposition = utils::IteratorUtils::getAnyByOutRelation(
+      &context,
       keynodes::ScComponentManagerKeynodes::myself,
-      ScType::EdgeDCommonConst,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
       keynodes::ScComponentManagerKeynodes::nrel_ostis_system_decomposition);
-  if (!myselfDecomposition->Next())
+
+  if (!context.IsElement(myselfDecomposition))
     return componentDecomposition;
 
   ScIterator3Ptr partsDecomposition =
-      m_memoryCtx.Iterator3(myselfDecomposition->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.Iterator3(myselfDecomposition, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
   while (partsDecomposition->Next())
   {
-    if (!m_memoryCtx.HelperCheckEdge(componentClass, partsDecomposition->Get(2), ScType::EdgeAccessConstPosPerm))
+    if (!context.HelperCheckEdge(componentClass, partsDecomposition->Get(2), ScType::EdgeAccessConstPosPerm))
       continue;
 
-    ScIterator5Ptr partDecomposition = m_memoryCtx.Iterator5(
-        partsDecomposition->Get(2),
-        ScType::EdgeDCommonConst,
-        ScType::NodeConst,
-        ScType::EdgeAccessConstPosPerm,
-        keynodes::ScComponentManagerKeynodes::nrel_decomposition);
-    if (!partDecomposition->Next())
-      return componentDecomposition;
-
-    componentDecomposition = partDecomposition->Get(2);
+    componentDecomposition = utils::IteratorUtils::getAnyByOutRelation(
+        &context, partsDecomposition->Get(2), keynodes::ScComponentManagerKeynodes::nrel_decomposition);
     break;
   }
   return componentDecomposition;
 }
 
-bool CommonUtils::CheckIfInstalled(ScMemoryContext & m_memoryCtx, ScAddr const & component)
+bool CommonUtils::CheckIfInstalled(ScMemoryContext & context, ScAddr const & component)
 {
-  ScAddr decompositionAddr = GetSubsystemDecompositionAddr(m_memoryCtx, component);
-  if (!decompositionAddr.IsValid() || !component.IsValid())
+  ScAddr decompositionAddr = GetSubsystemDecompositionAddr(context, component);
+  if (!context.IsElement(decompositionAddr) || !context.IsElement(component))
     return false;
-  return m_memoryCtx.HelperCheckEdge(decompositionAddr, component, ScType::EdgeAccessConstPosPerm);
+  return context.HelperCheckEdge(decompositionAddr, component, ScType::EdgeAccessConstPosPerm);
 }
 
-ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & m_memoryCtx, ScAddr const & specification)
+ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification)
 {
-  ScAddr component;
-  ScIterator5Ptr itComponent = m_memoryCtx.Iterator5(
-      specification,
-      ScType::EdgeAccessConstPosPerm,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
-      scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
-  if (itComponent->Next())
-  {
-    return itComponent->Get(2);
-  }
-  return component;
+  return utils::IteratorUtils::getAnyByOutRelation(
+      &context, specification, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
 }
 
 }  // namespace common_utils

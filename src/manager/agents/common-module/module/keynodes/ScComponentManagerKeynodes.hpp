@@ -19,7 +19,7 @@ class ScComponentManagerKeynodes : public ScObject
   SC_GENERATED_BODY()
 
 public:
-  SC_PROPERTY(Keynode("myself"), ForceCreate(ScType::NodeConstClass))
+  SC_PROPERTY(Keynode("myself"), ForceCreate(ScType::NodeConst))
   static ScAddr myself;
 
   SC_PROPERTY(Keynode("concept_reusable_component"), ForceCreate(ScType::NodeConstClass))

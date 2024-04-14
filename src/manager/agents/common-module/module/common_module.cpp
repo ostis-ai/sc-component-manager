@@ -22,12 +22,12 @@ sc_result CommonModule::InitializeImpl()
     SC_LOG_ERROR("CommonModule is deactivated");
     return SC_RESULT_ERROR;
   }
-  ScMemoryContext * m_memoryCtx = new ScMemoryContext();
+  ScMemoryContext context;
   keynodes::ScComponentManagerKeynodes::InitGlobal();
   common_utils::CommonUtils::InitParametersMap();
-  if (!common_utils::CommonUtils::CheckIfMyselfDecompositionAddrExists(*m_memoryCtx).IsValid())
+  if (!common_utils::CommonUtils::GetMyselfDecompositionAddr(context).IsValid())
   {
-    common_utils::CommonUtils::CreateMyselfDecomposition(*m_memoryCtx);
+    common_utils::CommonUtils::CreateMyselfDecomposition(context);
   }
   return SC_RESULT_OK;
 }

@@ -36,8 +36,8 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
     try
     {
       SC_LOG_DEBUG(
-          "ScComponentManagerCommandInstall: Validating component \"" + context->HelperGetSystemIdtf(componentToInstall)
-          + "\"");
+          "ScComponentManagerCommandInstall: Validating component \""
+          << context->HelperGetSystemIdtf(componentToInstall) << "\"");
       ValidateComponent(context, componentToInstall);
     }
     catch (utils::ScException const & exception)
@@ -47,8 +47,8 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
       continue;
     }
     SC_LOG_DEBUG(
-        "ScComponentManagerCommandInstall: Component \"" + context->HelperGetSystemIdtf(componentToInstall)
-        + "\" is specified correctly");
+        "ScComponentManagerCommandInstall: Component \"" << context->HelperGetSystemIdtf(componentToInstall)
+                                                         << "\" is specified correctly");
     availableComponents.push_back(componentToInstall);
   }
   return availableComponents;
@@ -99,8 +99,14 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
 
   componentsToInstall = GetAvailableComponents(context, componentsToInstall);
 
-  for (ScAddr const & componentAddr : componentsToInstall)
+  ScAddr decompositionAddr;
+  for (ScAddr componentAddr : componentsToInstall)
   {
+    if (common_utils::CommonUtils::CheckIfInstalled(*context, componentAddr))
+    {
+      SC_LOG_DEBUG("Component \"" << context->HelperGetSystemIdtf(componentAddr) << "\" is already installed");
+      continue;
+    }
     executionResult = InstallDependencies(context, componentAddr);
     executionResult &= DownloadComponent(context, componentAddr);
     if (executionResult)
@@ -108,6 +114,8 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
       executionResult &= InstallComponent(context, componentAddr);
     }
     // TODO: need to process installation method from component specification in kb
+    decompositionAddr = common_utils::CommonUtils::GetSubsystemDecompositionAddr(*context, componentAddr);
+    context->CreateEdge(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
   }
 
   return componentsToInstall;
@@ -167,7 +175,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
   for (ScAddr const & componentDependency : componentDependencies)
   {
     std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
-    SC_LOG_INFO("ScComponentManager: Install dependency \"" + dependencyIdtf + "\"");
+    SC_LOG_INFO("ScComponentManager: Install dependency \"" << dependencyIdtf << "\"");
     CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
 
     ScAddr const actionAddr =
@@ -179,7 +187,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
     // Return empty if you couldn't install one from all dependencies why?
     if (!dependencyResult)
     {
-      SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependency \"" + dependencyIdtf + "\" is not installed");
+      SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependency \"" << dependencyIdtf << "\" is not installed");
       // return dependencyResult;
       result = false;
     }

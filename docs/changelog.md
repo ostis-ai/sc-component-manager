@@ -11,9 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Describe myself decomposition
+- Add components logging
 - Update clang-format
-- Agents for init, search, install comands
-- Documentation of CLion cmake-configuraion
+- Agents for init, search, install commands
+- Documentation of CLion cmake-configuration
 - Download components from a separate directory of a repository, not to clone all repository 
 - Add repository url parser to get information from GitHub repository link
 - Add installation of kb/ps/interface components to the relevant directories

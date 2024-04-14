@@ -6,6 +6,8 @@
 
 #include "common_module.hpp"
 
+#include "sc-memory/sc_memory.hpp"
+
 #include "keynodes/ScComponentManagerKeynodes.hpp"
 #include "utils/common_utils.hpp"
 
@@ -20,10 +22,13 @@ sc_result CommonModule::InitializeImpl()
     SC_LOG_ERROR("CommonModule is deactivated");
     return SC_RESULT_ERROR;
   }
-
+  ScMemoryContext context;
   keynodes::ScComponentManagerKeynodes::InitGlobal();
   common_utils::CommonUtils::InitParametersMap();
-
+  if (!context.IsElement(common_utils::CommonUtils::GetMyselfDecompositionAddr(context)))
+  {
+    common_utils::CommonUtils::CreateMyselfDecomposition(context);
+  }
   return SC_RESULT_OK;
 }
 

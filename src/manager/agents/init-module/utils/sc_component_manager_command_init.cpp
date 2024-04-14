@@ -8,6 +8,7 @@
 #include "downloader/downloader.hpp"
 #include "sc_component_manager_command_init.hpp"
 #include "utils/sc_component_utils.hpp"
+#include "module/utils/common_utils.hpp"
 
 ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
@@ -72,8 +73,16 @@ bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
     SC_LOG_DEBUG(exception.Message());
   }
 
+  ScAddr component;
   for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
   {
+    // TODO componentSpecificationAddr as specification of component
+    component = common_utils::CommonUtils::GetComponentBySpecification(*context, componentSpecificationAddr);
+    if (common_utils::CommonUtils::CheckIfInstalled(*context, component))
+    {
+      SC_LOG_WARNING("Component \"" << context->HelperGetSystemIdtf(component) << "\" is already installed");
+      continue;
+    }
     downloaderHandler->DownloadSpecification(context, componentSpecificationAddr);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER
                                           + context->HelperGetSystemIdtf(componentSpecificationAddr);

@@ -19,6 +19,9 @@ class ScComponentManagerKeynodes : public ScObject
   SC_GENERATED_BODY()
 
 public:
+  SC_PROPERTY(Keynode("myself"), ForceCreate(ScType::NodeConst))
+  static ScAddr myself;
+
   SC_PROPERTY(Keynode("concept_reusable_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_component;
 
@@ -28,8 +31,11 @@ public:
   SC_PROPERTY(Keynode("concept_reusable_ps_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_ps_component;
 
-  SC_PROPERTY(Keynode("concept_reusable_interface_component"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_interface_component;
+  SC_PROPERTY(Keynode("concept_reusable_ui_component"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_ui_component;
+
+  SC_PROPERTY(Keynode("concept_reusable_embedded_ostis_system"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_reusable_embedded_ostis_system;
 
   SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_repository;
@@ -51,6 +57,18 @@ public:
 
   SC_PROPERTY(Keynode("concept_google_drive_url"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_google_drive_url;
+
+  SC_PROPERTY(Keynode("sc_model_of_knowledge_base"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr sc_model_of_knowledge_base;
+
+  SC_PROPERTY(Keynode("sc_model_of_interface"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr sc_model_of_interface;
+
+  SC_PROPERTY(Keynode("sc_model_of_problem_solver"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr sc_model_of_problem_solver;
+
+  SC_PROPERTY(Keynode("concept_subsystems_set"), ForceCreate(ScType::NodeConstClass))
+  static ScAddr concept_subsystems_set;
 
   SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_repositories_specifications;
@@ -81,6 +99,12 @@ public:
 
   SC_PROPERTY(Keynode("nrel_installation_script"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_installation_script;
+
+  SC_PROPERTY(Keynode("nrel_decomposition"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_decomposition;
+
+  SC_PROPERTY(Keynode("nrel_ostis_system_decomposition"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_ostis_system_decomposition;
 
   SC_PROPERTY(Keynode("action_components_init"), ForceCreate)
   static ScAddr action_components_init;

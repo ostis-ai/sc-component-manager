@@ -10,10 +10,12 @@
 
 namespace keynodes
 {
+ScAddr ScComponentManagerKeynodes::myself;
 ScAddr ScComponentManagerKeynodes::concept_reusable_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_kb_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_ps_component;
-ScAddr ScComponentManagerKeynodes::concept_reusable_interface_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_ui_component;
+ScAddr ScComponentManagerKeynodes::concept_reusable_embedded_ostis_system;
 ScAddr ScComponentManagerKeynodes::concept_repository;
 ScAddr ScComponentManagerKeynodes::concept_reusable_component_specification;
 ScAddr ScComponentManagerKeynodes::concept_complex_address;
@@ -21,6 +23,10 @@ ScAddr ScComponentManagerKeynodes::concept_single_address;
 ScAddr ScComponentManagerKeynodes::concept_github_url;
 ScAddr ScComponentManagerKeynodes::concept_google_drive_url;
 ScAddr ScComponentManagerKeynodes::concept_need_to_install_components;
+ScAddr ScComponentManagerKeynodes::sc_model_of_knowledge_base;
+ScAddr ScComponentManagerKeynodes::sc_model_of_interface;
+ScAddr ScComponentManagerKeynodes::sc_model_of_problem_solver;
+ScAddr ScComponentManagerKeynodes::concept_subsystems_set;
 ScAddr ScComponentManagerKeynodes::rrel_repositories_specifications;
 ScAddr ScComponentManagerKeynodes::rrel_components_specifications;
 ScAddr ScComponentManagerKeynodes::nrel_authors;
@@ -31,6 +37,8 @@ ScAddr ScComponentManagerKeynodes::nrel_installation_method;
 ScAddr ScComponentManagerKeynodes::nrel_alternative_addresses;
 ScAddr ScComponentManagerKeynodes::nrel_repository_address;
 ScAddr ScComponentManagerKeynodes::nrel_installation_script;
+ScAddr ScComponentManagerKeynodes::nrel_decomposition;
+ScAddr ScComponentManagerKeynodes::nrel_ostis_system_decomposition;
 ScAddr ScComponentManagerKeynodes::action_components_init;
 ScAddr ScComponentManagerKeynodes::action_components_search;
 ScAddr ScComponentManagerKeynodes::action_components_install;

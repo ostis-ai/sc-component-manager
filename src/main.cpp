@@ -14,8 +14,8 @@
 #include "sc-config-utils/sc_memory_config.hpp"
 #include "sc-memory/utils/sc_signal_handler.hpp"
 
-#include "manager/sc_component_manager_impl.hpp"
-#include "manager/sc-component-manager-factory/sc_component_manager_factory.hpp"
+#include "sc_component_manager_impl.hpp"
+#include "sc-component-manager-factory/sc_component_manager_factory.hpp"
 
 sc_int main(sc_int argc, sc_char * argv[])
 {
@@ -38,6 +38,8 @@ sc_int main(sc_int argc, sc_char * argv[])
   if (options.Has({"config", "c"}))
     configFilePath = options[{"config", "c"}].second;
 
+  ScMemory::ms_configPath = configFilePath;
+
   ScParams params{options, {}};
 
   ScConfig config{
@@ -59,14 +61,14 @@ sc_int main(sc_int argc, sc_char * argv[])
   ScMemoryConfig memoryConfig{config, memoryParams};
 
   ScMemory::Initialize(memoryConfig.GetParams());
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
 
   std::unique_ptr<ScComponentManager> scComponentManager =
       ScComponentManagerFactory::ConfigureScComponentManager(params, memoryConfig.GetParams());
 
   std::atomic_bool isRun = {SC_TRUE};
   utils::ScSignalHandler::Initialize();
-  utils::ScSignalHandler::m_onTerminate = [&isRun]() {
+  utils::ScSignalHandler::m_onTerminate = [&isRun]()
+  {
     isRun = SC_FALSE;
   };
 

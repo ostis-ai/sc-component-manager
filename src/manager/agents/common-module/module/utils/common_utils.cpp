@@ -21,19 +21,10 @@ std::vector<std::vector<ScAddr>> CommonUtils::componentsClasses;
 
 ScAddr CommonUtils::GetMyselfDecompositionAddr(ScMemoryContext & context)
 {
-  ScAddr myselfDecompositionAddr;
-
-  ScIterator5Ptr decompositionIt = context.Iterator5(
+  return utils::IteratorUtils::getAnyByOutRelation(
+      &context,
       keynodes::ScComponentManagerKeynodes::myself,
-      ScType::EdgeDCommonConst,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
       keynodes::ScComponentManagerKeynodes::nrel_ostis_system_decomposition);
-  if (decompositionIt->Next())
-  {
-    myselfDecompositionAddr = decompositionIt->Get(2);
-  }
-  return myselfDecompositionAddr;
 }
 
 void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & context)

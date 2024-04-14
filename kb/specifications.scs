@@ -5,7 +5,7 @@ sc_component_manager_repository
 
 ..components_addresses
 	<- sc_node_tuple;
-	-> cat_kb_component_spec
+	-> cat_reusable_component_specification
 	    (*
            	<- concept_reusable_component_specification;;
            	=> nrel_alternative_addresses:
@@ -22,7 +22,7 @@ sc_component_manager_repository
            			*);;
            	*);;
         *);
-	-> part_methods_tools_spec
+	-> part_methods_tools_specification
 	    (*
            	<- concept_reusable_component_specification;;
            	=> nrel_alternative_addresses:
@@ -39,7 +39,7 @@ sc_component_manager_repository
            			*);;
            	*);;
         *);
-	-> part_platform_spec
+	-> part_platform_specification
 	    (*
            	<- concept_reusable_component_specification;;
            	=> nrel_alternative_addresses:
@@ -56,7 +56,7 @@ sc_component_manager_repository
            			*);;
            	*);;
         *);
-	-> part_ui_spec
+	-> part_ui_specification
 	    (*
            	<- concept_reusable_component_specification;;
            	=> nrel_alternative_addresses:

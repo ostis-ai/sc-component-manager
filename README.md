@@ -43,11 +43,10 @@ To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory
 
 To start sc-component-manager run:
 
-``./scripts/run_sc_component_manager.sh``
+``./scripts/run_sc_machine.sh``
 
 Possible run flags:
-- `-c` <CONFIG_PATH>
-- `-i` - interactive mode to run command manually;
+- `-c` <CONFIG_PATH>.
 
 ### Commands
 | Command              | Abbreviation                             | Description                                                                                       | Flags                                                                                                                      |

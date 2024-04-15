@@ -13,8 +13,8 @@
 class ScComponentManagerImpl : public ScComponentManager
 {
 public:
-  ScComponentManagerImpl(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath, sc_memory_params memoryParams)
-    : ScComponentManager(std::move(componentsPath), memoryParams)
+  ScComponentManagerImpl(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
+    : ScComponentManager(std::move(componentsPath))
   {
   }
 

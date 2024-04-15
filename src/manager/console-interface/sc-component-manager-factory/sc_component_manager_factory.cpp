@@ -8,8 +8,7 @@
 #include "sc_component_manager_impl.hpp"
 
 std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScComponentManager(
-    ScParams const & scComponentManagerParams,
-    sc_memory_params const & memoryParams)
+    ScParams const & scComponentManagerParams)
 {
   std::string const KB_COMPONENT_PATH = "knowledge_base_components_path";
   std::string const PS_COMPONENT_PATH = "problem_solver_components_path";
@@ -26,7 +25,7 @@ std::unique_ptr<ScComponentManager> ScComponentManagerFactory::ConfigureScCompon
           scComponentManagerParams.Get<std::string>(INTERFACE_COMPONENT_PATH)}}};
 
     std::unique_ptr<ScComponentManager> scComponentManager =
-        std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(componentsPath, memoryParams));
+        std::unique_ptr<ScComponentManager>(new ScComponentManagerImpl(componentsPath));
     return scComponentManager;
   }
   catch (utils::ScException const & exception)

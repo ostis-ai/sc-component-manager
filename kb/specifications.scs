@@ -72,7 +72,126 @@ sc_component_manager_repository
            					*);;
            			*);;
            	*);;
-        *);;
+        *);
+	-> part_menu_of_logical_inference_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_menu/menu_of_logical_inference]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> part_menu_of_agent_of_finding_intersection_of_sets_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_menu/menu_of_agent_of_finding_intersection_of_sets]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> part_agent_of_finding_intersection_of_sets_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_agents/agent_of_finding_intersection_of_sets]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> part_polygons_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_figure/sd_polygons]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> part_triangles_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_figure/sd_triangles]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> lr_about_isosceles_triangle_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_lr/lr_about_isosceles_triangle]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> lr_about_relation_specification
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_lr/lr_about_relation]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);;
 
 ..repositories_addresses
 	-> ... 

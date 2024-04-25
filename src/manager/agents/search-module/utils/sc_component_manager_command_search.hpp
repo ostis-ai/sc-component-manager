@@ -16,6 +16,7 @@ public:
   ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
+  std::string const SPECIFICATION_ALIAS = "_specification";
   std::string const COMPONENT_ALIAS = "_component";
   std::string const AUTHORS_SET_ALIAS = "_authors";
   std::string const EXPLANATION_LINK_ALIAS = "_explanation";
@@ -44,16 +45,16 @@ protected:
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 
-  std::vector<std::string> SearchComponents(
+  std::set<ScAddr, ScAddrLessFunc> SearchComponentsSpecifications(
       ScMemoryContext * context,
       ScTemplate & searchComponentTemplate,
       std::map<std::string, ScAddrVector> const & linksValues);
 
-  std::vector<std::string> SearchComponentsWithoutLinks(
+  std::set<ScAddr, ScAddrLessFunc> SearchComponentsSpecificationsWithoutLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult);
 
-  std::vector<std::string> SearchComponentsWithLinks(
+  std::set<ScAddr, ScAddrLessFunc> SearchComponentsSpecificationsWithLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult,
       std::map<std::string, ScAddrVector> const & linksValues);

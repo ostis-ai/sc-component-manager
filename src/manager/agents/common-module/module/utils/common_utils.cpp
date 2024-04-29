@@ -299,6 +299,8 @@ bool CommonUtils::CheckIfInstalled(ScMemoryContext & context, ScAddr const & com
 
 ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification)
 {
+  if (!context.IsElement(specification))
+    return specification;
   return utils::IteratorUtils::getAnyByOutRelation(
       &context, specification, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
 }

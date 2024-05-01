@@ -28,16 +28,13 @@ ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context,
 
   ScTemplate searchComponentTemplate;
   searchComponentTemplate.Quintuple(
-     ScType::NodeVarStruct >> SPECIFICATION_ALIAS,
-     ScType::EdgeAccessVarPosPerm,
-     ScType::NodeVar >> COMPONENT_ALIAS,
-     ScType::EdgeAccessVarPosPerm,
-     scAgentsCommon::CoreKeynodes::rrel_key_sc_element
-   );
-  searchComponentTemplate.Triple(
-      keynodes::ScComponentManagerKeynodes::concept_reusable_component,
+      ScType::NodeVarStruct >> SPECIFICATION_ALIAS,
       ScType::EdgeAccessVarPosPerm,
-      COMPONENT_ALIAS);
+      ScType::NodeVar >> COMPONENT_ALIAS,
+      ScType::EdgeAccessVarPosPerm,
+      scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+  searchComponentTemplate.Triple(
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
 
   if (commandParameters.find(CLASS) != commandParameters.cend())
   {
@@ -67,7 +64,8 @@ ScAddrVector ScComponentManagerCommandSearch::Execute(ScMemoryContext * context,
     linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
   }
 
-  std::set<ScAddr, ScAddrLessFunc> componentsSpecifications = SearchComponentsSpecifications(context, searchComponentTemplate, linksValues);
+  std::set<ScAddr, ScAddrLessFunc> componentsSpecifications =
+      SearchComponentsSpecifications(context, searchComponentTemplate, linksValues);
   ScAddrVector componentsSpecificationsVector(componentsSpecifications.size());
   std::copy(componentsSpecifications.begin(), componentsSpecifications.end(), componentsSpecificationsVector.begin());
 
@@ -170,9 +168,10 @@ std::set<ScAddr, ScAddrLessFunc> ScComponentManagerCommandSearch::SearchComponen
   {
     ScAddr reusableComponentSpecification = searchComponentResult[i][SPECIFICATION_ALIAS];
     ScAddr reusableComponent = searchComponentResult[i][COMPONENT_ALIAS];
-    SC_LOG_INFO("ScComponentManager: specification is "
-      << context->HelperGetSystemIdtf(reusableComponentSpecification) << ", component is "
-      << context->HelperGetSystemIdtf(reusableComponent));
+    SC_LOG_INFO(
+        "ScComponentManager: specification is " << context->HelperGetSystemIdtf(reusableComponentSpecification)
+                                                << ", component is "
+                                                << context->HelperGetSystemIdtf(reusableComponent));
     result.insert(reusableComponentSpecification);
   }
 
@@ -195,9 +194,10 @@ std::set<ScAddr, ScAddrLessFunc> ScComponentManagerCommandSearch::SearchComponen
         {
           ScAddr reusableComponentSpecification = searchComponentResult[i][SPECIFICATION_ALIAS];
           ScAddr reusableComponent = searchComponentResult[i][COMPONENT_ALIAS];
-          SC_LOG_INFO("ScComponentManager: specification is "
-                      << context->HelperGetSystemIdtf(reusableComponentSpecification) << ", component is "
-                      << context->HelperGetSystemIdtf(reusableComponent));
+          SC_LOG_INFO(
+              "ScComponentManager: specification is " << context->HelperGetSystemIdtf(reusableComponentSpecification)
+                                                      << ", component is "
+                                                      << context->HelperGetSystemIdtf(reusableComponent));
           result.insert(reusableComponentSpecification);
         }
       }

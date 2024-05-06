@@ -114,10 +114,11 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
     }
     // TODO: need to process installation method from component specification in kb
     decompositionAddr = common_utils::CommonUtils::GetSubsystemDecompositionAddr(*context, componentAddr);
-    if(context->IsElement(decompositionAddr))
-        context->CreateEdge(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
+    if (context->IsElement(decompositionAddr))
+      context->CreateEdge(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
     else
-        SC_LOG_WARNING("Component \"" << context->HelperGetSystemIdtf(componentAddr) << "\" can't be installed");
+      SC_LOG_WARNING(
+          "Component \"" << context->HelperGetSystemIdtf(componentAddr) << "\" can't be added in myself-decomposition");
   }
 
   return componentsToInstall;

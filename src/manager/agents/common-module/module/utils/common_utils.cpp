@@ -305,4 +305,33 @@ ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & context, ScAdd
       &context, specification, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
 }
 
+bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context)
+{
+  ScAddr myselfDecompositionAddr = GetMyselfDecompositionAddr(context);
+  if (context.IsElement(myselfDecompositionAddr))
+    return false;
+
+  ScAddr componentClassAddr;
+  ScAddr myselfDecompositionPartAddr;
+  ScAddr partDecompositionAddr;
+
+  for (ScAddrVector const & subsystemAndComponentClass : componentsClasses)
+  {
+    componentClassAddr = subsystemAndComponentClass[1];
+
+    ScIterator3Ptr it = context.Iterator3(myselfDecompositionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    while (it->Next())
+    {
+      myselfDecompositionPartAddr = it->Get(2);
+      if (context.HelperCheckEdge(componentClassAddr, myselfDecompositionAddr, ScType::EdgeAccessConstPosPerm))
+      {
+        partDecompositionAddr = utils::IteratorUtils::getAnyByOutRelation(
+            &context, myselfDecompositionPartAddr, keynodes::ScComponentManagerKeynodes::nrel_decomposition);
+        if (!context.IsElement(partDecompositionAddr))
+          return false;
+      }
+    }
+  }
+  return true;
+}
 }  // namespace common_utils

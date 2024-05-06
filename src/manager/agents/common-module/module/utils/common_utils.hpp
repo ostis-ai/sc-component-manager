@@ -40,5 +40,6 @@ public:
   static ScAddr GetSubsystemDecompositionAddr(ScMemoryContext & context, ScAddr const & component);
   static bool CheckIfInstalled(ScMemoryContext & context, ScAddr const & component);
   static ScAddr GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification);
+  static bool CheckIfFullMyselfDecompositionExists(ScMemoryContext & context);
 };
 }  // namespace common_utils

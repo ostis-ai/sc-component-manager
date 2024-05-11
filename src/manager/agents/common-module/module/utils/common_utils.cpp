@@ -308,7 +308,7 @@ ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & context, ScAdd
 bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context)
 {
   ScAddr myselfDecompositionAddr = GetMyselfDecompositionAddr(context);
-  if (context.IsElement(myselfDecompositionAddr))
+  if (!context.IsElement(myselfDecompositionAddr))
     return false;
 
   ScAddr componentClassAddr;

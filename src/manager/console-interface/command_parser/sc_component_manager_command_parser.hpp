@@ -46,9 +46,16 @@ public:
           "\"" + command + "\" is not a command. Maybe you mean " + CommandConstants::COMPONENTS_COMMAND_PREFIX + "?");
 
     parsedCommand.first = commandTokens.at(1);
-    SC_LOG_WARNING(parsedCommand.first);
     CommandParameters commandParameters = GetCommandParameters(commandTokens);
     parsedCommand.second = commandParameters;
+    //    for (auto & p : parsedCommand.second)
+    //    {
+    //      SC_LOG_WARNING(p.first);
+    //      for (auto & x : p.second)
+    //      {
+    //        SC_LOG_WARNING(":\t" << x);
+    //      }
+    //    }
 
     return parsedCommand;
   }
@@ -62,10 +69,17 @@ protected:
     CommandParameters commandParameters;
     std::string parameterName;
     std::vector<std::string> parameterValue;
+    std::string currentCommandToken;
 
     for (size_t tokenNumber = COMMAND_KEYWORDS_SIZE; tokenNumber < commandTokens.size(); tokenNumber++)
     {
-      std::string currentCommandToken = commandTokens.at(tokenNumber);
+      currentCommandToken = commandTokens.at(tokenNumber);
+      if (tokenNumber == COMMAND_KEYWORDS_SIZE && commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX
+          && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL
+          && currentCommandToken.at(0) != PARAMETER_VALUES_DELIMITER)
+      {
+        parameterName = CommandsConstantsFlags::IDTF;
+      }
       if (currentCommandToken.at(0) == PARAMETER_VALUES_DELIMITER)
       {
         if (!parameterValue.empty())
@@ -89,14 +103,14 @@ protected:
     {
       commandParameters.insert({parameterName, parameterValue});
     }
-    else
-    {
-      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX
-          && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && !parameterValue.empty())
-      {
-        commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
-      }
-    }
+    //    else
+    //    {
+    //      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX
+    //          && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && !parameterValue.empty())
+    //      {
+    //        commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
+    //      }
+    //    }
 
     InsertParametersWithoutValues(commandParameters, commandTokens, PARAMETER_VALUES_DELIMITER);
 

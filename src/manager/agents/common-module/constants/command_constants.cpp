@@ -47,6 +47,7 @@ std::string const CommandConstants::COMPONENTS_COMMAND_INSTALL = "install";
 std::string const CommandConstants::COMPONENTS_COMMAND_SEARCH = "search";
 
 std::string const CommandsConstantsFlags::IDTF = "idtf";
+std::string const CommandsConstantsFlags::SET = "set";
 std::string const CommandsConstantsFlags::EXPLANATION = "explanation";
 std::string const CommandsConstantsFlags::CLASS = "class";
 std::string const CommandsConstantsFlags::AUTHOR = "author";

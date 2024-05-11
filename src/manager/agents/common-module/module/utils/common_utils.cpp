@@ -60,6 +60,7 @@ void CommonUtils::InitParametersMap()
       {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
       {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
       {"idtf", scAgentsCommon::CoreKeynodes::rrel_1},
+      {"set", scAgentsCommon::CoreKeynodes::rrel_1},
       {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
       {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
       {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};
@@ -115,7 +116,11 @@ bool CommonUtils::TransformToScStruct(
           context.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
         }
       }
-      context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
+      edgeAddr = context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
+      if (parameter.first == CommandsConstantsFlags::SET)
+      {
+        context.CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::rrel_set, edgeAddr);
+      };
     }
   }
   return true;
@@ -128,6 +133,7 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
 {
   ScAddr parameterNode;
   ScAddrVector components;
+  ScAddr setParameterEdgeAddr;
   ScIterator5Ptr const & parameterIterator = context.Iterator5(
       actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relationAddr);
   if (parameterIterator->Next())
@@ -137,7 +143,10 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
         context.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentsIterator->Next())
     {
-      if (context.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass)
+      setParameterEdgeAddr = componentsIterator->Get(1);
+      if (context.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass
+          && !context.HelperCheckEdge(
+              keynodes::ScComponentManagerKeynodes::rrel_set, setParameterEdgeAddr, ScType::EdgeAccessConstPosPerm))
       {
         ScIterator3Ptr const & elementsIterator =
             context.Iterator3(componentsIterator->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);

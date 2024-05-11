@@ -18,20 +18,20 @@ public:
   {
     size_t const COMMAND_KEYWORDS_SIZE = 2;
     std::string const fullCommand = GetFullCommand(command);
-    std::string cutCommand = fullCommand;
-
-    size_t firstPapameter = fullCommand.find('-');
-    if (firstPapameter != std::string::npos)
-    {
-      cutCommand = fullCommand.substr(0, firstPapameter - 1);
-    }
-
-    size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
-    if (endOfCommandPos != std::string::npos)
-    {
-      cutCommand.erase(endOfCommandPos + 1);
-    }
-
+    //    std::string cutCommand = fullCommand;
+    //
+    //    size_t firstPapameter = fullCommand.find('-');
+    //    if (firstPapameter != std::string::npos)
+    //    {
+    //      cutCommand = fullCommand.substr(0, firstPapameter - 1);
+    //    }
+    //
+    //    size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
+    //    if (endOfCommandPos != std::string::npos)
+    //    {
+    //      cutCommand.erase(endOfCommandPos + 1);
+    //    }
+    //    SC_LOG_WARNING(cutCommand);
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
     commandTokens = ParseCommand(fullCommand);
@@ -46,6 +46,7 @@ public:
           "\"" + command + "\" is not a command. Maybe you mean " + CommandConstants::COMPONENTS_COMMAND_PREFIX + "?");
 
     parsedCommand.first = commandTokens.at(1);
+    SC_LOG_WARNING(parsedCommand.first);
     CommandParameters commandParameters = GetCommandParameters(commandTokens);
     parsedCommand.second = commandParameters;
 

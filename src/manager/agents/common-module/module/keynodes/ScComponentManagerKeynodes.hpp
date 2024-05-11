@@ -121,6 +121,9 @@ public:
   SC_PROPERTY(Keynode("rrel_class"), ForceCreate)
   static ScAddr rrel_class;
 
+  SC_PROPERTY(Keynode("rrel_set"), ForceCreate)
+  static ScAddr rrel_set;
+
   SC_PROPERTY(Keynode("rrel_explanation"), ForceCreate)
   static ScAddr rrel_explanation;
 

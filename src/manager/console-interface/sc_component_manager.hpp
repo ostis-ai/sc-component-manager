@@ -40,6 +40,9 @@ public:
 
 protected:
   std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
+
+  sc_bool static HasNewInput();
+
   void Start();
 
   ScComponentManagerCommandHandler * m_handler;

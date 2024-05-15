@@ -7,23 +7,39 @@
 #include <string>
 #include <iostream>
 #include <thread>
+#include <csignal>
 
 #include "sc_component_manager.hpp"
-#include "sc-memory/sc_debug.hpp"
+
+static constexpr int STD_INPUT = 0;
+static constexpr __suseconds_t WAIT_BETWEEN_SELECT_US = 250000L;
 
 void ScComponentManager::Run()
 {
-  m_instance = std::thread(&ScComponentManager::Start, this);
   m_isRunning = SC_TRUE;
+  m_instance = std::thread(&ScComponentManager::Start, this);
+}
+
+sc_bool ScComponentManager::HasNewInput()
+{
+  struct timeval waitTime = {0L, WAIT_BETWEEN_SELECT_US};
+  fd_set fds;
+  FD_ZERO(&fds);
+  FD_SET(STD_INPUT, &fds);
+  int ready = select(STD_INPUT + 1, &fds, nullptr, nullptr, &waitTime);
+  return ready > 0;
 }
 
 void ScComponentManager::Start()
 {
   std::string command;
-  do
+  while (m_isRunning)
   {
-    SC_LOG_INFO("ScComponentManager: Enter command");
-    getline(std::cin, command);
+    if (HasNewInput())
+      std::getline(std::cin, command);
+
+    if (command.empty())
+      continue;
 
     try
     {
@@ -33,15 +49,16 @@ void ScComponentManager::Start()
     {
       SC_LOG_ERROR(exception.Message());
     }
+
+    command.clear();
   }
-  while (m_isRunning);
 }
 
 void ScComponentManager::Stop()
 {
   m_isRunning = SC_FALSE;
   if (m_instance.joinable())
-    m_instance.detach();
+    m_instance.join();
 }
 
 void ScComponentManager::QuietInstall()

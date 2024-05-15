@@ -51,6 +51,7 @@ sc_result ScComponentManagerModule::ShutdownImpl()
   if (m_scComponentManager)
     m_scComponentManager->Stop();
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");
+  m_scComponentManager.reset();
 
   return SC_RESULT_OK;
 }

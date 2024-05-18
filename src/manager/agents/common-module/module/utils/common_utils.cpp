@@ -59,8 +59,8 @@ void CommonUtils::InitParametersMap()
       {"author", keynodes::ScComponentManagerKeynodes::rrel_author},
       {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
       {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
-      {"idtf", scAgentsCommon::CoreKeynodes::rrel_1},
-      {"set", scAgentsCommon::CoreKeynodes::rrel_1},
+      {"idtf", keynodes::ScComponentManagerKeynodes::rrel_identifier},
+      {"set", keynodes::ScComponentManagerKeynodes::rrel_set},
       {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
       {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
       {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};
@@ -85,6 +85,7 @@ bool CommonUtils::TransformToScStruct(
   ScAddr parameterRrelNodeAddr;
   ScAddr edgeAddr;
   ScAddr setAddr;
+  ScAddr subSetAddr;
   for (auto const & parameter : commandParameters)
   {
     try
@@ -96,7 +97,18 @@ bool CommonUtils::TransformToScStruct(
       SC_LOG_INFO("Transform to sc-structure: Unknown parameter " << parameter.first);
       continue;
     }
-    setAddr = context.CreateNode(ScType::NodeConst);
+    setAddr = utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+    if (!context.IsElement(setAddr))
+      setAddr = context.CreateNode(ScType::NodeConst);
+
+    if (parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_set
+        || parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_identifier)
+    {
+      parameterRrelNodeAddr = scAgentsCommon::CoreKeynodes::rrel_1;
+      subSetAddr = context.CreateNode(ScType::NodeConst);
+      utils::GenerationUtils::generateRelationBetween(
+          &context, setAddr, subSetAddr, managerParametersWithAgentRelations.at(parameter.first));
+    }
     utils::GenerationUtils::generateRelationBetween(&context, actionAddr, setAddr, parameterRrelNodeAddr);
 
     for (std::string const & parameterValue : parameter.second)
@@ -116,11 +128,12 @@ bool CommonUtils::TransformToScStruct(
           context.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
         }
       }
-      edgeAddr = context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
-      if (parameter.first == CommandsConstantsFlags::SET)
+      if (parameter.first == CommandsConstantsFlags::SET || parameter.first == CommandsConstantsFlags::IDTF)
       {
-        context.CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::rrel_set, edgeAddr);
-      };
+        context.CreateEdge(ScType::EdgeAccessConstPosPerm, subSetAddr, parameterValueAddr);
+        continue;
+      }
+      context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
     }
   }
   return true;
@@ -134,19 +147,38 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
   ScAddr parameterNode;
   ScAddrVector components;
   ScAddr setParameterEdgeAddr;
-  ScIterator5Ptr const & parameterIterator = context.Iterator5(
-      actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relationAddr);
-  if (parameterIterator->Next())
+  parameterNode = utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, relationAddr);
+
+  if (context.IsElement(parameterNode))
   {
-    parameterNode = parameterIterator->Get(2);
+    if (relationAddr == scAgentsCommon::CoreKeynodes::rrel_1)
+    {
+      std::vector<ScAddr> idtfWithComponentsAddrs;
+
+      ScAddr parameterSetNode = utils::IteratorUtils::getAnyByOutRelation(
+          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_set);
+      ScAddr parameterComponentsNode = utils::IteratorUtils::getAnyByOutRelation(
+          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_identifier);
+
+      for (auto subParameterNode : {parameterSetNode, parameterComponentsNode})
+      {
+        if (context.IsElement(subParameterNode))
+        {
+          idtfWithComponentsAddrs = utils::IteratorUtils::getAllWithType(&context, subParameterNode, ScType::NodeConst);
+          for (auto const & componentAddr : idtfWithComponentsAddrs)
+          {
+            components.push_back(componentAddr);
+          }
+        }
+      }
+      return components;
+    }
+
     ScIterator3Ptr const & componentsIterator =
         context.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentsIterator->Next())
     {
-      setParameterEdgeAddr = componentsIterator->Get(1);
-      if (context.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass
-          && !context.HelperCheckEdge(
-              keynodes::ScComponentManagerKeynodes::rrel_set, setParameterEdgeAddr, ScType::EdgeAccessConstPosPerm))
+      if (context.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass)
       {
         ScIterator3Ptr const & elementsIterator =
             context.Iterator3(componentsIterator->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);

@@ -202,16 +202,16 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
 {
   std::map<std::string, std::vector<std::string>> commandParameters;
 
-  ScAddr const & authorsSetAddr =
-      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_author);
+  ScAddr const & authorsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
+      &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_author);
   std::map<std::string, ScAddr> const & authors = GetSetElements(context, authorsSetAddr);
 
   ScAddr const & classesSetAddr =
-      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
+      utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
   std::map<std::string, ScAddr> const & classes = GetSetElements(context, classesSetAddr);
 
-  ScAddr const & explanationsSetAddr =
-      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
+  ScAddr const & explanationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
+      &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
   std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(context, explanationsSetAddr);
 
   std::vector<std::string> authorsList, classesList, explanationsList;
@@ -235,21 +235,6 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
     commandParameters.insert({CommandsConstantsFlags::EXPLANATION, explanationsList});
   }
   return commandParameters;
-}
-
-ScAddr CommonUtils::GetParameterNodeUnderRelation(
-    ScMemoryContext & context,
-    ScAddr const & actionAddr,
-    ScAddr const & relation)
-{
-  ScAddr parameterNode;
-  ScIterator5Ptr const & parameterIterator = context.Iterator5(
-      actionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst, ScType::EdgeAccessConstPosPerm, relation);
-  if (parameterIterator->Next())
-  {
-    parameterNode = parameterIterator->Get(2);
-  }
-  return parameterNode;
 }
 
 std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & context, ScAddr const & setAddr)

@@ -28,10 +28,6 @@ public:
       ScMemoryContext & context,
       ScAddr const & actionAddr,
       ScAddr const & relationAddr);
-  static ScAddr GetParameterNodeUnderRelation(
-      ScMemoryContext & context,
-      ScAddr const & actionAddr,
-      ScAddr const & relation);
   static std::map<std::string, ScAddr> GetSetElements(ScMemoryContext & context, ScAddr const & setAddr);
   static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & context, ScAddr const & setAddr);
   static std::map<std::string, std::vector<std::string>> GetCommandParameters(

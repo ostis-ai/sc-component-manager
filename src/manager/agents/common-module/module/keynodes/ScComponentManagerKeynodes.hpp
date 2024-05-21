@@ -121,8 +121,8 @@ public:
   SC_PROPERTY(Keynode("rrel_class"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_class;
 
-  SC_PROPERTY(Keynode("rrel_set"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_set;
+  SC_PROPERTY(Keynode("rrel_sets"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr rrel_sets;
 
   SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_components;

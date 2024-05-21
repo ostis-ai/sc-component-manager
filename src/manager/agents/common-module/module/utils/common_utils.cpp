@@ -60,7 +60,7 @@ void CommonUtils::InitParametersMap()
       {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
       {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
       {"idtf", keynodes::ScComponentManagerKeynodes::rrel_identifier},
-      {"set", keynodes::ScComponentManagerKeynodes::rrel_set},
+      {"set", keynodes::ScComponentManagerKeynodes::rrel_sets},
       {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
       {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
       {"init", keynodes::ScComponentManagerKeynodes::action_components_init}};
@@ -101,7 +101,7 @@ bool CommonUtils::TransformToScStruct(
     if (!context.IsElement(setAddr))
       setAddr = context.CreateNode(ScType::NodeConst);
 
-    if (parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_set
+    if (parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_sets
         || parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_identifier)
     {
       parameterRrelNodeAddr = scAgentsCommon::CoreKeynodes::rrel_1;
@@ -153,24 +153,37 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
   {
     if (relationAddr == scAgentsCommon::CoreKeynodes::rrel_1)
     {
-      std::vector<ScAddr> idtfWithComponentsAddrs;
+      std::vector<ScAddr> componentsAddrs;
+      std::vector<ScAddr> componentsClassesAddrs;
 
       ScAddr parameterSetNode = utils::IteratorUtils::getAnyByOutRelation(
-          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_set);
+          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_sets);
       ScAddr parameterComponentsNode = utils::IteratorUtils::getAnyByOutRelation(
           &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_identifier);
 
-      for (auto subParameterNode : {parameterSetNode, parameterComponentsNode})
+      if (context.IsElement(parameterSetNode))
       {
-        if (context.IsElement(subParameterNode))
+        componentsClassesAddrs =
+            utils::IteratorUtils::getAllWithType(&context, parameterSetNode, ScType::NodeConstClass);
+        for (auto const & componentClassAddr : componentsClassesAddrs)
         {
-          idtfWithComponentsAddrs = utils::IteratorUtils::getAllWithType(&context, subParameterNode, ScType::NodeConst);
-          for (auto const & componentAddr : idtfWithComponentsAddrs)
+          componentsAddrs = utils::IteratorUtils::getAllWithType(&context, componentClassAddr, ScType::NodeConst);
+          for (auto const & componentAddr : componentsAddrs)
           {
             components.push_back(componentAddr);
           }
         }
       }
+
+      if (context.IsElement(parameterComponentsNode))
+      {
+        componentsAddrs = utils::IteratorUtils::getAllWithType(&context, parameterComponentsNode, ScType::NodeConst);
+        for (auto const & componentAddr : componentsAddrs)
+        {
+          components.push_back(componentAddr);
+        }
+      }
+
       return components;
     }
 

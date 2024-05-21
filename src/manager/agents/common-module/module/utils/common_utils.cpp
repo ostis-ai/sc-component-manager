@@ -59,7 +59,7 @@ void CommonUtils::InitParametersMap()
       {"author", keynodes::ScComponentManagerKeynodes::rrel_author},
       {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
       {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
-      {"idtf", keynodes::ScComponentManagerKeynodes::rrel_identifier},
+      {"idtf", keynodes::ScComponentManagerKeynodes::rrel_components},
       {"set", keynodes::ScComponentManagerKeynodes::rrel_sets},
       {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
       {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
@@ -102,7 +102,7 @@ bool CommonUtils::TransformToScStruct(
       setAddr = context.CreateNode(ScType::NodeConst);
 
     if (parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_sets
-        || parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_identifier)
+        || parameterRrelNodeAddr == keynodes::ScComponentManagerKeynodes::rrel_components)
     {
       parameterRrelNodeAddr = scAgentsCommon::CoreKeynodes::rrel_1;
       subSetAddr = context.CreateNode(ScType::NodeConst);
@@ -159,7 +159,7 @@ ScAddrVector CommonUtils::GetNodesUnderParameter(
       ScAddr parameterSetNode = utils::IteratorUtils::getAnyByOutRelation(
           &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_sets);
       ScAddr parameterComponentsNode = utils::IteratorUtils::getAnyByOutRelation(
-          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_identifier);
+          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_components);
 
       if (context.IsElement(parameterSetNode))
       {

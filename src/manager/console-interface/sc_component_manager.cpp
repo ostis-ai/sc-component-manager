@@ -7,12 +7,13 @@
 #include <string>
 #include <iostream>
 #include <thread>
-#include <csignal>
+
+#include <sys/select.h>
 
 #include "sc_component_manager.hpp"
 
 static constexpr int STD_INPUT = 0;
-static constexpr __suseconds_t WAIT_BETWEEN_SELECT_US = 250000L;
+static constexpr suseconds_t WAIT_BETWEEN_SELECT_US = 250000L;
 
 void ScComponentManager::Run()
 {

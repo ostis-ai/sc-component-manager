@@ -59,6 +59,10 @@ void CommonUtils::InitParametersMap()
       {"author", keynodes::ScComponentManagerKeynodes::rrel_author},
       {"class", keynodes::ScComponentManagerKeynodes::rrel_class},
       {"explanation", keynodes::ScComponentManagerKeynodes::rrel_explanation},
+      {"note", keynodes::ScComponentManagerKeynodes::rrel_note},
+      {"purpose", keynodes::ScComponentManagerKeynodes::rrel_purpose},
+      {"key", keynodes::ScComponentManagerKeynodes::rrel_key_sc_element},
+      {"id", keynodes::ScComponentManagerKeynodes::rrel_main_idtf},
       {"idtf", scAgentsCommon::CoreKeynodes::rrel_1},
       {"search", keynodes::ScComponentManagerKeynodes::action_components_search},
       {"install", keynodes::ScComponentManagerKeynodes::action_components_install},
@@ -105,6 +109,21 @@ bool CommonUtils::TransformToScStruct(
         parameterValueAddr = context.CreateNode(ScType::LinkConst);
         context.SetLinkContent(parameterValueAddr, parameterValue);
       }
+      else if (parameter.first == CommandsConstantsFlags::NOTE)
+      {
+        parameterValueAddr = context.CreateNode(ScType::LinkConst);
+        context.SetLinkContent(parameterValueAddr, parameterValue);
+      }
+      else if (parameter.first == CommandsConstantsFlags::PURPOSE)
+      {
+        parameterValueAddr = context.CreateNode(ScType::LinkConst);
+        context.SetLinkContent(parameterValueAddr, parameterValue);
+      }
+      else if (parameter.first == CommandsConstantsFlags::ID)
+      {
+        parameterValueAddr = context.CreateNode(ScType::LinkConst);
+        context.SetLinkContent(parameterValueAddr, parameterValue);
+      }
       else
       {
         parameterValueAddr = context.HelperFindBySystemIdtf(parameterValue);
@@ -115,6 +134,7 @@ bool CommonUtils::TransformToScStruct(
           context.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
         }
       }
+
       context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
     }
   }
@@ -173,7 +193,23 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
       GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
   std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(context, explanationsSetAddr);
 
-  std::vector<std::string> authorsList, classesList, explanationsList;
+  ScAddr const & notesSetAddr =
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_note);
+  std::map<std::string, ScAddr> const & notes = GetElementsLinksOfSet(context, notesSetAddr);
+
+  ScAddr const & purposesSetAddr =
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_purpose);
+  std::map<std::string, ScAddr> const & purposes = GetElementsLinksOfSet(context, purposesSetAddr);
+
+  ScAddr const & keysSetAddr =
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_key_sc_element);
+  std::map<std::string, ScAddr> const & keys = GetElementsLinksOfSet(context, keysSetAddr);
+
+  ScAddr const & idsSetAddr =
+      GetParameterNodeUnderRelation(context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_main_idtf);
+  std::map<std::string, ScAddr> const & ids = GetElementsLinksOfSet(context, idsSetAddr);
+
+  std::vector<std::string> authorsList, classesList, explanationsList, notesList, purposesList, keysList, idsList;
 
   if (context.IsElement(authorsSetAddr))
   {
@@ -192,6 +228,30 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
     for (auto & el : explanations)
       explanationsList.push_back(el.first);
     commandParameters.insert({CommandsConstantsFlags::EXPLANATION, explanationsList});
+  }
+  if (context.IsElement(notesSetAddr))
+  {
+    for (auto & el : notes)
+      notesList.push_back(el.first);
+    commandParameters.insert({CommandsConstantsFlags::NOTE, notesList});
+  }
+  if (context.IsElement(purposesSetAddr))
+  {
+    for (auto & el : purposes)
+      purposesList.push_back(el.first);
+    commandParameters.insert({CommandsConstantsFlags::PURPOSE, purposesList});
+  }
+  if (context.IsElement(keysSetAddr))
+  {
+    for (auto & el : keys)
+      keysList.push_back(el.first);
+    commandParameters.insert({CommandsConstantsFlags::KEY, keysList});
+  }
+  if (context.IsElement(idsSetAddr))
+  {
+    for (auto & el : ids)
+      idsList.push_back(el.first);
+    commandParameters.insert({CommandsConstantsFlags::ID, idsList});
   }
   return commandParameters;
 }

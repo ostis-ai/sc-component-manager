@@ -82,6 +82,18 @@ public:
   SC_PROPERTY(Keynode("nrel_explanation"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_explanation;
 
+  SC_PROPERTY(Keynode("nrel_note"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_note;
+
+  SC_PROPERTY(Keynode("nrel_purpose"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_purpose;
+
+  SC_PROPERTY(Keynode("nrel_key_sc_element"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_key_sc_element;
+
+  SC_PROPERTY(Keynode("nrel_main_idtf"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr nrel_main_idtf;
+
   SC_PROPERTY(Keynode("nrel_component_address"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_component_address;
 
@@ -126,6 +138,18 @@ public:
 
   SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate)
   static ScAddr rrel_identifier;
+
+  SC_PROPERTY(Keynode("rrel_note"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr rrel_note;
+
+  SC_PROPERTY(Keynode("rrel_purpose"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr rrel_purpose;
+
+  SC_PROPERTY(Keynode("rrel_key_sc_element"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr rrel_key_sc_element;
+
+  SC_PROPERTY(Keynode("rrel_main_idtf"), ForceCreate(ScType::NodeConstNoRole))
+  static ScAddr rrel_main_idtf;
 };
 
 }  // namespace keynodes

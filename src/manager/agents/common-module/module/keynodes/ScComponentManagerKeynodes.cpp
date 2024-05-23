@@ -31,6 +31,10 @@ ScAddr ScComponentManagerKeynodes::rrel_repositories_specifications;
 ScAddr ScComponentManagerKeynodes::rrel_components_specifications;
 ScAddr ScComponentManagerKeynodes::nrel_authors;
 ScAddr ScComponentManagerKeynodes::nrel_explanation;
+ScAddr ScComponentManagerKeynodes::nrel_note;
+ScAddr ScComponentManagerKeynodes::nrel_purpose;
+ScAddr ScComponentManagerKeynodes::nrel_key_sc_element;
+ScAddr ScComponentManagerKeynodes::nrel_main_idtf;
 ScAddr ScComponentManagerKeynodes::nrel_component_address;
 ScAddr ScComponentManagerKeynodes::nrel_component_dependencies;
 ScAddr ScComponentManagerKeynodes::nrel_installation_method;
@@ -46,4 +50,9 @@ ScAddr ScComponentManagerKeynodes::rrel_author;
 ScAddr ScComponentManagerKeynodes::rrel_class;
 ScAddr ScComponentManagerKeynodes::rrel_explanation;
 ScAddr ScComponentManagerKeynodes::rrel_identifier;
+ScAddr ScComponentManagerKeynodes::rrel_note;
+ScAddr ScComponentManagerKeynodes::rrel_purpose;
+ScAddr ScComponentManagerKeynodes::rrel_key_sc_element;
+ScAddr ScComponentManagerKeynodes::rrel_main_idtf;
+
 }  // namespace keynodes

@@ -23,6 +23,7 @@ Possible tags:
   * `[keynodes]` - changes in `keynodes` module;
   * `[kb]` - changes in `kb` module;
   * `[downloader]` - changes in `downloader` module;
+  * `[interface]` - changes in `command line interface` module;
   * `[review]` - commits with review fixes;
   * `[refactor]` - commits with some code refactoring;
   * `[changelog]` - use when you update changelog;

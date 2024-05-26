@@ -165,72 +165,40 @@ bool CommonUtils::TransformToScStruct(
   return true;
 }
 
-ScAddrVector CommonUtils::GetNodesUnderParameter(
+ScAddrVector CommonUtils::GetInstallationComponents(
     ScMemoryContext & context,
     ScAddr const & actionAddr,
     ScAddr const & relationAddr)
 {
-  ScAddr parameterNode;
+  ScAddr const & parameterNode = utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, relationAddr);
   ScAddrVector components;
-  ScAddr setParameterEdgeAddr;
-  parameterNode = utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, relationAddr);
+  std::vector<ScAddr> componentsAddrs;
 
-  if (context.IsElement(parameterNode))
+  if (!context.IsElement(parameterNode))
+    return components;
+
+  ScAddr const & parameterSetNode = utils::IteratorUtils::getAnyByOutRelation(
+      &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_sets);
+  ScAddr const & parameterComponentsNode = utils::IteratorUtils::getAnyByOutRelation(
+      &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_components);
+
+  if (context.IsElement(parameterSetNode))
   {
-    if (relationAddr == scAgentsCommon::CoreKeynodes::rrel_1)
+    std::vector<ScAddr> const & componentsClassesAddrs =
+        utils::IteratorUtils::getAllWithType(&context, parameterSetNode, ScType::NodeConstClass);
+    for (auto const & componentClassAddr : componentsClassesAddrs)
     {
-      std::vector<ScAddr> componentsAddrs;
-      std::vector<ScAddr> componentsClassesAddrs;
-
-      ScAddr parameterSetNode = utils::IteratorUtils::getAnyByOutRelation(
-          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_sets);
-      ScAddr parameterComponentsNode = utils::IteratorUtils::getAnyByOutRelation(
-          &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_components);
-
-      if (context.IsElement(parameterSetNode))
-      {
-        componentsClassesAddrs =
-            utils::IteratorUtils::getAllWithType(&context, parameterSetNode, ScType::NodeConstClass);
-        for (auto const & componentClassAddr : componentsClassesAddrs)
-        {
-          componentsAddrs = utils::IteratorUtils::getAllWithType(&context, componentClassAddr, ScType::NodeConst);
-          for (auto const & componentAddr : componentsAddrs)
-          {
-            components.push_back(componentAddr);
-          }
-        }
-      }
-
-      if (context.IsElement(parameterComponentsNode))
-      {
-        componentsAddrs = utils::IteratorUtils::getAllWithType(&context, parameterComponentsNode, ScType::NodeConst);
-        for (auto const & componentAddr : componentsAddrs)
-        {
-          components.push_back(componentAddr);
-        }
-      }
-
-      return components;
+      componentsAddrs = utils::IteratorUtils::getAllWithType(&context, componentClassAddr, ScType::NodeConst);
+      for (auto const & componentAddr : componentsAddrs)
+        components.push_back(componentAddr);
     }
+  }
 
-    ScIterator3Ptr const & componentsIterator =
-        context.Iterator3(parameterNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-    while (componentsIterator->Next())
-    {
-      if (context.GetElementType(componentsIterator->Get(2)) == ScType::NodeConstClass)
-      {
-        ScIterator3Ptr const & elementsIterator =
-            context.Iterator3(componentsIterator->Get(2), ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-        while (elementsIterator->Next())
-        {
-          components.push_back(elementsIterator->Get(2));
-        }
-      }
-      else
-      {
-        components.push_back(componentsIterator->Get(2));
-      }
-    }
+  if (context.IsElement(parameterComponentsNode))
+  {
+    componentsAddrs = utils::IteratorUtils::getAllWithType(&context, parameterComponentsNode, ScType::NodeConst);
+    for (auto const & componentAddr : componentsAddrs)
+      components.push_back(componentAddr);
   }
   return components;
 }

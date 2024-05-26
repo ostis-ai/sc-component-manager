@@ -89,7 +89,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
 {
   bool executionResult = true;
   ScAddrVector componentsToInstall =
-      common_utils::CommonUtils::GetNodesUnderParameter(*context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+      common_utils::CommonUtils::GetInstallationComponents(*context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
 
   if (componentsToInstall.empty())
   {

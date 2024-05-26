@@ -76,7 +76,8 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
         componentUtils::InstallUtils::GetComponentDirName(context, componentAddr, m_downloadDir);
 
     std::stringstream command;
-    command << "cd " << componentDirName << " && " << "." << script;
+    command << "cd " << componentDirName << " && "
+            << "." << script;
 
     ScExec Exec({command.str()});
   }

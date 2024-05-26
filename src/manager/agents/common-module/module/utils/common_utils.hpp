@@ -15,6 +15,7 @@ class CommonUtils
 {
 public:
   static std::map<std::string, ScAddr> managerParametersWithAgentRelations;
+  static std::map<std::string, std::vector<ScAddr>> mainFlagWithSubFlags;
   static std::vector<std::vector<ScAddr>> componentsClasses;
 
   static void InitParametersMap();

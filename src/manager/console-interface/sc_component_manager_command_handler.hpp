@@ -53,7 +53,7 @@ public:
         SC_LOG_ERROR(ex.what());
       }
       ScAddr actionAddr = utils::AgentUtils::formActionNode(m_context, actionAddrClass, {});
-      common_utils::CommonUtils::TransformToScStruct(*m_context, actionAddr, commandParameters);
+      common_utils::CommonUtils::TranslateFromStringToScMemory(*m_context, actionAddr, commandParameters);
 
       utils::AgentUtils::applyAction(m_context, actionAddr, 30000);
 

@@ -9,6 +9,7 @@
 #include "utils/sc_component_utils.hpp"
 
 #include "sc-agents-common/utils/AgentUtils.hpp"
+#include <sc-agents-common/utils/IteratorUtils.hpp>
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "module/utils/common_utils.hpp"
@@ -88,8 +89,13 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
 ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   bool executionResult = true;
-  ScAddrVector componentsToInstall =
-      common_utils::CommonUtils::GetInstallationComponents(*context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+  ScAddr const & parameterNode =
+      utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+  common_utils::CommonUtils::unorderedSetScAddr componentsSet =
+      common_utils::CommonUtils::GetComponentsToInstall(*context, parameterNode);
+  ScAddrVector componentsToInstall(componentsSet.size());
+
+  std::copy(componentsSet.begin(), componentsSet.end(), componentsToInstall.begin());
 
   if (componentsToInstall.empty())
   {
@@ -184,7 +190,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
 
     ScAddr const actionAddr =
         utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
-    common_utils::CommonUtils::TransformToScStruct(*context, actionAddr, dependencyParameters);
+    common_utils::CommonUtils::TranslateFromStringToScMemory(*context, actionAddr, dependencyParameters);
 
     bool dependencyResult = Execute(context, actionAddr).empty();
 

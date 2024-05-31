@@ -16,6 +16,7 @@
 
 namespace common_utils
 {
+
 std::map<std::string, ScAddr> CommonUtils::managerParametersWithAgentRelations;
 std::map<std::string, std::vector<ScAddr>> CommonUtils::mainFlagWithSubFlags;
 std::vector<std::vector<ScAddr>> CommonUtils::componentsClasses;
@@ -121,7 +122,7 @@ ScAddr GetSetAddrOfComponents(ScMemoryContext & context, ScAddr const & actionAd
   return endSetAddr;
 }
 
-bool CommonUtils::TransformToScStruct(
+bool CommonUtils::TranslateFromStringToScMemory(
     ScMemoryContext & context,
     ScAddr const & actionAddr,
     std::map<std::string, std::vector<std::string>> const & commandParameters)
@@ -165,15 +166,11 @@ bool CommonUtils::TransformToScStruct(
   return true;
 }
 
-ScAddrVector CommonUtils::GetInstallationComponents(
+CommonUtils::unorderedSetScAddr CommonUtils::GetComponentsToInstall(
     ScMemoryContext & context,
-    ScAddr const & actionAddr,
-    ScAddr const & relationAddr)
+    ScAddr const & parameterNode)
 {
-  ScAddr const & parameterNode = utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, relationAddr);
-  ScAddrVector components;
-  std::vector<ScAddr> componentsAddrs;
-
+  std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>> components;
   if (!context.IsElement(parameterNode))
     return components;
 
@@ -184,21 +181,20 @@ ScAddrVector CommonUtils::GetInstallationComponents(
 
   if (context.IsElement(parameterSetNode))
   {
-    std::vector<ScAddr> const & componentsClassesAddrs =
-        utils::IteratorUtils::getAllWithType(&context, parameterSetNode, ScType::NodeConstClass);
-    for (auto const & componentClassAddr : componentsClassesAddrs)
+    for (ScAddr const & componentClassAddr :
+         utils::IteratorUtils::getAllWithType(&context, parameterSetNode, ScType::NodeConstClass))
     {
-      componentsAddrs = utils::IteratorUtils::getAllWithType(&context, componentClassAddr, ScType::NodeConst);
-      for (auto const & componentAddr : componentsAddrs)
-        components.push_back(componentAddr);
+      for (ScAddr const & componentAddr :
+           utils::IteratorUtils::getAllWithType(&context, componentClassAddr, ScType::NodeConst))
+        components.insert(componentAddr);
     }
   }
 
   if (context.IsElement(parameterComponentsNode))
   {
-    componentsAddrs = utils::IteratorUtils::getAllWithType(&context, parameterComponentsNode, ScType::NodeConst);
-    for (auto const & componentAddr : componentsAddrs)
-      components.push_back(componentAddr);
+    for (ScAddr const & componentAddr :
+         utils::IteratorUtils::getAllWithType(&context, parameterComponentsNode, ScType::NodeConst))
+      components.insert(componentAddr);
   }
   return components;
 }

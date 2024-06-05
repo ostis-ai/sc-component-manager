@@ -7,7 +7,7 @@
 	\scnfileitem{Отыскать все спецификаци спецификаций многократно используемых компонентов в базе знаний.}
 	\scnfileitem{Скачать спецификаций на устройство.}
 \end{scnrelfromvector}	
-\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/ci.png}}
+\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/components_init_input.png}}
 \begin{scnrelfromset}{аргументы агента}
 	\scnitem{пустое множество}
 \end{scnrelfromset}
@@ -15,7 +15,7 @@
 \begin{scnindent}
 	\scntext{примечание}{В результате выполнения агентом поискового действия на устройстве появятся scs-файлы со спецификациями, скаченными по сети. Данные файлы сразу транслируются в sc-память.}
 \end{scnindent}
-\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/ci_out.png}}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/components_init_output.png}}
 
 \scnheader{Агент установки компонентов}
 \scnidtf{sc-агент установки компонентов}
@@ -24,7 +24,7 @@
 	\scnfileitem{Поиск спецификации компонента в базе знаний по заданному критерию, если он есть, иначе поиск всех спецификаций компонентов.}
 	\scnfileitem{Скачивание и установка (опционально) на устройство.}
 \end{scnrelfromvector}
-	\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/cinst.png}}
+	\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/components_install_input.png}}
 \begin{scnrelfromset}{аргументы агента}
 	\scnitem{множество компонентов}
 	\begin{scnindent}
@@ -39,7 +39,7 @@
 \begin{scnindent}
 	\scntext{примечание}{В результате выполнения агентом действия по установке компонентов на устройстве появятся компоненты в соответствующих папках со спецификациями, и данные компоненты будут установлены, если это необходимо.}
 \end{scnindent}
-\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/cinst_out.png}}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/components_install_output.png}}
 
 \scnheader{Агент поиска спецификаций компонентов}
 \scnidtf{sc-агент поиска спецификаций компонентов}
@@ -47,7 +47,7 @@
 \begin{scnrelfromvector}{задача}
 	\scnfileitem{Отыскать спецификации компонентов в базе знаний по заданным критериям.}
 \end{scnrelfromvector}
-\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/cs.png}}
+\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/components_search_input.png}}
 \begin{scnrelfromset}{аргументы агента}
 	\scnitem{authors}
 	\begin{scnindent}
@@ -70,14 +70,14 @@
 \begin{scnindent}
 	\scntext{примечание}{В результате выполнения агентом поискового действия сформируется ответ со множеством найденных компонентов.}
 \end{scnindent}
-\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/cs_out.png}}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/components_search_output.png}}
 
 \scnheader{Агент поиска спецификации компонента по компоненту}
 \scnidtf{sc-агент поиска спецификации компонента по компоненту}
 \begin{scnrelfromvector}{задача}
 	\scnfileitem{Отыскать спецификацию компонента в базе знаний по заданному компоненту.}
 \end{scnrelfromvector}
-\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/ss.png}}
+\scnrelfrom{пример входной конструкции}{\scnfileimage[20em]{images/specifications_search_input.png}}
 \begin{scnrelfromvector}{аргументы агента}
 	\scnitem{component}
 	\begin{scnindent}
@@ -88,5 +88,5 @@
 \begin{scnindent}
 	\scntext{примечание}{В результате выполнения агентом поискового действия сформируется ответ с найденной спецификацией.}
 \end{scnindent}
-\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/ss_out.png}}
+\scnrelfrom{пример выходной конструкции}{\scnfileimage[20em]{images/specifications_search_output.png}}
 \end{SCn}

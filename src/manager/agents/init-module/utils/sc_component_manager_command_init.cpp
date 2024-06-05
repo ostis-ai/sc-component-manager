@@ -8,9 +8,10 @@
 #include "downloader/downloader.hpp"
 #include "sc_component_manager_command_init.hpp"
 #include "utils/sc_component_utils.hpp"
-#include "module/utils/common_utils.hpp"
 
-ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
+common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(
+    ScMemoryContext * context,
+    ScAddr const & actionAddr)
 {
   ScAddrVector processedRepositories;
 
@@ -19,7 +20,7 @@ ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, S
 
   ProcessRepositories(context, availableRepositories);
 
-  ScAddrVector components;
+  common_utils::CommonUtils::ScAddrUnorderedSet components;
   ScIterator3Ptr const & componentsIterator = context->Iterator3(
       keynodes::ScComponentManagerKeynodes::concept_reusable_component,
       ScType::EdgeAccessConstPosPerm,
@@ -27,7 +28,7 @@ ScAddrVector ScComponentManagerCommandInit::Execute(ScMemoryContext * context, S
   while (componentsIterator->Next())
   {
     SC_LOG_DEBUG(context->HelperGetSystemIdtf(componentsIterator->Get(2)));
-    components.push_back(componentsIterator->Get(2));
+    components.insert(componentsIterator->Get(2));
   }
 
   return components;

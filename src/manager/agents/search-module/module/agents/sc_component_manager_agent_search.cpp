@@ -5,7 +5,10 @@
  */
 
 #include <sc-agents-common/utils/AgentUtils.hpp>
+
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
+#include "module/utils/common_utils.hpp"
+
 #include "utils/sc_component_manager_command_search.hpp"
 
 #include "sc_component_manager_agent_search.hpp"
@@ -25,9 +28,9 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerSearchAgent)
   SC_LOG_DEBUG("ScComponentManagerSearchAgent started");
 
   ScComponentManagerCommandSearch command = ScComponentManagerCommandSearch();
-  ScAddrVector components = command.Execute(&m_memoryCtx, actionAddr);
-
-  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, components, true);
+  common_utils::CommonUtils::ScAddrUnorderedSet components = command.Execute(&m_memoryCtx, actionAddr);
+  ScAddrVector result(components.begin(), components.end());
+  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, result, true);
 
   SC_LOG_DEBUG("ScComponentManagerSearchAgent finished");
   return SC_RESULT_OK;

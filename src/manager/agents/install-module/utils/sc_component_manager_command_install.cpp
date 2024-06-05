@@ -12,8 +12,6 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
-#include "module/utils/common_utils.hpp"
-
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
@@ -27,11 +25,11 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
  * @param componentsToInstall vector of components identifiers
  * @return vector of available components
  */
-ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
+common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInstall::GetAvailableComponents(
     ScMemoryContext * context,
-    std::vector<ScAddr> const & componentsToInstall)
+    common_utils::CommonUtils::ScAddrUnorderedSet const & componentsToInstall)
 {
-  ScAddrVector availableComponents;
+  common_utils::CommonUtils::ScAddrUnorderedSet availableComponents;
   for (ScAddr const & componentToInstall : componentsToInstall)
   {
     try
@@ -50,7 +48,7 @@ ScAddrVector ScComponentManagerCommandInstall::GetAvailableComponents(
     SC_LOG_DEBUG(
         "ScComponentManagerCommandInstall: Component \"" << context->HelperGetSystemIdtf(componentToInstall)
                                                          << "\" is specified correctly");
-    availableComponents.push_back(componentToInstall);
+    availableComponents.insert(componentToInstall);
   }
   return availableComponents;
 }
@@ -86,16 +84,15 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
   return true;
 }
 
-ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
+common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(
+    ScMemoryContext * context,
+    ScAddr const & actionAddr)
 {
   bool executionResult = true;
   ScAddr const & parameterNode =
       utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
-  common_utils::CommonUtils::unorderedSetScAddr componentsSet =
+  common_utils::CommonUtils::ScAddrUnorderedSet componentsToInstall =
       common_utils::CommonUtils::GetComponentsToInstall(*context, parameterNode);
-  ScAddrVector componentsToInstall(componentsSet.size());
-
-  std::copy(componentsSet.begin(), componentsSet.end(), componentsToInstall.begin());
 
   if (componentsToInstall.empty())
   {
@@ -106,7 +103,7 @@ ScAddrVector ScComponentManagerCommandInstall::Execute(ScMemoryContext * context
   componentsToInstall = GetAvailableComponents(context, componentsToInstall);
 
   ScAddr decompositionAddr;
-  for (ScAddr componentAddr : componentsToInstall)
+  for (ScAddr const & componentAddr : componentsToInstall)
   {
     if (common_utils::CommonUtils::CheckIfInstalled(*context, componentAddr))
     {

@@ -166,11 +166,11 @@ bool CommonUtils::TranslateFromStringToScMemory(
   return true;
 }
 
-CommonUtils::unorderedSetScAddr CommonUtils::GetComponentsToInstall(
+CommonUtils::ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(
     ScMemoryContext & context,
     ScAddr const & parameterNode)
 {
-  std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>> components;
+  CommonUtils::ScAddrUnorderedSet components;
   if (!context.IsElement(parameterNode))
     return components;
 
@@ -181,20 +181,29 @@ CommonUtils::unorderedSetScAddr CommonUtils::GetComponentsToInstall(
 
   if (context.IsElement(parameterSetNode))
   {
-    for (ScAddr const & componentClassAddr :
-         utils::IteratorUtils::getAllWithType(&context, parameterSetNode, ScType::NodeConstClass))
+    ScIterator3Ptr const & setsIterator =
+        context.Iterator3(parameterSetNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    ScAddr componentClassAddr;
+    while (setsIterator->Next())
     {
-      for (ScAddr const & componentAddr :
-           utils::IteratorUtils::getAllWithType(&context, componentClassAddr, ScType::NodeConst))
-        components.insert(componentAddr);
+      componentClassAddr = setsIterator->Get(2);
+      ScIterator3Ptr const & componentsIterator =
+          context.Iterator3(componentClassAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      while (componentsIterator->Next())
+      {
+        components.insert(componentsIterator->Get(2));
+      }
     }
   }
 
   if (context.IsElement(parameterComponentsNode))
   {
-    for (ScAddr const & componentAddr :
-         utils::IteratorUtils::getAllWithType(&context, parameterComponentsNode, ScType::NodeConst))
-      components.insert(componentAddr);
+    ScIterator3Ptr const & componentsIterator =
+        context.Iterator3(parameterComponentsNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    while (componentsIterator->Next())
+    {
+      components.insert(componentsIterator->Get(2));
+    }
   }
   return components;
 }

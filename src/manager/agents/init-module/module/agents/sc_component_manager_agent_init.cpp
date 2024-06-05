@@ -7,6 +7,8 @@
 #include <sc-agents-common/utils/AgentUtils.hpp>
 #include "utils/sc_component_manager_command_init.hpp"
 
+#include "module/utils/common_utils.hpp"
+
 #include "sc_component_manager_agent_init.hpp"
 
 #include "sc-config-utils/sc-config/sc_config.hpp"
@@ -30,9 +32,9 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
 
   ScComponentManagerCommandInit command = ScComponentManagerCommandInit(configManager[PathKeysOfConfigPath::KB_PATH]);
 
-  ScAddrVector const & components = command.Execute(&m_memoryCtx, actionAddr);
-
-  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, components, true);
+  common_utils::CommonUtils::ScAddrUnorderedSet const & components = command.Execute(&m_memoryCtx, actionAddr);
+  ScAddrVector result(components.begin(), components.end());
+  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, result, true);
 
   SC_LOG_DEBUG("ScComponentManagerInitAgent finished");
   return SC_RESULT_OK;

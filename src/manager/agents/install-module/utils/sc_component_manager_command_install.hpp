@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#include "module/utils/common_utils.hpp"
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 #include "commands/sc_component_manager_command.hpp"
@@ -28,7 +29,7 @@ class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 public:
   explicit ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath);
 
-  ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
+  common_utils::CommonUtils::ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
   static void ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
@@ -37,9 +38,9 @@ protected:
 
   bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  static ScAddrVector GetAvailableComponents(
+  static common_utils::CommonUtils::ScAddrUnorderedSet GetAvailableComponents(
       ScMemoryContext * context,
-      std::vector<ScAddr> const & componentsToInstallIdentifiers);
+      common_utils::CommonUtils::ScAddrUnorderedSet const & componentsToInstallIdentifiers);
 
   bool InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 

@@ -28,7 +28,7 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerSearchAgent)
   SC_LOG_DEBUG("ScComponentManagerSearchAgent started");
 
   ScComponentManagerCommandSearch command = ScComponentManagerCommandSearch();
-  common_utils::CommonUtils::ScAddrUnorderedSet components = command.Execute(&m_memoryCtx, actionAddr);
+  ScAddrUnorderedSet components = command.Execute(&m_memoryCtx, actionAddr);
   ScAddrVector result(components.begin(), components.end());
   utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, result, true);
 

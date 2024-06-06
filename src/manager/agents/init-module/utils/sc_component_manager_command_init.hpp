@@ -9,9 +9,8 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
-#include "module/utils/common_utils.hpp"
-
 #include "commands/sc_component_manager_command.hpp"
+
 #include "downloader/downloader_handler.hpp"
 
 class ScComponentManagerCommandInit : public ScComponentManagerCommand
@@ -22,7 +21,7 @@ public:
   {
   }
 
-  common_utils::CommonUtils::ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
+  ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
   bool ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
 

@@ -166,11 +166,9 @@ bool CommonUtils::TranslateFromStringToScMemory(
   return true;
 }
 
-CommonUtils::ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(
-    ScMemoryContext & context,
-    ScAddr const & parameterNode)
+ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(ScMemoryContext & context, ScAddr const & parameterNode)
 {
-  CommonUtils::ScAddrUnorderedSet components;
+  ScAddrUnorderedSet components;
   if (!context.IsElement(parameterNode))
     return components;
 

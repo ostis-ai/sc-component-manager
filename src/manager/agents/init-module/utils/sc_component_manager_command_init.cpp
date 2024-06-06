@@ -8,10 +8,11 @@
 #include "downloader/downloader.hpp"
 #include "sc_component_manager_command_init.hpp"
 #include "utils/sc_component_utils.hpp"
+#include "module/utils/common_utils.hpp"
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(
-    ScMemoryContext * context,
-    ScAddr const & actionAddr)
+using namespace common_utils;
+
+ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   ScAddrVector processedRepositories;
 
@@ -20,7 +21,7 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInit::Exe
 
   ProcessRepositories(context, availableRepositories);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet components;
+  ScAddrUnorderedSet components;
   ScIterator3Ptr const & componentsIterator = context->Iterator3(
       keynodes::ScComponentManagerKeynodes::concept_reusable_component,
       ScType::EdgeAccessConstPosPerm,
@@ -78,8 +79,8 @@ bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
   for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
   {
     // TODO componentSpecificationAddr as specification of component
-    component = common_utils::CommonUtils::GetComponentBySpecification(*context, componentSpecificationAddr);
-    if (common_utils::CommonUtils::CheckIfInstalled(*context, component))
+    component = CommonUtils::GetComponentBySpecification(*context, componentSpecificationAddr);
+    if (CommonUtils::CheckIfInstalled(*context, component))
     {
       SC_LOG_WARNING("Component \"" << context->HelperGetSystemIdtf(component) << "\" is already installed");
       continue;

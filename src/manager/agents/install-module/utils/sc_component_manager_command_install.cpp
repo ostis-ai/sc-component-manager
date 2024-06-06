@@ -12,6 +12,8 @@
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
+using namespace common_utils;
+
 ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
@@ -25,11 +27,11 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
  * @param componentsToInstall vector of components identifiers
  * @return vector of available components
  */
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInstall::GetAvailableComponents(
+ScAddrUnorderedSet ScComponentManagerCommandInstall::GetAvailableComponents(
     ScMemoryContext * context,
-    common_utils::CommonUtils::ScAddrUnorderedSet const & componentsToInstall)
+    ScAddrUnorderedSet const & componentsToInstall)
 {
-  common_utils::CommonUtils::ScAddrUnorderedSet availableComponents;
+  ScAddrUnorderedSet availableComponents;
   for (ScAddr const & componentToInstall : componentsToInstall)
   {
     try
@@ -84,15 +86,12 @@ bool ScComponentManagerCommandInstall::InstallComponent(ScMemoryContext * contex
   return true;
 }
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(
-    ScMemoryContext * context,
-    ScAddr const & actionAddr)
+ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   bool executionResult = true;
   ScAddr const & parameterNode =
       utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
-  common_utils::CommonUtils::ScAddrUnorderedSet componentsToInstall =
-      common_utils::CommonUtils::GetComponentsToInstall(*context, parameterNode);
+  ScAddrUnorderedSet componentsToInstall = CommonUtils::GetComponentsToInstall(*context, parameterNode);
 
   if (componentsToInstall.empty())
   {
@@ -105,7 +104,7 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInstall::
   ScAddr decompositionAddr;
   for (ScAddr const & componentAddr : componentsToInstall)
   {
-    if (common_utils::CommonUtils::CheckIfInstalled(*context, componentAddr))
+    if (CommonUtils::CheckIfInstalled(*context, componentAddr))
     {
       SC_LOG_DEBUG("Component \"" << context->HelperGetSystemIdtf(componentAddr) << "\" is already installed");
       continue;
@@ -117,7 +116,7 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandInstall::
       executionResult &= InstallComponent(context, componentAddr);
     }
     // TODO: need to process installation method from component specification in kb
-    decompositionAddr = common_utils::CommonUtils::GetSubsystemDecompositionAddr(*context, componentAddr);
+    decompositionAddr = CommonUtils::GetSubsystemDecompositionAddr(*context, componentAddr);
     if (context->IsElement(decompositionAddr))
       context->CreateEdge(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
     else
@@ -187,7 +186,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
 
     ScAddr const actionAddr =
         utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
-    common_utils::CommonUtils::TranslateFromStringToScMemory(*context, actionAddr, dependencyParameters);
+    CommonUtils::TranslateFromStringToScMemory(*context, actionAddr, dependencyParameters);
 
     bool dependencyResult = Execute(context, actionAddr).empty();
 

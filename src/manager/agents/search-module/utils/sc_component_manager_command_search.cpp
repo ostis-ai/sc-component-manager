@@ -9,14 +9,16 @@
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "sc_component_manager_command_search.hpp"
-#include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(
-    ScMemoryContext * context,
-    ScAddr const & actionAddr)
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
+#include "module/utils/common_utils.hpp"
+
+using namespace common_utils;
+
+ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
   std::map<std::string, std::vector<std::string>> commandParameters =
-      common_utils::CommonUtils::GetCommandParameters(*context, actionAddr);
+      CommonUtils::GetCommandParameters(*context, actionAddr);
   for (auto const & param : commandParameters)
   {
     if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first)
@@ -52,11 +54,11 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::E
         commandParameters.at(AUTHOR));
   }
 
-  std::map<std::string, common_utils::CommonUtils::ScAddrUnorderedSet> linksValues;
+  std::map<std::string, ScAddrUnorderedSet> linksValues;
   if (commandParameters.find(EXPLANATION) != commandParameters.cend()
       && !commandParameters.find(EXPLANATION)->second.empty())
   {
-    common_utils::CommonUtils::ScAddrUnorderedSet explanationLinks = SearchComponentsByRelationLink(
+    ScAddrUnorderedSet explanationLinks = SearchComponentsByRelationLink(
         context,
         keynodes::ScComponentManagerKeynodes::nrel_explanation,
         EXPLANATION_LINK_ALIAS,
@@ -65,7 +67,7 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::E
     linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
   }
 
-  common_utils::CommonUtils::ScAddrUnorderedSet componentsSpecifications =
+  ScAddrUnorderedSet componentsSpecifications =
       SearchComponentsSpecifications(context, searchComponentTemplate, linksValues);
 
   return componentsSpecifications;
@@ -113,7 +115,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByClass(
   }
 }
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLink(
+ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLink(
     ScMemoryContext * context,
     ScAddr const & relationAddr,
     std::string const & linkAlias,
@@ -134,16 +136,16 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::S
       ScType::EdgeAccessVarPosPerm,
       relationAddr);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet result(links.begin(), links.end());
+  ScAddrUnorderedSet result(links.begin(), links.end());
   return result;
 }
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecifications(
+ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecifications(
     ScMemoryContext * context,
     ScTemplate & searchComponentTemplate,
-    std::map<std::string, common_utils::CommonUtils::ScAddrUnorderedSet> const & linksValues)
+    std::map<std::string, ScAddrUnorderedSet> const & linksValues)
 {
-  common_utils::CommonUtils::ScAddrUnorderedSet result;
+  ScAddrUnorderedSet result;
   ScTemplateSearchResult searchComponentResult;
   context->HelperSearchTemplate(searchComponentTemplate, searchComponentResult);
 
@@ -159,12 +161,11 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::S
   return result;
 }
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::
-    SearchComponentsSpecificationsWithoutLinks(
-        ScMemoryContext * context,
-        ScTemplateSearchResult const & searchComponentResult)
+ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecificationsWithoutLinks(
+    ScMemoryContext * context,
+    ScTemplateSearchResult const & searchComponentResult)
 {
-  common_utils::CommonUtils::ScAddrUnorderedSet result;
+  ScAddrUnorderedSet result;
   for (size_t i = 0; i < searchComponentResult.Size(); i++)
   {
     ScAddr reusableComponentSpecification = searchComponentResult[i][SPECIFICATION_ALIAS];
@@ -179,12 +180,12 @@ common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::
   return result;
 }
 
-common_utils::CommonUtils::ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecificationsWithLinks(
+ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecificationsWithLinks(
     ScMemoryContext * context,
     ScTemplateSearchResult const & searchComponentResult,
-    std::map<std::string, common_utils::CommonUtils::ScAddrUnorderedSet> const & linksValues)
+    std::map<std::string, ScAddrUnorderedSet> const & linksValues)
 {
-  common_utils::CommonUtils::ScAddrUnorderedSet result;
+  ScAddrUnorderedSet result;
   for (size_t i = 0; i < searchComponentResult.Size(); i++)
   {
     for (auto const & linkValue : linksValues)

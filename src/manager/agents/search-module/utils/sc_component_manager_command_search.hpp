@@ -8,14 +8,12 @@
 
 #include "commands/sc_component_manager_command.hpp"
 
-#include "module/utils/common_utils.hpp"
-
 class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 {
 public:
   ScComponentManagerCommandSearch() = default;
 
-  common_utils::CommonUtils::ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
+  ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
   std::string const SPECIFICATION_ALIAS = "_specification";
@@ -40,24 +38,24 @@ protected:
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet SearchComponentsByRelationLink(
+  ScAddrUnorderedSet SearchComponentsByRelationLink(
       ScMemoryContext * context,
       ScAddr const & relationAddr,
       std::string const & linkAlias,
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet SearchComponentsSpecifications(
+  ScAddrUnorderedSet SearchComponentsSpecifications(
       ScMemoryContext * context,
       ScTemplate & searchComponentTemplate,
-      std::map<std::string, common_utils::CommonUtils::ScAddrUnorderedSet> const & linksValues);
+      std::map<std::string, ScAddrUnorderedSet> const & linksValues);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet SearchComponentsSpecificationsWithoutLinks(
+  ScAddrUnorderedSet SearchComponentsSpecificationsWithoutLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet SearchComponentsSpecificationsWithLinks(
+  ScAddrUnorderedSet SearchComponentsSpecificationsWithLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult,
-      std::map<std::string, common_utils::CommonUtils::ScAddrUnorderedSet> const & linksValues);
+      std::map<std::string, ScAddrUnorderedSet> const & linksValues);
 };

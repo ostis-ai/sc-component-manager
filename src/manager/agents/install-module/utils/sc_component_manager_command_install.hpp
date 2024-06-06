@@ -29,7 +29,7 @@ class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 public:
   explicit ScComponentManagerCommandInstall(std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath);
 
-  common_utils::CommonUtils::ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
+  ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
   static void ValidateComponent(ScMemoryContext * context, ScAddr const & componentAddr);
@@ -38,9 +38,9 @@ protected:
 
   bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  static common_utils::CommonUtils::ScAddrUnorderedSet GetAvailableComponents(
+  static ScAddrUnorderedSet GetAvailableComponents(
       ScMemoryContext * context,
-      common_utils::CommonUtils::ScAddrUnorderedSet const & componentsToInstallIdentifiers);
+      ScAddrUnorderedSet const & componentsToInstallIdentifiers);
 
   bool InstallComponent(ScMemoryContext * context, ScAddr const & componentAddr);
 

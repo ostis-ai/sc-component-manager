@@ -11,10 +11,11 @@
 
 namespace common_utils
 {
+using ScAddrUnorderedSet = std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>>;
+
 class CommonUtils
 {
 public:
-  using ScAddrUnorderedSet = std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>>;
   static std::map<std::string, ScAddr> managerParametersWithAgentRelations;
   static std::map<std::string, std::vector<ScAddr>> mainFlagWithSubFlags;
   static std::vector<std::vector<ScAddr>> componentsClasses;

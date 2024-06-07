@@ -308,8 +308,9 @@ ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & context, ScA
       keynodes::ScComponentManagerKeynodes::nrel_ostis_system_decomposition);
 
   if (!context.IsElement(myselfDecomposition))
+  {
     return componentDecomposition;
-
+  }
   ScIterator3Ptr partsDecomposition =
       context.Iterator3(myselfDecomposition, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
@@ -322,6 +323,7 @@ ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & context, ScA
         &context, partsDecomposition->Get(2), keynodes::ScComponentManagerKeynodes::nrel_decomposition);
     break;
   }
+
   return componentDecomposition;
 }
 
@@ -359,7 +361,7 @@ bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context
     while (it->Next())
     {
       myselfDecompositionPartAddr = it->Get(2);
-      if (context.HelperCheckEdge(componentClassAddr, myselfDecompositionAddr, ScType::EdgeAccessConstPosPerm))
+      if (context.HelperCheckEdge(componentClassAddr, myselfDecompositionPartAddr, ScType::EdgeAccessConstPosPerm))
       {
         partDecompositionAddr = utils::IteratorUtils::getAnyByOutRelation(
             &context, myselfDecompositionPartAddr, keynodes::ScComponentManagerKeynodes::nrel_decomposition);

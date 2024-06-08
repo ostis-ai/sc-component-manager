@@ -38,6 +38,8 @@ protected:
 
   bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
+  static ScAddr CreateInstallStructureAndGetDepsSet(ScMemoryContext * context, ScAddr const & actionAddr);
+
   static ScAddrUnorderedSet GetAvailableComponents(
       ScMemoryContext * context,
       ScAddrUnorderedSet const & componentsToInstallIdentifiers);

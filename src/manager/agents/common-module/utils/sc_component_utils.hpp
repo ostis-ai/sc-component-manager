@@ -8,6 +8,10 @@
 
 #include <sc-memory/sc_memory.hpp>
 
+#include "module/utils/common_utils.hpp"
+
+using namespace common_utils;
+
 namespace componentUtils
 {
 class SearchUtils
@@ -15,7 +19,7 @@ class SearchUtils
 public:
   static ScAddr GetComponentAddress(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  static ScAddrVector GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
+  static ScAddrUnorderedSet GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
   static ScAddr GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr);
 

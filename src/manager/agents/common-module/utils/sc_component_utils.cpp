@@ -19,6 +19,10 @@
 #include "constants/command_constants.hpp"
 #include "url_parser/repository_url_parser.hpp"
 
+#include "module/utils/common_utils.hpp"
+
+using namespace common_utils;
+
 namespace componentUtils
 {
 /**
@@ -52,9 +56,9 @@ ScAddr SearchUtils::GetComponentAddress(ScMemoryContext * context, ScAddr const 
  * @return ScAddrVector consists of component dependencies sc-addrs,
  * return empty vector if component has no dependencies
  */
-ScAddrVector SearchUtils::GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
+ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  ScAddrVector componentDependencies;
+  ScAddrUnorderedSet componentDependencies;
   ScAddrVector componentCurrentDependencies;
   ScAddr componentDependenciesSet;
 
@@ -70,8 +74,10 @@ ScAddrVector SearchUtils::GetComponentDependencies(ScMemoryContext * context, Sc
     componentDependenciesSet = componentDependenciesIterator->Get(2);
     componentCurrentDependencies =
         utils::IteratorUtils::getAllWithType(context, componentDependenciesSet, ScType::NodeConst);
-    componentDependencies.insert(
-        componentDependencies.cend(), componentCurrentDependencies.cbegin(), componentCurrentDependencies.cend());
+    std::copy(
+        componentCurrentDependencies.begin(),
+        componentCurrentDependencies.end(),
+        std::inserter(componentDependencies, componentDependencies.end()));
   }
 
   return componentDependencies;

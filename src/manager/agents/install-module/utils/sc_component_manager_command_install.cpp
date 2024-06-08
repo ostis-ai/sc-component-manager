@@ -5,8 +5,12 @@
  */
 
 #include "sc_component_manager_command_install.hpp"
+
 #include <sc-memory/utils/sc_exec.hpp>
+
 #include "utils/sc_component_utils.hpp"
+
+#include "module/utils/common_utils.hpp"
 
 #include "sc-agents-common/utils/AgentUtils.hpp"
 #include <sc-agents-common/utils/IteratorUtils.hpp>
@@ -172,31 +176,53 @@ void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
  * if installation successfull, otherwise
  * returns empty vector.
  */
+
+ScAddr ScComponentManagerCommandInstall::CreateInstallStructureAndGetDepsSet(
+    ScMemoryContext * context,
+    ScAddr const & actionAddr)
+{
+  ScAddr const & mainParameter = context->CreateNode(ScType::NodeConst);
+  ScAddr const & setsParameter = context->CreateNode(ScType::NodeConst);
+  ScAddr const & depSetsParameter = context->CreateNode(ScType::NodeConst);
+  ScAddr edge;
+
+  edge = context->CreateEdge(ScType::EdgeAccessConstPosPerm, actionAddr, mainParameter);
+  context->CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::rrel_1, edge);
+
+  edge = context->CreateEdge(ScType::EdgeAccessConstPosPerm, mainParameter, setsParameter);
+  context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::rrel_sets, edge);
+
+  context->CreateEdge(ScType::EdgeAccessConstPosPerm, setsParameter, depSetsParameter);
+
+  return depSetsParameter;
+}
+
 bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  bool result = true;
+  bool result;
   // Get component dependencies and install them recursively
-  ScAddrVector const & componentDependencies =
+  ScAddrUnorderedSet const & componentDependencies =
       componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
+
+  ScAddr const & actionAddr =
+      utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
+  ScAddr const & depsSetParameter = CreateInstallStructureAndGetDepsSet(context, actionAddr);
+
   for (ScAddr const & componentDependency : componentDependencies)
   {
     std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
-    SC_LOG_INFO("ScComponentManager: Install dependency \"" << dependencyIdtf << "\"");
-    CommandParameters dependencyParameters = {{PARAMETER_NAME, {dependencyIdtf}}};
+    context->CreateEdge(ScType::EdgeAccessConstPosPerm, depsSetParameter, componentDependency);
+    SC_LOG_INFO("ScComponentManager: Found dependency \"" << dependencyIdtf << "\"");
+  }
 
-    ScAddr const actionAddr =
-        utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
-    CommonUtils::TranslateFromStringToScMemory(*context, actionAddr, dependencyParameters);
+  // Call install components agent
+  utils::AgentUtils::applyAction(context, actionAddr, 30000);
 
-    bool dependencyResult = Execute(context, actionAddr).empty();
-
-    // Return empty if you couldn't install one from all dependencies why?
-    if (!dependencyResult)
-    {
-      SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependency \"" << dependencyIdtf << "\" is not installed");
-      // return dependencyResult;
-      result = false;
-    }
+  result = context->HelperCheckEdge(
+      scAgentsCommon::CoreKeynodes::question_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+  if (!result)
+  {
+    SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependencies are not successfully installed");
   }
 
   return result;

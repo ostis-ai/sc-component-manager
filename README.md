@@ -49,11 +49,11 @@ Possible run flags:
 - `-c` <CONFIG_PATH>.
 
 ### Commands
-| Command              | Abbreviation                             | Description                                                                                       | Flags                                                                                                                      |
-|:---------------------|:-----------------------------------------|:--------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
-| `components init`    | `ci`, <br/> `comp init`                  | Download specifications from repositories.                                                        |                                                                                                                            |
-| `components search`  | `cs`, <br/> `comp search`, <br/>`comp s` | Search a component specification in the knowledge base by author, class or explanation substring. | [--author \<author\>] <br/> [--class \<class\>] <br/> [--explanation \<"explanation"\>] or [--explanation \<explanation\>] |
-| `components install` | `cinst`, <br/> `comp inst`               | Install components by its system identifier.                                                      | [--idtf \<system_idtf\>] or [\<system_idtf\>] - install by an identifier                                                   |
+| Command              | Abbreviation                             | Description                                                                                       | Flags                                                                                                                          |
+|:---------------------|:-----------------------------------------|:--------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
+| `components init`    | `ci`, <br/> `comp init`                  | Download specifications from repositories.                                                        |                                                                                                                                |
+| `components search`  | `cs`, <br/> `comp search`, <br/>`comp s` | Search a component specification in the knowledge base by author, class or explanation substring. | [--author \<author\>] <br/> [--class \<class\>] <br/> [--explanation \<"explanation"\>] or [--explanation \<explanation\>]     |
+| `components install` | `cinst`, <br/> `comp inst`               | Install components by its system identifier or install the set of components.                     | [--idtf \<system_idtf\>] or [\<system_idtf\>] - install by an identifier <br/> [--set \<set\>] - install the set of components |
 - Note: `kb/specifications.scs` contains the example of a repository specification.
   
 

@@ -14,6 +14,8 @@
 
 #include "sc-agents-common/utils/AgentUtils.hpp"
 #include <sc-agents-common/utils/IteratorUtils.hpp>
+#include <sc-agents-common/utils/GenerationUtils.hpp>
+
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 using namespace common_utils;
@@ -171,60 +173,47 @@ void ScComponentManagerCommandInstall::ValidateComponent(ScMemoryContext * conte
   }
 }
 
+ScAddr ScComponentManagerCommandInstall::CreateSetToInstallStructure(
+    ScMemoryContext * context,
+    ScAddr const & dependenciesSet)
+{
+  if (!context->IsElement(dependenciesSet))
+  {
+    return dependenciesSet;
+  }
+  ScAddr const & setsParameter = context->CreateNode(ScType::NodeConst);
+  ScAddr const & mainParameter = context->CreateNode(ScType::NodeConst);
+  utils::GenerationUtils::generateRelationBetween(
+      context, mainParameter, setsParameter, keynodes::ScComponentManagerKeynodes::rrel_sets);
+  context->CreateEdge(ScType::EdgeAccessConstPosPerm, setsParameter, dependenciesSet);
+
+  return mainParameter;
+}
+
 /**
  * Tries to install component dependencies.
  * @return Returns {DependencyIdtf1, DependencyIdtf2, ...}
  * if installation successfull, otherwise
  * returns empty vector.
  */
-
-ScAddr ScComponentManagerCommandInstall::CreateInstallStructureAndGetDepsSet(
-    ScMemoryContext * context,
-    ScAddr const & actionAddr)
-{
-  ScAddr const & mainParameter = context->CreateNode(ScType::NodeConst);
-  ScAddr const & setsParameter = context->CreateNode(ScType::NodeConst);
-  ScAddr const & depSetsParameter = context->CreateNode(ScType::NodeConst);
-  ScAddr edge;
-
-  edge = context->CreateEdge(ScType::EdgeAccessConstPosPerm, actionAddr, mainParameter);
-  context->CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::rrel_1, edge);
-
-  edge = context->CreateEdge(ScType::EdgeAccessConstPosPerm, mainParameter, setsParameter);
-  context->CreateEdge(ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::rrel_sets, edge);
-
-  context->CreateEdge(ScType::EdgeAccessConstPosPerm, setsParameter, depSetsParameter);
-
-  return depSetsParameter;
-}
-
 bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  bool result = false;
-  std::string dependencyIdtf;
-  // Get component dependencies and install them recursively
+  bool result = true;
+  ScAddr const & dependenciesSet = utils::IteratorUtils::getAnyByOutRelation(
+      context, componentAddr, keynodes::ScComponentManagerKeynodes::nrel_component_dependencies);
   ScAddrUnorderedSet const & componentDependencies =
       componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
 
-  ScAddr const & actionAddr =
-      utils::AgentUtils::formActionNode(context, keynodes::ScComponentManagerKeynodes::action_components_install, {});
-  ScAddr const & depsSetParameter = CreateInstallStructureAndGetDepsSet(context, actionAddr);
-
-  for (ScAddr const & componentDependency : componentDependencies)
+  if (componentDependencies.empty())
   {
-    dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
-    if (!context->HelperCheckEdge(
-            keynodes::ScComponentManagerKeynodes::concept_reusable_component,
-            componentDependency,
-            ScType::EdgeAccessConstPosPerm))
-    {
-      SC_LOG_WARNING(
-          "ScComponentManager: Didn't find dependency \"" << dependencyIdtf << "\". Can't install the component.");
-      return result;
-    }
-    context->CreateEdge(ScType::EdgeAccessConstPosPerm, depsSetParameter, componentDependency);
-    SC_LOG_INFO("ScComponentManager: Found dependency \"" << dependencyIdtf << "\"");
+    return result;
   }
+
+  // Get component dependencies and install them recursively
+  std::string dependencyIdtf;
+  ScAddr const & mainParameter = CreateSetToInstallStructure(context, dependenciesSet);
+  ScAddr const & actionAddr = utils::AgentUtils::formActionNode(
+      context, keynodes::ScComponentManagerKeynodes::action_components_install, {mainParameter});
 
   // Call install components agent
   utils::AgentUtils::applyAction(context, actionAddr, 30000);

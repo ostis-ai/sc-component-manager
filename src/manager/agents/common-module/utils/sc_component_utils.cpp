@@ -19,8 +19,6 @@
 #include "constants/command_constants.hpp"
 #include "url_parser/repository_url_parser.hpp"
 
-#include "module/utils/common_utils.hpp"
-
 using namespace common_utils;
 
 namespace componentUtils
@@ -59,25 +57,24 @@ ScAddr SearchUtils::GetComponentAddress(ScMemoryContext * context, ScAddr const 
 ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddrUnorderedSet componentDependencies;
-  ScAddrVector componentCurrentDependencies;
   ScAddr componentDependenciesSet;
 
-  ScIterator5Ptr const & componentDependenciesIterator = context->Iterator5(
+  ScIterator5Ptr const & componentDependenciesSetIterator = context->Iterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
       ScType::EdgeAccessConstPosPerm,
       keynodes::ScComponentManagerKeynodes::nrel_component_dependencies);
 
-  while (componentDependenciesIterator->Next())
+  while (componentDependenciesSetIterator->Next())
   {
-    componentDependenciesSet = componentDependenciesIterator->Get(2);
-    componentCurrentDependencies =
-        utils::IteratorUtils::getAllWithType(context, componentDependenciesSet, ScType::NodeConst);
-    std::copy(
-        componentCurrentDependencies.begin(),
-        componentCurrentDependencies.end(),
-        std::inserter(componentDependencies, componentDependencies.end()));
+    componentDependenciesSet = componentDependenciesSetIterator->Get(2);
+    ScIterator3Ptr const & componentDependenciesIterator =
+        context->Iterator3(componentDependenciesSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    while (componentDependenciesIterator->Next())
+    {
+      componentDependencies.insert(componentDependenciesIterator->Get(2));
+    }
   }
 
   return componentDependencies;

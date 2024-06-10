@@ -38,7 +38,7 @@ protected:
 
   bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
-  static ScAddr CreateInstallStructureAndGetDepsSet(ScMemoryContext * context, ScAddr const & actionAddr);
+  static ScAddr CreateSetToInstallStructure(ScMemoryContext * context, ScAddr const & dependenciesSet);
 
   static ScAddrUnorderedSet GetAvailableComponents(
       ScMemoryContext * context,

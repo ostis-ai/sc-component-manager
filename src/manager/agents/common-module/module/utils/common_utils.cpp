@@ -170,7 +170,9 @@ ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(ScMemoryContext & context
 {
   ScAddrUnorderedSet components;
   if (!context.IsElement(parameterNode))
+  {
     return components;
+  }
 
   ScAddr const & parameterSetNode = utils::IteratorUtils::getAnyByOutRelation(
       &context, parameterNode, keynodes::ScComponentManagerKeynodes::rrel_sets);

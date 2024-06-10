@@ -114,9 +114,10 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScMemoryContext * c
       continue;
     }
     executionResult = InstallDependencies(context, componentAddr);
-    executionResult &= DownloadComponent(context, componentAddr);
+
     if (executionResult)
     {
+      executionResult &= DownloadComponent(context, componentAddr);
       executionResult &= InstallComponent(context, componentAddr);
     }
     // TODO: need to process installation method from component specification in kb
@@ -199,7 +200,8 @@ ScAddr ScComponentManagerCommandInstall::CreateInstallStructureAndGetDepsSet(
 
 bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  bool result;
+  bool result = false;
+  std::string dependencyIdtf;
   // Get component dependencies and install them recursively
   ScAddrUnorderedSet const & componentDependencies =
       componentUtils::SearchUtils::GetComponentDependencies(context, componentAddr);
@@ -210,7 +212,16 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
 
   for (ScAddr const & componentDependency : componentDependencies)
   {
-    std::string dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
+    dependencyIdtf = context->HelperGetSystemIdtf(componentDependency);
+    if (!context->HelperCheckEdge(
+            keynodes::ScComponentManagerKeynodes::concept_reusable_component,
+            componentDependency,
+            ScType::EdgeAccessConstPosPerm))
+    {
+      SC_LOG_WARNING(
+          "ScComponentManager: Didn't find dependency \"" << dependencyIdtf << "\". Can't install the component.");
+      return result;
+    }
     context->CreateEdge(ScType::EdgeAccessConstPosPerm, depsSetParameter, componentDependency);
     SC_LOG_INFO("ScComponentManager: Found dependency \"" << dependencyIdtf << "\"");
   }

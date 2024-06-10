@@ -13,7 +13,7 @@ class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 public:
   ScComponentManagerCommandSearch() = default;
 
-  ScAddrVector Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
+  ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
 protected:
   std::string const SPECIFICATION_ALIAS = "_specification";
@@ -38,24 +38,24 @@ protected:
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 
-  ScAddrVector SearchComponentsByRelationLink(
+  ScAddrUnorderedSet SearchComponentsByRelationLink(
       ScMemoryContext * context,
       ScAddr const & relationAddr,
       std::string const & linkAlias,
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 
-  std::set<ScAddr, ScAddrLessFunc> SearchComponentsSpecifications(
+  ScAddrUnorderedSet SearchComponentsSpecifications(
       ScMemoryContext * context,
       ScTemplate & searchComponentTemplate,
-      std::map<std::string, ScAddrVector> const & linksValues);
+      std::map<std::string, ScAddrUnorderedSet> const & linksValues);
 
-  std::set<ScAddr, ScAddrLessFunc> SearchComponentsSpecificationsWithoutLinks(
+  ScAddrUnorderedSet SearchComponentsSpecificationsWithoutLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult);
 
-  std::set<ScAddr, ScAddrLessFunc> SearchComponentsSpecificationsWithLinks(
+  ScAddrUnorderedSet SearchComponentsSpecificationsWithLinks(
       ScMemoryContext * context,
       ScTemplateSearchResult const & searchComponentResult,
-      std::map<std::string, ScAddrVector> const & linksValues);
+      std::map<std::string, ScAddrUnorderedSet> const & linksValues);
 };

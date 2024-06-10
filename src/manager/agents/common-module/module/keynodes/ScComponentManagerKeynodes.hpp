@@ -106,25 +106,31 @@ public:
   SC_PROPERTY(Keynode("nrel_ostis_system_decomposition"), ForceCreate(ScType::NodeConstNoRole))
   static ScAddr nrel_ostis_system_decomposition;
 
-  SC_PROPERTY(Keynode("action_components_init"), ForceCreate)
+  SC_PROPERTY(Keynode("action_components_init"), ForceCreate(ScType::NodeConstClass))
   static ScAddr action_components_init;
 
-  SC_PROPERTY(Keynode("action_components_search"), ForceCreate)
+  SC_PROPERTY(Keynode("action_components_search"), ForceCreate(ScType::NodeConstClass))
   static ScAddr action_components_search;
 
-  SC_PROPERTY(Keynode("action_components_install"), ForceCreate)
+  SC_PROPERTY(Keynode("action_components_install"), ForceCreate(ScType::NodeConstClass))
   static ScAddr action_components_install;
 
-  SC_PROPERTY(Keynode("rrel_author"), ForceCreate)
+  SC_PROPERTY(Keynode("rrel_author"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_author;
 
-  SC_PROPERTY(Keynode("rrel_class"), ForceCreate)
+  SC_PROPERTY(Keynode("rrel_class"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_class;
 
-  SC_PROPERTY(Keynode("rrel_explanation"), ForceCreate)
+  SC_PROPERTY(Keynode("rrel_sets"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr rrel_sets;
+
+  SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
+  static ScAddr rrel_components;
+
+  SC_PROPERTY(Keynode("rrel_explanation"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_explanation;
 
-  SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate)
+  SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_identifier;
 };
 

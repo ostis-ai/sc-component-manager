@@ -18,19 +18,6 @@ public:
   {
     size_t const COMMAND_KEYWORDS_SIZE = 2;
     std::string const fullCommand = GetFullCommand(command);
-    std::string cutCommand = fullCommand;
-
-    size_t firstPapameter = fullCommand.find('-');
-    if (firstPapameter != std::string::npos)
-    {
-      cutCommand = fullCommand.substr(0, firstPapameter - 1);
-    }
-
-    size_t endOfCommandPos = cutCommand.find_last_not_of(' ');
-    if (endOfCommandPos != std::string::npos)
-    {
-      cutCommand.erase(endOfCommandPos + 1);
-    }
 
     std::pair<std::string, CommandParameters> parsedCommand;
     std::vector<std::string> commandTokens;
@@ -61,39 +48,32 @@ protected:
     CommandParameters commandParameters;
     std::string parameterName;
     std::vector<std::string> parameterValue;
+    std::string currentCommandToken;
 
     for (size_t tokenNumber = COMMAND_KEYWORDS_SIZE; tokenNumber < commandTokens.size(); tokenNumber++)
     {
-      std::string currentCommandToken = commandTokens.at(tokenNumber);
+      currentCommandToken = commandTokens.at(tokenNumber);
+      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX
+          && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && tokenNumber == COMMAND_KEYWORDS_SIZE
+          && commandTokens[tokenNumber][0] != PARAMETER_VALUES_DELIMITER)
+      {
+        parameterName = CommandsConstantsFlags::IDTF;
+        commandParameters.insert({parameterName, {}});
+      }
       if (currentCommandToken.at(0) == PARAMETER_VALUES_DELIMITER)
       {
         if (!parameterValue.empty())
-        {
-          commandParameters.insert({parameterName, parameterValue});
           parameterValue.clear();
-        }
+
         parameterName = GetParameterNameAfterDelimiter(currentCommandToken, PARAMETER_VALUES_DELIMITER);
+        commandParameters.insert({parameterName, {}});
       }
       else
       {
         if (currentCommandToken.at(0) == '\"')
-        {
           currentCommandToken = currentCommandToken.substr(1, currentCommandToken.size() - 2);
-        }
-        parameterValue.push_back(currentCommandToken);
-      }
-    }
 
-    if (!parameterName.empty())
-    {
-      commandParameters.insert({parameterName, parameterValue});
-    }
-    else
-    {
-      if (commandTokens[0] == CommandConstants::COMPONENTS_COMMAND_PREFIX
-          && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && !parameterValue.empty())
-      {
-        commandParameters.insert({CommandsConstantsFlags::IDTF, parameterValue});
+        commandParameters[parameterName].push_back(currentCommandToken);
       }
     }
 

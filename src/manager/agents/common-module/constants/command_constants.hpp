@@ -59,6 +59,7 @@ class CommandsConstantsFlags
 {
 public:
   static std::string const IDTF;
+  static std::string const SET;
   static std::string const EXPLANATION;
   static std::string const AUTHOR;
   static std::string const CLASS;

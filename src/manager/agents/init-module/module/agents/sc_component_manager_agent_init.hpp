@@ -15,8 +15,11 @@ namespace initModule
 {
 class ScComponentManagerInitAgent : public ScAgent
 {
+public:
   SC_CLASS(Agent, Event(scAgentsCommon::CoreKeynodes::question_initiated, ScEvent::Type::AddOutputEdge))
   SC_GENERATED_BODY()
+
+  using ScAddrUnorderedSet = std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>>;
 
 private:
   bool CheckAction(ScAddr const & actionAddr);

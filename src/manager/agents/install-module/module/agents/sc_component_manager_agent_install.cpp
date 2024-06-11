@@ -44,10 +44,11 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
        configManager[PathKeysOfConfigPath::UI_PATH]});
 
   ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);
-  ScAddrUnorderedSet const & identifiersNodes = command.Execute(&m_memoryCtx, actionAddr);
-  ScAddrVector result(identifiersNodes.begin(), identifiersNodes.end());
-  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, result, true);
+  ScAddrUnorderedSet const & identifiersNodesSet = command.Execute(&m_memoryCtx, actionAddr);
+  bool result = !identifiersNodesSet.empty();
+  ScAddrVector identifiersNodesVector(identifiersNodesSet.begin(), identifiersNodesSet.end());
 
+  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, identifiersNodesVector, result);
   SC_LOG_DEBUG("ScComponentManagerInstallAgent finished");
   return SC_RESULT_OK;
 };

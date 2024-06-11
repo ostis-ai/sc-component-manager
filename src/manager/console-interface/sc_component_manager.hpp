@@ -21,33 +21,24 @@ public:
   explicit ScComponentManager(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
     : m_componentsPath(std::move(componentsPath))
   {
-    m_handler = new ScComponentManagerCommandHandler(m_componentsPath);
   }
-
-  void QuietInstall();
 
   void Run();
 
-  virtual bool Emit(std::string const & command) = 0;
-
   void Stop();
 
-  virtual ~ScComponentManager()
-  {
-    delete m_handler;
-    m_handler = nullptr;
-  }
+  virtual ~ScComponentManager() = default;
 
 protected:
   std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
 
-  sc_bool static HasNewInput();
-
   void Start();
 
-  ScComponentManagerCommandHandler * m_handler;
+  sc_bool static HasNewInput();
+
+  bool Emit(std::string const & command);
 
 private:
   std::thread m_instance;
-  std::atomic<sc_bool> m_isRunning;
+  std::atomic<sc_bool> m_isRunning{};
 };

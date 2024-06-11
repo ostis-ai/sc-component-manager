@@ -11,8 +11,6 @@
 #include "sc-agents-common/utils/CommonUtils.hpp"
 #include "sc-agents-common/utils/AgentUtils.hpp"
 
-#include "sc_component_manager_handler.hpp"
-
 #include "common-module/module/utils/common_utils.hpp"
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 
@@ -20,7 +18,7 @@
 #include "search-module/utils/sc_component_manager_command_search.hpp"
 #include "install-module/utils/sc_component_manager_command_install.hpp"
 
-class ScComponentManagerCommandHandler : public ScComponentManagerHandler
+class ScComponentManagerCommandHandler
 {
 public:
   explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
@@ -35,7 +33,7 @@ public:
         {"install", new ScComponentManagerCommandInstall(m_componentsPath)}};
   }
 
-  bool Handle(std::string const & commandType, CommandParameters const & commandParameters) override
+  bool Handle(std::string const & commandType, CommandParameters const & commandParameters)
   {
     bool executionResult;
     m_commandParameters = commandParameters;
@@ -68,7 +66,7 @@ public:
     return executionResult;
   }
 
-  ~ScComponentManagerCommandHandler() override
+  ~ScComponentManagerCommandHandler()
   {
     m_context->Destroy();
     delete m_context;

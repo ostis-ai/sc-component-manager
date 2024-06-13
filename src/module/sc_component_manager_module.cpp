@@ -6,29 +6,33 @@
 
 #include "sc_component_manager_module.hpp"
 
-#include "sc-component-manager-factory/sc_component_manager_factory.hpp"
-
 SC_IMPLEMENT_MODULE(ScComponentManagerModule)
 
 sc_result ScComponentManagerModule::InitializeImpl()
 {
-  // It is backward compatible logic. When all platform-dependent components will be configured from kb it will be
-  // removed.
+  std::string const KB_COMPONENTS_PATH = "knowledge_base_components_path";
+  std::string const PS_COMPONENTS_PATH = "problem_solver_components_path";
+  std::string const INTERFACE_COMPONENTS_PATH = "interface_components_path";
+
+  // It is backward compatible logic. We should configure platform-dependent components from kb
   ScConfig config{
       ScMemory::ms_configPath,
-      {"knowledge_base_components_path",
-       "problem_solver_components_path",
-       "interface_components_path",
-       "repo_path",
-       "extensions_path",
-       "log_file"}};
+      {KB_COMPONENTS_PATH, PS_COMPONENTS_PATH, INTERFACE_COMPONENTS_PATH, "repo_path", "extensions_path", "log_file"}};
   ScConfigGroup managerConfig = config["sc-component-manager"];
-  for (auto const & key : *managerConfig)
+  for (std::string const & key : *managerConfig)
     m_params.Insert({key, managerConfig[key]});
+
+  std::map<ScAddr, std::string, ScAddrLessFunc> const & componentsPath = {
+      {{keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
+        m_params.Get<std::string>(KB_COMPONENTS_PATH)},
+       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
+        m_params.Get<std::string>(PS_COMPONENTS_PATH)},
+       {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
+        m_params.Get<std::string>(INTERFACE_COMPONENTS_PATH)}}};
 
   try
   {
-    m_scComponentManager = ScComponentManagerFactory::ConfigureScComponentManager(m_params);
+    m_scComponentManager = std::make_unique<ScComponentManager>(componentsPath);
     if (!m_scComponentManager)
       return SC_RESULT_ERROR;
 

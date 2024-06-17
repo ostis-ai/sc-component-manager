@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add storage config and config parser
 - Create base environment to run commands
 - Add commands redaction 
+- Add new search flags
 
 ### Changed
 

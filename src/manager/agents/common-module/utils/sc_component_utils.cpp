@@ -334,8 +334,7 @@ bool LoadUtils::LoadScsFilesInDir(
     if (filePath.extension() == SpecificationConstants::SCS_EXTENSION && filePath.filename().string() != excludedFiles)
     {
       // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
-      loader.loadScsFile(*context, filePath);
-      result = true;
+      result = loader.loadScsFile(*context, filePath);
     }
   }
 

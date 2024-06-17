@@ -24,7 +24,7 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
     return SC_RESULT_OK;
   }
 
-  SC_LOG_DEBUG("ScComponentManagerInitAgent started");
+  SC_LOG_INFO("ScComponentManagerInitAgent started");
 
   ScConfig config{ScMemory::ms_configPath, {PathKeysOfConfigPath::KB_PATH}};
   ScConfigGroup configManager = config["sc-component-manager"];
@@ -35,7 +35,7 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInitAgent)
   ScAddrVector result(components.begin(), components.end());
   utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, result, true);
 
-  SC_LOG_DEBUG("ScComponentManagerInitAgent finished");
+  SC_LOG_INFO("ScComponentManagerInitAgent finished");
   return SC_RESULT_OK;
 };
 

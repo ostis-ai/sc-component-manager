@@ -23,12 +23,7 @@ public:
 
   ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
-  bool ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories);
-
-  static ScAddrVector GetSpecificationsAddrs(
-      ScMemoryContext * context,
-      ScAddr const & repositoryAddr,
-      ScAddr const & rrelAddr);
+  ScAddrUnorderedSet ProcessRepository(ScMemoryContext * context, ScAddr & repositories);
 
 protected:
   std::string m_specificationsPath;

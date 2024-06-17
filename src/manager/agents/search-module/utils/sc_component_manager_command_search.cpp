@@ -54,6 +54,16 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
         commandParameters.at(AUTHOR));
   }
 
+  if (commandParameters.find(KEY) != commandParameters.cend())
+  {
+    SearchComponentsByRelationSet(
+        context,
+        keynodes::ScComponentManagerKeynodes::nrel_key_sc_element,
+        KEY_SET_ALIAS,
+        searchComponentTemplate,
+        commandParameters.at(KEY));
+  }
+
   std::map<std::string, ScAddrUnorderedSet> linksValues;
   if (commandParameters.find(EXPLANATION) != commandParameters.cend()
       && !commandParameters.find(EXPLANATION)->second.empty())
@@ -65,6 +75,42 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
         searchComponentTemplate,
         commandParameters.at(EXPLANATION));
     linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
+  }
+  
+  if (commandParameters.find(NOTE) != commandParameters.cend()
+      && !commandParameters.find(NOTE)->second.empty())
+  {
+    ScAddrUnorderedSet noteLinks = SearchComponentsByRelationLink(
+        context,
+        keynodes::ScComponentManagerKeynodes::nrel_note,
+        NOTE_LINK_ALIAS,
+        searchComponentTemplate,
+        commandParameters.at(NOTE));
+    linksValues.insert({NOTE_LINK_ALIAS, noteLinks});
+  }
+
+  if (commandParameters.find(PURPOSE) != commandParameters.cend()
+      && !commandParameters.find(PURPOSE)->second.empty())
+  {
+    ScAddrUnorderedSet purposeLinks = SearchComponentsByRelationLink(
+        context,
+        keynodes::ScComponentManagerKeynodes::nrel_purpose,
+        PURPOSE_LINK_ALIAS,
+        searchComponentTemplate,
+        commandParameters.at(PURPOSE));
+    linksValues.insert({PURPOSE_LINK_ALIAS, purposeLinks});
+  }
+
+  if (commandParameters.find(MAIN_ID) != commandParameters.cend()
+      && !commandParameters.find(MAIN_ID)->second.empty())
+  {
+    ScAddrUnorderedSet idLinks = SearchComponentsByRelationLink(
+        context,
+        scAgentsCommon::CoreKeynodes::nrel_main_idtf,
+        ID_LINK_ALIAS,
+        searchComponentTemplate,
+        commandParameters.at(MAIN_ID));
+    linksValues.insert({ID_LINK_ALIAS, idLinks});
   }
 
   ScAddrUnorderedSet componentsSpecifications =

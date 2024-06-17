@@ -20,11 +20,19 @@ protected:
   std::string const COMPONENT_ALIAS = "_component";
   std::string const AUTHORS_SET_ALIAS = "_authors";
   std::string const EXPLANATION_LINK_ALIAS = "_explanation";
+  std::string const NOTE_LINK_ALIAS = "_note";
+  std::string const PURPOSE_LINK_ALIAS = "_purpose";
+  std::string const KEY_SET_ALIAS = "_key";
+  std::string const ID_LINK_ALIAS = "_id";
 
   std::string const AUTHOR = "author";
   std::string const CLASS = "class";
   std::string const EXPLANATION = "explanation";
-  std::set<std::string> const possibleSearchParameters = {AUTHOR, CLASS, EXPLANATION};  // extend to more params
+  std::string const NOTE = "note";
+  std::string const PURPOSE = "purpose";
+  std::string const KEY = "key";
+  std::string const MAIN_ID = "main-id";
+  std::set<std::string> const possibleSearchParameters = {AUTHOR, CLASS, EXPLANATION, NOTE, PURPOSE, KEY, MAIN_ID}; // extend to more params
 
   void SearchComponentsByClass(
       ScMemoryContext * context,

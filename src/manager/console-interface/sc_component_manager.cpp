@@ -71,7 +71,7 @@ bool ScComponentManager::Emit(std::string const & command)
 
   std::string const logMessage = executionResult ? "successfully" : "unsuccessfully";
 
-  SC_LOG_DEBUG("ScComponentManagerImpl: command executed " << logMessage);
+  SC_LOG_DEBUG("ScComponentManager: command executed " << logMessage);
 
   return executionResult;
 }

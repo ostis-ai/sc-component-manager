@@ -81,7 +81,12 @@ bool DownloaderHandler::DownloadSpecification(ScMemoryContext * context, ScAddr 
   std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMITER + nodeSystemIdentifier;
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {
-    ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);  // TODO: not safe method
+    ScAddr const & linkAddressClassAddr = getUrlLinkClass(context, currentAddressLinkAddr);
+    if (!context->IsElement(linkAddressClassAddr))
+    {
+      continue;
+    }
+
     if (linkAddressClassAddr == keynodes::ScComponentManagerKeynodes::concept_github_url)
     {
       context->GetLinkContent(currentAddressLinkAddr, urlAddress);

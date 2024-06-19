@@ -321,21 +321,27 @@ bool LoadUtils::LoadScsFilesInDir(
     std::string const & excludedFiles)
 {
   bool result = false;
-  ScsLoader loader;
-
   if (!std::filesystem::exists(dirPath))
   {
     return result;
   }
 
+  ScsLoader loader;
   for (std::filesystem::directory_entry const & dirEntry : std::filesystem::recursive_directory_iterator(dirPath))
   {
     std::filesystem::path const & filePath = dirEntry.path();
     if (filePath.extension() == SpecificationConstants::SCS_EXTENSION && filePath.filename().string() != excludedFiles)
     {
-      // TODO: fix to "result = loader.loadScsFile(*context, filePath);" after merge in sc-machine
-      loader.loadScsFile(*context, filePath);
-      result = true;
+      try
+      {
+        result &= loader.loadScsFile(*context, filePath);
+      }
+      catch (utils::ScException const & exception)
+      {
+        SC_LOG_ERROR("LoadUtils: can't load file " << filePath);
+        SC_LOG_ERROR(exception.Message());
+        continue;
+      }
     }
   }
 

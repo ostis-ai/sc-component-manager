@@ -14,112 +14,59 @@ using namespace common_utils;
 
 ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
-  ScAddrVector processedRepositories;
+  ScAddrUnorderedSet specifications;
 
-  ScAddrVector availableRepositories = utils::IteratorUtils::getAllWithType(
-      context, keynodes::ScComponentManagerKeynodes::concept_repository, ScType::NodeConst);
+  ScIterator3Ptr const repositoriesIterator = context->Iterator3(
+      keynodes::ScComponentManagerKeynodes::concept_repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
-  ProcessRepositories(context, availableRepositories);
-
-  ScAddrUnorderedSet components;
-  ScIterator3Ptr const & componentsIterator = context->Iterator3(
-      keynodes::ScComponentManagerKeynodes::concept_reusable_component,
-      ScType::EdgeAccessConstPosPerm,
-      ScType::NodeConst);
-  while (componentsIterator->Next())
+  ScAddr repository;
+  while (repositoriesIterator->Next())
   {
-    SC_LOG_DEBUG(context->HelperGetSystemIdtf(componentsIterator->Get(2)));
-    components.insert(componentsIterator->Get(2));
+    repository = repositoriesIterator->Get(2);
+    ProcessRepository(context, repository, specifications);
   }
 
-  return components;
+  return specifications;
 }
 
 /**
- * @brief Recursivly iterates through repositories
- * and download avaible components specifications.
+ * @brief Download available components specifications from a storage.
  * @param context current sc-memory context
- * @param avaibleRepositories vector of avaible repositories addrs
+ * @param repository ScAddr of a repository of components to load
  */
-bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * context, ScAddrVector & availableRepositories)
+void ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context, ScAddr & repository, ScAddrUnorderedSet & specifications)
 {
-  if (availableRepositories.empty())
-    return true;
-
-  ScAddr const repository = availableRepositories.back();
-
-  ScAddrVector currentRepositoriesAddrs;
-  try
+  ScAddr const & specificationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
+      context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
+  if (!context->IsElement(specificationsSetAddr))
   {
-    currentRepositoriesAddrs = GetSpecificationsAddrs(
-        context, repository, keynodes::ScComponentManagerKeynodes::rrel_repositories_specifications);
-  }
-  catch (utils::ScException const & exception)
-  {
-    SC_LOG_DEBUG("ScComponentManagerCommandInit: Problem getting repositories specifications");
-    SC_LOG_DEBUG(exception.Message());
+    SC_LOG_WARNING(
+        "ScComponentManagerCommandInit: components specification not found in repository "
+        << context->HelperGetSystemIdtf(repository));
+    return;
   }
 
-  availableRepositories.insert(
-      availableRepositories.begin(), currentRepositoriesAddrs.begin(), currentRepositoriesAddrs.end());
-
-  ScAddrVector currentComponentsSpecificationsAddrs;
-  try
-  {
-    currentComponentsSpecificationsAddrs = GetSpecificationsAddrs(
-        context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
-  }
-  catch (utils::ScException const & exception)
-  {
-    SC_LOG_DEBUG("ScComponentManagerCommandInit: Problem getting component specifications");
-    SC_LOG_DEBUG(exception.Message());
-  }
-
+  ScAddr componentSpecification;
   ScAddr component;
-  for (ScAddr const & componentSpecificationAddr : currentComponentsSpecificationsAddrs)
+  ScIterator3Ptr const specificationsIterator =
+      context->Iterator3(specificationsSetAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  while (specificationsIterator->Next())
   {
-    // TODO componentSpecificationAddr as specification of component
-    component = CommonUtils::GetComponentBySpecification(*context, componentSpecificationAddr);
-    if (CommonUtils::CheckIfInstalled(*context, component))
+    componentSpecification = specificationsIterator->Get(2);
+    component = CommonUtils::GetComponentBySpecification(*context, componentSpecification);
+    if (context->IsElement(component))
     {
-      SC_LOG_WARNING("Component \"" << context->HelperGetSystemIdtf(component) << "\" is already installed");
+      SC_LOG_WARNING(
+          "ScComponentManagerCommandInit: Specification is already loaded for component "
+          << context->HelperGetSystemIdtf(component));
       continue;
     }
-    downloaderHandler->DownloadSpecification(context, componentSpecificationAddr);
+    specifications.insert(componentSpecification);
+    downloaderHandler->DownloadSpecification(context, componentSpecification);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER
-                                          + context->HelperGetSystemIdtf(componentSpecificationAddr);
+                                          + context->HelperGetSystemIdtf(componentSpecification);
     componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
-
-    ScAddrUnorderedSet componentDependencies =
-        componentUtils::SearchUtils::GetComponentDependencies(context, componentSpecificationAddr);
-    availableRepositories.insert(
-        availableRepositories.end(), componentDependencies.begin(), componentDependencies.end());
+    SC_LOG_DEBUG(
+        "ScComponentManagerCommandInit: loaded specification " << context->HelperGetSystemIdtf(componentSpecification));
   }
-
-  availableRepositories.pop_back();
-  ProcessRepositories(context, availableRepositories);
-
-  return true;
-}
-
-/**
- * @brief Get all sc-addrs from first set
- * that connected with nodeAddr by rrelAddr relation.
- * @param context current sc-memory context
- * @param nodeAddr sc-addr of node that connected with set
- * @param rrelAddr sc-addr of relation that connects nodeAddr with set
- * @return Vector of all sc-addrs of all NodeConst nodes
- * that are in set that is connected with nodeAddr by rrelAdd rrelation.
- */
-ScAddrVector ScComponentManagerCommandInit::GetSpecificationsAddrs(
-    ScMemoryContext * context,
-    ScAddr const & nodeAddr,
-    ScAddr const & rrelAddr)
-{
-  ScAddr const & specificationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(context, nodeAddr, rrelAddr);
-
-  ScAddrVector specificationsAddrs =
-      utils::IteratorUtils::getAllWithType(context, specificationsSetAddr, ScType::NodeConst);
-
-  return specificationsAddrs;
 }

@@ -23,7 +23,7 @@ public:
 
   ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
 
-  ScAddrUnorderedSet ProcessRepository(ScMemoryContext * context, ScAddr & repositories);
+  void ProcessRepository(ScMemoryContext * context, ScAddr & repositories, ScAddrUnorderedSet & specifications);
 
 protected:
   std::string m_specificationsPath;

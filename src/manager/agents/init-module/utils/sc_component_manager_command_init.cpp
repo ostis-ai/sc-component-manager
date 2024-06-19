@@ -23,9 +23,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * cont
   while (repositoriesIterator->Next())
   {
     repository = repositoriesIterator->Get(2);
-    ScAddrUnorderedSet specificationsTemp = ProcessRepository(context, repository);
-
-    specifications.insert(specificationsTemp.cbegin(), specificationsTemp.cend());
+    ProcessRepository(context, repository, specifications);
   }
 
   return specifications;
@@ -36,9 +34,8 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * cont
  * @param context current sc-memory context
  * @param repository ScAddr of a repository of components to load
  */
-ScAddrUnorderedSet ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context, ScAddr & repository)
+void ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context, ScAddr & repository, ScAddrUnorderedSet & specifications)
 {
-  ScAddrUnorderedSet specifications;
   ScAddr const & specificationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
       context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
   if (!context->IsElement(specificationsSetAddr))
@@ -46,7 +43,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::ProcessRepository(ScMemoryCont
     SC_LOG_WARNING(
         "ScComponentManagerCommandInit: components specification not found in repository "
         << context->HelperGetSystemIdtf(repository));
-    return specifications;
+    return;
   }
 
   ScAddr componentSpecification;
@@ -72,6 +69,4 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::ProcessRepository(ScMemoryCont
     SC_LOG_DEBUG(
         "ScComponentManagerCommandInit: loaded specification " << context->HelperGetSystemIdtf(componentSpecification));
   }
-
-  return specifications;
 }

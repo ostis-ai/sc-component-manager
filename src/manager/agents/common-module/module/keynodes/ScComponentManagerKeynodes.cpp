@@ -12,6 +12,7 @@ namespace keynodes
 {
 ScAddr ScComponentManagerKeynodes::myself;
 ScAddr ScComponentManagerKeynodes::concept_reusable_component;
+ScAddr ScComponentManagerKeynodes::current_components_to_install;
 ScAddr ScComponentManagerKeynodes::concept_reusable_kb_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_ps_component;
 ScAddr ScComponentManagerKeynodes::concept_reusable_ui_component;

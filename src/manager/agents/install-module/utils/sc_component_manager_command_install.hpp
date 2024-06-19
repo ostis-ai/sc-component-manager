@@ -38,6 +38,15 @@ protected:
 
   bool InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr);
 
+  static ScAddr CreateSetToInstallStructure(ScMemoryContext * context, ScAddr const & dependenciesSet);
+
+  static ScAddr CheckDependencyDuplication(
+      ScMemoryContext * context,
+      ScAddr const & currentInstallationComponentsAddr,
+      ScAddr const & dependenciesSet);
+
+  static bool EraseTempOutputEdges(ScMemoryContext * context, ScAddr const & node);
+
   static ScAddrUnorderedSet GetAvailableComponents(
       ScMemoryContext * context,
       ScAddrUnorderedSet const & componentsToInstallIdentifiers);

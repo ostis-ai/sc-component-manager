@@ -90,7 +90,7 @@ bool ScComponentManagerCommandInit::ProcessRepositories(ScMemoryContext * contex
                                           + context->HelperGetSystemIdtf(componentSpecificationAddr);
     componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
 
-    ScAddrVector componentDependencies =
+    ScAddrUnorderedSet componentDependencies =
         componentUtils::SearchUtils::GetComponentDependencies(context, componentSpecificationAddr);
     availableRepositories.insert(
         availableRepositories.end(), componentDependencies.begin(), componentDependencies.end());

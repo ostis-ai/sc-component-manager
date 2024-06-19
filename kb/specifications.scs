@@ -190,4 +190,38 @@ sc_component_manager_repository
 						*);;
 					*);;
 			*);;
+		*);
+	-> part_figure
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_figure/part_figure]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
+		*);
+	-> part_lr
+		(*
+			<- concept_reusable_component_specification;;
+			=> nrel_alternative_addresses:
+			...
+			(*
+				<- sc_node_tuple;;
+				-> rrel_1:
+					...
+					(*
+						-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_lr/part_lr]
+						(*
+							<- concept_github_url;;
+						*);;
+					*);;
+			*);;
 		*);;

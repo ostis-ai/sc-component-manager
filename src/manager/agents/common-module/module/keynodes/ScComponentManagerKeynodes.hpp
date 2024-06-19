@@ -25,6 +25,9 @@ public:
   SC_PROPERTY(Keynode("concept_reusable_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_component;
 
+  SC_PROPERTY(Keynode("concept_current_components_to_install"), ForceCreate(ScType::NodeConst))
+  static ScAddr current_components_to_install;
+
   SC_PROPERTY(Keynode("concept_reusable_kb_component"), ForceCreate(ScType::NodeConstClass))
   static ScAddr concept_reusable_kb_component;
 

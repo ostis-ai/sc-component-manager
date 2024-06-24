@@ -25,7 +25,7 @@ rrel_explanation
 rrel_note
 <- sc_node_role_relation;
 => nrel_main_idtf:
-  [описание'] (* <- lang_ru;; *);
+  [примечание'] (* <- lang_ru;; *);
   [note'] (* <- lang_en;; *);;
 
 rrel_purpose

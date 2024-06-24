@@ -44,73 +44,34 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
     SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
   }
 
-  if (commandParameters.find(AUTHOR) != commandParameters.cend())
+   for (int sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
   {
-    SearchComponentsByRelationSet(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_authors,
-        AUTHORS_SET_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(AUTHOR));
-  }
-
-  if (commandParameters.find(KEY) != commandParameters.cend())
-  {
-    SearchComponentsByRelationSet(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_key_sc_element,
-        KEY_SET_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(KEY));
+    if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
+    {
+      SearchComponentsByRelationSet(
+          context,
+          std::get<1>(searchByRelation[sequenceNumber]),
+          std::get<2>(searchByRelation[sequenceNumber]),
+          searchComponentTemplate,
+          commandParameters.at(std::get<0>(searchByRelation[sequenceNumber])));
+    }
   }
 
   std::map<std::string, ScAddrUnorderedSet> linksValues;
-  if (commandParameters.find(EXPLANATION) != commandParameters.cend()
-      && !commandParameters.find(EXPLANATION)->second.empty())
+  for (int sequenceNumber = 0; sequenceNumber < searchByLine.size(); sequenceNumber++)
   {
-    ScAddrUnorderedSet explanationLinks = SearchComponentsByRelationLink(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_explanation,
-        EXPLANATION_LINK_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(EXPLANATION));
-    linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
-  }
-  
-  if (commandParameters.find(NOTE) != commandParameters.cend()
-      && !commandParameters.find(NOTE)->second.empty())
-  {
-    ScAddrUnorderedSet noteLinks = SearchComponentsByRelationLink(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_note,
-        NOTE_LINK_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(NOTE));
-    linksValues.insert({NOTE_LINK_ALIAS, noteLinks});
-  }
-
-  if (commandParameters.find(PURPOSE) != commandParameters.cend()
-      && !commandParameters.find(PURPOSE)->second.empty())
-  {
-    ScAddrUnorderedSet purposeLinks = SearchComponentsByRelationLink(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_purpose,
-        PURPOSE_LINK_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(PURPOSE));
-    linksValues.insert({PURPOSE_LINK_ALIAS, purposeLinks});
-  }
-
-  if (commandParameters.find(MAIN_ID) != commandParameters.cend()
-      && !commandParameters.find(MAIN_ID)->second.empty())
-  {
-    ScAddrUnorderedSet idLinks = SearchComponentsByRelationLink(
-        context,
-        scAgentsCommon::CoreKeynodes::nrel_main_idtf,
-        ID_LINK_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(MAIN_ID));
-    linksValues.insert({ID_LINK_ALIAS, idLinks});
+    if (commandParameters.find(std::get<0>(searchByLine[sequenceNumber])) != commandParameters.cend()
+        && !commandParameters.find(std::get<0>(searchByLine[sequenceNumber]))->second.empty())
+    {
+      SC_LOG_INFO(std::get<0>(searchByLine[sequenceNumber]));
+      ScAddrUnorderedSet links = SearchComponentsByRelationLink(
+          context,
+          std::get<1>(searchByLine[sequenceNumber]),
+          std::get<2>(searchByLine[sequenceNumber]),
+          searchComponentTemplate,
+          commandParameters.at(std::get<0>(searchByLine[sequenceNumber])));
+      linksValues.insert({std::get<2>(searchByLine[sequenceNumber]), links});
+    }
   }
 
   ScAddrUnorderedSet componentsSpecifications =

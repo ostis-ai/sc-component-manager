@@ -4,14 +4,14 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <string>
-#include <iostream>
-#include <thread>
+#include "sc_component_manager.hpp"
 
 #include <sys/select.h>
 
-#include "sc_component_manager.hpp"
+#include "sc-memory/sc_debug.hpp"
+
 #include "command_parser/sc_component_manager_command_parser.hpp"
+#include "command_handler/sc_component_manager_command_handler.hpp"
 
 static constexpr int STD_INPUT = 0;
 static constexpr suseconds_t WAIT_BETWEEN_SELECT_US = 250000L;
@@ -66,7 +66,7 @@ sc_bool ScComponentManager::HasNewInput()
 bool ScComponentManager::Emit(std::string const & command)
 {
   std::pair<std::string, CommandParameters> const parsedCommand = ScComponentManagerParser::Parse(command);
-  ScComponentManagerCommandHandler handler(m_componentsPath);
+  ScComponentManagerCommandHandler handler;
   bool const executionResult = handler.Handle(parsedCommand.first, parsedCommand.second);
 
   std::string const logMessage = executionResult ? "successfully" : "unsuccessfully";

@@ -34,7 +34,10 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * cont
  * @param context current sc-memory context
  * @param repository ScAddr of a repository of components to load
  */
-void ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context, ScAddr & repository, ScAddrUnorderedSet & specifications)
+void ScComponentManagerCommandInit::ProcessRepository(
+    ScMemoryContext * context,
+    ScAddr & repository,
+    ScAddrUnorderedSet & specifications)
 {
   ScAddr const & specificationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
       context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);

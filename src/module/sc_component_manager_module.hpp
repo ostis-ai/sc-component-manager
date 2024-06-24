@@ -8,6 +8,7 @@
 
 #include <sc-memory/sc_memory.hpp>
 #include <sc-memory/sc_module.hpp>
+#include <sc-config-utils/sc_memory_config.hpp>
 
 #include "sc_component_manager.hpp"
 
@@ -24,5 +25,5 @@ class ScComponentManagerModule : public ScModule
 
 protected:
   ScParams m_params;
-  std::unique_ptr<ScComponentManager> m_scComponentManager;
+  ScComponentManager m_scComponentManager;
 };

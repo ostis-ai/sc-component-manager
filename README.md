@@ -52,9 +52,9 @@ Possible run flags:
 | Command              | Abbreviation                             | Description                                                                                       | Flags                                                                                                                          |
 |:---------------------|:-----------------------------------------|:--------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
 | `components init`    | `ci`, <br/> `comp init`                  | Download specifications from repositories.                                                        |                                                                                                                                |
-| `components search`  | `cs`, <br/> `comp search`, <br/>`comp s` | Search a component specification in the knowledge base by author, class or explanation substring. | [--author \<author\>] <br/> [--class \<class\>] <br/> [--key \<key\>] <br/> [--explanation \<"explanation"\>] <br/> [--note \<"note"\>] <br/> [--purpose \<"purpose"\>] <br/> [--main-id \<"main identifier"\>] |
+| `components search`  | `cs`, <br/> `comp search`, <br/>`comp s` | Search a component specification in the knowledge base by author, class, key sc-element, explanation, note, purpose or main identifier substring. | [--author \<author\>] <br/> [--class \<class\>] <br/> [--key \<key\>] <br/> [--explanation \<explanation\>] <br/> [--note \<note\>] <br/> [--purpose \<purpose\>] <br/> [--main-id \<main identifier\>] |
 | `components install` | `cinst`, <br/> `comp inst`               | Install components by its system identifier or install the set of components.                     | [--idtf \<system_idtf\>] or [\<system_idtf\>] - install by an identifier <br/> [--set \<set\>] - install the set of components |
-- Note: when searching for a single word, the quotes can be omitted.
+- Note: if you are searching for several words from a string, then you need to put this string in quotes.
 - Note: `kb/specifications.scs` contains the example of a repository specification.
   
 

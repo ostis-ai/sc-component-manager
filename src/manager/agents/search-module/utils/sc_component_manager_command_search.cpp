@@ -44,7 +44,7 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
     SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
   }
 
-   for (int sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
+   for (size_t sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
   {
     if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
     {
@@ -58,12 +58,11 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
   }
 
   std::map<std::string, ScAddrUnorderedSet> linksValues;
-  for (int sequenceNumber = 0; sequenceNumber < searchByLine.size(); sequenceNumber++)
+  for (size_t sequenceNumber = 0; sequenceNumber < searchByLine.size(); sequenceNumber++)
   {
     if (commandParameters.find(std::get<0>(searchByLine[sequenceNumber])) != commandParameters.cend()
         && !commandParameters.find(std::get<0>(searchByLine[sequenceNumber]))->second.empty())
     {
-      SC_LOG_INFO(std::get<0>(searchByLine[sequenceNumber]));
       ScAddrUnorderedSet links = SearchComponentsByRelationLink(
           context,
           std::get<1>(searchByLine[sequenceNumber]),

@@ -213,6 +213,7 @@ ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(ScMemoryContext & context
   return components;
 }
 
+// TODO: there is a lot of repetitive code, it needs to be optimized
 std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameters(
     ScMemoryContext & context,
     ScAddr const & actionAddr)

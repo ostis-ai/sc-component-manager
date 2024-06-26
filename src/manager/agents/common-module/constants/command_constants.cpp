@@ -51,6 +51,10 @@ std::string const CommandsConstantsFlags::SET = "set";
 std::string const CommandsConstantsFlags::EXPLANATION = "explanation";
 std::string const CommandsConstantsFlags::CLASS = "class";
 std::string const CommandsConstantsFlags::AUTHOR = "author";
+std::string const CommandsConstantsFlags::NOTE = "note";
+std::string const CommandsConstantsFlags::PURPOSE = "purpose";
+std::string const CommandsConstantsFlags::KEY = "key";
+std::string const CommandsConstantsFlags::MAIN_ID = "main-id";
 
 std::string const PathKeysOfConfigPath::KB_PATH = "knowledge_base_components_path";
 std::string const PathKeysOfConfigPath::PS_PATH = "problem_solver_components_path";

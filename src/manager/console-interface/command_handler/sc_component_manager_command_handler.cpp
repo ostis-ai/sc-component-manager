@@ -30,9 +30,12 @@ ScComponentManagerCommandHandler::ScComponentManagerCommandHandler()
       {CommandsConstantsFlags::CLASS, keynodes::ScComponentManagerKeynodes::rrel_class},
       {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
 
-  m_SearchParametersRelations = {
+  m_SearchNodesParametersRelations = {
       {CommandsConstantsFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::rrel_author},
       {CommandsConstantsFlags::CLASS, keynodes::ScComponentManagerKeynodes::rrel_class},
+      {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
+
+  m_SearchLinksParametersRelations = {
       {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
 }
 
@@ -111,11 +114,27 @@ void ScComponentManagerCommandHandler::FormInstallActionNodeParameter(
 void ScComponentManagerCommandHandler::FormSearchActionNodeParameter(ScAddr const & action, CommandParameters const & commandParameters)
 {
   ScAddr paramsSet;
-  for (auto const & param : commandParameters)
+  ScAddr foundParamValue;
+  for (auto const & params : commandParameters)
   {
-    if (m_SearchParametersRelations.find(param.first) != m_SearchParametersRelations.cend())
+    paramsSet = m_context->CreateNode(ScType::NodeConst);
+    for (std::string const & paramValue : params.second)
     {
-      paramsSet = m_context->CreateNode(ScType::NodeConst);
+      // Process parameter if it is a link
+      if (m_SearchNodesParametersRelations.find(params.first) != m_SearchNodesParametersRelations.cend())
+      {
+        foundParamValue = m_context->HelperFindBySystemIdtf(paramValue);
+        utils::GenerationUtils::generateRelationBetween(m_context, action, paramsSet, m_SearchNodesParametersRelations.at(params.first));
+      }
+      // Process parameter if it is a node
+      else if (m_SearchLinksParametersRelations.find(params.first) != m_SearchLinksParametersRelations.cend())
+      {
+        foundParamValue = m_context->CreateLink();
+        m_context->SetLinkContent(foundParamValue, paramValue);
+        utils::GenerationUtils::generateRelationBetween(m_context, action, paramsSet, m_SearchLinksParametersRelations.at(params.first));
+      }
+
+      m_context->CreateEdge(ScType::EdgeAccessConstPosPerm, paramsSet, foundParamValue);
     }
   }
 }

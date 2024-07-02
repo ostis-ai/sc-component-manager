@@ -27,7 +27,8 @@ protected:
   ScMemoryContext * m_context{};
   std::map<std::string, ScAddr> m_actions;
   std::map<std::string, ScAddr> m_InstallParametersRelations;
-  std::map<std::string, ScAddr> m_SearchParametersRelations;
+  std::map<std::string, ScAddr> m_SearchNodesParametersRelations;
+  std::map<std::string, ScAddr> m_SearchLinksParametersRelations;
 
   void FormInstallActionNodeParameter(
       ScAddr const & action,

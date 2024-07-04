@@ -126,12 +126,17 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLi
     ScAddr const & relationAddr,
     std::string const & linkAlias,
     ScTemplate & searchComponentTemplate,
-    std::vector<std::string> const & parameters)
+    std::vector<std::string> & parameters)
 {
   if (parameters.size() > 1)
   {
-    SC_THROW_EXCEPTION(
-        utils::ExceptionParseError, "ScComponentManagerCommandSearch: Unsupported multiple links search");
+    for (size_t sequenceNumber = 1; sequenceNumber < parameters.size(); sequenceNumber++)
+    {
+      parameters[0] += " ";
+      parameters[0] += parameters[sequenceNumber];
+    }
+    parameters.erase(parameters.begin()+1, parameters.end());
+    SC_LOG_INFO("ScComponentManagerCommandSearch: Unsupported multiple links search, the search was performed across the full line");
   }
   ScAddrVector links = context->FindLinksByContentSubstring(parameters.at(0));
 

@@ -67,7 +67,7 @@ protected:
       ScAddr const & relationAddr,
       std::string const & linkAlias,
       ScTemplate & searchComponentTemplate,
-      std::vector<std::string> const & parameters);
+      std::vector<std::string> & parameters);
 
   ScAddrUnorderedSet SearchComponentsSpecifications(
       ScMemoryContext * context,

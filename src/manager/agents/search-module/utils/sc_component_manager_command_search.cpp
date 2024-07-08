@@ -44,27 +44,33 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
     SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
   }
 
-  if (commandParameters.find(AUTHOR) != commandParameters.cend())
+   for (size_t sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
   {
-    SearchComponentsByRelationSet(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_authors,
-        AUTHORS_SET_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(AUTHOR));
+    if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
+    {
+      SearchComponentsByRelationSet(
+          context,
+          std::get<1>(searchByRelation[sequenceNumber]),
+          std::get<2>(searchByRelation[sequenceNumber]),
+          searchComponentTemplate,
+          commandParameters.at(std::get<0>(searchByRelation[sequenceNumber])));
+    }
   }
 
   std::map<std::string, ScAddrUnorderedSet> linksValues;
-  if (commandParameters.find(EXPLANATION) != commandParameters.cend()
-      && !commandParameters.find(EXPLANATION)->second.empty())
+  for (size_t sequenceNumber = 0; sequenceNumber < searchByLine.size(); sequenceNumber++)
   {
-    ScAddrUnorderedSet explanationLinks = SearchComponentsByRelationLink(
-        context,
-        keynodes::ScComponentManagerKeynodes::nrel_explanation,
-        EXPLANATION_LINK_ALIAS,
-        searchComponentTemplate,
-        commandParameters.at(EXPLANATION));
-    linksValues.insert({EXPLANATION_LINK_ALIAS, explanationLinks});
+    if (commandParameters.find(std::get<0>(searchByLine[sequenceNumber])) != commandParameters.cend()
+        && !commandParameters.find(std::get<0>(searchByLine[sequenceNumber]))->second.empty())
+    {
+      ScAddrUnorderedSet links = SearchComponentsByRelationLink(
+          context,
+          std::get<1>(searchByLine[sequenceNumber]),
+          std::get<2>(searchByLine[sequenceNumber]),
+          searchComponentTemplate,
+          commandParameters.at(std::get<0>(searchByLine[sequenceNumber])));
+      linksValues.insert({std::get<2>(searchByLine[sequenceNumber]), links});
+    }
   }
 
   ScAddrUnorderedSet componentsSpecifications =
@@ -120,12 +126,17 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLi
     ScAddr const & relationAddr,
     std::string const & linkAlias,
     ScTemplate & searchComponentTemplate,
-    std::vector<std::string> const & parameters)
+    std::vector<std::string> & parameters)
 {
   if (parameters.size() > 1)
   {
-    SC_THROW_EXCEPTION(
-        utils::ExceptionParseError, "ScComponentManagerCommandSearch: Unsupported multiple links search");
+    for (size_t sequenceNumber = 1; sequenceNumber < parameters.size(); sequenceNumber++)
+    {
+      parameters[0] += " ";
+      parameters[0] += parameters[sequenceNumber];
+    }
+    parameters.erase(parameters.begin()+1, parameters.end());
+    SC_LOG_INFO("ScComponentManagerCommandSearch: Unsupported multiple links search, the search was performed across the full line");
   }
   ScAddrVector links = context->FindLinksByContentSubstring(parameters.at(0));
 

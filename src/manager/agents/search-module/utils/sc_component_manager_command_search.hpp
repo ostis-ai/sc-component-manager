@@ -6,7 +6,9 @@
 
 #pragma once
 
+#include "sc-agents-common/keynodes/coreKeynodes.hpp"
 #include "commands/sc_component_manager_command.hpp"
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
 class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 {
@@ -20,11 +22,33 @@ protected:
   std::string const COMPONENT_ALIAS = "_component";
   std::string const AUTHORS_SET_ALIAS = "_authors";
   std::string const EXPLANATION_LINK_ALIAS = "_explanation";
+  std::string const NOTE_LINK_ALIAS = "_note";
+  std::string const PURPOSE_LINK_ALIAS = "_purpose";
+  std::string const KEY_SET_ALIAS = "_key";
+  std::string const MAIN_ID_LINK_ALIAS = "_main-id";
 
   std::string const AUTHOR = "author";
   std::string const CLASS = "class";
   std::string const EXPLANATION = "explanation";
-  std::set<std::string> const possibleSearchParameters = {AUTHOR, CLASS, EXPLANATION};  // extend to more params
+  std::string const NOTE = "note";
+  std::string const PURPOSE = "purpose";
+  std::string const KEY = "key";
+  std::string const MAIN_ID = "main-id";
+  std::set<std::string> const possibleSearchParameters = {AUTHOR, CLASS, EXPLANATION, NOTE, PURPOSE, KEY, MAIN_ID}; // extend to more params
+
+  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByLine = 
+  {
+    {EXPLANATION, keynodes::ScComponentManagerKeynodes::nrel_explanation, EXPLANATION_LINK_ALIAS},
+    {NOTE, keynodes::ScComponentManagerKeynodes::nrel_note, NOTE_LINK_ALIAS},
+    {PURPOSE, keynodes::ScComponentManagerKeynodes::nrel_purpose, PURPOSE_LINK_ALIAS},
+    {MAIN_ID, scAgentsCommon::CoreKeynodes::nrel_main_idtf, MAIN_ID_LINK_ALIAS}
+  };
+
+  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByRelation = 
+  {
+    {AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors, AUTHORS_SET_ALIAS},
+    {KEY, keynodes::ScComponentManagerKeynodes::nrel_key_sc_element, KEY_SET_ALIAS}
+  };
 
   void SearchComponentsByClass(
       ScMemoryContext * context,
@@ -43,7 +67,7 @@ protected:
       ScAddr const & relationAddr,
       std::string const & linkAlias,
       ScTemplate & searchComponentTemplate,
-      std::vector<std::string> const & parameters);
+      std::vector<std::string> & parameters);
 
   ScAddrUnorderedSet SearchComponentsSpecifications(
       ScMemoryContext * context,

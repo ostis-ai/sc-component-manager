@@ -63,6 +63,10 @@ public:
   static std::string const EXPLANATION;
   static std::string const AUTHOR;
   static std::string const CLASS;
+  static std::string const NOTE;
+  static std::string const PURPOSE;
+  static std::string const KEY;
+  static std::string const MAIN_ID;
 };
 
 class PathKeysOfConfigPath

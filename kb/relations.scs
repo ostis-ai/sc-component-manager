@@ -1,23 +1,47 @@
 rrel_identifier
 <- sc_node_role_relation;
 => nrel_main_idtf:
-	[идентификатор'] (* <- lang_ru;; *);
+  [идентификатор'] (* <- lang_ru;; *);
   [identifier'] (* <- lang_en;; *);;
 
 rrel_class
 <- sc_node_role_relation;
 => nrel_main_idtf:
-	[класс'] (* <- lang_ru;; *);
+  [класс'] (* <- lang_ru;; *);
   [class'] (* <- lang_en;; *);;
 
 rrel_author
 <- sc_node_role_relation;
 => nrel_main_idtf:
-	[автор'] (* <- lang_ru;; *);
+  [автор'] (* <- lang_ru;; *);
   [author'] (* <- lang_en;; *);;
 
 rrel_explanation
 <- sc_node_role_relation;
 => nrel_main_idtf:
-	[примечание'] (* <- lang_ru;; *);
+  [примечание'] (* <- lang_ru;; *);
   [explanation'] (* <- lang_en;; *);;
+
+rrel_note
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+  [примечание'] (* <- lang_ru;; *);
+  [note'] (* <- lang_en;; *);;
+
+rrel_purpose
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+  [цель'] (* <- lang_ru;; *);
+  [purpose'] (* <- lang_en;; *);;
+
+rrel_key_sc_element
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+  [ключеввой sc-элемент'] (* <- lang_ru;; *);
+  [key sc-element'] (* <- lang_en;; *);;
+
+rrel_main_idtf
+<- sc_node_role_relation;
+=> nrel_main_idtf:
+  [основной идентификатор'] (* <- lang_ru;; *);
+  [main identifier'] (* <- lang_en;; *);;

@@ -25,15 +25,10 @@ ScComponentManagerCommandHandler::ScComponentManagerCommandHandler()
 
   m_InstallParametersRelations = {
       {CommandsConstantsFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
-      {CommandsConstantsFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets},
-      {CommandsConstantsFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::rrel_author},
-      {CommandsConstantsFlags::CLASS, keynodes::ScComponentManagerKeynodes::rrel_class},
-      {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
+      {CommandsConstantsFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets}};
 
   m_SearchNodesParametersRelations = {
-      {CommandsConstantsFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::rrel_author},
-      {CommandsConstantsFlags::CLASS, keynodes::ScComponentManagerKeynodes::rrel_class},
-      {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
+      {CommandsConstantsFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors}};
 
   m_SearchLinksParametersRelations = {
       {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
@@ -62,8 +57,6 @@ bool ScComponentManagerCommandHandler::Handle(
   {
     FormSearchActionNodeParameter(action, commandParameters);
   }
-
-  common_utils::CommonUtils::TranslateFromStringToScMemory(*m_context, action, commandParameters);
 
   utils::AgentUtils::applyAction(m_context, action, 30000);
 
@@ -113,17 +106,43 @@ void ScComponentManagerCommandHandler::FormInstallActionNodeParameter(
 
 void ScComponentManagerCommandHandler::FormSearchActionNodeParameter(ScAddr const & action, CommandParameters const & commandParameters)
 {
+  ScAddr const & searchStructure = m_context->CreateNode(ScType::NodeConstStruct);
+  ScAddr const & component = m_context->CreateNode(ScType::NodeVar);
+
+  ScAddr const & componentArc = m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, component);
+  m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+  m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, componentArc);
+
   ScAddr paramsSet;
   ScAddr foundParamValue;
   for (auto const & params : commandParameters)
   {
-    paramsSet = m_context->CreateNode(ScType::NodeConst);
+    if (m_SearchNodesParametersRelations.find(params.first) != m_SearchNodesParametersRelations.cend())
+    {
+      common_utils::CommonUtils::GenerateVarRelationBetween(
+          *m_context, searchStructure, component, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+
+      paramsSet = m_context->CreateNode(ScType::NodeVar);
+      for (std::string const & paramValue : params.second)
+      {
+        foundParamValue = m_context->HelperFindBySystemIdtf(paramValue);
+        m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, paramsSet, foundParamValue);
+      }
+
+    }
+
+
     for (std::string const & paramValue : params.second)
     {
       // Process parameter if it is a link
       if (m_SearchNodesParametersRelations.find(params.first) != m_SearchNodesParametersRelations.cend())
       {
         foundParamValue = m_context->HelperFindBySystemIdtf(paramValue);
+        if (m_context->GetElementType(foundParamValue) == ScType::NodeConstClass)
+        {
+
+        }
+
         utils::GenerationUtils::generateRelationBetween(m_context, action, paramsSet, m_SearchNodesParametersRelations.at(params.first));
       }
       // Process parameter if it is a node

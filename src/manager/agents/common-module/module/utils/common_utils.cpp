@@ -5,8 +5,10 @@
  */
 
 #include "common_utils.hpp"
+
 #include <sc-agents-common/utils/GenerationUtils.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
+#include <sc-agents-common/utils/CommonUtils.hpp>
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "sc-memory/sc_memory.hpp"
@@ -419,4 +421,16 @@ bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context
   }
   return true;
 }
+
+void GenerateVarRelationInStructure(ScMemoryContext & context, ScAddr const & start, ScAddr const & finish, ScAddr const & relation, ScAddr const & structure)
+{
+  bool const isRole = utils::CommonUtils::checkType(&context, relation, ScType::NodeConstRole);
+  ScType const arcType = isRole ? ScType::EdgeAccessVarPosPerm : ScType::EdgeDCommonVar;
+  ScAddr const edge = context.CreateEdge(arcType, start, finish);
+  context.CreateEdge(ScType::EdgeAccessVarPosPerm, structure, edge);
+  ScAddr const & relationEdge = context.CreateEdge(ScType::EdgeAccessVarPosPerm, relation, edge);
+
+
+}
+
 }  // namespace common_utils

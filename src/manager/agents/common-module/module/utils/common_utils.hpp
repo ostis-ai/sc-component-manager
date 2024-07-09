@@ -35,5 +35,6 @@ public:
   static bool CheckIfInstalled(ScMemoryContext & context, ScAddr const & component);
   static ScAddr GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification);
   static bool CheckIfFullMyselfDecompositionExists(ScMemoryContext & context);
+  static void GenerateVarRelationInStructure(ScMemoryContext & context, ScAddr const & start, ScAddr const & finish, ScAddr const & relation, ScAddr const & structure);
 };
 }  // namespace common_utils

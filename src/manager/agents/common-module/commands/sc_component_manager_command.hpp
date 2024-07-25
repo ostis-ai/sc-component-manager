@@ -16,7 +16,6 @@ using CommandParameters = std::map<std::string, std::vector<std::string>>;
 class ScComponentManagerCommand
 {
 public:
-  using ScAddrUnorderedSet = std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>>;
   virtual ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) = 0;
 
   virtual ~ScComponentManagerCommand() = default;

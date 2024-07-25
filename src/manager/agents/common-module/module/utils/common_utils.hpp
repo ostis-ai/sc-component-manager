@@ -11,8 +11,6 @@
 
 namespace common_utils
 {
-using ScAddrUnorderedSet = std::unordered_set<ScAddr, ScAddrHashFunc<sc_uint32>>;
-
 class CommonUtils
 {
 public:

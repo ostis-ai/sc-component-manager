@@ -1,5 +1,5 @@
 test_action_node
-<- question;
+<- action;
 <- action_components_install;
 -> rrel_1: ... (* -> part_ui;; *);;
 

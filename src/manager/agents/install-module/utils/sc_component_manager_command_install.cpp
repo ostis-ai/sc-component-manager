@@ -285,7 +285,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
   utils::AgentUtils::applyAction(context, actionAddr, 30000);
 
   result = context->HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::question_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+      scAgentsCommon::CoreKeynodes::action_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
   if (!result)
   {
     SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependencies are not successfully installed");

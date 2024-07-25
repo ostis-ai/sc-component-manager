@@ -56,7 +56,7 @@ public:
       utils::AgentUtils::applyAction(m_context, actionAddr, 30000);
 
       executionResult = m_context->HelperCheckEdge(
-          scAgentsCommon::CoreKeynodes::question_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+          scAgentsCommon::CoreKeynodes::action_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
     }
     else
     {

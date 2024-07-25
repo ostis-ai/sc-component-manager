@@ -1,5 +1,5 @@
 test_action_node
-<- question;
+<- action;
 <- action_components_init;;
 
 sc_component_manager_repository

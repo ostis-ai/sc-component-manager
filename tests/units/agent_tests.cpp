@@ -40,12 +40,12 @@ TEST_F(AgentTest, AgentInit)
 
   SC_AGENT_REGISTER(initModule::ScComponentManagerInitAgent)
 
-  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
+  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::action_initiated, testActionNode);
 
   ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
 
   EXPECT_TRUE(context.HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::question_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
+      scAgentsCommon::CoreKeynodes::action_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
 
   std::vector<std::string> namesOfComponents = {"part_platform", "part_ui"};
   bool isComponentExists = false;
@@ -73,13 +73,13 @@ TEST_F(AgentTest, AgentSearch)
 
   SC_AGENT_REGISTER(searchModule::ScComponentManagerSearchAgent)
   std::vector<std::string> namesOfComponents = {"part_platform_specification", "part_ui_specification"};
-  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
+  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::action_initiated, testActionNode);
 
   ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
   bool isComponentExists = false;
 
   EXPECT_TRUE(context.HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::question_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
+      scAgentsCommon::CoreKeynodes::action_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
 
   ScIterator3Ptr const & componentsIterator =
       context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
@@ -104,12 +104,12 @@ TEST_F(AgentTest, AgentInstall)
 
   SC_AGENT_REGISTER(installModule::ScComponentManagerInstallAgent)
 
-  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::question_initiated, testActionNode);
+  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::action_initiated, testActionNode);
 
   ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
 
   EXPECT_TRUE(context.HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::question_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
+      scAgentsCommon::CoreKeynodes::action_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
 
   ScIterator3Ptr const & componentsIterator =
       context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);

@@ -23,15 +23,20 @@ ScComponentManagerCommandHandler::ScComponentManagerCommandHandler()
       {CommandConstants::COMPONENTS_COMMAND_INSTALL, keynodes::ScComponentManagerKeynodes::action_components_install},
       {CommandConstants::COMPONENTS_COMMAND_INIT, keynodes::ScComponentManagerKeynodes::action_components_init}};
 
-  m_InstallParametersRelations = {
-      {CommandsConstantsFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
-      {CommandsConstantsFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets}};
+  m_installParametersRelations = {
+      {CommandsSearchFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
+      {CommandsSearchFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets}};
 
-  m_SearchNodesParametersRelations = {
-      {CommandsConstantsFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors}};
+  m_searchQuasybinaryRelations = {
+      {CommandsSearchFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors}};
 
-  m_SearchLinksParametersRelations = {
-      {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation}};
+  m_searchLinksRelations = {
+      {CommandsSearchFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::nrel_explanation},
+      {CommandsSearchFlags::IDTF, scAgentsCommon::CoreKeynodes::nrel_idtf},
+      {CommandsSearchFlags::MAIN_ID, scAgentsCommon::CoreKeynodes::nrel_main_idtf},
+      {CommandsSearchFlags::NOTE, keynodes::ScComponentManagerKeynodes::nrel_note},
+      {CommandsSearchFlags::PURPOSE, keynodes::ScComponentManagerKeynodes::nrel_purpose}
+    };
 }
 
 bool ScComponentManagerCommandHandler::Handle(
@@ -50,8 +55,8 @@ bool ScComponentManagerCommandHandler::Handle(
 
   if (actionsIterator->first == CommandConstants::COMPONENTS_COMMAND_INSTALL)
   {
-    FormInstallActionNodeParameter(action, commandParameters, CommandsConstantsFlags::SET);
-    FormInstallActionNodeParameter(action, commandParameters, CommandsConstantsFlags::IDTF);
+    FormInstallActionNodeParameter(action, commandParameters, CommandsSearchFlags::SET);
+    FormInstallActionNodeParameter(action, commandParameters, CommandsSearchFlags::IDTF);
   }
   else if (actionsIterator->first == CommandConstants::COMPONENTS_COMMAND_SEARCH)
   {
@@ -61,7 +66,7 @@ bool ScComponentManagerCommandHandler::Handle(
   utils::AgentUtils::applyAction(m_context, action, 30000);
 
   bool const executionResult = m_context->HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::question_finished_successfully, action, ScType::EdgeAccessConstPosPerm);
+      scAgentsCommon::CoreKeynodes::action_finished_successfully, action, ScType::EdgeAccessConstPosPerm);
 
   return executionResult;
 }
@@ -78,7 +83,7 @@ void ScComponentManagerCommandHandler::FormInstallActionNodeParameter(
   ScAddr relation;
   try
   {
-    relation = m_InstallParametersRelations.at(parameter);
+    relation = m_installParametersRelations.at(parameter);
   }
   catch (std::out_of_range const & exception)
   {
@@ -106,56 +111,59 @@ void ScComponentManagerCommandHandler::FormInstallActionNodeParameter(
 
 void ScComponentManagerCommandHandler::FormSearchActionNodeParameter(ScAddr const & action, CommandParameters const & commandParameters)
 {
-  ScAddr const & searchStructure = m_context->CreateNode(ScType::NodeConstStruct);
-  ScAddr const & component = m_context->CreateNode(ScType::NodeVar);
+  std::string const COMPONENT_ALIAS = "_component";
+  std::string PARAMETERS_SET_ALIAS = "_parameters_set";
+  ScAddr searchStructure;
+  ScTemplate searchTemplate;
+  searchTemplate.Triple(
+    keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, ScType::NodeVar >> COMPONENT_ALIAS);
 
-  ScAddr const & componentArc = m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, component);
-  m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
-  m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, componentArc);
-
-  ScAddr paramsSet;
-  ScAddr foundParamValue;
-  for (auto const & params : commandParameters)
+  ScAddr parameterValue;
+  size_t index = 1;
+  for (auto const & commandParams : commandParameters)
   {
-    if (m_SearchNodesParametersRelations.find(params.first) != m_SearchNodesParametersRelations.cend())
+    PARAMETERS_SET_ALIAS += std::to_string(index);
+    index++;
+
+    // _component _=> nrel_quasibinary_relation:: _parameters_set (* _-> param1; _-> param2;; *);;
+    if (m_searchQuasybinaryRelations.find(commandParams.first) != m_searchQuasybinaryRelations.cend())
     {
-      common_utils::CommonUtils::GenerateVarRelationBetween(
-          *m_context, searchStructure, component, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
-
-      paramsSet = m_context->CreateNode(ScType::NodeVar);
-      for (std::string const & paramValue : params.second)
+      searchTemplate.Triple(COMPONENT_ALIAS, ScType::EdgeDCommonVar, ScType::NodeVar >> PARAMETERS_SET_ALIAS);
+      for (std::string const & commandParameterValue : commandParams.second)
       {
-        foundParamValue = m_context->HelperFindBySystemIdtf(paramValue);
-        m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, paramsSet, foundParamValue);
+        parameterValue = m_context->HelperFindBySystemIdtf(commandParameterValue);
+        searchTemplate.Triple(PARAMETERS_SET_ALIAS, ScType::EdgeAccessVarPosPerm, parameterValue);
       }
-
     }
-
-
-    for (std::string const & paramValue : params.second)
+    // _component _=> nrel_binary_relation:: _[link with content]
+    else if (m_searchLinksRelations.find(commandParams.first) != m_searchLinksRelations.cend())
     {
-      // Process parameter if it is a link
-      if (m_SearchNodesParametersRelations.find(params.first) != m_SearchNodesParametersRelations.cend())
+      for (std::string const & commandParameterValue : commandParams.second)
       {
-        foundParamValue = m_context->HelperFindBySystemIdtf(paramValue);
-        if (m_context->GetElementType(foundParamValue) == ScType::NodeConstClass)
-        {
-
-        }
-
-        utils::GenerationUtils::generateRelationBetween(m_context, action, paramsSet, m_SearchNodesParametersRelations.at(params.first));
+        parameterValue = m_context->CreateLink(ScType::LinkVar);
+        m_context->SetLinkContent(parameterValue, commandParameterValue);
+        searchTemplate.Quintuple(COMPONENT_ALIAS, ScType::EdgeDCommonVar, parameterValue, ScType::EdgeAccessVarPosPerm, parameterValue);
       }
-      // Process parameter if it is a node
-      else if (m_SearchLinksParametersRelations.find(params.first) != m_SearchLinksParametersRelations.cend())
+    }
+    // concept_some_component_class _-> _component
+    else if (commandParams.first == CommandsSearchFlags::CLASS)
+    {
+      for (std::string const & commandParameterValue : commandParams.second)
       {
-        foundParamValue = m_context->CreateLink();
-        m_context->SetLinkContent(foundParamValue, paramValue);
-        utils::GenerationUtils::generateRelationBetween(m_context, action, paramsSet, m_SearchLinksParametersRelations.at(params.first));
+        parameterValue = m_context->HelperFindBySystemIdtf(commandParameterValue);
+        searchTemplate.Triple(parameterValue, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
       }
-
-      m_context->CreateEdge(ScType::EdgeAccessConstPosPerm, paramsSet, foundParamValue);
     }
   }
+
+  m_context->HelperLoadTemplate(searchTemplate, searchStructure);
+
+  // ScAddr const & componentArc = m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, component);
+  // m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+  // m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, componentArc);
+
+  // Add search structure as an argument to search action node
+  utils::GenerationUtils::generateRelationBetween(m_context, action, searchStructure, scAgentsCommon::CoreKeynodes::rrel_1);
 }
 
 ScComponentManagerCommandHandler::~ScComponentManagerCommandHandler()

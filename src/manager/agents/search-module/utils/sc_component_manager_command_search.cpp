@@ -7,6 +7,7 @@
 #include <algorithm>
 
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
+#include "sc-agents-common/utils/IteratorUtils.hpp"
 
 #include "sc_component_manager_command_search.hpp"
 
@@ -17,17 +18,8 @@ using namespace common_utils;
 
 ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
-  std::map<std::string, std::vector<std::string>> commandParameters =
-      CommonUtils::GetCommandParameters(*context, actionAddr);
-  for (auto const & param : commandParameters)
-  {
-    if (std::find(possibleSearchParameters.cbegin(), possibleSearchParameters.cend(), param.first)
-        == possibleSearchParameters.cend())
-    {
-      SC_THROW_EXCEPTION(
-          utils::ExceptionParseError, "ScComponentManagerCommandSearch: Unsupported search parameter " << param.first);
-    }
-  }
+  ScAddr const searchStructure = utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+  // build template and search template
 
   ScTemplate searchComponentTemplate;
   searchComponentTemplate.Quintuple(

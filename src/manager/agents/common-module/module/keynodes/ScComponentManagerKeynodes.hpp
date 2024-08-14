@@ -127,9 +127,6 @@ public:
   SC_PROPERTY(Keynode("action_components_install"), ForceCreate(ScType::NodeConstClass))
   static ScAddr action_components_install;
 
-  SC_PROPERTY(Keynode("rrel_author"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_author;
-
   SC_PROPERTY(Keynode("rrel_class"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_class;
 
@@ -138,21 +135,6 @@ public:
 
   SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
   static ScAddr rrel_components;
-
-  SC_PROPERTY(Keynode("rrel_explanation"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_explanation;
-
-  SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_identifier;
-
-  SC_PROPERTY(Keynode("rrel_note"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr rrel_note;
-
-  SC_PROPERTY(Keynode("rrel_purpose"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr rrel_purpose;
-  
-  SC_PROPERTY(Keynode("rrel_main_idtf"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr rrel_main_idtf;
 };
 
 }  // namespace keynodes

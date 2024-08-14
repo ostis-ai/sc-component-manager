@@ -28,13 +28,9 @@ public:
   static ScAddrUnorderedSet GetComponentsToInstall(ScMemoryContext & context, ScAddr const & actionAddr);
   static std::map<std::string, ScAddr> GetSetElements(ScMemoryContext & context, ScAddr const & setAddr);
   static std::map<std::string, ScAddr> GetElementsLinksOfSet(ScMemoryContext & context, ScAddr const & setAddr);
-  static std::map<std::string, std::vector<std::string>> GetCommandParameters(
-      ScMemoryContext & context,
-      ScAddr const & actionAddr);
   static ScAddr GetSubsystemDecompositionAddr(ScMemoryContext & context, ScAddr const & component);
   static bool CheckIfInstalled(ScMemoryContext & context, ScAddr const & component);
   static ScAddr GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification);
   static bool CheckIfFullMyselfDecompositionExists(ScMemoryContext & context);
-  static void GenerateVarRelationInStructure(ScMemoryContext & context, ScAddr const & start, ScAddr const & finish, ScAddr const & relation, ScAddr const & structure);
 };
 }  // namespace common_utils

@@ -54,7 +54,7 @@ public:
   static std::map<std::string, std::string> COMMAND_MAP;
 };
 
-class CommandsConstantsFlags
+class CommandsSearchFlags
 {
 public:
   static std::string const IDTF;

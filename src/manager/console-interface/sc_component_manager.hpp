@@ -8,37 +8,47 @@
 
 #include <thread>
 #include <atomic>
-#include <utility>
+#include <map>
 
-#include "sc-memory/sc_debug.hpp"
-#include "sc-config-utils/sc_memory_config.hpp"
-
-#include "sc_component_manager_command_handler.hpp"
+#include "sc-memory/sc_addr.hpp"
 
 class ScComponentManager
 {
 public:
-  explicit ScComponentManager(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
-    : m_componentsPath(std::move(componentsPath))
-  {
-  }
+  ScComponentManager() = default;
 
+  /*!
+   * @brief Creates new thread instance for sc-component-manager
+   */
   void Run();
 
+  /*!
+   * @brief Stor sc-component-manager. Join its thread instance
+   */
   void Stop();
 
-  virtual ~ScComponentManager() = default;
+  ~ScComponentManager() = default;
 
 protected:
-  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
-
+  /*!
+   * @brief Get command from terminal input and emit command
+   */
   void Start();
 
+  /*!
+   * @brief Check if terminal has new input to emit command
+   * @return true if there is new input, otherwise false
+   */
   sc_bool static HasNewInput();
 
-  bool Emit(std::string const & command);
+  /*!
+   * @brief Parse command into type and parameters with values then handle command
+   * @param command raw string of command
+   * @return execution result of the emitted command
+   */
+  static bool Emit(std::string const & command);
 
 private:
-  std::thread m_instance;
-  std::atomic<sc_bool> m_isRunning{};
+  std::thread m_instance;              /// New thread for sc-component-manager commands handling
+  std::atomic<sc_bool> m_isRunning{};  /// Flag to stop sc-component-manager commands handling
 };

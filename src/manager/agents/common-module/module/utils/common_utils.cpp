@@ -5,8 +5,10 @@
  */
 
 #include "common_utils.hpp"
+
 #include <sc-agents-common/utils/GenerationUtils.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
+#include <sc-agents-common/utils/CommonUtils.hpp>
 #include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 #include "sc-memory/sc_memory.hpp"
@@ -58,18 +60,9 @@ void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & context)
 void CommonUtils::InitParametersMap()
 {
   managerParametersWithAgentRelations = {
-      {CommandsConstantsFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::rrel_author},
-      {CommandsConstantsFlags::CLASS, keynodes::ScComponentManagerKeynodes::rrel_class},
-      {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation},
-      {CommandsConstantsFlags::NOTE, keynodes::ScComponentManagerKeynodes::rrel_note},
-      {CommandsConstantsFlags::PURPOSE, keynodes::ScComponentManagerKeynodes::rrel_purpose},
-      {CommandsConstantsFlags::KEY, scAgentsCommon::CoreKeynodes::rrel_key_sc_element},
-      {CommandsConstantsFlags::MAIN_ID, keynodes::ScComponentManagerKeynodes::rrel_main_idtf},
-      {CommandsConstantsFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
-      {CommandsConstantsFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets},
-      {CommandConstants::COMPONENTS_COMMAND_SEARCH, keynodes::ScComponentManagerKeynodes::action_components_search},
-      {CommandConstants::COMPONENTS_COMMAND_INSTALL, keynodes::ScComponentManagerKeynodes::action_components_install},
-      {CommandConstants::COMPONENTS_COMMAND_INIT, keynodes::ScComponentManagerKeynodes::action_components_init}};
+      {CommandsSearchFlags::KEY, scAgentsCommon::CoreKeynodes::rrel_key_sc_element},
+      {CommandsSearchFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
+      {CommandsSearchFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets}};
 
   mainFlagWithSubFlags = {
       {"rrel_1",
@@ -149,10 +142,10 @@ bool CommonUtils::TranslateFromStringToScMemory(
 
     for (std::string const & parameterValue : parameter.second)
     {
-      if (parameter.first == CommandsConstantsFlags::EXPLANATION ||
-          parameter.first == CommandsConstantsFlags::NOTE ||
-          parameter.first == CommandsConstantsFlags::PURPOSE ||
-          parameter.first == CommandsConstantsFlags::MAIN_ID)
+      if (parameter.first == CommandsSearchFlags::EXPLANATION ||
+          parameter.first == CommandsSearchFlags::NOTE ||
+          parameter.first == CommandsSearchFlags::PURPOSE ||
+          parameter.first == CommandsSearchFlags::MAIN_ID)
       {
         parameterValueAddr = context.CreateNode(ScType::LinkConst);
         context.SetLinkContent(parameterValueAddr, parameterValue);
@@ -213,88 +206,6 @@ ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(ScMemoryContext & context
     }
   }
   return components;
-}
-
-// TODO: there is a lot of repetitive code, it needs to be optimized
-std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameters(
-    ScMemoryContext & context,
-    ScAddr const & actionAddr)
-{
-  std::map<std::string, std::vector<std::string>> commandParameters;
-
-  ScAddr const & authorsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-      &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_author);
-  std::map<std::string, ScAddr> const & authors = GetSetElements(context, authorsSetAddr);
-
-  ScAddr const & classesSetAddr =
-      utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
-  std::map<std::string, ScAddr> const & classes = GetSetElements(context, classesSetAddr);
-
-  ScAddr const & explanationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-      &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
-  std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(context, explanationsSetAddr);
-
-  ScAddr const & notesSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_note);
-  std::map<std::string, ScAddr> const & notes = GetElementsLinksOfSet(context, notesSetAddr);
-
-  ScAddr const & purposesSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_purpose);
-  std::map<std::string, ScAddr> const & purposes = GetElementsLinksOfSet(context, purposesSetAddr);
-
-  ScAddr const & keysSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
-  std::map<std::string, ScAddr> const & keys = GetElementsLinksOfSet(context, keysSetAddr);
-
-  ScAddr const & idsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_main_idtf);
-  std::map<std::string, ScAddr> const & ids = GetElementsLinksOfSet(context, idsSetAddr);
-
-  std::vector<std::string> authorsList, classesList, explanationsList, notesList, purposesList, keysList, idsList;
-
-  if (context.IsElement(authorsSetAddr))
-  {
-    for (auto & el : authors)
-      authorsList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::AUTHOR, authorsList});
-  }
-  if (context.IsElement(classesSetAddr))
-  {
-    for (auto & el : classes)
-      classesList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::CLASS, classesList});
-  }
-  if (context.IsElement(explanationsSetAddr))
-  {
-    for (auto & el : explanations)
-      explanationsList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::EXPLANATION, explanationsList});
-  }
-  if (context.IsElement(notesSetAddr))
-  {
-    for (auto & el : notes)
-      notesList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::NOTE, notesList});
-  }
-  if (context.IsElement(purposesSetAddr))
-  {
-    for (auto & el : purposes)
-      purposesList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::PURPOSE, purposesList});
-  }
-  if (context.IsElement(keysSetAddr))
-  {
-    for (auto & el : keys)
-      keysList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::KEY, keysList});
-  }
-  if (context.IsElement(idsSetAddr))
-  {
-    for (auto & el : ids)
-      idsList.push_back(el.first);
-    commandParameters.insert({CommandsConstantsFlags::MAIN_ID, idsList});
-  }
-  return commandParameters;
 }
 
 std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & context, ScAddr const & setAddr)
@@ -422,4 +333,5 @@ bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context
   }
   return true;
 }
+
 }  // namespace common_utils

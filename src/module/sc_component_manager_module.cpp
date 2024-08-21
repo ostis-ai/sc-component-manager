@@ -6,6 +6,8 @@
 
 #include "sc_component_manager_module.hpp"
 
+#include "module/keynodes/ScComponentManagerKeynodes.hpp"
+
 SC_IMPLEMENT_MODULE(ScComponentManagerModule)
 
 sc_result ScComponentManagerModule::InitializeImpl()
@@ -32,11 +34,7 @@ sc_result ScComponentManagerModule::InitializeImpl()
 
   try
   {
-    m_scComponentManager = std::make_unique<ScComponentManager>(componentsPath);
-    if (!m_scComponentManager)
-      return SC_RESULT_ERROR;
-
-    m_scComponentManager->Run();
+    m_scComponentManager.Run();
     SC_LOG_INFO("[sc-component-manager] Sc-component-manager run");
   }
   catch (utils::ScException const & exception)
@@ -52,10 +50,9 @@ sc_result ScComponentManagerModule::InitializeImpl()
 
 sc_result ScComponentManagerModule::ShutdownImpl()
 {
-  if (m_scComponentManager)
-    m_scComponentManager->Stop();
+  m_scComponentManager.Stop();
+
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");
-  m_scComponentManager.reset();
 
   return SC_RESULT_OK;
 }

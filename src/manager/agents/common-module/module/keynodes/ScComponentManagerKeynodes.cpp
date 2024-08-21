@@ -46,13 +46,7 @@ ScAddr ScComponentManagerKeynodes::nrel_ostis_system_decomposition;
 ScAddr ScComponentManagerKeynodes::action_components_init;
 ScAddr ScComponentManagerKeynodes::action_components_search;
 ScAddr ScComponentManagerKeynodes::action_components_install;
-ScAddr ScComponentManagerKeynodes::rrel_author;
 ScAddr ScComponentManagerKeynodes::rrel_sets;
 ScAddr ScComponentManagerKeynodes::rrel_components;
 ScAddr ScComponentManagerKeynodes::rrel_class;
-ScAddr ScComponentManagerKeynodes::rrel_explanation;
-ScAddr ScComponentManagerKeynodes::rrel_identifier;
-ScAddr ScComponentManagerKeynodes::rrel_note;
-ScAddr ScComponentManagerKeynodes::rrel_purpose;
-ScAddr ScComponentManagerKeynodes::rrel_main_idtf;
 }  // namespace keynodes

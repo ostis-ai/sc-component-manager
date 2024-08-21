@@ -18,99 +18,27 @@ using namespace common_utils;
 
 ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
 {
+  ScAddrUnorderedSet componentsSpecifications;
   ScAddr const searchStructure = utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
-  // build template and search template
 
-  ScTemplate searchComponentTemplate;
-  searchComponentTemplate.Quintuple(
-      ScType::NodeVarStruct >> SPECIFICATION_ALIAS,
-      ScType::EdgeAccessVarPosPerm,
-      ScType::NodeVar >> COMPONENT_ALIAS,
-      ScType::EdgeAccessVarPosPerm,
-      scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
-  searchComponentTemplate.Triple(
-      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
+  ScTemplate searchTemplate;
+  context->HelperBuildTemplate(searchTemplate, searchStructure);
 
-  if (commandParameters.find(CLASS) != commandParameters.cend())
+  context->HelperSearchTemplate(searchTemplate,
+  [&context, searchStructure](ScTemplateResultItem const & item) 
   {
-    SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
-  }
-
-   for (size_t sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
-  {
-    if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
+    ScIterator5Ptr const reusableComponentIterator = context->Iterator5(searchStructure, ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, ScType::NodeVar);
+    if (reusableComponentIterator->Next())
     {
-      SearchComponentsByRelationSet(
-          context,
-          std::get<1>(searchByRelation[sequenceNumber]),
-          std::get<2>(searchByRelation[sequenceNumber]),
-          searchComponentTemplate,
-          commandParameters.at(std::get<0>(searchByRelation[sequenceNumber])));
-    }
-  }
 
-  std::map<std::string, ScAddrUnorderedSet> linksValues;
-  for (size_t sequenceNumber = 0; sequenceNumber < searchByLine.size(); sequenceNumber++)
+    }
+  },
+  [&context](ScAddr const & item) 
   {
-    if (commandParameters.find(std::get<0>(searchByLine[sequenceNumber])) != commandParameters.cend()
-        && !commandParameters.find(std::get<0>(searchByLine[sequenceNumber]))->second.empty())
-    {
-      ScAddrUnorderedSet links = SearchComponentsByRelationLink(
-          context,
-          std::get<1>(searchByLine[sequenceNumber]),
-          std::get<2>(searchByLine[sequenceNumber]),
-          searchComponentTemplate,
-          commandParameters.at(std::get<0>(searchByLine[sequenceNumber])));
-      linksValues.insert({std::get<2>(searchByLine[sequenceNumber]), links});
-    }
-  }
-
-  ScAddrUnorderedSet componentsSpecifications =
-      SearchComponentsSpecifications(context, searchComponentTemplate, linksValues);
+    return false;
+  });
 
   return componentsSpecifications;
-}
-
-void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
-    ScMemoryContext * context,
-    ScAddr const & relationAddr,
-    std::string const & setAlias,
-    ScTemplate & searchComponentTemplate,
-    std::vector<std::string> const & parameters)
-{
-  searchComponentTemplate.Quintuple(
-      COMPONENT_ALIAS,
-      ScType::EdgeDCommonVar,
-      ScType::NodeVar >> setAlias,  // NodeVarTuple
-      ScType::EdgeAccessVarPosPerm,
-      relationAddr);
-  for (std::string const & parameterIdentifier : parameters)
-  {
-    ScAddr parameterAddr = context->HelperFindBySystemIdtf(parameterIdentifier);
-    if (!parameterAddr.IsValid())
-    {
-      searchComponentTemplate.Clear();
-      break;
-    }
-    searchComponentTemplate.Triple(setAlias, ScType::EdgeAccessVarPosPerm, parameterAddr);
-  }
-}
-
-void ScComponentManagerCommandSearch::SearchComponentsByClass(
-    ScMemoryContext * context,
-    ScTemplate & searchComponentTemplate,
-    std::vector<std::string> const & parameters)
-{
-  for (std::string const & classIdentifier : parameters)
-  {
-    ScAddr classAddr = context->HelperFindBySystemIdtf(classIdentifier);
-    if (!classAddr.IsValid())
-    {
-      searchComponentTemplate.Clear();
-      break;
-    }
-    searchComponentTemplate.Triple(classAddr, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
-  }
 }
 
 ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLink(

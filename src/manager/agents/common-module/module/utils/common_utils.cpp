@@ -60,13 +60,7 @@ void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & context)
 void CommonUtils::InitParametersMap()
 {
   managerParametersWithAgentRelations = {
-      {CommandsSearchFlags::AUTHOR, keynodes::ScComponentManagerKeynodes::rrel_author},
-      {CommandsSearchFlags::CLASS, keynodes::ScComponentManagerKeynodes::rrel_class},
-      {CommandsSearchFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation},
-      {CommandsSearchFlags::NOTE, keynodes::ScComponentManagerKeynodes::rrel_note},
-      {CommandsSearchFlags::PURPOSE, keynodes::ScComponentManagerKeynodes::rrel_purpose},
       {CommandsSearchFlags::KEY, scAgentsCommon::CoreKeynodes::rrel_key_sc_element},
-      {CommandsSearchFlags::MAIN_ID, keynodes::ScComponentManagerKeynodes::rrel_main_idtf},
       {CommandsSearchFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
       {CommandsSearchFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets}};
 

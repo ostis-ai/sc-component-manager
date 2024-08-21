@@ -10,9 +10,23 @@
 #include <sc-agents-common/utils/AgentUtils.hpp>
 #include <sc-agents-common/utils/GenerationUtils.hpp>
 
+#include <sc-memory/sc_scs_helper.hpp>
+
 #include "common-module/module/utils/common_utils.hpp"
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 #include "constants/command_constants.hpp"
+
+
+class DummyFileInterface : public SCsFileInterface
+{
+public:
+  ~DummyFileInterface() override {}
+
+  ScStreamPtr GetFileContent(std::string const &) override
+  {
+    return ScStreamPtr();
+  }
+};
 
 ScComponentManagerCommandHandler::ScComponentManagerCommandHandler()
 {
@@ -111,38 +125,38 @@ void ScComponentManagerCommandHandler::FormInstallActionNodeParameter(
 
 void ScComponentManagerCommandHandler::FormSearchActionNodeParameter(ScAddr const & action, CommandParameters const & commandParameters)
 {
-  std::string const COMPONENT_ALIAS = "_component";
-  std::string PARAMETERS_SET_ALIAS = "_parameters_set";
-  ScAddr searchStructure;
-  ScTemplate searchTemplate;
-  searchTemplate.Triple(
-    keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, ScType::NodeVar >> COMPONENT_ALIAS);
-
+  ScAddr const searchStructure = m_context->CreateNode(ScType::NodeConstStruct);
+  std::string scsTemplate = "concept_reusable_component _-> .._component;;\n";
   ScAddr parameterValue;
   size_t index = 1;
+  std::string PARAMETERS_SET_ALIAS = ".._parameters_set";
   for (auto const & commandParams : commandParameters)
   {
     PARAMETERS_SET_ALIAS += std::to_string(index);
     index++;
 
-    // _component _=> nrel_quasibinary_relation:: _parameters_set (* _-> param1; _-> param2;; *);;
+    // .._component _=> nrel_quasibinary_relation:: .._parameters_set(index) (* _-> param1; _-> param2;; *);;
     if (m_searchQuasybinaryRelations.find(commandParams.first) != m_searchQuasybinaryRelations.cend())
     {
-      searchTemplate.Triple(COMPONENT_ALIAS, ScType::EdgeDCommonVar, ScType::NodeVar >> PARAMETERS_SET_ALIAS);
+      scsTemplate += ".._component _=> " + m_context->HelperGetSystemIdtf(m_searchQuasybinaryRelations.at(commandParams.first)) + ":: " + PARAMETERS_SET_ALIAS + "(* ";
       for (std::string const & commandParameterValue : commandParams.second)
       {
         parameterValue = m_context->HelperFindBySystemIdtf(commandParameterValue);
-        searchTemplate.Triple(PARAMETERS_SET_ALIAS, ScType::EdgeAccessVarPosPerm, parameterValue);
+        if (!m_context->IsElement(parameterValue))
+        {
+          SC_THROW_EXCEPTION(utils::ExceptionItemNotFound, "ScComponentManagerCommandHandler: parameter with value " + commandParameterValue + " is not found.");
+        }
+        scsTemplate += " _-> " + commandParameterValue + ";";
       }
+      scsTemplate += "; *);;\n";
     }
+
     // _component _=> nrel_binary_relation:: _[link with content]
     else if (m_searchLinksRelations.find(commandParams.first) != m_searchLinksRelations.cend())
     {
       for (std::string const & commandParameterValue : commandParams.second)
       {
-        parameterValue = m_context->CreateLink(ScType::LinkVar);
-        m_context->SetLinkContent(parameterValue, commandParameterValue);
-        searchTemplate.Quintuple(COMPONENT_ALIAS, ScType::EdgeDCommonVar, parameterValue, ScType::EdgeAccessVarPosPerm, parameterValue);
+        scsTemplate += ".._component _=> " + m_context->HelperGetSystemIdtf(m_searchLinksRelations.at(commandParams.first)) + ":: _[" + commandParameterValue + "];;\n";
       }
     }
     // concept_some_component_class _-> _component
@@ -151,16 +165,19 @@ void ScComponentManagerCommandHandler::FormSearchActionNodeParameter(ScAddr cons
       for (std::string const & commandParameterValue : commandParams.second)
       {
         parameterValue = m_context->HelperFindBySystemIdtf(commandParameterValue);
-        searchTemplate.Triple(parameterValue, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
+        if (!m_context->IsElement(parameterValue))
+        {
+          SC_THROW_EXCEPTION(utils::ExceptionItemNotFound, "ScComponentManagerCommandHandler: class " + commandParameterValue + " is not found.");
+        }
+        scsTemplate += commandParameterValue + "_-> .._component;;";
       }
     }
   }
 
-  m_context->HelperLoadTemplate(searchTemplate, searchStructure);
-
-  // ScAddr const & componentArc = m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, component);
-  // m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
-  // m_context->CreateEdge(ScType::EdgeAccessVarPosPerm, searchStructure, componentArc);
+  SC_LOG_WARNING(scsTemplate);
+  
+  SCsHelper helper(*m_context, std::make_shared<DummyFileInterface>());
+  helper.GenerateBySCsTextLazy(scsTemplate, searchStructure);
 
   // Add search structure as an argument to search action node
   utils::GenerationUtils::generateRelationBetween(m_context, action, searchStructure, scAgentsCommon::CoreKeynodes::rrel_1);

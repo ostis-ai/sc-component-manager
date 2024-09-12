@@ -6,9 +6,9 @@
 
 #include "sc_component_manager_module.hpp"
 
-SC_IMPLEMENT_MODULE(ScComponentManagerModule)
+SC_MODULE_REGISTER(ScComponentManagerModule);
 
-sc_result ScComponentManagerModule::InitializeImpl()
+void ScComponentManagerModule::Initialize(ScMemoryContext * context)
 {
   std::string const KB_COMPONENTS_PATH = "knowledge_base_components_path";
   std::string const PS_COMPONENTS_PATH = "problem_solver_components_path";
@@ -34,7 +34,7 @@ sc_result ScComponentManagerModule::InitializeImpl()
   {
     m_scComponentManager = std::make_unique<ScComponentManager>(componentsPath);
     if (!m_scComponentManager)
-      return SC_RESULT_ERROR;
+      return;
 
     m_scComponentManager->Run();
     SC_LOG_INFO("[sc-component-manager] Sc-component-manager run");
@@ -42,20 +42,14 @@ sc_result ScComponentManagerModule::InitializeImpl()
   catch (utils::ScException const & exception)
   {
     SC_LOG_ERROR("[sc-component-manager] " << exception.Description());
-    ScComponentManagerModule::ShutdownImpl();
-
-    return SC_RESULT_ERROR;
+    ScComponentManagerModule::Shutdown(context);
   }
-
-  return SC_RESULT_OK;
 }
 
-sc_result ScComponentManagerModule::ShutdownImpl()
+void ScComponentManagerModule::Shutdown(ScMemoryContext * context)
 {
   if (m_scComponentManager)
     m_scComponentManager->Stop();
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");
   m_scComponentManager.reset();
-
-  return SC_RESULT_OK;
 }

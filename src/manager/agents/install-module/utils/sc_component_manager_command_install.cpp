@@ -12,11 +12,8 @@
 
 #include "module/utils/common_utils.hpp"
 
-#include "sc-agents-common/utils/AgentUtils.hpp"
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/GenerationUtils.hpp>
-
-#include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 using namespace common_utils;
 
@@ -109,10 +106,9 @@ bool ScComponentManagerCommandInstall::EraseTempOutputEdges(ScMemoryContext * co
   return result;
 }
 
-ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
+ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScAgentContext * context, ScAddr const & actionAddr)
 {
-  ScAddr const & parameterNode =
-      utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+  ScAddr const & parameterNode = utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, ScKeynodes::rrel_1);
   ScAddrUnorderedSet componentsToInstall = CommonUtils::GetComponentsToInstall(*context, parameterNode);
   if (componentsToInstall.empty())
   {
@@ -244,7 +240,7 @@ ScAddr ScComponentManagerCommandInstall::CheckDependencyDuplication(
  * if installation successfull, otherwise
  * returns empty vector.
  */
-bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
+bool ScComponentManagerCommandInstall::InstallDependencies(ScAgentContext * context, ScAddr const & componentAddr)
 {
   bool result = true;
   ScAddr const & dependenciesSet = utils::IteratorUtils::getAnyByOutRelation(
@@ -278,14 +274,14 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
   // Get component dependencies and install them recursively
   std::string dependencyIdtf;
   ScAddr const & mainParameter = CreateSetToInstallStructure(context, dependenciesSet);
-  ScAddr const & actionAddr = utils::AgentUtils::formActionNode(
-      context, keynodes::ScComponentManagerKeynodes::action_components_install, {mainParameter});
+
+  ScAction actionAddr = context->GenerateAction(keynodes::ScComponentManagerKeynodes::action_components_install);
+  actionAddr.SetArguments(mainParameter);
 
   // Call install components agent
-  utils::AgentUtils::applyAction(context, actionAddr, 30000);
+  actionAddr.InitiateAndWait(30000);
 
-  result = context->HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::action_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+  result = actionAddr.IsFinishedSuccessfully();
   if (!result)
   {
     SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependencies are not successfully installed");

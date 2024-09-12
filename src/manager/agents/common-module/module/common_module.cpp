@@ -13,26 +13,13 @@
 
 using namespace commonModule;
 
-SC_IMPLEMENT_MODULE(CommonModule)
+SC_MODULE_REGISTER(CommonModule);
 
-sc_result CommonModule::InitializeImpl()
+void CommonModule::Initialize(ScMemoryContext * context)
 {
-  if (!CommonModule::InitGlobal())
-  {
-    SC_LOG_ERROR("CommonModule is deactivated");
-    return SC_RESULT_ERROR;
-  }
-  ScMemoryContext context;
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
   common_utils::CommonUtils::InitParametersMap();
-  if (!common_utils::CommonUtils::CheckIfFullMyselfDecompositionExists(context))
+  if (!common_utils::CommonUtils::CheckIfFullMyselfDecompositionExists(*context))
   {
-    common_utils::CommonUtils::CreateMyselfDecomposition(context);
+    common_utils::CommonUtils::CreateMyselfDecomposition(*context);
   }
-  return SC_RESULT_OK;
-}
-
-sc_result CommonModule::ShutdownImpl()
-{
-  return SC_RESULT_OK;
 }

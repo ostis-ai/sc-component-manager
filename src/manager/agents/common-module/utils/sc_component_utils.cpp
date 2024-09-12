@@ -135,7 +135,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
   }
 
   ScAddr specificationAddressAddr =
-      utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, scAgentsCommon::CoreKeynodes::rrel_1);
+      utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, ScKeynodes::rrel_1);
 
   if (!specificationAddressAddr.IsValid())
   {

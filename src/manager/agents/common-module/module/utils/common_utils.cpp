@@ -7,8 +7,6 @@
 #include "common_utils.hpp"
 #include <sc-agents-common/utils/GenerationUtils.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
-#include "sc-agents-common/keynodes/coreKeynodes.hpp"
-
 #include "sc-memory/sc_memory.hpp"
 
 #include "constants/command_constants.hpp"
@@ -63,7 +61,7 @@ void CommonUtils::InitParametersMap()
       {CommandsConstantsFlags::EXPLANATION, keynodes::ScComponentManagerKeynodes::rrel_explanation},
       {CommandsConstantsFlags::NOTE, keynodes::ScComponentManagerKeynodes::rrel_note},
       {CommandsConstantsFlags::PURPOSE, keynodes::ScComponentManagerKeynodes::rrel_purpose},
-      {CommandsConstantsFlags::KEY, scAgentsCommon::CoreKeynodes::rrel_key_sc_element},
+      {CommandsConstantsFlags::KEY, ScKeynodes::rrel_key_sc_element},
       {CommandsConstantsFlags::MAIN_ID, keynodes::ScComponentManagerKeynodes::rrel_main_idtf},
       {CommandsConstantsFlags::IDTF, keynodes::ScComponentManagerKeynodes::rrel_components},
       {CommandsConstantsFlags::SET, keynodes::ScComponentManagerKeynodes::rrel_sets},
@@ -149,10 +147,8 @@ bool CommonUtils::TranslateFromStringToScMemory(
 
     for (std::string const & parameterValue : parameter.second)
     {
-      if (parameter.first == CommandsConstantsFlags::EXPLANATION ||
-          parameter.first == CommandsConstantsFlags::NOTE ||
-          parameter.first == CommandsConstantsFlags::PURPOSE ||
-          parameter.first == CommandsConstantsFlags::MAIN_ID)
+      if (parameter.first == CommandsConstantsFlags::EXPLANATION || parameter.first == CommandsConstantsFlags::NOTE
+          || parameter.first == CommandsConstantsFlags::PURPOSE || parameter.first == CommandsConstantsFlags::MAIN_ID)
       {
         parameterValueAddr = context.CreateNode(ScType::LinkConst);
         context.SetLinkContent(parameterValueAddr, parameterValue);
@@ -234,20 +230,20 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
       &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
   std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(context, explanationsSetAddr);
 
-  ScAddr const & notesSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_note);
+  ScAddr const & notesSetAddr =
+      utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_note);
   std::map<std::string, ScAddr> const & notes = GetElementsLinksOfSet(context, notesSetAddr);
 
   ScAddr const & purposesSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_purpose);
+      &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_purpose);
   std::map<std::string, ScAddr> const & purposes = GetElementsLinksOfSet(context, purposesSetAddr);
 
-  ScAddr const & keysSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+  ScAddr const & keysSetAddr =
+      utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, ScKeynodes::rrel_key_sc_element);
   std::map<std::string, ScAddr> const & keys = GetElementsLinksOfSet(context, keysSetAddr);
 
   ScAddr const & idsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
-    &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_main_idtf);
+      &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_main_idtf);
   std::map<std::string, ScAddr> const & ids = GetElementsLinksOfSet(context, idsSetAddr);
 
   std::vector<std::string> authorsList, classesList, explanationsList, notesList, purposesList, keysList, idsList;
@@ -389,8 +385,7 @@ ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & context, ScAdd
 {
   if (!context.IsElement(specification))
     return specification;
-  return utils::IteratorUtils::getAnyByOutRelation(
-      &context, specification, scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+  return utils::IteratorUtils::getAnyByOutRelation(&context, specification, ScKeynodes::rrel_key_sc_element);
 }
 
 bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context)

@@ -6,20 +6,16 @@
 
 #pragma once
 
-#include "sc-memory/kpm/sc_agent.hpp"
-#include "sc-agents-common/keynodes/coreKeynodes.hpp"
-
-#include "sc_component_manager_agent_install.generated.hpp"
+#include <sc-memory/sc_agent.hpp>
 
 namespace installModule
 {
-class ScComponentManagerInstallAgent : public ScAgent
+class ScComponentManagerInstallAgent : public ScActionInitiatedAgent
 {
 public:
-  SC_CLASS(Agent, Event(scAgentsCommon::CoreKeynodes::action_initiated, ScEvent::Type::AddOutputEdge))
-  SC_GENERATED_BODY()
+public:
+  ScAddr GetActionClass() const override;
 
-private:
-  bool CheckAction(ScAddr const & actionAddr);
+  ScResult DoProgram(ScAction & action) override;
 };
 }  // namespace installModule

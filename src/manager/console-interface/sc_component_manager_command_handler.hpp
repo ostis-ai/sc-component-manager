@@ -9,8 +9,6 @@
 #include <utility>
 
 #include "sc-agents-common/utils/CommonUtils.hpp"
-#include "sc-agents-common/utils/AgentUtils.hpp"
-
 #include "common-module/module/utils/common_utils.hpp"
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 
@@ -24,7 +22,7 @@ public:
   explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
     : m_componentsPath(std::move(componentsPath))
   {
-    m_context = new ScMemoryContext();
+    m_context = new ScAgentContext();
     std::string const & specificationPath =
         m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
     m_actions = {
@@ -50,13 +48,12 @@ public:
       {
         SC_LOG_ERROR(ex.what());
       }
-      ScAddr actionAddr = utils::AgentUtils::formActionNode(m_context, actionAddrClass, {});
+      ScAction actionAddr = m_context->GenerateAction(actionAddrClass);
       common_utils::CommonUtils::TranslateFromStringToScMemory(*m_context, actionAddr, commandParameters);
 
-      utils::AgentUtils::applyAction(m_context, actionAddr, 30000);
+      actionAddr.InitiateAndWait(30000);
 
-      executionResult = m_context->HelperCheckEdge(
-          scAgentsCommon::CoreKeynodes::action_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+      executionResult = actionAddr.IsFinishedSuccessfully();
     }
     else
     {
@@ -78,7 +75,7 @@ public:
   }
 
 protected:
-  ScMemoryContext * m_context{};
+  ScAgentContext * m_context{};
   CommandParameters m_commandParameters;
   std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
   std::map<std::string, ScComponentManagerCommand *> m_actions;

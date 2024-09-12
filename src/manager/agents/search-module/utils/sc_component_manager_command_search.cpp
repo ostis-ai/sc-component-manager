@@ -6,8 +6,6 @@
 
 #include <algorithm>
 
-#include "sc-agents-common/keynodes/coreKeynodes.hpp"
-
 #include "sc_component_manager_command_search.hpp"
 
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
@@ -15,7 +13,7 @@
 
 using namespace common_utils;
 
-ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
+ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * context, ScAddr const & actionAddr)
 {
   std::map<std::string, std::vector<std::string>> commandParameters =
       CommonUtils::GetCommandParameters(*context, actionAddr);
@@ -35,7 +33,7 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
       ScType::EdgeAccessVarPosPerm,
       ScType::NodeVar >> COMPONENT_ALIAS,
       ScType::EdgeAccessVarPosPerm,
-      scAgentsCommon::CoreKeynodes::rrel_key_sc_element);
+      ScKeynodes::rrel_key_sc_element);
   searchComponentTemplate.Triple(
       keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
 
@@ -44,7 +42,7 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScMemoryContext * co
     SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
   }
 
-   for (size_t sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
+  for (size_t sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
   {
     if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
     {
@@ -135,8 +133,10 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLi
       parameters[0] += " ";
       parameters[0] += parameters[sequenceNumber];
     }
-    parameters.erase(parameters.begin()+1, parameters.end());
-    SC_LOG_INFO("ScComponentManagerCommandSearch: Unsupported multiple links search, the search was performed across the full line");
+    parameters.erase(parameters.begin() + 1, parameters.end());
+    SC_LOG_INFO(
+        "ScComponentManagerCommandSearch: Unsupported multiple links search, the search was performed across the full "
+        "line");
   }
   ScAddrVector links = context->FindLinksByContentSubstring(parameters.at(0));
 

@@ -4,8 +4,6 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <sc-agents-common/utils/AgentUtils.hpp>
-
 #include "utils/sc_component_manager_command_install.hpp"
 
 #include "sc_component_manager_agent_install.hpp"
@@ -15,16 +13,9 @@
 using namespace installModule;
 using namespace keynodes;
 
-SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
+ScResult ScComponentManagerInstallAgent::DoProgram(ScAction & action)
 {
-  ScAddr const & actionAddr = otherAddr;
-
-  if (!CheckAction(actionAddr))
-  {
-    return SC_RESULT_OK;
-  }
-
-  SC_LOG_DEBUG("ScComponentManagerInstallAgent started");
+  SC_AGENT_LOG_DEBUG("started");
 
   std::map<ScAddr, std::string, ScAddrLessFunc> componentWithConfigPath;
 
@@ -44,17 +35,18 @@ SC_AGENT_IMPLEMENTATION(ScComponentManagerInstallAgent)
        configManager[PathKeysOfConfigPath::UI_PATH]});
 
   ScComponentManagerCommandInstall command = ScComponentManagerCommandInstall(componentWithConfigPath);
-  ScAddrUnorderedSet const & identifiersNodesSet = command.Execute(&m_memoryCtx, actionAddr);
-  bool result = !identifiersNodesSet.empty();
-  ScAddrVector identifiersNodesVector(identifiersNodesSet.begin(), identifiersNodesSet.end());
+  ScAddrUnorderedSet const & identifiersNodesSet = command.Execute(&m_context, action);
+  bool isSuccess = !identifiersNodesSet.empty();
+  ScStructure result = m_context.GenerateStructure();
+  for (auto const & identifierNode : identifiersNodesSet)
+    result << identifierNode;
+  action.SetResult(result);
 
-  utils::AgentUtils::finishAgentWork(&m_memoryCtx, actionAddr, identifiersNodesVector, result);
-  SC_LOG_DEBUG("ScComponentManagerInstallAgent finished");
-  return SC_RESULT_OK;
-};
+  SC_AGENT_LOG_DEBUG("finished");
+  return isSuccess ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
+}
 
-bool ScComponentManagerInstallAgent::CheckAction(ScAddr const & actionAddr)
+ScAddr ScComponentManagerInstallAgent::GetActionClass() const
 {
-  return m_memoryCtx.HelperCheckEdge(
-      keynodes::ScComponentManagerKeynodes::action_components_install, actionAddr, ScType::EdgeAccessConstPosPerm);
+  return keynodes::ScComponentManagerKeynodes::action_components_install;
 }

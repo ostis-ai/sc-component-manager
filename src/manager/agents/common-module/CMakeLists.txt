@@ -15,8 +15,6 @@ target_include_directories(common-lib
     PUBLIC ${SC_KPM_SRC}
 )
 
-sc_codegen_ex(common-lib ${CMAKE_CURRENT_LIST_DIR}/module ${CMAKE_CURRENT_LIST_DIR}/generated)
-
 if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(common-lib)
 endif()

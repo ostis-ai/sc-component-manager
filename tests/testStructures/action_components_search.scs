@@ -8,6 +8,8 @@ part_platform_specification
     <- concept_reusable_component_specification;;
 
 part_platform_specification = [*
+-> rrel_key_sc_element:
+    part_platform;;
 part_platform
     <- concept_reusable_component;
     <- concept_atomic_reusable_component;
@@ -28,6 +30,8 @@ part_ui_specification
     <- concept_reusable_component_specification;;
 
 part_ui_specification = [*
+-> rrel_key_sc_element:
+    part_ui;;
 part_ui
     <- concept_reusable_component;
     <- concept_atomic_reusable_component;

@@ -57,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Remove codegen for agents
 - Remove svn dependency
 - Remove trunk folder when download git repository
 - Remove storage parser

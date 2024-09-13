@@ -16,8 +16,6 @@ using namespace keynodes;
 
 ScResult ScComponentManagerSearchAgent::DoProgram(ScAction & action)
 {
-  SC_AGENT_LOG_DEBUG("started");
-
   ScComponentManagerCommandSearch command = ScComponentManagerCommandSearch();
   ScAddrUnorderedSet components = command.Execute(&m_context, action);
   ScStructure result = m_context.GenerateStructure();
@@ -25,7 +23,6 @@ ScResult ScComponentManagerSearchAgent::DoProgram(ScAction & action)
     result << component;
   action.SetResult(result);
 
-  SC_AGENT_LOG_DEBUG("finished");
   return action.FinishSuccessfully();
 }
 

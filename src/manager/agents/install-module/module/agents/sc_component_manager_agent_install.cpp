@@ -15,8 +15,6 @@ using namespace keynodes;
 
 ScResult ScComponentManagerInstallAgent::DoProgram(ScAction & action)
 {
-  SC_AGENT_LOG_DEBUG("started");
-
   std::map<ScAddr, std::string, ScAddrLessFunc> componentWithConfigPath;
 
   ScConfig config{
@@ -42,7 +40,6 @@ ScResult ScComponentManagerInstallAgent::DoProgram(ScAction & action)
     result << identifierNode;
   action.SetResult(result);
 
-  SC_AGENT_LOG_DEBUG("finished");
   return isSuccess ? action.FinishSuccessfully() : action.FinishUnsuccessfully();
 }
 

@@ -15,8 +15,6 @@ using namespace keynodes;
 
 ScResult ScComponentManagerInitAgent::DoProgram(ScAction & action)
 {
-  SC_AGENT_LOG_INFO("started");
-
   ScConfig config{ScMemory::ms_configPath, {PathKeysOfConfigPath::KB_PATH}};
   ScConfigGroup configManager = config["sc-component-manager"];
 
@@ -28,7 +26,6 @@ ScResult ScComponentManagerInitAgent::DoProgram(ScAction & action)
     result << specification;
   action.SetResult(result);
 
-  SC_AGENT_LOG_INFO("finished");
   return action.FinishSuccessfully();
 }
 

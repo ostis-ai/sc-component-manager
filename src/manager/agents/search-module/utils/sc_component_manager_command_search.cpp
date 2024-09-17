@@ -92,7 +92,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
       relationAddr);
   for (std::string const & parameterIdentifier : parameters)
   {
-    ScAddr parameterAddr = context->HelperFindBySystemIdtf(parameterIdentifier);
+    ScAddr parameterAddr = context->SearchElementBySystemIdentifier(parameterIdentifier);
     if (!parameterAddr.IsValid())
     {
       searchComponentTemplate.Clear();
@@ -109,7 +109,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByClass(
 {
   for (std::string const & classIdentifier : parameters)
   {
-    ScAddr classAddr = context->HelperFindBySystemIdtf(classIdentifier);
+    ScAddr classAddr = context->SearchElementBySystemIdentifier(classIdentifier);
     if (!classAddr.IsValid())
     {
       searchComponentTemplate.Clear();
@@ -138,7 +138,7 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLi
         "ScComponentManagerCommandSearch: Unsupported multiple links search, the search was performed across the full "
         "line");
   }
-  ScAddrVector links = context->FindLinksByContentSubstring(parameters.at(0));
+  ScAddrSet links = context->SearchLinksByContentSubstring(parameters.at(0));
 
   searchComponentTemplate.Quintuple(
       COMPONENT_ALIAS,
@@ -158,7 +158,7 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecificatio
 {
   ScAddrUnorderedSet result;
   ScTemplateSearchResult searchComponentResult;
-  context->HelperSearchTemplate(searchComponentTemplate, searchComponentResult);
+  context->SearchByTemplate(searchComponentTemplate, searchComponentResult);
 
   if (linksValues.empty())
   {
@@ -182,9 +182,9 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecificatio
     ScAddr reusableComponentSpecification = searchComponentResult[i][SPECIFICATION_ALIAS];
     ScAddr reusableComponent = searchComponentResult[i][COMPONENT_ALIAS];
     SC_LOG_INFO(
-        "ScComponentManager: specification is " << context->HelperGetSystemIdtf(reusableComponentSpecification)
+        "ScComponentManager: specification is " << context->GetElementSystemIdentifier(reusableComponentSpecification)
                                                 << ", component is "
-                                                << context->HelperGetSystemIdtf(reusableComponent));
+                                                << context->GetElementSystemIdentifier(reusableComponent));
     result.insert(reusableComponentSpecification);
   }
 
@@ -208,9 +208,9 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsSpecificatio
           ScAddr reusableComponentSpecification = searchComponentResult[i][SPECIFICATION_ALIAS];
           ScAddr reusableComponent = searchComponentResult[i][COMPONENT_ALIAS];
           SC_LOG_INFO(
-              "ScComponentManager: specification is " << context->HelperGetSystemIdtf(reusableComponentSpecification)
-                                                      << ", component is "
-                                                      << context->HelperGetSystemIdtf(reusableComponent));
+              "ScComponentManager: specification is "
+              << context->GetElementSystemIdentifier(reusableComponentSpecification) << ", component is "
+              << context->GetElementSystemIdentifier(reusableComponent));
           result.insert(reusableComponentSpecification);
         }
       }

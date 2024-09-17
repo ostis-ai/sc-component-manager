@@ -24,7 +24,7 @@ TEST_F(AgentTest, AgentInit)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_init.scs");
-  ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
+  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
   ScAction testAction = context.ConvertToAction(testActionNode);
 
   context.SubscribeAgent<initModule::ScComponentManagerInitAgent>();
@@ -37,10 +37,10 @@ TEST_F(AgentTest, AgentInit)
   size_t foundSpecifications = 0;
 
   ScIterator3Ptr const & specificationsIterator =
-      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
+      context.CreateIterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
   while (specificationsIterator->Next())
   {
-    std::string const & specificationIdentifier = context.HelperGetSystemIdtf(specificationsIterator->Get(2));
+    std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
     isSpecificationExists =
         std::count(namesOfSpecifications.begin(), namesOfSpecifications.end(), specificationIdentifier);
     EXPECT_TRUE(isSpecificationExists) << specificationIdentifier << " is not in action result";
@@ -54,7 +54,7 @@ TEST_F(AgentTest, AgentSearch)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_search.scs");
-  ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
+  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
   ScAction testAction = context.ConvertToAction(testActionNode);
 
   context.SubscribeAgent<searchModule::ScComponentManagerSearchAgent>();
@@ -67,10 +67,10 @@ TEST_F(AgentTest, AgentSearch)
   size_t foundSpecifications = 0;
 
   ScIterator3Ptr const & specificationsIterator =
-      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
+      context.CreateIterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
   while (specificationsIterator->Next())
   {
-    std::string const & specificationIdentifier = context.HelperGetSystemIdtf(specificationsIterator->Get(2));
+    std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
     isSpecificationExists =
         std::count(namesOfSpecifications.begin(), namesOfSpecifications.end(), specificationIdentifier);
     EXPECT_TRUE(isSpecificationExists) << specificationIdentifier << " is not in action result";
@@ -84,7 +84,7 @@ TEST_F(AgentTest, AgentInstall)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_install.scs");
-  ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
+  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
   ScAction testAction = context.ConvertToAction(testActionNode);
 
   context.SubscribeAgent<installModule::ScComponentManagerInstallAgent>();
@@ -94,10 +94,10 @@ TEST_F(AgentTest, AgentInstall)
   ScStructure result = testAction.GetResult();
 
   ScIterator3Ptr const & componentsIterator =
-      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.CreateIterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   EXPECT_TRUE(componentsIterator->Next());
 
-  EXPECT_EQ("part_ui", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+  EXPECT_EQ("part_ui", context.GetElementSystemIdentifier(componentsIterator->Get(2)));
 
   context.UnsubscribeAgent<installModule::ScComponentManagerInstallAgent>();
 }

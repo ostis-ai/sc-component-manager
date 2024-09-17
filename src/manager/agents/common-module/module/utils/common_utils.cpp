@@ -29,7 +29,7 @@ ScAddr CommonUtils::GetMyselfDecompositionAddr(ScMemoryContext & context)
 
 void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & context)
 {
-  ScAddr myselfDecompositionAddr = context.CreateNode(ScType::NodeConst);
+  ScAddr myselfDecompositionAddr = context.GenerateNode(ScType::NodeConst);
   utils::GenerationUtils::generateRelationBetween(
       &context,
       keynodes::ScComponentManagerKeynodes::myself,
@@ -42,12 +42,12 @@ void CommonUtils::CreateMyselfDecomposition(ScMemoryContext & context)
   for (ScAddrVector const & subsystemAndComponentClass : componentsClasses)
   {
     componentClassAddr = subsystemAndComponentClass[1];
-    componentAddr = context.CreateNode(ScType::NodeConst);
+    componentAddr = context.GenerateNode(ScType::NodeConst);
 
-    context.CreateEdge(ScType::EdgeAccessConstPosPerm, componentClassAddr, componentAddr);
-    context.CreateEdge(ScType::EdgeAccessConstPosPerm, myselfDecompositionAddr, componentAddr);
+    context.GenerateConnector(ScType::EdgeAccessConstPosPerm, componentClassAddr, componentAddr);
+    context.GenerateConnector(ScType::EdgeAccessConstPosPerm, myselfDecompositionAddr, componentAddr);
 
-    componentDecompositionAddr = context.CreateNode(ScType::NodeConst);
+    componentDecompositionAddr = context.GenerateNode(ScType::NodeConst);
     utils::GenerationUtils::generateRelationBetween(
         &context, componentAddr, componentDecompositionAddr, keynodes::ScComponentManagerKeynodes::nrel_decomposition);
   }
@@ -97,7 +97,7 @@ ScAddr GetSetAddrOfComponents(ScMemoryContext & context, ScAddr const & actionAd
         != relationAndSubRelations.second.end())
     {
       // If main parameter consists of several parameters
-      relationAddr = context.HelperFindBySystemIdtf(relationAndSubRelations.first);
+      relationAddr = context.SearchElementBySystemIdentifier(relationAndSubRelations.first);
       break;
     }
   }
@@ -107,16 +107,16 @@ ScAddr GetSetAddrOfComponents(ScMemoryContext & context, ScAddr const & actionAd
     setAddr = utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, relationAddr);
     if (!context.IsElement(setAddr))
     {
-      setAddr = context.CreateNode(ScType::NodeConst);
+      setAddr = context.GenerateNode(ScType::NodeConst);
     }
-    ScAddr subSetAddr = context.CreateNode(ScType::NodeConst);
+    ScAddr subSetAddr = context.GenerateNode(ScType::NodeConst);
     utils::GenerationUtils::generateRelationBetween(&context, actionAddr, setAddr, relationAddr);
     utils::GenerationUtils::generateRelationBetween(&context, setAddr, subSetAddr, parameterRelNodeAddr);
     endSetAddr = subSetAddr;
   }
   else
   {
-    setAddr = context.CreateNode(ScType::NodeConst);
+    setAddr = context.GenerateNode(ScType::NodeConst);
     utils::GenerationUtils::generateRelationBetween(&context, actionAddr, setAddr, parameterRelNodeAddr);
     endSetAddr = setAddr;
   }
@@ -150,20 +150,20 @@ bool CommonUtils::TranslateFromStringToScMemory(
       if (parameter.first == CommandsConstantsFlags::EXPLANATION || parameter.first == CommandsConstantsFlags::NOTE
           || parameter.first == CommandsConstantsFlags::PURPOSE || parameter.first == CommandsConstantsFlags::MAIN_ID)
       {
-        parameterValueAddr = context.CreateNode(ScType::LinkConst);
+        parameterValueAddr = context.GenerateNode(ScType::LinkConst);
         context.SetLinkContent(parameterValueAddr, parameterValue);
       }
       else
       {
-        parameterValueAddr = context.HelperFindBySystemIdtf(parameterValue);
+        parameterValueAddr = context.SearchElementBySystemIdentifier(parameterValue);
         if (!context.IsElement(parameterValueAddr))
         {
           SC_LOG_WARNING("Transform to sc-structure: Unknown value: " << parameterValue);
-          parameterValueAddr = context.CreateNode(ScType::NodeConst);
-          context.HelperSetSystemIdtf(parameterValue, parameterValueAddr);
+          parameterValueAddr = context.GenerateNode(ScType::NodeConst);
+          context.SetElementSystemIdentifier(parameterValue, parameterValueAddr);
         }
       }
-      context.CreateEdge(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
+      context.GenerateConnector(ScType::EdgeAccessConstPosPerm, setAddr, parameterValueAddr);
     }
   }
   return true;
@@ -185,13 +185,13 @@ ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(ScMemoryContext & context
   if (context.IsElement(parameterSetNode))
   {
     ScIterator3Ptr const & setsIterator =
-        context.Iterator3(parameterSetNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        context.CreateIterator3(parameterSetNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     ScAddr componentClassAddr;
     while (setsIterator->Next())
     {
       componentClassAddr = setsIterator->Get(2);
       ScIterator3Ptr const & componentsIterator =
-          context.Iterator3(componentClassAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+          context.CreateIterator3(componentClassAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
       while (componentsIterator->Next())
       {
         components.insert(componentsIterator->Get(2));
@@ -202,7 +202,7 @@ ScAddrUnorderedSet CommonUtils::GetComponentsToInstall(ScMemoryContext & context
   if (context.IsElement(parameterComponentsNode))
   {
     ScIterator3Ptr const & componentsIterator =
-        context.Iterator3(parameterComponentsNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        context.CreateIterator3(parameterComponentsNode, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentsIterator->Next())
     {
       components.insert(componentsIterator->Get(2));
@@ -299,12 +299,13 @@ std::map<std::string, ScAddr> CommonUtils::GetSetElements(ScMemoryContext & cont
   if (!context.IsElement(setAddr))
     return elementsIdtfAndAddr;
   ScIterator3Ptr const & elementsIterator =
-      context.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (elementsIterator->Next())
   {
     try
     {
-      elementsIdtfAndAddr.insert({context.HelperGetSystemIdtf(elementsIterator->Get(2)), elementsIterator->Get(2)});
+      elementsIdtfAndAddr.insert(
+          {context.GetElementSystemIdentifier(elementsIterator->Get(2)), elementsIterator->Get(2)});
     }
     catch (std::exception const & exception)
     {
@@ -322,7 +323,7 @@ std::map<std::string, ScAddr> CommonUtils::GetElementsLinksOfSet(ScMemoryContext
     return elementsIdtfAndAddr;
   std::string elementIdtf;
   ScIterator3Ptr const & elementsIterator =
-      context.Iterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
+      context.CreateIterator3(setAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
   while (elementsIterator->Next())
   {
     context.GetLinkContent(elementsIterator->Get(2), elementIdtf);
@@ -342,7 +343,7 @@ ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & context, ScA
 
   for (std::vector<ScAddr> const & commonComponentClass : common_utils::CommonUtils::componentsClasses)
   {
-    if (context.HelperCheckEdge(commonComponentClass[0], component, ScType::EdgeAccessConstPosPerm))
+    if (context.CheckConnector(commonComponentClass[0], component, ScType::EdgeAccessConstPosPerm))
     {
       componentClass = commonComponentClass[1];
       break;
@@ -358,11 +359,11 @@ ScAddr CommonUtils::GetSubsystemDecompositionAddr(ScMemoryContext & context, ScA
     return componentDecomposition;
   }
   ScIterator3Ptr partsDecomposition =
-      context.Iterator3(myselfDecomposition, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.CreateIterator3(myselfDecomposition, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
   while (partsDecomposition->Next())
   {
-    if (!context.HelperCheckEdge(componentClass, partsDecomposition->Get(2), ScType::EdgeAccessConstPosPerm))
+    if (!context.CheckConnector(componentClass, partsDecomposition->Get(2), ScType::EdgeAccessConstPosPerm))
       continue;
 
     componentDecomposition = utils::IteratorUtils::getAnyByOutRelation(
@@ -378,7 +379,7 @@ bool CommonUtils::CheckIfInstalled(ScMemoryContext & context, ScAddr const & com
   ScAddr decompositionAddr = GetSubsystemDecompositionAddr(context, component);
   if (!context.IsElement(decompositionAddr) || !context.IsElement(component))
     return false;
-  return context.HelperCheckEdge(decompositionAddr, component, ScType::EdgeAccessConstPosPerm);
+  return context.CheckConnector(decompositionAddr, component, ScType::EdgeAccessConstPosPerm);
 }
 
 ScAddr CommonUtils::GetComponentBySpecification(ScMemoryContext & context, ScAddr const & specification)
@@ -402,11 +403,12 @@ bool CommonUtils::CheckIfFullMyselfDecompositionExists(ScMemoryContext & context
   {
     componentClassAddr = subsystemAndComponentClass[1];
 
-    ScIterator3Ptr it = context.Iterator3(myselfDecompositionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+    ScIterator3Ptr it =
+        context.CreateIterator3(myselfDecompositionAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (it->Next())
     {
       myselfDecompositionPartAddr = it->Get(2);
-      if (context.HelperCheckEdge(componentClassAddr, myselfDecompositionPartAddr, ScType::EdgeAccessConstPosPerm))
+      if (context.CheckConnector(componentClassAddr, myselfDecompositionPartAddr, ScType::EdgeAccessConstPosPerm))
       {
         partDecompositionAddr = utils::IteratorUtils::getAnyByOutRelation(
             &context, myselfDecompositionPartAddr, keynodes::ScComponentManagerKeynodes::nrel_decomposition);

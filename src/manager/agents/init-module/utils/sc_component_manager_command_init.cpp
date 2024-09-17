@@ -16,7 +16,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScAgentContext * conte
 {
   ScAddrUnorderedSet specifications;
 
-  ScIterator3Ptr const repositoriesIterator = context->Iterator3(
+  ScIterator3Ptr const repositoriesIterator = context->CreateIterator3(
       keynodes::ScComponentManagerKeynodes::concept_repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
 
   ScAddr repository;
@@ -45,14 +45,14 @@ void ScComponentManagerCommandInit::ProcessRepository(
   {
     SC_LOG_WARNING(
         "ScComponentManagerCommandInit: components specification not found in repository "
-        << context->HelperGetSystemIdtf(repository));
+        << context->GetElementSystemIdentifier(repository));
     return;
   }
 
   ScAddr componentSpecification;
   ScAddr component;
   ScIterator3Ptr const specificationsIterator =
-      context->Iterator3(specificationsSetAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context->CreateIterator3(specificationsSetAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
   while (specificationsIterator->Next())
   {
     componentSpecification = specificationsIterator->Get(2);
@@ -61,15 +61,16 @@ void ScComponentManagerCommandInit::ProcessRepository(
     {
       SC_LOG_WARNING(
           "ScComponentManagerCommandInit: Specification is already loaded for component "
-          << context->HelperGetSystemIdtf(component));
+          << context->GetElementSystemIdentifier(component));
       continue;
     }
     specifications.insert(componentSpecification);
     downloaderHandler->DownloadSpecification(context, componentSpecification);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER
-                                          + context->HelperGetSystemIdtf(componentSpecification);
+                                          + context->GetElementSystemIdentifier(componentSpecification);
     componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
     SC_LOG_DEBUG(
-        "ScComponentManagerCommandInit: loaded specification " << context->HelperGetSystemIdtf(componentSpecification));
+        "ScComponentManagerCommandInit: loaded specification "
+        << context->GetElementSystemIdentifier(componentSpecification));
   }
 }

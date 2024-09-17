@@ -26,7 +26,7 @@ ScAddr DownloaderHandler::getDownloadableClass(ScMemoryContext * context, ScAddr
 
   for (ScAddr const & currentClass : downloadableClasses)
   {
-    if (context->HelperCheckEdge(currentClass, nodeAddr, ScType::EdgeAccessConstPosPerm))
+    if (context->CheckConnector(currentClass, nodeAddr, ScType::EdgeAccessConstPosPerm))
     {
       downloadableClass = currentClass;
     }
@@ -53,7 +53,7 @@ ScAddr DownloaderHandler::getUrlLinkClass(ScMemoryContext * context, ScAddr cons
 
   for (ScAddr const & currentClass : downloadableUrls)
   {
-    if (context->HelperCheckEdge(currentClass, linkAddr, ScType::EdgeAccessConstPosPerm))
+    if (context->CheckConnector(currentClass, linkAddr, ScType::EdgeAccessConstPosPerm))
     {
       urlLinkClass = currentClass;
     }
@@ -77,7 +77,7 @@ bool DownloaderHandler::DownloadSpecification(ScMemoryContext * context, ScAddr 
   }
 
   std::string urlAddress;
-  std::string const & nodeSystemIdentifier = context->HelperGetSystemIdtf(componentSpecificationAddr);
+  std::string const & nodeSystemIdentifier = context->GetElementSystemIdentifier(componentSpecificationAddr);
   std::string const & downloadPath = m_downloadDir + SpecificationConstants::DIRECTORY_DELIMITER + nodeSystemIdentifier;
   for (ScAddr const & currentAddressLinkAddr : nodeAddressLinkAddrs)
   {

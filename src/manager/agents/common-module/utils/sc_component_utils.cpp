@@ -32,7 +32,7 @@ namespace componentUtils
 ScAddr SearchUtils::GetComponentAddress(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddr componentAddressAddr;
-  ScIterator5Ptr const & componentAddressIterator = context->Iterator5(
+  ScIterator5Ptr const & componentAddressIterator = context->CreateIterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::LinkConst,
@@ -59,7 +59,7 @@ ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * conte
   ScAddrUnorderedSet componentDependencies;
   ScAddr componentDependenciesSet;
 
-  ScIterator5Ptr const & componentDependenciesSetIterator = context->Iterator5(
+  ScIterator5Ptr const & componentDependenciesSetIterator = context->CreateIterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
@@ -70,7 +70,7 @@ ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * conte
   {
     componentDependenciesSet = componentDependenciesSetIterator->Get(2);
     ScIterator3Ptr const & componentDependenciesIterator =
-        context->Iterator3(componentDependenciesSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        context->CreateIterator3(componentDependenciesSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
     while (componentDependenciesIterator->Next())
     {
       componentDependencies.insert(componentDependenciesIterator->Get(2));
@@ -89,7 +89,7 @@ ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * conte
 ScAddr SearchUtils::GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddr componentInstallationMethod;
-  ScIterator5Ptr const & componentDependenciesIterator = context->Iterator5(
+  ScIterator5Ptr const & componentDependenciesIterator = context->CreateIterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
@@ -115,7 +115,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
 {
   ScAddrVector specificationAddressLinks;
 
-  ScIterator5Ptr const & alternativeAddressesSetIterator = context->Iterator5(
+  ScIterator5Ptr const & alternativeAddressesSetIterator = context->CreateIterator5(
       componentSpecificationAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeTuple,
@@ -163,7 +163,7 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 {
   ScAddr addressLinkAddr;
 
-  ScIterator5Ptr const & repositoryAddressIterator = context->Iterator5(
+  ScIterator5Ptr const & repositoryAddressIterator = context->CreateIterator5(
       repositoryAddr,
       ScType::EdgeDCommonConst,
       ScType::NodeConst,
@@ -178,7 +178,7 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
   ScAddr const & repositoryAddressAddr = repositoryAddressIterator->Get(2);
 
   ScIterator3Ptr const & addressLinkIterator =
-      context->Iterator3(repositoryAddressAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
+      context->CreateIterator3(repositoryAddressAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
 
   if (!addressLinkIterator->Next())
   {
@@ -210,7 +210,7 @@ ScAddrVector SearchUtils::GetNeedToInstallComponents(ScMemoryContext * context)
 bool InstallUtils::IsReusable(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   bool result = true;
-  ScIterator3Ptr const reusableComponentCLassIterator = context->Iterator3(
+  ScIterator3Ptr const reusableComponentCLassIterator = context->CreateIterator3(
       keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessConstPosPerm, componentAddr);
   if (!reusableComponentCLassIterator->Next())
   {
@@ -228,7 +228,7 @@ bool InstallUtils::IsReusable(ScMemoryContext * context, ScAddr const & componen
  */
 std::vector<std::string> InstallUtils::GetInstallScripts(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  ScIterator5Ptr const & installScriptsIterator = context->Iterator5(
+  ScIterator5Ptr const & installScriptsIterator = context->CreateIterator5(
       componentAddr,
       ScType::EdgeDCommonConst,
       ScType::LinkConst,

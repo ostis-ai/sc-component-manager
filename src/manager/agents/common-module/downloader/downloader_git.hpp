@@ -33,7 +33,7 @@ public:
   {
     if (!sc_fs_create_directory(downloadPath.c_str()))
     {
-      SC_LOG_ERROR("Can't download file. Can't create folder. " << downloadPath);
+      SC_LOG_ERROR("DownloaderGit: Can't download file. Can't create folder. " << downloadPath);
       return false;
     }
 
@@ -83,7 +83,7 @@ public:
   {
     if (!sc_fs_create_directory(downloadPath.c_str()))
     {
-      SC_LOG_ERROR("Can't download repository. Can't create folder. " << downloadPath);
+      SC_LOG_ERROR("DownloaderGit: Can't download repository. Can't create folder. " << downloadPath);
       return false;
     }
 

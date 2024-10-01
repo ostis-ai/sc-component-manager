@@ -16,6 +16,7 @@ cmake-build-debug
 *.blg
 *.fdb_latexmk
 *.fls
+*.gz
 *.log
 *.pdf
 *.run.xml

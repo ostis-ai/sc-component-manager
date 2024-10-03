@@ -1,6 +1,6 @@
 make_tests_from_folder(${CMAKE_CURRENT_LIST_DIR}/units
     NAME sc-component-manager-tests
-    DEPENDS sc-memory sc-core console-interface
+    DEPENDS sc-memory sc-core console-interface search-lib init-lib install-lib
     INCLUDES ${SC_MEMORY_SRC}/tests/sc-memory/_test
 )
 

@@ -37,7 +37,7 @@ TEST_F(AgentTest, AgentInit)
   size_t foundSpecifications = 0;
 
   ScIterator3Ptr const & specificationsIterator =
-      context.CreateIterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
+      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNodeStructure);
   while (specificationsIterator->Next())
   {
     std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
@@ -67,7 +67,7 @@ TEST_F(AgentTest, AgentSearch)
   size_t foundSpecifications = 0;
 
   ScIterator3Ptr const & specificationsIterator =
-      context.CreateIterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
+      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNodeStructure);
   while (specificationsIterator->Next())
   {
     std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
@@ -94,7 +94,7 @@ TEST_F(AgentTest, AgentInstall)
   ScStructure result = testAction.GetResult();
 
   ScIterator3Ptr const & componentsIterator =
-      context.CreateIterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNode);
   EXPECT_TRUE(componentsIterator->Next());
 
   EXPECT_EQ("part_ui", context.GetElementSystemIdentifier(componentsIterator->Get(2)));

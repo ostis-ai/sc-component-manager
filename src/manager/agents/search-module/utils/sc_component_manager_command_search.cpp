@@ -29,13 +29,13 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * con
 
   ScTemplate searchComponentTemplate;
   searchComponentTemplate.Quintuple(
-      ScType::NodeVarStruct >> SPECIFICATION_ALIAS,
-      ScType::EdgeAccessVarPosPerm,
-      ScType::NodeVar >> COMPONENT_ALIAS,
-      ScType::EdgeAccessVarPosPerm,
+      ScType::VarNodeStructure >> SPECIFICATION_ALIAS,
+      ScType::VarPermPosArc,
+      ScType::VarNode >> COMPONENT_ALIAS,
+      ScType::VarPermPosArc,
       ScKeynodes::rrel_key_sc_element);
   searchComponentTemplate.Triple(
-      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::VarPermPosArc, COMPONENT_ALIAS);
 
   if (commandParameters.find(CLASS) != commandParameters.cend())
   {
@@ -86,9 +86,9 @@ void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
 {
   searchComponentTemplate.Quintuple(
       COMPONENT_ALIAS,
-      ScType::EdgeDCommonVar,
-      ScType::NodeVar >> setAlias,  // NodeVarTuple
-      ScType::EdgeAccessVarPosPerm,
+      ScType::VarCommonArc,
+      ScType::VarNode >> setAlias,  // NodeVarTuple
+      ScType::VarPermPosArc,
       relationAddr);
   for (std::string const & parameterIdentifier : parameters)
   {
@@ -98,7 +98,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
       searchComponentTemplate.Clear();
       break;
     }
-    searchComponentTemplate.Triple(setAlias, ScType::EdgeAccessVarPosPerm, parameterAddr);
+    searchComponentTemplate.Triple(setAlias, ScType::VarPermPosArc, parameterAddr);
   }
 }
 
@@ -115,7 +115,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByClass(
       searchComponentTemplate.Clear();
       break;
     }
-    searchComponentTemplate.Triple(classAddr, ScType::EdgeAccessVarPosPerm, COMPONENT_ALIAS);
+    searchComponentTemplate.Triple(classAddr, ScType::VarPermPosArc, COMPONENT_ALIAS);
   }
 }
 
@@ -141,11 +141,7 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::SearchComponentsByRelationLi
   ScAddrSet links = context->SearchLinksByContentSubstring(parameters.at(0));
 
   searchComponentTemplate.Quintuple(
-      COMPONENT_ALIAS,
-      ScType::EdgeDCommonVar,
-      ScType::LinkVar >> linkAlias,
-      ScType::EdgeAccessVarPosPerm,
-      relationAddr);
+      COMPONENT_ALIAS, ScType::VarCommonArc, ScType::VarNodeLink >> linkAlias, ScType::VarPermPosArc, relationAddr);
 
   ScAddrUnorderedSet result(links.begin(), links.end());
   return result;

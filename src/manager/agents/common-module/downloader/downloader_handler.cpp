@@ -26,7 +26,7 @@ ScAddr DownloaderHandler::getDownloadableClass(ScMemoryContext * context, ScAddr
 
   for (ScAddr const & currentClass : downloadableClasses)
   {
-    if (context->CheckConnector(currentClass, nodeAddr, ScType::EdgeAccessConstPosPerm))
+    if (context->CheckConnector(currentClass, nodeAddr, ScType::ConstPermPosArc))
     {
       downloadableClass = currentClass;
     }
@@ -53,7 +53,7 @@ ScAddr DownloaderHandler::getUrlLinkClass(ScMemoryContext * context, ScAddr cons
 
   for (ScAddr const & currentClass : downloadableUrls)
   {
-    if (context->CheckConnector(currentClass, linkAddr, ScType::EdgeAccessConstPosPerm))
+    if (context->CheckConnector(currentClass, linkAddr, ScType::ConstPermPosArc))
     {
       urlLinkClass = currentClass;
     }

@@ -17,7 +17,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScAgentContext * conte
   ScAddrUnorderedSet specifications;
 
   ScIterator3Ptr const repositoriesIterator = context->CreateIterator3(
-      keynodes::ScComponentManagerKeynodes::concept_repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      keynodes::ScComponentManagerKeynodes::concept_repository, ScType::ConstPermPosArc, ScType::ConstNode);
 
   ScAddr repository;
   while (repositoriesIterator->Next())
@@ -52,7 +52,7 @@ void ScComponentManagerCommandInit::ProcessRepository(
   ScAddr componentSpecification;
   ScAddr component;
   ScIterator3Ptr const specificationsIterator =
-      context->CreateIterator3(specificationsSetAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context->CreateIterator3(specificationsSetAddr, ScType::ConstPermPosArc, ScType::ConstNode);
   while (specificationsIterator->Next())
   {
     componentSpecification = specificationsIterator->Get(2);

@@ -96,8 +96,8 @@ bool ScComponentManagerCommandInstall::EraseTempOutputEdges(ScMemoryContext * co
   {
     ScIterator3Ptr const & edgesIterator = context->CreateIterator3(
         node,  // set of components
-        ScType::EdgeAccessConstPosTemp,
-        ScType::NodeConst);  // component
+        ScType::ConstTempPosArc,
+        ScType::ConstNode);  // component
     while (edgesIterator->Next())
     {
       context->EraseElement(edgesIterator->Get(1));
@@ -128,9 +128,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScAgentContext * co
       continue;
     }
     context->GenerateConnector(
-        ScType::EdgeAccessConstPosTemp,
-        keynodes::ScComponentManagerKeynodes::current_components_to_install,
-        componentAddr);
+        ScType::ConstTempPosArc, keynodes::ScComponentManagerKeynodes::current_components_to_install, componentAddr);
     executionResult &= InstallDependencies(context, componentAddr);
     executionResult &=
         EraseTempOutputEdges(context, keynodes::ScComponentManagerKeynodes::current_components_to_install);
@@ -144,7 +142,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScAgentContext * co
 
     decompositionAddr = CommonUtils::GetSubsystemDecompositionAddr(*context, componentAddr);
     if (context->IsElement(decompositionAddr))
-      context->GenerateConnector(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
+      context->GenerateConnector(ScType::ConstPermPosArc, decompositionAddr, componentAddr);
     else
       SC_LOG_WARNING(
           "Component \"" << context->GetElementSystemIdentifier(componentAddr)
@@ -201,11 +199,11 @@ ScAddr ScComponentManagerCommandInstall::CreateSetToInstallStructure(
   {
     return dependenciesSet;
   }
-  ScAddr const & setsParameter = context->GenerateNode(ScType::NodeConst);
-  ScAddr const & mainParameter = context->GenerateNode(ScType::NodeConst);
+  ScAddr const & setsParameter = context->GenerateNode(ScType::ConstNode);
+  ScAddr const & mainParameter = context->GenerateNode(ScType::ConstNode);
   utils::GenerationUtils::generateRelationBetween(
       context, mainParameter, setsParameter, keynodes::ScComponentManagerKeynodes::rrel_sets);
-  context->GenerateConnector(ScType::EdgeAccessConstPosPerm, setsParameter, dependenciesSet);
+  context->GenerateConnector(ScType::ConstPermPosArc, setsParameter, dependenciesSet);
 
   return mainParameter;
 }
@@ -222,12 +220,11 @@ ScAddr ScComponentManagerCommandInstall::CheckDependencyDuplication(
   }
 
   ScIterator3Ptr const & componentsIterator =
-      context->CreateIterator3(dependenciesSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context->CreateIterator3(dependenciesSet, ScType::ConstPermPosArc, ScType::ConstNode);
 
   while (componentsIterator->Next())
   {
-    if (context->CheckConnector(
-            currentInstallationComponentsAddr, componentsIterator->Get(2), ScType::EdgeAccessConstPosTemp))
+    if (context->CheckConnector(currentInstallationComponentsAddr, componentsIterator->Get(2), ScType::ConstTempPosArc))
     {
       return componentsIterator->Get(2);
     }
@@ -299,7 +296,7 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
 {
   ScAddr componentClass;
   ScIterator3Ptr const & componentClassIterator =
-      context->CreateIterator3(ScType::NodeConstClass, ScType::EdgeAccessConstPosPerm, componentAddr);
+      context->CreateIterator3(ScType::ConstNodeClass, ScType::ConstPermPosArc, componentAddr);
   while (componentClassIterator->Next())
   {
     componentClass = componentClassIterator->Get(0);

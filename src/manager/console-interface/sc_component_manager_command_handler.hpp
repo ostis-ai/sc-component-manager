@@ -8,27 +8,20 @@
 
 #include <utility>
 
+#include <sc-memory/sc_agent_context.hpp>
+
 #include "sc-agents-common/utils/CommonUtils.hpp"
 #include "common-module/module/utils/common_utils.hpp"
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
-
-#include "init-module/utils/sc_component_manager_command_init.hpp"
-#include "search-module/utils/sc_component_manager_command_search.hpp"
-#include "install-module/utils/sc_component_manager_command_install.hpp"
+#include "commands/sc_component_manager_command.hpp"
 
 class ScComponentManagerCommandHandler
 {
 public:
-  explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
-    : m_componentsPath(std::move(componentsPath))
+  explicit ScComponentManagerCommandHandler()
   {
     m_context = new ScAgentContext();
-    std::string const & specificationPath =
-        m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
-    m_actions = {
-        {"init", new ScComponentManagerCommandInit(specificationPath)},
-        {"search", new ScComponentManagerCommandSearch()},
-        {"install", new ScComponentManagerCommandInstall(m_componentsPath)}};
+    m_actions = {"init", "search", "install"};
   }
 
   bool Handle(std::string const & commandType, CommandParameters const & commandParameters)
@@ -41,8 +34,8 @@ public:
       ScAddr actionAddrClass;
       try
       {
-        actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(it->first);
-        SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
+        actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(*it);
+        SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " << *it << " command");
       }
       catch (std::out_of_range const & ex)
       {
@@ -68,15 +61,11 @@ public:
     m_context->Destroy();
     delete m_context;
 
-    for (auto const & it : m_actions)
-      delete it.second;
-
     m_actions.clear();
   }
 
 protected:
   ScAgentContext * m_context{};
   CommandParameters m_commandParameters;
-  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
-  std::map<std::string, ScComponentManagerCommand *> m_actions;
+  std::set<std::string> m_actions;
 };

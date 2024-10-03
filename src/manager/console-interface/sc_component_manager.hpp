@@ -18,10 +18,7 @@
 class ScComponentManager
 {
 public:
-  explicit ScComponentManager(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
-    : m_componentsPath(std::move(componentsPath))
-  {
-  }
+  explicit ScComponentManager() = default;
 
   void Run();
 
@@ -30,8 +27,6 @@ public:
   virtual ~ScComponentManager() = default;
 
 protected:
-  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
-
   void Start();
 
   sc_bool static HasNewInput();

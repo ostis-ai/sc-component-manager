@@ -22,17 +22,9 @@ void ScComponentManagerModule::Initialize(ScMemoryContext * context)
   for (std::string const & key : *managerConfig)
     m_params.Insert({key, managerConfig[key]});
 
-  std::map<ScAddr, std::string, ScAddrLessFunc> const & componentsPath = {
-      {{keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
-        m_params.Get<std::string>(KB_COMPONENTS_PATH)},
-       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
-        m_params.Get<std::string>(PS_COMPONENTS_PATH)},
-       {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
-        m_params.Get<std::string>(INTERFACE_COMPONENTS_PATH)}}};
-
   try
   {
-    m_scComponentManager = std::make_unique<ScComponentManager>(componentsPath);
+    m_scComponentManager = std::make_unique<ScComponentManager>();
     if (!m_scComponentManager)
       return;
 

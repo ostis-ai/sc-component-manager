@@ -14,5 +14,7 @@ class CommonModule : public ScModule
 {
 public:
   void Initialize(ScMemoryContext * context) override;
+
+  void Shutdown(ScMemoryContext * context) override;
 };
 }  // namespace commonModule

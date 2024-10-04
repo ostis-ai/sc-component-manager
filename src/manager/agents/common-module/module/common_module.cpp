@@ -23,3 +23,8 @@ void CommonModule::Initialize(ScMemoryContext * context)
     common_utils::CommonUtils::CreateMyselfDecomposition(*context);
   }
 }
+
+void CommonModule::Shutdown(ScMemoryContext * context)
+{
+  common_utils::CommonUtils::ClearParametersMap();
+}

@@ -84,6 +84,13 @@ void CommonUtils::InitParametersMap()
        keynodes::ScComponentManagerKeynodes::concept_subsystems_set}};
 }
 
+void CommonUtils::ClearParametersMap()
+{
+  managerParametersWithAgentRelations.clear();
+  mainFlagWithSubFlags.clear();
+  componentsClasses.clear();
+}
+
 // actionAddr -> relation(flag)': set (* -> component1;; -> component2;; *)
 // actionAddr -> relation(flag)': set (* -> subflag(subrelation)' : subset1;; -> subflag' : subset2;; *)
 ScAddr GetSetAddrOfComponents(ScMemoryContext & context, ScAddr const & actionAddr, ScAddr const & parameterRelNodeAddr)

@@ -20,6 +20,7 @@ public:
   static std::vector<std::vector<ScAddr>> componentsClasses;
 
   static void InitParametersMap();
+  static void ClearParametersMap();
   static bool TranslateFromStringToScMemory(
       ScMemoryContext & context,
       ScAddr const & actionAddr,

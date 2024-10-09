@@ -87,7 +87,7 @@ void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(
   searchComponentTemplate.Quintuple(
       COMPONENT_ALIAS,
       ScType::VarCommonArc,
-      ScType::VarNode >> setAlias,  // NodeVarTuple
+      ScType::VarNode >> setAlias,  // VarNodeTuple
       ScType::VarPermPosArc,
       relationAddr);
   for (std::string const & parameterIdentifier : parameters)

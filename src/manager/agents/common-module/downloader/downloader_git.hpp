@@ -124,8 +124,8 @@ protected:
   static std::string GetDefaultBranch(std::string const & username, std::string const & repositoryName)
   {
     std::stringstream query;
-    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << GitHubConstants::CURL_GET_BRANCH_COMMAND
-          << username << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
+    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << username
+          << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
           << GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND;
 
     ScExec exec{{query.str()}};

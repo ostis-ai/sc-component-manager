@@ -15,7 +15,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
 link_directories(${SC_BIN_PATH} ${SC_EXTENSIONS_DIRECTORY})
 
 set(SC_MACHINE_PATH "${PARENT_DIR}/sc-machine/")
-set(SC_CODEGEN_TOOL "${SC_BIN_PATH}/sc-code-generator")
 set(CMAKE_MODULE_PATH "${SC_MACHINE_PATH}/cmake")
 
 if(${SC_BUILD_TESTS})
@@ -26,9 +25,11 @@ if(${SC_CLANG_FORMAT_CODE})
     include(${SC_MACHINE_PATH}/cmake/ClangFormat.cmake)
 endif()
 
-set(SC_MEMORY_SRC "${SC_MACHINE_PATH}/sc-memory/")
-set(SC_KPM_SRC "${SC_MACHINE_PATH}/sc-kpm/")
-set(SC_TOOLS_SRC "${SC_MACHINE_PATH}/sc-tools/")
+set(SC_MEMORY_SRC "${SC_MACHINE_PATH}/sc-memory/sc-memory/include")
+set(SC_AGENTS_COMMON_PATH "${SC_MACHINE_PATH}/sc-kpm/sc-agents-common/include")
+set(SC_CORE_PATH "${SC_MACHINE_PATH}/sc-memory/sc-core/include")
+set(SC_BUILDER_PATH "${SC_MACHINE_PATH}/sc-tools/sc-builder/include")
+set(SC_CONFIG_PATH "${SC_MACHINE_PATH}/sc-tools/sc-config/include")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/dependencies.cmake")
 sc_target_dependencies()

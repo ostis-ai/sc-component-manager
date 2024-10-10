@@ -17,11 +17,6 @@
 #include "downloader/downloader.hpp"
 #include "downloader/downloader_handler.hpp"
 
-extern "C"
-{
-#include "sc-core/sc-store/sc-fs-memory/sc_file_system.h"
-}
-
 class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 {
   std::string const PARAMETER_NAME = "idtf";

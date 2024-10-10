@@ -1,7 +1,7 @@
 make_tests_from_folder(${CMAKE_CURRENT_LIST_DIR}/units
     NAME sc-component-manager-tests
-    DEPENDS sc-memory sc-core console-interface search-lib init-lib install-lib
-    INCLUDES ${SC_MEMORY_SRC}/tests/sc-memory/_test
+    DEPENDS sc-memory sc-core console-interface search-lib init-lib install-lib sc-builder-lib
+    INCLUDES ${SC_MEMORY_SRC} ${SC_BUILDER_PATH}
 )
 
 if(${SC_CLANG_FORMAT_CODE})

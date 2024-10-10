@@ -8,7 +8,7 @@
 
 #include "sc_component_manager_agent_init.hpp"
 
-#include "sc-config-utils/sc-config/sc_config.hpp"
+#include "sc-config/sc_config.hpp"
 
 using namespace initModule;
 using namespace keynodes;

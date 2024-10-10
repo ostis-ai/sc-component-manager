@@ -11,6 +11,7 @@ target_link_libraries(console-interface
 target_include_directories(console-interface
     PUBLIC ${CMAKE_CURRENT_LIST_DIR}
     PUBLIC ${AGENTS_SRC}
+    PUBLIC ${SC_CONFIG_PATH}
 )
 
 if(${SC_CLANG_FORMAT_CODE})

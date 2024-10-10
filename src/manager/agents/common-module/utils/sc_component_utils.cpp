@@ -9,7 +9,7 @@
 #include <sc-memory/sc_addr.hpp>
 #include <sc-memory/sc_type.hpp>
 #include <sc-memory/sc_iterator.hpp>
-#include <sc-builder/src/scs_loader.hpp>
+#include <sc-builder/scs_loader.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 

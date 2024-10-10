@@ -8,7 +8,7 @@
 
 #include "sc_component_manager_agent_install.hpp"
 
-#include "sc-config-utils/sc-config/sc_config.hpp"
+#include "sc-config/sc_config.hpp"
 
 using namespace installModule;
 using namespace keynodes;

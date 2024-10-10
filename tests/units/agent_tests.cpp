@@ -5,8 +5,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <sc-builder/src/scs_loader.hpp>
-#include "sc_test.hpp"
+#include <sc-builder/scs_loader.hpp>
+#include <sc-memory/test/sc_test.hpp>
 
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 

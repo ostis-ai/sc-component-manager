@@ -320,7 +320,8 @@ bool LoadUtils::LoadScsFilesInDir(
     std::string const & dirPath,
     std::string const & excludedFiles)
 {
-  bool result = false;
+  bool atLeastOneFileWasAttemptedToLoad = false;
+  bool result = true;
   if (!std::filesystem::exists(dirPath))
   {
     return result;
@@ -332,6 +333,7 @@ bool LoadUtils::LoadScsFilesInDir(
     std::filesystem::path const & filePath = dirEntry.path();
     if (filePath.extension() == SpecificationConstants::SCS_EXTENSION && filePath.filename().string() != excludedFiles)
     {
+      atLeastOneFileWasAttemptedToLoad = true;
       try
       {
         result &= loader.loadScsFile(*context, filePath);
@@ -345,7 +347,7 @@ bool LoadUtils::LoadScsFilesInDir(
     }
   }
 
-  return result;
+  return atLeastOneFileWasAttemptedToLoad && result;
 }
 
 }  // namespace componentUtils

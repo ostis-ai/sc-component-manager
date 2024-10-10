@@ -32,7 +32,7 @@ public:
       override
   {
     std::error_code errorCode;
-    if (!std::filesystem::create_directories(downloadPath.c_str(), errorCode))
+    if (!std::filesystem::create_directories(downloadPath, errorCode) && errorCode)
     {
       SC_LOG_ERROR(
           "DownloaderGit: Can't download file. Can't create folder " << downloadPath << " with error message "
@@ -85,7 +85,7 @@ public:
   bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) override
   {
     std::error_code errorCode;
-    if (!std::filesystem::create_directories(downloadPath.c_str(), errorCode))
+    if (!std::filesystem::create_directories(downloadPath, errorCode) && errorCode)
     {
       SC_LOG_ERROR(
           "DownloaderGit: Can't download repository. Can't create folder " << downloadPath << " with error message "

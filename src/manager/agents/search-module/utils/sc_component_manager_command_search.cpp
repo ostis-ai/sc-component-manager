@@ -81,13 +81,13 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * con
 void ScComponentManagerCommandSearch::SearchComponentsByRelation(
     ScMemoryContext * context,
     ScAddr const & relationAddr,
-    std::string const & nodeAlias,
+    std::string const & parameterAlias,
     ScTemplate & searchComponentTemplate,
     std::vector<std::string> const & parameters)
 {
   if (parameters.empty())
     searchComponentTemplate.Quintuple(
-        COMPONENT_ALIAS, ScType::VarCommonArc, ScType::VarNode >> nodeAlias, ScType::VarPermPosArc, relationAddr);
+        COMPONENT_ALIAS, ScType::VarCommonArc, ScType::VarNode >> parameterAlias, ScType::VarPermPosArc, relationAddr);
   for (std::string const & parameterIdentifier : parameters)
   {
     ScAddr parameterAddr = context->SearchElementBySystemIdentifier(parameterIdentifier);

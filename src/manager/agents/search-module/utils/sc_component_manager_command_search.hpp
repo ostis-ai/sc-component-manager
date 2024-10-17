@@ -64,7 +64,7 @@ protected:
   void SearchComponentsByRelation(
       ScMemoryContext * context,
       ScAddr const & relationAddr,
-      std::string const & setAlias,
+      std::string const & parameterAlias,
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 

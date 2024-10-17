@@ -42,45 +42,33 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * con
     SearchComponentsByClass(context, searchComponentTemplate, commandParameters.at(CLASS));
   }
 
-  for (size_t sequenceNumber = 0; sequenceNumber < searchByRelation.size(); sequenceNumber++)
+  for (auto const & [parameterName, parameterRelation, templateAlias] : searchByRelation)
   {
-    if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
+    if (commandParameters.find(parameterName) != commandParameters.cend())
     {
       SearchComponentsByRelation(
-          context,
-          std::get<1>(searchByRelation[sequenceNumber]),
-          std::get<2>(searchByRelation[sequenceNumber]),
-          searchComponentTemplate,
-          commandParameters.at(std::get<0>(searchByRelation[sequenceNumber])));
+          context, parameterRelation, templateAlias, searchComponentTemplate, commandParameters.at(parameterName));
     }
   }
 
-  for (size_t sequenceNumber = 0; sequenceNumber < searchByRelationSet.size(); sequenceNumber++)
+  for (auto const & [parameterName, parameterRelation, templateAlias] : searchByRelationSet)
   {
-    if (commandParameters.find(std::get<0>(searchByRelationSet[sequenceNumber])) != commandParameters.cend())
+    if (commandParameters.find(parameterName) != commandParameters.cend())
     {
       SearchComponentsByRelationSet(
-          context,
-          std::get<1>(searchByRelationSet[sequenceNumber]),
-          std::get<2>(searchByRelationSet[sequenceNumber]),
-          searchComponentTemplate,
-          commandParameters.at(std::get<0>(searchByRelationSet[sequenceNumber])));
+          context, parameterRelation, templateAlias, searchComponentTemplate, commandParameters.at(parameterName));
     }
   }
 
   std::map<std::string, ScAddrUnorderedSet> linksValues;
-  for (size_t sequenceNumber = 0; sequenceNumber < searchByLine.size(); sequenceNumber++)
+  for (auto const & [parameterName, parameterRelation, templateAlias] : searchByLine)
   {
-    if (commandParameters.find(std::get<0>(searchByLine[sequenceNumber])) != commandParameters.cend()
-        && !commandParameters.find(std::get<0>(searchByLine[sequenceNumber]))->second.empty())
+    if (commandParameters.find(parameterName) != commandParameters.cend()
+        && !commandParameters.find(parameterName)->second.empty())
     {
       ScAddrUnorderedSet links = SearchComponentsByRelationLink(
-          context,
-          std::get<1>(searchByLine[sequenceNumber]),
-          std::get<2>(searchByLine[sequenceNumber]),
-          searchComponentTemplate,
-          commandParameters.at(std::get<0>(searchByLine[sequenceNumber])));
-      linksValues.insert({std::get<2>(searchByLine[sequenceNumber]), links});
+          context, parameterRelation, templateAlias, searchComponentTemplate, commandParameters.at(parameterName));
+      linksValues.insert({templateAlias, links});
     }
   }
 

@@ -21,7 +21,6 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
 {
-  downloaderHandler = std::make_unique<DownloaderHandler>(m_downloadDir);
 }
 
 /**

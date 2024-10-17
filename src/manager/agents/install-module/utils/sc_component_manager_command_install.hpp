@@ -54,6 +54,4 @@ protected:
   std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
 
   std::string m_downloadDir;
-
-  std::unique_ptr<DownloaderHandler> downloaderHandler;
 };

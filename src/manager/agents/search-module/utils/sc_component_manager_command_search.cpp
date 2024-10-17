@@ -46,12 +46,25 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * con
   {
     if (commandParameters.find(std::get<0>(searchByRelation[sequenceNumber])) != commandParameters.cend())
     {
-      SearchComponentsByRelationSet(
+      SearchComponentsByRelation(
           context,
           std::get<1>(searchByRelation[sequenceNumber]),
           std::get<2>(searchByRelation[sequenceNumber]),
           searchComponentTemplate,
           commandParameters.at(std::get<0>(searchByRelation[sequenceNumber])));
+    }
+  }
+
+  for (size_t sequenceNumber = 0; sequenceNumber < searchByRelationSet.size(); sequenceNumber++)
+  {
+    if (commandParameters.find(std::get<0>(searchByRelationSet[sequenceNumber])) != commandParameters.cend())
+    {
+      SearchComponentsByRelationSet(
+          context,
+          std::get<1>(searchByRelationSet[sequenceNumber]),
+          std::get<2>(searchByRelationSet[sequenceNumber]),
+          searchComponentTemplate,
+          commandParameters.at(std::get<0>(searchByRelationSet[sequenceNumber])));
     }
   }
 
@@ -75,6 +88,29 @@ ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * con
       SearchComponentsSpecifications(context, searchComponentTemplate, linksValues);
 
   return componentsSpecifications;
+}
+
+void ScComponentManagerCommandSearch::SearchComponentsByRelation(
+    ScMemoryContext * context,
+    ScAddr const & relationAddr,
+    std::string const & nodeAlias,
+    ScTemplate & searchComponentTemplate,
+    std::vector<std::string> const & parameters)
+{
+  if (parameters.empty())
+    searchComponentTemplate.Quintuple(
+        COMPONENT_ALIAS, ScType::VarCommonArc, ScType::VarNode >> nodeAlias, ScType::VarPermPosArc, relationAddr);
+  for (std::string const & parameterIdentifier : parameters)
+  {
+    ScAddr parameterAddr = context->SearchElementBySystemIdentifier(parameterIdentifier);
+    if (!parameterAddr.IsValid())
+    {
+      searchComponentTemplate.Clear();
+      break;
+    }
+    searchComponentTemplate.Quintuple(
+        COMPONENT_ALIAS, ScType::VarCommonArc, parameterAddr, ScType::VarPermPosArc, relationAddr);
+  }
 }
 
 void ScComponentManagerCommandSearch::SearchComponentsByRelationSet(

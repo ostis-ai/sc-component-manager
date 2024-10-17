@@ -44,8 +44,10 @@ protected:
       {MAIN_ID, ScKeynodes::nrel_main_idtf, MAIN_ID_LINK_ALIAS}};
 
   std::vector<std::tuple<std::string, ScAddr, std::string>> searchByRelation = {
-      {AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors, AUTHORS_SET_ALIAS},
       {KEY, keynodes::ScComponentManagerKeynodes::nrel_key_sc_element, KEY_SET_ALIAS}};
+
+  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByRelationSet = {
+      {AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors, AUTHORS_SET_ALIAS}};
 
   void SearchComponentsByClass(
       ScMemoryContext * context,
@@ -53,6 +55,13 @@ protected:
       std::vector<std::string> const & parameters);
 
   void SearchComponentsByRelationSet(
+      ScMemoryContext * context,
+      ScAddr const & relationAddr,
+      std::string const & setAlias,
+      ScTemplate & searchComponentTemplate,
+      std::vector<std::string> const & parameters);
+
+  void SearchComponentsByRelation(
       ScMemoryContext * context,
       ScAddr const & relationAddr,
       std::string const & setAlias,

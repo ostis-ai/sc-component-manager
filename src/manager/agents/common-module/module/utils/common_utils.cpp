@@ -233,6 +233,10 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
       utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_class);
   std::map<std::string, ScAddr> const & classes = GetSetElements(context, classesSetAddr);
 
+  ScAddr const & keysSetAddr =
+      utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, ScKeynodes::rrel_key_sc_element);
+  std::map<std::string, ScAddr> const & keys = GetSetElements(context, keysSetAddr);
+
   ScAddr const & explanationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
       &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_explanation);
   std::map<std::string, ScAddr> const & explanations = GetElementsLinksOfSet(context, explanationsSetAddr);
@@ -244,10 +248,6 @@ std::map<std::string, std::vector<std::string>> CommonUtils::GetCommandParameter
   ScAddr const & purposesSetAddr = utils::IteratorUtils::getAnyByOutRelation(
       &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_purpose);
   std::map<std::string, ScAddr> const & purposes = GetElementsLinksOfSet(context, purposesSetAddr);
-
-  ScAddr const & keysSetAddr =
-      utils::IteratorUtils::getAnyByOutRelation(&context, actionAddr, ScKeynodes::rrel_key_sc_element);
-  std::map<std::string, ScAddr> const & keys = GetElementsLinksOfSet(context, keysSetAddr);
 
   ScAddr const & idsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
       &context, actionAddr, keynodes::ScComponentManagerKeynodes::rrel_main_idtf);

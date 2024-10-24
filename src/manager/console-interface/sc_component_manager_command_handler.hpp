@@ -8,29 +8,20 @@
 
 #include <utility>
 
-#include "sc-agents-common/utils/CommonUtils.hpp"
-#include "sc-agents-common/utils/AgentUtils.hpp"
+#include <sc-memory/sc_agent_context.hpp>
 
+#include "sc-agents-common/utils/CommonUtils.hpp"
 #include "common-module/module/utils/common_utils.hpp"
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
-
-#include "init-module/utils/sc_component_manager_command_init.hpp"
-#include "search-module/utils/sc_component_manager_command_search.hpp"
-#include "install-module/utils/sc_component_manager_command_install.hpp"
+#include "commands/sc_component_manager_command.hpp"
 
 class ScComponentManagerCommandHandler
 {
 public:
-  explicit ScComponentManagerCommandHandler(std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
-    : m_componentsPath(std::move(componentsPath))
+  explicit ScComponentManagerCommandHandler()
   {
-    m_context = new ScMemoryContext();
-    std::string const & specificationPath =
-        m_componentsPath.at(keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component);
-    m_actions = {
-        {"init", new ScComponentManagerCommandInit(specificationPath)},
-        {"search", new ScComponentManagerCommandSearch()},
-        {"install", new ScComponentManagerCommandInstall(m_componentsPath)}};
+    m_context = new ScAgentContext();
+    m_actions = {"init", "search", "install"};
   }
 
   bool Handle(std::string const & commandType, CommandParameters const & commandParameters)
@@ -43,20 +34,19 @@ public:
       ScAddr actionAddrClass;
       try
       {
-        actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(it->first);
-        SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " + it->first + " command");
+        actionAddrClass = common_utils::CommonUtils::managerParametersWithAgentRelations.at(*it);
+        SC_LOG_DEBUG("ScComponentManagerCommandHandler: execute " << *it << " command");
       }
       catch (std::out_of_range const & ex)
       {
         SC_LOG_ERROR(ex.what());
       }
-      ScAddr actionAddr = utils::AgentUtils::formActionNode(m_context, actionAddrClass, {});
+      ScAction actionAddr = m_context->GenerateAction(actionAddrClass);
       common_utils::CommonUtils::TranslateFromStringToScMemory(*m_context, actionAddr, commandParameters);
 
-      utils::AgentUtils::applyAction(m_context, actionAddr, 30000);
+      actionAddr.InitiateAndWait(30000);
 
-      executionResult = m_context->HelperCheckEdge(
-          scAgentsCommon::CoreKeynodes::action_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+      executionResult = actionAddr.IsFinishedSuccessfully();
     }
     else
     {
@@ -71,15 +61,11 @@ public:
     m_context->Destroy();
     delete m_context;
 
-    for (auto const & it : m_actions)
-      delete it.second;
-
     m_actions.clear();
   }
 
 protected:
-  ScMemoryContext * m_context{};
+  ScAgentContext * m_context{};
   CommandParameters m_commandParameters;
-  std::map<ScAddr, std::string, ScAddrLessFunc> m_componentsPath;
-  std::map<std::string, ScComponentManagerCommand *> m_actions;
+  std::set<std::string> m_actions;
 };

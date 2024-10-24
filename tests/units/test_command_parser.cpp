@@ -27,6 +27,9 @@ TEST_F(ScComponentManagerTest, ParseCommandTypes)
   commandType = m_commandParser->Parse("components search").first;
   EXPECT_EQ(commandType, "search");
 
+  commandType = m_commandParser->Parse("components search -").first;
+  EXPECT_EQ(commandType, "search");
+
   commandType = m_commandParser->Parse("components install").first;
   EXPECT_EQ(commandType, "install");
 }

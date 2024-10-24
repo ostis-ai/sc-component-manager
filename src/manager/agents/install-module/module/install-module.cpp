@@ -10,24 +10,4 @@
 
 using namespace installModule;
 
-SC_IMPLEMENT_MODULE(InstallModule)
-
-sc_result InstallModule::InitializeImpl()
-{
-  if (!InstallModule::InitGlobal())
-  {
-    SC_LOG_ERROR("InstallModule is deactivated");
-    return SC_RESULT_ERROR;
-  }
-
-  SC_AGENT_REGISTER(ScComponentManagerInstallAgent);
-
-  return SC_RESULT_OK;
-}
-
-sc_result InstallModule::ShutdownImpl()
-{
-  SC_AGENT_UNREGISTER(ScComponentManagerInstallAgent);
-
-  return SC_RESULT_OK;
-}
+SC_MODULE_REGISTER(InstallModule)->Agent<ScComponentManagerInstallAgent>();

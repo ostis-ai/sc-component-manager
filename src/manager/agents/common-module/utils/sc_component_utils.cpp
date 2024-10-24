@@ -9,7 +9,7 @@
 #include <sc-memory/sc_addr.hpp>
 #include <sc-memory/sc_type.hpp>
 #include <sc-memory/sc_iterator.hpp>
-#include <sc-builder/src/scs_loader.hpp>
+#include <sc-builder/scs_loader.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
@@ -32,11 +32,11 @@ namespace componentUtils
 ScAddr SearchUtils::GetComponentAddress(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddr componentAddressAddr;
-  ScIterator5Ptr const & componentAddressIterator = context->Iterator5(
+  ScIterator5Ptr const & componentAddressIterator = context->CreateIterator5(
       componentAddr,
-      ScType::EdgeDCommonConst,
-      ScType::LinkConst,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstCommonArc,
+      ScType::ConstNodeLink,
+      ScType::ConstPermPosArc,
       keynodes::ScComponentManagerKeynodes::nrel_component_address);
 
   if (componentAddressIterator->Next())
@@ -59,18 +59,18 @@ ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * conte
   ScAddrUnorderedSet componentDependencies;
   ScAddr componentDependenciesSet;
 
-  ScIterator5Ptr const & componentDependenciesSetIterator = context->Iterator5(
+  ScIterator5Ptr const & componentDependenciesSetIterator = context->CreateIterator5(
       componentAddr,
-      ScType::EdgeDCommonConst,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstCommonArc,
+      ScType::ConstNode,
+      ScType::ConstPermPosArc,
       keynodes::ScComponentManagerKeynodes::nrel_component_dependencies);
 
   while (componentDependenciesSetIterator->Next())
   {
     componentDependenciesSet = componentDependenciesSetIterator->Get(2);
     ScIterator3Ptr const & componentDependenciesIterator =
-        context->Iterator3(componentDependenciesSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+        context->CreateIterator3(componentDependenciesSet, ScType::ConstPermPosArc, ScType::ConstNode);
     while (componentDependenciesIterator->Next())
     {
       componentDependencies.insert(componentDependenciesIterator->Get(2));
@@ -89,11 +89,11 @@ ScAddrUnorderedSet SearchUtils::GetComponentDependencies(ScMemoryContext * conte
 ScAddr SearchUtils::GetComponentInstallationMethod(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   ScAddr componentInstallationMethod;
-  ScIterator5Ptr const & componentDependenciesIterator = context->Iterator5(
+  ScIterator5Ptr const & componentDependenciesIterator = context->CreateIterator5(
       componentAddr,
-      ScType::EdgeDCommonConst,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstCommonArc,
+      ScType::ConstNode,
+      ScType::ConstPermPosArc,
       keynodes::ScComponentManagerKeynodes::nrel_installation_method);
 
   if (componentDependenciesIterator->Next())
@@ -115,11 +115,11 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
 {
   ScAddrVector specificationAddressLinks;
 
-  ScIterator5Ptr const & alternativeAddressesSetIterator = context->Iterator5(
+  ScIterator5Ptr const & alternativeAddressesSetIterator = context->CreateIterator5(
       componentSpecificationAddr,
-      ScType::EdgeDCommonConst,
+      ScType::ConstCommonArc,
       ScType::NodeTuple,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstPermPosArc,
       keynodes::ScComponentManagerKeynodes::nrel_alternative_addresses);
 
   if (!alternativeAddressesSetIterator->Next())
@@ -135,7 +135,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
   }
 
   ScAddr specificationAddressAddr =
-      utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, scAgentsCommon::CoreKeynodes::rrel_1);
+      utils::IteratorUtils::getAnyByOutRelation(context, alternativeAddressesSet, ScKeynodes::rrel_1);
 
   if (!specificationAddressAddr.IsValid())
   {
@@ -143,7 +143,7 @@ ScAddrVector SearchUtils::GetSpecificationAddress(ScMemoryContext * context, ScA
   }
 
   specificationAddressLinks =
-      utils::IteratorUtils::getAllWithType(context, specificationAddressAddr, ScType::LinkConst);
+      utils::IteratorUtils::getAllWithType(context, specificationAddressAddr, ScType::ConstNodeLink);
 
   if (specificationAddressLinks.empty())
   {
@@ -163,11 +163,11 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 {
   ScAddr addressLinkAddr;
 
-  ScIterator5Ptr const & repositoryAddressIterator = context->Iterator5(
+  ScIterator5Ptr const & repositoryAddressIterator = context->CreateIterator5(
       repositoryAddr,
-      ScType::EdgeDCommonConst,
-      ScType::NodeConst,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstCommonArc,
+      ScType::ConstNode,
+      ScType::ConstPermPosArc,
       keynodes::ScComponentManagerKeynodes::nrel_repository_address);
 
   if (!repositoryAddressIterator->Next())
@@ -178,7 +178,7 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
   ScAddr const & repositoryAddressAddr = repositoryAddressIterator->Get(2);
 
   ScIterator3Ptr const & addressLinkIterator =
-      context->Iterator3(repositoryAddressAddr, ScType::EdgeAccessConstPosPerm, ScType::LinkConst);
+      context->CreateIterator3(repositoryAddressAddr, ScType::ConstPermPosArc, ScType::ConstNodeLink);
 
   if (!addressLinkIterator->Next())
   {
@@ -198,7 +198,7 @@ ScAddr SearchUtils::GetRepositoryAddress(ScMemoryContext * context, ScAddr const
 ScAddrVector SearchUtils::GetNeedToInstallComponents(ScMemoryContext * context)
 {
   return utils::IteratorUtils::getAllWithType(
-      context, keynodes::ScComponentManagerKeynodes::concept_need_to_install_components, ScType::NodeConst);
+      context, keynodes::ScComponentManagerKeynodes::concept_need_to_install_components, ScType::ConstNode);
 }
 
 /**
@@ -210,8 +210,8 @@ ScAddrVector SearchUtils::GetNeedToInstallComponents(ScMemoryContext * context)
 bool InstallUtils::IsReusable(ScMemoryContext * context, ScAddr const & componentAddr)
 {
   bool result = true;
-  ScIterator3Ptr const reusableComponentCLassIterator = context->Iterator3(
-      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessConstPosPerm, componentAddr);
+  ScIterator3Ptr const reusableComponentCLassIterator = context->CreateIterator3(
+      keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::ConstPermPosArc, componentAddr);
   if (!reusableComponentCLassIterator->Next())
   {
     SC_LOG_WARNING("Component is not a reusable component.");
@@ -228,11 +228,11 @@ bool InstallUtils::IsReusable(ScMemoryContext * context, ScAddr const & componen
  */
 std::vector<std::string> InstallUtils::GetInstallScripts(ScMemoryContext * context, ScAddr const & componentAddr)
 {
-  ScIterator5Ptr const & installScriptsIterator = context->Iterator5(
+  ScIterator5Ptr const & installScriptsIterator = context->CreateIterator5(
       componentAddr,
-      ScType::EdgeDCommonConst,
-      ScType::LinkConst,
-      ScType::EdgeAccessConstPosPerm,
+      ScType::ConstCommonArc,
+      ScType::ConstNodeLink,
+      ScType::ConstPermPosArc,
       keynodes::ScComponentManagerKeynodes::nrel_installation_script);
 
   // TODO: bug: in kb folder there are 2 specifications for one rep, so all links duplicated
@@ -320,7 +320,8 @@ bool LoadUtils::LoadScsFilesInDir(
     std::string const & dirPath,
     std::string const & excludedFiles)
 {
-  bool result = false;
+  bool atLeastOneFileWasAttemptedToLoad = false;
+  bool result = true;
   if (!std::filesystem::exists(dirPath))
   {
     return result;
@@ -332,6 +333,7 @@ bool LoadUtils::LoadScsFilesInDir(
     std::filesystem::path const & filePath = dirEntry.path();
     if (filePath.extension() == SpecificationConstants::SCS_EXTENSION && filePath.filename().string() != excludedFiles)
     {
+      atLeastOneFileWasAttemptedToLoad = true;
       try
       {
         result &= loader.loadScsFile(*context, filePath);
@@ -345,7 +347,7 @@ bool LoadUtils::LoadScsFilesInDir(
     }
   }
 
-  return result;
+  return atLeastOneFileWasAttemptedToLoad && result;
 }
 
 }  // namespace componentUtils

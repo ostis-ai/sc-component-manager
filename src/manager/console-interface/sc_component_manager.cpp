@@ -66,7 +66,7 @@ sc_bool ScComponentManager::HasNewInput()
 bool ScComponentManager::Emit(std::string const & command)
 {
   std::pair<std::string, CommandParameters> const parsedCommand = ScComponentManagerParser::Parse(command);
-  ScComponentManagerCommandHandler handler(m_componentsPath);
+  ScComponentManagerCommandHandler handler;
   bool const executionResult = handler.Handle(parsedCommand.first, parsedCommand.second);
 
   std::string const logMessage = executionResult ? "successfully" : "unsuccessfully";

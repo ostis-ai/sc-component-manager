@@ -5,11 +5,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <sc-builder/src/scs_loader.hpp>
-#include <sc-agents-common/keynodes/coreKeynodes.hpp>
-#include "sc_test.hpp"
-
-#include "sc-agents-common/utils/AgentUtils.hpp"
+#include <sc-builder/scs_loader.hpp>
+#include <sc-memory/test/sc_test.hpp>
 
 #include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
 
@@ -19,103 +16,262 @@
 
 using AgentTest = ScMemoryTest;
 ScsLoader loader;
-const std::string TEST_FILES_DIR_PATH = MODULE_TEST_SRC_PATH "/testStructures/";
+std::string const TEST_FILES_DIR_PATH = MODULE_TEST_SRC_PATH "/testStructures/";
+std::string const TEST_FILES_COMPONENTS_SEARCH_DIR_PATH = MODULE_TEST_SRC_PATH "/testStructures/componentsSearch/";
+
+std::unordered_set<std::string> const ALL_SPECIFICATIONS_FOR_SEARCH = {
+    "part_platform_specification",
+    "part_ui_specification",
+    "specification_1",
+    "specification_2",
+    "specification_3",
+};
 
 int const WAIT_TIME = 5000;
 
-void initialize()
-{
-  scAgentsCommon::CoreKeynodes::InitGlobal();
-  keynodes::ScComponentManagerKeynodes::InitGlobal();
-}
-
 TEST_F(AgentTest, AgentInit)
 {
-  ScMemoryContext & context = *m_ctx;
+  ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_init.scs");
-  ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
+  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
+  EXPECT_TRUE(testActionNode.IsValid());
+  ScAction testAction = context.ConvertToAction(testActionNode);
 
-  ScAgentInit(true);
-  initialize();
+  context.SubscribeAgent<initModule::ScComponentManagerInitAgent>();
+  testAction.InitiateAndWait(WAIT_TIME);
+  EXPECT_TRUE(testAction.IsFinishedSuccessfully());
+  ScStructure result = testAction.GetResult();
 
-  SC_AGENT_REGISTER(initModule::ScComponentManagerInitAgent)
+  std::vector<std::string> namesOfSpecifications = {"part_platform_spec", "part_ui_spec"};
+  bool isSpecificationExists = false;
+  size_t foundSpecifications = 0;
 
-  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::action_initiated, testActionNode);
-
-  ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
-
-  EXPECT_TRUE(context.HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::action_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
-
-  std::vector<std::string> namesOfComponents = {"part_platform", "part_ui"};
-  bool isComponentExists = false;
-
-  ScIterator3Ptr const & componentsIterator =
-      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
-  while (componentsIterator->Next())
+  ScIterator3Ptr const & specificationsIterator =
+      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNodeStructure);
+  while (specificationsIterator->Next())
   {
-    isComponentExists = std::count(
-        namesOfComponents.begin(), namesOfComponents.end(), context.HelperGetSystemIdtf(componentsIterator->Get(2)));
-    EXPECT_TRUE(isComponentExists);
+    std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
+    isSpecificationExists =
+        std::count(namesOfSpecifications.begin(), namesOfSpecifications.end(), specificationIdentifier);
+    EXPECT_TRUE(isSpecificationExists) << specificationIdentifier << " is not in action result";
+    foundSpecifications += isSpecificationExists;
   }
-  EXPECT_TRUE(isComponentExists);
-  SC_AGENT_UNREGISTER(initModule::ScComponentManagerInitAgent)
+  EXPECT_EQ(foundSpecifications, namesOfSpecifications.size());
+  context.UnsubscribeAgent<initModule::ScComponentManagerInitAgent>();
 }
 
-TEST_F(AgentTest, AgentSearch)
+void searchComponentsTestBody(
+    ScAgentContext & context,
+    std::unordered_set<std::string> const & expectedFoundSpecifications,
+    std::string const & filename)
 {
-  ScMemoryContext & context = *m_ctx;
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_search.scs");
-  ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
+  loader.loadScsFile(context, TEST_FILES_COMPONENTS_SEARCH_DIR_PATH + "specifications.scs");
+  loader.loadScsFile(context, TEST_FILES_COMPONENTS_SEARCH_DIR_PATH + filename);
+  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
+  ScAction testAction = context.ConvertToAction(testActionNode);
 
-  ScAgentInit(true);
-  initialize();
+  context.SubscribeAgent<searchModule::ScComponentManagerSearchAgent>();
+  testAction.InitiateAndWait(WAIT_TIME);
+  EXPECT_TRUE(testAction.IsFinishedSuccessfully());
 
-  SC_AGENT_REGISTER(searchModule::ScComponentManagerSearchAgent)
-  std::vector<std::string> namesOfComponents = {"part_platform_specification", "part_ui_specification"};
-  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::action_initiated, testActionNode);
+  ScStructure result = testAction.GetResult();
+  bool isSpecificationExists = false;
+  size_t foundSpecifications = 0;
 
-  ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
-  bool isComponentExists = false;
-
-  EXPECT_TRUE(context.HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::action_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
-
-  ScIterator3Ptr const & componentsIterator =
-      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConstStruct);
-  while (componentsIterator->Next())
+  ScIterator3Ptr const & specificationsIterator =
+      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNodeStructure);
+  while (specificationsIterator->Next())
   {
-    isComponentExists = std::count(
-        namesOfComponents.begin(), namesOfComponents.end(), context.HelperGetSystemIdtf(componentsIterator->Get(2)));
-    EXPECT_TRUE(isComponentExists);
+    std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
+    isSpecificationExists = expectedFoundSpecifications.count(specificationIdentifier);
+    EXPECT_TRUE(isSpecificationExists) << specificationIdentifier << " is not in action result";
+    foundSpecifications += isSpecificationExists;
   }
-  EXPECT_TRUE(isComponentExists);
-  SC_AGENT_UNREGISTER(searchModule::ScComponentManagerSearchAgent)
+  EXPECT_EQ(foundSpecifications, expectedFoundSpecifications.size());
+  context.UnsubscribeAgent<searchModule::ScComponentManagerSearchAgent>();
+}
+
+TEST_F(AgentTest, AgentSearchByOneClass)
+{
+  searchComponentsTestBody(
+      *m_ctx, {"part_platform_specification", "part_ui_specification"}, "one_class_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByTwoClasses)
+{
+  searchComponentsTestBody(
+      *m_ctx, {"part_platform_specification", "part_ui_specification"}, "two_classes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroClasses)
+{
+  searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_classes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatibleClasses)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_classes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByOneAuthor)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_1", "specification_2"}, "one_author_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByTwoAuthors)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_authors_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroAuthors)
+{
+  searchComponentsTestBody(
+      *m_ctx, {"specification_1", "specification_2", "specification_3"}, "zero_authors_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatibleAuthor)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_authors_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByOneKey)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_3"}, "one_key_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByTwoKeys)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_keys_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroKeys)
+{
+  searchComponentsTestBody(
+      *m_ctx, {"specification_1", "specification_2", "specification_3"}, "zero_keys_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatibleKeys)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_keys_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByOneNote)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "one_note_action_components_search.scs");
+}
+
+// disabled because links in action arguments are passed without order so search uses `2 component` instead of
+// `component 2`
+TEST_F(AgentTest, DISABLED_AgentSearchByTwoNotes)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_notes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroNotes)
+{
+  searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_notes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatibleNotes)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_notes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByOneExplanation)
+{
+  searchComponentsTestBody(
+      *m_ctx, {"specification_1", "specification_3"}, "one_explanation_action_components_search.scs");
+}
+
+// disabled because links in action arguments are passed without order so search uses `2 component` instead of
+// `component 2`
+TEST_F(AgentTest, DISABLED_AgentSearchByTwoExplanations)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_explanations_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroExplanations)
+{
+  searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_explanations_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatibleExplanations)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_explanations_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByOnePurpose)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_1", "specification_2"}, "one_purpose_action_components_search.scs");
+}
+
+// disabled because links in action arguments are passed without order so search uses `2 component` instead of
+// `component 2`
+TEST_F(AgentTest, DISABLED_AgentSearchByTwoPurposes)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_purposes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroPurposes)
+{
+  searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_purposes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatiblePurposes)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_purposes_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByOneId)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_1", "specification_2"}, "one_id_action_components_search.scs");
+}
+
+// disabled because links in action arguments are passed without order so search uses `3 component` instead of
+// `component 3`
+TEST_F(AgentTest, DISABLED_AgentSearchByTwoIds)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_3"}, "two_ids_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByZeroIds)
+{
+  searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_ids_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByIncompatibleIds)
+{
+  searchComponentsTestBody(*m_ctx, {}, "incompatible_ids_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchByAllArguments)
+{
+  searchComponentsTestBody(*m_ctx, {"specification_2"}, "all_arguments_action_components_search.scs");
+}
+
+TEST_F(AgentTest, AgentSearchWithEmptyArguments)
+{
+  searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "empty_arguments_action_components_search.scs");
 }
 
 TEST_F(AgentTest, AgentInstall)
 {
-  ScMemoryContext & context = *m_ctx;
+  ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_install.scs");
-  ScAddr const & testActionNode = context.HelperFindBySystemIdtf("test_action_node");
+  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
+  ScAction testAction = context.ConvertToAction(testActionNode);
 
-  ScAgentInit(true);
-  initialize();
+  context.SubscribeAgent<installModule::ScComponentManagerInstallAgent>();
 
-  SC_AGENT_REGISTER(installModule::ScComponentManagerInstallAgent)
-
-  context.CreateEdge(ScType::EdgeAccessConstPosPerm, scAgentsCommon::CoreKeynodes::action_initiated, testActionNode);
-
-  ScAddr result = utils::AgentUtils::applyActionAndGetResultIfExists(&context, testActionNode, WAIT_TIME);
-
-  EXPECT_TRUE(context.HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::action_finished_successfully, testActionNode, ScType::EdgeAccessConstPosPerm));
+  testAction.InitiateAndWait(WAIT_TIME);
+  EXPECT_TRUE(testAction.IsFinishedSuccessfully());
+  ScStructure result = testAction.GetResult();
 
   ScIterator3Ptr const & componentsIterator =
-      context.Iterator3(result, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNode);
   EXPECT_TRUE(componentsIterator->Next());
 
-  EXPECT_EQ("part_ui", context.HelperGetSystemIdtf(componentsIterator->Get(2)));
+  EXPECT_EQ("part_ui", context.GetElementSystemIdentifier(componentsIterator->Get(2)));
 
-  SC_AGENT_UNREGISTER(installModule::ScComponentManagerInstallAgent)
+  context.UnsubscribeAgent<installModule::ScComponentManagerInstallAgent>();
 }

@@ -11,16 +11,12 @@
 
 #include "sc_component_manager.hpp"
 
-#include "sc_component_manager_module.generated.hpp"
-
 class ScComponentManagerModule : public ScModule
 {
-  SC_CLASS(LoadOrder(200))
-  SC_GENERATED_BODY()
+public:
+  void Initialize(ScMemoryContext * context) override;
 
-  sc_result InitializeImpl() override;
-
-  sc_result ShutdownImpl() override;
+  void Shutdown(ScMemoryContext * context) override;
 
 protected:
   ScParams m_params;

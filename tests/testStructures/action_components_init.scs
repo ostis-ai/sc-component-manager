@@ -11,6 +11,7 @@ sc_component_manager_repository
 	<- sc_node_tuple;
 	-> part_platform_spec
 	    (*
+           	<- sc_node_struct;;
            	<- concept_reusable_component_specification;;
            	=> nrel_alternative_addresses:
            	...
@@ -28,6 +29,7 @@ sc_component_manager_repository
         *);
 	-> part_ui_spec
 	    (*
+           	<- sc_node_struct;;
            	<- concept_reusable_component_specification;;
            	=> nrel_alternative_addresses:
            	...

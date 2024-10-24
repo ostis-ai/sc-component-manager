@@ -12,12 +12,12 @@
 
 using namespace common_utils;
 
-ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
+ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScAgentContext * context, ScAddr const & actionAddr)
 {
   ScAddrUnorderedSet specifications;
 
-  ScIterator3Ptr const repositoriesIterator = context->Iterator3(
-      keynodes::ScComponentManagerKeynodes::concept_repository, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+  ScIterator3Ptr const repositoriesIterator = context->CreateIterator3(
+      keynodes::ScComponentManagerKeynodes::concept_repository, ScType::ConstPermPosArc, ScType::ConstNode);
 
   ScAddr repository;
   while (repositoriesIterator->Next())
@@ -34,7 +34,10 @@ ScAddrUnorderedSet ScComponentManagerCommandInit::Execute(ScMemoryContext * cont
  * @param context current sc-memory context
  * @param repository ScAddr of a repository of components to load
  */
-void ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context, ScAddr & repository, ScAddrUnorderedSet & specifications)
+void ScComponentManagerCommandInit::ProcessRepository(
+    ScMemoryContext * context,
+    ScAddr & repository,
+    ScAddrUnorderedSet & specifications)
 {
   ScAddr const & specificationsSetAddr = utils::IteratorUtils::getAnyByOutRelation(
       context, repository, keynodes::ScComponentManagerKeynodes::rrel_components_specifications);
@@ -42,14 +45,14 @@ void ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context,
   {
     SC_LOG_WARNING(
         "ScComponentManagerCommandInit: components specification not found in repository "
-        << context->HelperGetSystemIdtf(repository));
+        << context->GetElementSystemIdentifier(repository));
     return;
   }
 
   ScAddr componentSpecification;
   ScAddr component;
   ScIterator3Ptr const specificationsIterator =
-      context->Iterator3(specificationsSetAddr, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context->CreateIterator3(specificationsSetAddr, ScType::ConstPermPosArc, ScType::ConstNode);
   while (specificationsIterator->Next())
   {
     componentSpecification = specificationsIterator->Get(2);
@@ -58,15 +61,16 @@ void ScComponentManagerCommandInit::ProcessRepository(ScMemoryContext * context,
     {
       SC_LOG_WARNING(
           "ScComponentManagerCommandInit: Specification is already loaded for component "
-          << context->HelperGetSystemIdtf(component));
+          << context->GetElementSystemIdentifier(component));
       continue;
     }
     specifications.insert(componentSpecification);
     downloaderHandler->DownloadSpecification(context, componentSpecification);
     std::string const specificationPath = m_specificationsPath + SpecificationConstants::DIRECTORY_DELIMITER
-                                          + context->HelperGetSystemIdtf(componentSpecification);
+                                          + context->GetElementSystemIdentifier(componentSpecification);
     componentUtils::LoadUtils::LoadScsFilesInDir(context, specificationPath);
     SC_LOG_DEBUG(
-        "ScComponentManagerCommandInit: loaded specification " << context->HelperGetSystemIdtf(componentSpecification));
+        "ScComponentManagerCommandInit: loaded specification "
+        << context->GetElementSystemIdentifier(componentSpecification));
   }
 }

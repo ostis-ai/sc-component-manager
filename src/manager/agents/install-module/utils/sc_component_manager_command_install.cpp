@@ -12,11 +12,8 @@
 
 #include "module/utils/common_utils.hpp"
 
-#include "sc-agents-common/utils/AgentUtils.hpp"
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/GenerationUtils.hpp>
-
-#include "sc-agents-common/keynodes/coreKeynodes.hpp"
 
 using namespace common_utils;
 
@@ -24,7 +21,6 @@ ScComponentManagerCommandInstall::ScComponentManagerCommandInstall(
     std::map<ScAddr, std::string, ScAddrLessFunc> componentsPath)
   : m_componentsPath(std::move(componentsPath))
 {
-  downloaderHandler = std::make_unique<DownloaderHandler>(m_downloadDir);
 }
 
 /**
@@ -44,7 +40,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::GetAvailableComponents(
     {
       SC_LOG_DEBUG(
           "ScComponentManagerCommandInstall: Validating component \""
-          << context->HelperGetSystemIdtf(componentToInstall) << "\"");
+          << context->GetElementSystemIdentifier(componentToInstall) << "\"");
       ValidateComponent(context, componentToInstall);
     }
     catch (utils::ScException const & exception)
@@ -54,7 +50,7 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::GetAvailableComponents(
       continue;
     }
     SC_LOG_DEBUG(
-        "ScComponentManagerCommandInstall: Component \"" << context->HelperGetSystemIdtf(componentToInstall)
+        "ScComponentManagerCommandInstall: Component \"" << context->GetElementSystemIdentifier(componentToInstall)
                                                          << "\" is specified correctly");
     availableComponents.insert(componentToInstall);
   }
@@ -97,10 +93,10 @@ bool ScComponentManagerCommandInstall::EraseTempOutputEdges(ScMemoryContext * co
   bool result = context->IsElement(node);
   if (result)
   {
-    ScIterator3Ptr const & edgesIterator = context->Iterator3(
+    ScIterator3Ptr const & edgesIterator = context->CreateIterator3(
         node,  // set of components
-        ScType::EdgeAccessConstPosTemp,
-        ScType::NodeConst);  // component
+        ScType::ConstTempPosArc,
+        ScType::ConstNode);  // component
     while (edgesIterator->Next())
     {
       context->EraseElement(edgesIterator->Get(1));
@@ -109,10 +105,9 @@ bool ScComponentManagerCommandInstall::EraseTempOutputEdges(ScMemoryContext * co
   return result;
 }
 
-ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScMemoryContext * context, ScAddr const & actionAddr)
+ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScAgentContext * context, ScAddr const & actionAddr)
 {
-  ScAddr const & parameterNode =
-      utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+  ScAddr const & parameterNode = utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, ScKeynodes::rrel_1);
   ScAddrUnorderedSet componentsToInstall = CommonUtils::GetComponentsToInstall(*context, parameterNode);
   if (componentsToInstall.empty())
   {
@@ -128,13 +123,11 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScMemoryContext * c
   {
     if (CommonUtils::CheckIfInstalled(*context, componentAddr))
     {
-      SC_LOG_DEBUG("Component \"" << context->HelperGetSystemIdtf(componentAddr) << "\" is already installed");
+      SC_LOG_DEBUG("Component \"" << context->GetElementSystemIdentifier(componentAddr) << "\" is already installed");
       continue;
     }
-    context->CreateEdge(
-        ScType::EdgeAccessConstPosTemp,
-        keynodes::ScComponentManagerKeynodes::current_components_to_install,
-        componentAddr);
+    context->GenerateConnector(
+        ScType::ConstTempPosArc, keynodes::ScComponentManagerKeynodes::current_components_to_install, componentAddr);
     executionResult &= InstallDependencies(context, componentAddr);
     executionResult &=
         EraseTempOutputEdges(context, keynodes::ScComponentManagerKeynodes::current_components_to_install);
@@ -148,10 +141,11 @@ ScAddrUnorderedSet ScComponentManagerCommandInstall::Execute(ScMemoryContext * c
 
     decompositionAddr = CommonUtils::GetSubsystemDecompositionAddr(*context, componentAddr);
     if (context->IsElement(decompositionAddr))
-      context->CreateEdge(ScType::EdgeAccessConstPosPerm, decompositionAddr, componentAddr);
+      context->GenerateConnector(ScType::ConstPermPosArc, decompositionAddr, componentAddr);
     else
       SC_LOG_WARNING(
-          "Component \"" << context->HelperGetSystemIdtf(componentAddr) << "\" can't be added in myself decomposition");
+          "Component \"" << context->GetElementSystemIdentifier(componentAddr)
+                         << "\" can't be added in myself decomposition");
   }
 
   return componentsToInstall;
@@ -204,11 +198,11 @@ ScAddr ScComponentManagerCommandInstall::CreateSetToInstallStructure(
   {
     return dependenciesSet;
   }
-  ScAddr const & setsParameter = context->CreateNode(ScType::NodeConst);
-  ScAddr const & mainParameter = context->CreateNode(ScType::NodeConst);
+  ScAddr const & setsParameter = context->GenerateNode(ScType::ConstNode);
+  ScAddr const & mainParameter = context->GenerateNode(ScType::ConstNode);
   utils::GenerationUtils::generateRelationBetween(
       context, mainParameter, setsParameter, keynodes::ScComponentManagerKeynodes::rrel_sets);
-  context->CreateEdge(ScType::EdgeAccessConstPosPerm, setsParameter, dependenciesSet);
+  context->GenerateConnector(ScType::ConstPermPosArc, setsParameter, dependenciesSet);
 
   return mainParameter;
 }
@@ -225,12 +219,11 @@ ScAddr ScComponentManagerCommandInstall::CheckDependencyDuplication(
   }
 
   ScIterator3Ptr const & componentsIterator =
-      context->Iterator3(dependenciesSet, ScType::EdgeAccessConstPosPerm, ScType::NodeConst);
+      context->CreateIterator3(dependenciesSet, ScType::ConstPermPosArc, ScType::ConstNode);
 
   while (componentsIterator->Next())
   {
-    if (context->HelperCheckEdge(
-            currentInstallationComponentsAddr, componentsIterator->Get(2), ScType::EdgeAccessConstPosTemp))
+    if (context->CheckConnector(currentInstallationComponentsAddr, componentsIterator->Get(2), ScType::ConstTempPosArc))
     {
       return componentsIterator->Get(2);
     }
@@ -244,7 +237,7 @@ ScAddr ScComponentManagerCommandInstall::CheckDependencyDuplication(
  * if installation successfull, otherwise
  * returns empty vector.
  */
-bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * context, ScAddr const & componentAddr)
+bool ScComponentManagerCommandInstall::InstallDependencies(ScAgentContext * context, ScAddr const & componentAddr)
 {
   bool result = true;
   ScAddr const & dependenciesSet = utils::IteratorUtils::getAnyByOutRelation(
@@ -261,7 +254,7 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
   {
     SC_LOG_ERROR(
         "ScComponentManagerCommandInstall: Can't install dependencies of the component \""
-        << context->HelperGetSystemIdtf(componentAddr) << "\"");
+        << context->GetElementSystemIdentifier(componentAddr) << "\"");
     return false;
   }
 
@@ -270,22 +263,23 @@ bool ScComponentManagerCommandInstall::InstallDependencies(ScMemoryContext * con
   if (context->IsElement(recursiveDependency))
   {
     SC_LOG_ERROR(
-        "ScComponentManagerCommandInstall: Found recursive dependency with component " << context->HelperGetSystemIdtf(
-            recursiveDependency) << ", can't install component " << context->HelperGetSystemIdtf(componentAddr));
+        "ScComponentManagerCommandInstall: Found recursive dependency with component "
+        << context->GetElementSystemIdentifier(recursiveDependency) << ", can't install component "
+        << context->GetElementSystemIdentifier(componentAddr));
     return false;
   }
 
   // Get component dependencies and install them recursively
   std::string dependencyIdtf;
   ScAddr const & mainParameter = CreateSetToInstallStructure(context, dependenciesSet);
-  ScAddr const & actionAddr = utils::AgentUtils::formActionNode(
-      context, keynodes::ScComponentManagerKeynodes::action_components_install, {mainParameter});
+
+  ScAction actionAddr = context->GenerateAction(keynodes::ScComponentManagerKeynodes::action_components_install);
+  actionAddr.SetArguments(mainParameter);
 
   // Call install components agent
-  utils::AgentUtils::applyAction(context, actionAddr, 30000);
+  actionAddr.InitiateAndWait(30000);
 
-  result = context->HelperCheckEdge(
-      scAgentsCommon::CoreKeynodes::action_finished_successfully, actionAddr, ScType::EdgeAccessConstPosPerm);
+  result = actionAddr.IsFinishedSuccessfully();
   if (!result)
   {
     SC_LOG_ERROR("ScComponentManagerCommandInstall: Dependencies are not successfully installed");
@@ -301,7 +295,7 @@ bool ScComponentManagerCommandInstall::DownloadComponent(ScMemoryContext * conte
 {
   ScAddr componentClass;
   ScIterator3Ptr const & componentClassIterator =
-      context->Iterator3(ScType::NodeConstClass, ScType::EdgeAccessConstPosPerm, componentAddr);
+      context->CreateIterator3(ScType::ConstNodeClass, ScType::ConstPermPosArc, componentAddr);
   while (componentClassIterator->Next())
   {
     componentClass = componentClassIterator->Get(0);

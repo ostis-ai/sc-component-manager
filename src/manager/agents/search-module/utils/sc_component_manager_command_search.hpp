@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "sc-agents-common/keynodes/coreKeynodes.hpp"
+#include <sc-memory/sc_agent_context.hpp>
 #include "commands/sc_component_manager_command.hpp"
 #include "module/keynodes/ScComponentManagerKeynodes.hpp"
 
@@ -15,7 +15,7 @@ class ScComponentManagerCommandSearch : public ScComponentManagerCommand
 public:
   ScComponentManagerCommandSearch() = default;
 
-  ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) override;
+  ScAddrUnorderedSet Execute(ScAgentContext * context, ScAddr const & actionAddr) override;
 
 protected:
   std::string const SPECIFICATION_ALIAS = "_specification";
@@ -34,21 +34,20 @@ protected:
   std::string const PURPOSE = "purpose";
   std::string const KEY = "key";
   std::string const MAIN_ID = "main-id";
-  std::set<std::string> const possibleSearchParameters = {AUTHOR, CLASS, EXPLANATION, NOTE, PURPOSE, KEY, MAIN_ID}; // extend to more params
+  std::set<std::string> const possibleSearchParameters =
+      {AUTHOR, CLASS, EXPLANATION, NOTE, PURPOSE, KEY, MAIN_ID};  // extend to more params
 
-  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByLine = 
-  {
-    {EXPLANATION, keynodes::ScComponentManagerKeynodes::nrel_explanation, EXPLANATION_LINK_ALIAS},
-    {NOTE, keynodes::ScComponentManagerKeynodes::nrel_note, NOTE_LINK_ALIAS},
-    {PURPOSE, keynodes::ScComponentManagerKeynodes::nrel_purpose, PURPOSE_LINK_ALIAS},
-    {MAIN_ID, scAgentsCommon::CoreKeynodes::nrel_main_idtf, MAIN_ID_LINK_ALIAS}
-  };
+  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByLine = {
+      {EXPLANATION, keynodes::ScComponentManagerKeynodes::nrel_explanation, EXPLANATION_LINK_ALIAS},
+      {NOTE, keynodes::ScComponentManagerKeynodes::nrel_note, NOTE_LINK_ALIAS},
+      {PURPOSE, keynodes::ScComponentManagerKeynodes::nrel_purpose, PURPOSE_LINK_ALIAS},
+      {MAIN_ID, ScKeynodes::nrel_main_idtf, MAIN_ID_LINK_ALIAS}};
 
-  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByRelation = 
-  {
-    {AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors, AUTHORS_SET_ALIAS},
-    {KEY, keynodes::ScComponentManagerKeynodes::nrel_key_sc_element, KEY_SET_ALIAS}
-  };
+  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByRelation = {
+      {KEY, keynodes::ScComponentManagerKeynodes::nrel_key_sc_element, KEY_SET_ALIAS}};
+
+  std::vector<std::tuple<std::string, ScAddr, std::string>> searchByRelationSet = {
+      {AUTHOR, keynodes::ScComponentManagerKeynodes::nrel_authors, AUTHORS_SET_ALIAS}};
 
   void SearchComponentsByClass(
       ScMemoryContext * context,
@@ -59,6 +58,13 @@ protected:
       ScMemoryContext * context,
       ScAddr const & relationAddr,
       std::string const & setAlias,
+      ScTemplate & searchComponentTemplate,
+      std::vector<std::string> const & parameters);
+
+  void SearchComponentsByRelation(
+      ScMemoryContext * context,
+      ScAddr const & relationAddr,
+      std::string const & parameterAlias,
       ScTemplate & searchComponentTemplate,
       std::vector<std::string> const & parameters);
 

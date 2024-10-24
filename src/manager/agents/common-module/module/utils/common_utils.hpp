@@ -6,8 +6,9 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
+#include <map>
+
+#include <sc-memory/sc_memory.hpp>
 
 namespace common_utils
 {
@@ -19,6 +20,7 @@ public:
   static std::vector<std::vector<ScAddr>> componentsClasses;
 
   static void InitParametersMap();
+  static void ClearParametersMap();
   static bool TranslateFromStringToScMemory(
       ScMemoryContext & context,
       ScAddr const & actionAddr,

@@ -9,11 +9,6 @@
 #include <string>
 #include <map>
 
-extern "C"
-{
-#include "sc-core/sc-store/sc-fs-memory/sc_file_system.h"
-}
-
 #include "sc-memory/sc_scs_helper.hpp"
 
 #include "downloader.hpp"

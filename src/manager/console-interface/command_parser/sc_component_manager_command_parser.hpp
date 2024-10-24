@@ -66,7 +66,8 @@ protected:
           parameterValue.clear();
 
         parameterName = GetParameterNameAfterDelimiter(currentCommandToken, PARAMETER_VALUES_DELIMITER);
-        commandParameters.insert({parameterName, {}});
+        if (!parameterName.empty())
+          commandParameters.insert({parameterName, {}});
       }
       else
       {
@@ -86,7 +87,7 @@ protected:
       std::string const & currentCommandToken,
       char const parameterDelimiter)
   {
-    if (currentCommandToken.at(1) == parameterDelimiter)
+    if (currentCommandToken.size() > 1 && currentCommandToken.at(1) == parameterDelimiter)
       return currentCommandToken.substr(2);
     else
       return currentCommandToken.substr(1);

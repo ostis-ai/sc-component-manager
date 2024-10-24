@@ -1,0 +1,8 @@
+test_action_node
+<- action;
+<- action_components_search;
+-> rrel_purpose:
+{
+    [2];
+    [3]
+};;

@@ -10,7 +10,7 @@
 #include <filesystem>
 
 #include "sc-memory/utils/sc_exec.hpp"
-#include "sc-core/sc-store/sc-fs-memory/sc_file_system.h"
+#include <filesystem>
 
 #include "downloader.hpp"
 #include "constants/command_constants.hpp"
@@ -31,9 +31,12 @@ public:
   bool DownloadFile(std::string const & downloadPath, std::string const & urlAddress, std::string const & pathPostfix)
       override
   {
-    if (!sc_fs_create_directory(downloadPath.c_str()))
+    std::error_code errorCode;
+    if (!std::filesystem::create_directories(downloadPath, errorCode) && errorCode)
     {
-      SC_LOG_ERROR("Can't download. Can't create folder. " << downloadPath);
+      SC_LOG_ERROR(
+          "DownloaderGit: Can't download file. Can't create folder " << downloadPath << " with error message "
+                                                                     << errorCode.message());
       return false;
     }
 
@@ -81,9 +84,12 @@ public:
 
   bool DownloadRepository(std::string const & downloadPath, std::string const & urlAddress) override
   {
-    if (!sc_fs_create_directory(downloadPath.c_str()))
+    std::error_code errorCode;
+    if (!std::filesystem::create_directories(downloadPath, errorCode) && errorCode)
     {
-      SC_LOG_ERROR("Can't download. Can't create folder. " << downloadPath);
+      SC_LOG_ERROR(
+          "DownloaderGit: Can't download repository. Can't create folder " << downloadPath << " with error message "
+                                                                           << errorCode.message());
       return false;
     }
 
@@ -118,8 +124,8 @@ protected:
   static std::string GetDefaultBranch(std::string const & username, std::string const & repositoryName)
   {
     std::stringstream query;
-    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << GitHubConstants::CURL_GET_BRANCH_COMMAND
-          << username << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
+    query << GitHubConstants::GITHUB_GET_DEFAULT_BRANCH_COMMAND_PREFIX << username
+          << SpecificationConstants::DIRECTORY_DELIMITER << repositoryName
           << GitHubConstants::GREP_DEFAULT_BRANCH_COMMAND;
 
     ScExec exec{{query.str()}};

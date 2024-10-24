@@ -6,153 +6,114 @@
 
 #pragma once
 
-#include "sc-memory/sc_addr.hpp"
-#include "sc-memory/sc_object.hpp"
-
-#include "ScComponentManagerKeynodes.generated.hpp"
+#include <sc-memory/sc_keynodes.hpp>
 
 namespace keynodes
 {
-class ScComponentManagerKeynodes : public ScObject
+class ScComponentManagerKeynodes : public ScKeynodes
 {
-  SC_CLASS()
-  SC_GENERATED_BODY()
-
 public:
-  SC_PROPERTY(Keynode("myself"), ForceCreate(ScType::NodeConst))
-  static ScAddr myself;
+  static inline ScKeynode const myself{"myself", ScType::ConstNode};
 
-  SC_PROPERTY(Keynode("concept_reusable_component"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_component;
+  static inline ScKeynode const concept_reusable_component{"concept_reusable_component", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_current_components_to_install"), ForceCreate(ScType::NodeConst))
-  static ScAddr current_components_to_install;
+  static inline ScKeynode const current_components_to_install{
+      "concept_current_components_to_install",
+      ScType::ConstNode};
 
-  SC_PROPERTY(Keynode("concept_reusable_kb_component"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_kb_component;
+  static inline ScKeynode const concept_reusable_kb_component{"concept_reusable_kb_component", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_reusable_ps_component"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_ps_component;
+  static inline ScKeynode const concept_reusable_ps_component{"concept_reusable_ps_component", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_reusable_ui_component"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_ui_component;
+  static inline ScKeynode const concept_reusable_ui_component{"concept_reusable_ui_component", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_reusable_embedded_ostis_system"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_embedded_ostis_system;
+  static inline ScKeynode const concept_reusable_embedded_ostis_system{
+      "concept_reusable_embedded_ostis_system",
+      ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_repository"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_repository;
+  static inline ScKeynode const concept_repository{"concept_repository", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_reusable_component_specification"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_reusable_component_specification;
+  static inline ScKeynode const concept_reusable_component_specification{
+      "concept_reusable_component_specification",
+      ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_single_address"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_single_address;
+  static inline ScKeynode const concept_single_address{"concept_single_address", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_complex_address"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_complex_address;
+  static inline ScKeynode const concept_complex_address{"concept_complex_address", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_github_url"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_github_url;
+  static inline ScKeynode const concept_github_url{"concept_github_url", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_need_to_install_components"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_need_to_install_components;
+  static inline ScKeynode const concept_need_to_install_components{
+      "concept_need_to_install_components",
+      ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_google_drive_url"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_google_drive_url;
+  static inline ScKeynode const concept_google_drive_url{"concept_google_drive_url", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("sc_model_of_knowledge_base"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr sc_model_of_knowledge_base;
+  static inline ScKeynode const sc_model_of_knowledge_base{"sc_model_of_knowledge_base", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("sc_model_of_interface"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr sc_model_of_interface;
+  static inline ScKeynode const sc_model_of_interface{"sc_model_of_interface", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("sc_model_of_problem_solver"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr sc_model_of_problem_solver;
+  static inline ScKeynode const sc_model_of_problem_solver{"sc_model_of_problem_solver", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("concept_subsystems_set"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr concept_subsystems_set;
+  static inline ScKeynode const concept_subsystems_set{"concept_subsystems_set", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("rrel_repositories_specifications"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_repositories_specifications;
+  static inline ScKeynode const rrel_repositories_specifications{
+      "rrel_repositories_specifications",
+      ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_components_specifications"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_components_specifications;
+  static inline ScKeynode const rrel_components_specifications{"rrel_components_specifications", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("nrel_authors"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_authors;
+  static inline ScKeynode const nrel_authors{"nrel_authors", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_explanation"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_explanation;
+  static inline ScKeynode const nrel_explanation{"nrel_explanation", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_note"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_note;
+  static inline ScKeynode const nrel_note{"nrel_note", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_purpose"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_purpose;
+  static inline ScKeynode const nrel_purpose{"nrel_purpose", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_key_sc_element"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_key_sc_element;
+  static inline ScKeynode const nrel_key_sc_element{"nrel_key_sc_element", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_component_address"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_component_address;
+  static inline ScKeynode const nrel_component_address{"nrel_component_address", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_component_dependencies"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_component_dependencies;
+  static inline ScKeynode const nrel_component_dependencies{"nrel_component_dependencies", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_installation_method"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_installation_method;
+  static inline ScKeynode const nrel_installation_method{"nrel_installation_method", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_alternative_addresses"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_alternative_addresses;
+  static inline ScKeynode const nrel_alternative_addresses{"nrel_alternative_addresses", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_repository_address"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_repository_address;
+  static inline ScKeynode const nrel_repository_address{"nrel_repository_address", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_installation_script"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_installation_script;
+  static inline ScKeynode const nrel_installation_script{"nrel_installation_script", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_decomposition"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_decomposition;
+  static inline ScKeynode const nrel_decomposition{"nrel_decomposition", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("nrel_ostis_system_decomposition"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr nrel_ostis_system_decomposition;
+  static inline ScKeynode const nrel_ostis_system_decomposition{
+      "nrel_ostis_system_decomposition",
+      ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("action_components_init"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr action_components_init;
+  static inline ScKeynode const action_components_init{"action_components_init", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("action_components_search"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr action_components_search;
+  static inline ScKeynode const action_components_search{"action_components_search", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("action_components_install"), ForceCreate(ScType::NodeConstClass))
-  static ScAddr action_components_install;
+  static inline ScKeynode const action_components_install{"action_components_install", ScType::ConstNodeClass};
 
-  SC_PROPERTY(Keynode("rrel_author"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_author;
+  static inline ScKeynode const rrel_author{"rrel_author", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_class"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_class;
+  static inline ScKeynode const rrel_class{"rrel_class", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_sets"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_sets;
+  static inline ScKeynode const rrel_sets{"rrel_sets", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_components"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_components;
+  static inline ScKeynode const rrel_components{"rrel_components", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_explanation"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_explanation;
+  static inline ScKeynode const rrel_explanation{"rrel_explanation", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_identifier"), ForceCreate(ScType::NodeConstRole))
-  static ScAddr rrel_identifier;
+  static inline ScKeynode const rrel_identifier{"rrel_identifier", ScType::ConstNodeRole};
 
-  SC_PROPERTY(Keynode("rrel_note"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr rrel_note;
+  static inline ScKeynode const rrel_note{"rrel_note", ScType::ConstNodeNoRole};
 
-  SC_PROPERTY(Keynode("rrel_purpose"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr rrel_purpose;
-  
-  SC_PROPERTY(Keynode("rrel_main_idtf"), ForceCreate(ScType::NodeConstNoRole))
-  static ScAddr rrel_main_idtf;
+  static inline ScKeynode const rrel_purpose{"rrel_purpose", ScType::ConstNodeNoRole};
+
+  static inline ScKeynode const rrel_main_idtf{"rrel_main_idtf", ScType::ConstNodeNoRole};
 };
 
 }  // namespace keynodes

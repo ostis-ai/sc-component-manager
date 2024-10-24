@@ -6,9 +6,9 @@
 
 #include "sc_component_manager_module.hpp"
 
-SC_IMPLEMENT_MODULE(ScComponentManagerModule)
+SC_MODULE_REGISTER(ScComponentManagerModule);
 
-sc_result ScComponentManagerModule::InitializeImpl()
+void ScComponentManagerModule::Initialize(ScMemoryContext * context)
 {
   std::string const KB_COMPONENTS_PATH = "knowledge_base_components_path";
   std::string const PS_COMPONENTS_PATH = "problem_solver_components_path";
@@ -22,19 +22,11 @@ sc_result ScComponentManagerModule::InitializeImpl()
   for (std::string const & key : *managerConfig)
     m_params.Insert({key, managerConfig[key]});
 
-  std::map<ScAddr, std::string, ScAddrLessFunc> const & componentsPath = {
-      {{keynodes::ScComponentManagerKeynodes::concept_reusable_kb_component,
-        m_params.Get<std::string>(KB_COMPONENTS_PATH)},
-       {keynodes::ScComponentManagerKeynodes::concept_reusable_ps_component,
-        m_params.Get<std::string>(PS_COMPONENTS_PATH)},
-       {keynodes::ScComponentManagerKeynodes::concept_reusable_ui_component,
-        m_params.Get<std::string>(INTERFACE_COMPONENTS_PATH)}}};
-
   try
   {
-    m_scComponentManager = std::make_unique<ScComponentManager>(componentsPath);
+    m_scComponentManager = std::make_unique<ScComponentManager>();
     if (!m_scComponentManager)
-      return SC_RESULT_ERROR;
+      return;
 
     m_scComponentManager->Run();
     SC_LOG_INFO("[sc-component-manager] Sc-component-manager run");
@@ -42,20 +34,14 @@ sc_result ScComponentManagerModule::InitializeImpl()
   catch (utils::ScException const & exception)
   {
     SC_LOG_ERROR("[sc-component-manager] " << exception.Description());
-    ScComponentManagerModule::ShutdownImpl();
-
-    return SC_RESULT_ERROR;
+    ScComponentManagerModule::Shutdown(context);
   }
-
-  return SC_RESULT_OK;
 }
 
-sc_result ScComponentManagerModule::ShutdownImpl()
+void ScComponentManagerModule::Shutdown(ScMemoryContext * context)
 {
   if (m_scComponentManager)
     m_scComponentManager->Stop();
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");
   m_scComponentManager.reset();
-
-  return SC_RESULT_OK;
 }

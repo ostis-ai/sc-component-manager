@@ -9,14 +9,14 @@
 #include <string>
 #include <vector>
 
-#include "sc-memory/sc_memory.hpp"
+#include "sc-memory/sc_agent_context.hpp"
 
 using CommandParameters = std::map<std::string, std::vector<std::string>>;
 
 class ScComponentManagerCommand
 {
 public:
-  virtual ScAddrUnorderedSet Execute(ScMemoryContext * context, ScAddr const & actionAddr) = 0;
+  virtual ScAddrUnorderedSet Execute(ScAgentContext * context, ScAddr const & actionAddr) = 0;
 
   virtual ~ScComponentManagerCommand() = default;
 };

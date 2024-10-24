@@ -1,9 +1,10 @@
 test_action_node
 <- action;
 <- action_components_install;
--> rrel_1: ... (* -> part_ui;; *);;
+-> rrel_1: ... (* -> rrel_components: ..components_to_install;; *);;
 
-
+..components_to_install
+    -> part_ui;;
 
 part_ui_specification
     <- concept_reusable_component_specification;;

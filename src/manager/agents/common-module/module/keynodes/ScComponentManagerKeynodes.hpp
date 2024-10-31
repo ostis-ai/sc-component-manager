@@ -63,33 +63,33 @@ public:
 
   static inline ScKeynode const rrel_components_specifications{"rrel_components_specifications", ScType::ConstNodeRole};
 
-  static inline ScKeynode const nrel_authors{"nrel_authors", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_authors{"nrel_authors", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_explanation{"nrel_explanation", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_explanation{"nrel_explanation", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_note{"nrel_note", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_note{"nrel_note", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_purpose{"nrel_purpose", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_purpose{"nrel_purpose", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_key_sc_element{"nrel_key_sc_element", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_key_sc_element{"nrel_key_sc_element", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_component_address{"nrel_component_address", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_component_address{"nrel_component_address", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_component_dependencies{"nrel_component_dependencies", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_component_dependencies{"nrel_component_dependencies", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_installation_method{"nrel_installation_method", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_installation_method{"nrel_installation_method", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_alternative_addresses{"nrel_alternative_addresses", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_alternative_addresses{"nrel_alternative_addresses", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_repository_address{"nrel_repository_address", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_repository_address{"nrel_repository_address", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_installation_script{"nrel_installation_script", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_installation_script{"nrel_installation_script", ScType::ConstNodeNonRole};
 
-  static inline ScKeynode const nrel_decomposition{"nrel_decomposition", ScType::ConstNodeNoRole};
+  static inline ScKeynode const nrel_decomposition{"nrel_decomposition", ScType::ConstNodeNonRole};
 
   static inline ScKeynode const nrel_ostis_system_decomposition{
       "nrel_ostis_system_decomposition",
-      ScType::ConstNodeNoRole};
+      ScType::ConstNodeNonRole};
 
   static inline ScKeynode const action_components_init{"action_components_init", ScType::ConstNodeClass};
 
@@ -109,11 +109,11 @@ public:
 
   static inline ScKeynode const rrel_identifier{"rrel_identifier", ScType::ConstNodeRole};
 
-  static inline ScKeynode const rrel_note{"rrel_note", ScType::ConstNodeNoRole};
+  static inline ScKeynode const rrel_note{"rrel_note", ScType::ConstNodeRole};
 
-  static inline ScKeynode const rrel_purpose{"rrel_purpose", ScType::ConstNodeNoRole};
+  static inline ScKeynode const rrel_purpose{"rrel_purpose", ScType::ConstNodeRole};
 
-  static inline ScKeynode const rrel_main_idtf{"rrel_main_idtf", ScType::ConstNodeNoRole};
+  static inline ScKeynode const rrel_main_idtf{"rrel_main_idtf", ScType::ConstNodeRole};
 };
 
 }  // namespace keynodes

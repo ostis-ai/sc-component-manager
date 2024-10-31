@@ -1,4 +1,4 @@
-sc_node_norole_relation
+sc_node_non_role_relation
 	-> nrel_component_address;
 	-> nrel_installation_method;
 	-> nrel_sc_identifier;

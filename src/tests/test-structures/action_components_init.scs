@@ -1,0 +1,54 @@
+test_action_node
+<- action;
+<- action_components_init;;
+
+sc_component_manager_repository
+	<- concept_repository;
+	-> rrel_components_specifications: ..components_addresses;
+	-> rrel_repositories_specifications: ..repositories_addresses;;
+
+..components_addresses
+	<- sc_node_tuple;
+	-> part_platform_spec
+	    (*
+           	<- sc_node_struct;;
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_platform/subdir_platform]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);
+	-> part_ui_spec
+	    (*
+           	<- sc_node_struct;;
+           	<- concept_reusable_component_specification;;
+           	=> nrel_alternative_addresses:
+           	...
+           	(*
+           		<- sc_node_tuple;;
+           		-> rrel_1:
+           			...
+           			(*
+           				-> [https://github.com/MksmOrlov/ostis-kb-lib/tree/main/part_ui]
+           					(*
+           						<- concept_github_url;;
+           					*);;
+           			*);;
+           	*);;
+        *);;
+
+..repositories_addresses
+	-> ...
+	    (*
+		  -> rrel_address:
+		      [https://github.com/MksmOrlov/components-repo-example];;
+		*);;

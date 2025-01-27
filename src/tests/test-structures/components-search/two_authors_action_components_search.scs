@@ -1,0 +1,8 @@
+test_action_node
+<- action;
+<- action_components_search;
+-> rrel_author:
+{
+    author_1;
+    author_2
+};;

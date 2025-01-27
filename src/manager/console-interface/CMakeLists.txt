@@ -7,16 +7,12 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
 
 add_library(console-interface SHARED ${SOURCES})
 target_link_libraries(console-interface
-    LINK_PUBLIC sc-machine::sc-agents-common
-    LINK_PUBLIC sc-machine::sc-builder-lib
     LINK_PUBLIC common-lib
 )
 target_include_directories(console-interface
-    PRIVATE ${CMAKE_CURRENT_LIST_DIR}
-    PRIVATE ${AGENTS_SRC}
-)
-target_include_directories(console-interface
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    PUBLIC $<BUILD_INTERFACE:${AGENTS_SRC}>
+    PUBLIC $<INSTALL_INTERFACE:include>
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PUBLIC $<INSTALL_INTERFACE:include>
 )

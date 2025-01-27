@@ -1,5 +1,41 @@
 This page describes rules to contribute changes and features by Pull Requests creating.
 
+## Initialize
+
+To initialize your repo do:
+
+* Make fork from `https://github.com/ostis-ai/sc-component-manager`.
+* Clone your fork to your machine and prepare (see [Readme](https://github.com/ostis-ai/sc-component-manager)).
+
+```sh
+git clone git@github.com:yourlogin/sc-component-manager.git
+cd sc-component-manager
+git remote add upstream git@github.com:ostis-ai/sc-component-manager.git
+```
+
+* To update your `main` from `upstream` use:
+
+```sh
+git fetch upstream
+git checkout upstream/main
+```
+
+* Use `git rebase` instead of `merge`. [More documentation about this command](https://git-scm.com/docs/git-rebase)
+just try to apply your commits (from current branch to commits in specified branch). To rebase your branch to main use:
+
+```sh
+git checkout <yourbranch>
+git rebase upstream/main
+```
+
+* If you have any problems, then redo:
+
+```sh
+git rebase --abort
+```
+
+* Or ask in [Element](https://app.element.io/index.html#/room/#ostis_tech_support:matrix.org).
+
 ## Commits message format
 
 Each commit message should be formed as: `[tag1]...[tagN] Message text (#issue)`.
@@ -9,9 +45,8 @@ be pointed in commit message.
 
 Examples:
 <pre>
-[kb] Update test components specification
-[init][test] Add unit test for init comand
-[utils] Add get specification address util
+[cpp] Colored log output
+[cpp][test] Add unit test for ScEvent class
 </pre>
 
 Possible tags:
@@ -34,16 +69,18 @@ Possible tags:
   * `[cmake]` - changes in `cmake` build system.
   * `[tests]` - changes in `tests`.
 
-Each commit in Pull request should be an atomic. Another word implement or fix one feature. For example:
+Each commit in Pull Request should be an atomic. Another word implement or fix one feature. For example:
 <pre>
 Last commit
 ...
-[utils][test] Add unit test for get specification address util
-[utils] Add get specification address util
+[cpp] Colored log output
+[cpp] Add class to work with console
 ...
 Init commit
 </pre>
 
+In this example we add class to work with console (where implemented colored output), then in another commit we had 
+implementation of colored log output.
 
 ***
 Each commit should have not much differences excluding cases, with:
@@ -67,7 +104,7 @@ All commit, that not applies to this rules, should be split by this rules. Anoth
 
 Each pull request with many changes, that not possible to review (excluding codestyle, rename changes), will be rejected.
 
-_**All commit, that not applies to this rules, should be split by this rules. Another way they will be rejected with Pull request.**_
+_**All commit, that not applies to these rules, should be split by these rules. Another way they will be rejected with Pull request.**_
 
 ### Pull Request Preparation
 
@@ -75,12 +112,12 @@ _**All commit, that not applies to this rules, should be split by this rules. An
  - Update changelog;
  - Update documentation;
  - Cover new functionality by tests;
- - Your code should be written according to a [codestyle](docs/dev/codestyle.md).
+ - Your code should be written according to a codestyle like in sc-machine (see [Codestyle rules](https://ostis-ai.github.io/sc-machine/dev/codestyle/)).
 
 ### Pull Request creation
 
  - Create PR on GitHub;
- - Check that CI checks were passed successfully;
+ - Check that CI checks were passed successfully.
 
 ### Pull Request Review
 

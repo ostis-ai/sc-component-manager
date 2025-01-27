@@ -120,7 +120,7 @@ You can also check code formatting. To learn more, go to the [CMake flags](cmake
 
 ### Run sc-component-manager
 
-Before launching sc-component-manager, [extract sc-machine from GitHub Releases](https://ostis-ai.github.io/sc-machine/quick_start/) or [build it](https://ostis-ai.github.io/sc-machine/build/quick_start/).
+Before launching sc-component-manager, [extract sc-machine from GitHub Releases](https://ostis-ai.github.io/sc-machine/quick_start/#github-releases) or [build it](https://ostis-ai.github.io/sc-machine/build/quick_start/).
 
 To launch sc-component-manager, run:
 
@@ -135,6 +135,6 @@ cd sc-machine-<version>-<platform>
 # run sc-machine with sc-component-manager
 ./bin/sc-machine -s ../kb.bin \
     -e "path/to/sc-component-manager/build/<Release|Debug>/lib/extensions"
-# if it needs you can provide several paths to extensions separated 
-# with semicolon
+# if several paths to extensions are provided then they should be separated 
+# by semicolon and wrapped in double quotes
 ```

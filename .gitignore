@@ -20,3 +20,5 @@ cmake-build-debug
 *.log
 *.pdf
 *.run.xml
+
+/ConanPresets.json

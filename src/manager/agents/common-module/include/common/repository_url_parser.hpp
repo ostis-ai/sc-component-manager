@@ -7,7 +7,8 @@
 #pragma once
 
 #include <string>
-#include "constants/command_constants.hpp"
+
+#include "common/command_constants.hpp"
 
 class RepositoryUrlParser
 {

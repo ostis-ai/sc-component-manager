@@ -9,12 +9,12 @@
 #include <string>
 #include <filesystem>
 
-#include "sc-memory/utils/sc_exec.hpp"
-#include <filesystem>
+#include <sc-memory/utils/sc_exec.hpp>
 
-#include "downloader.hpp"
-#include "constants/command_constants.hpp"
-#include "url_parser/repository_url_parser.hpp"
+#include "common/command_constants.hpp"
+#include "common/downloader.hpp"
+
+#include "repository_url_parser.hpp"
 
 class DownloaderGit : public Downloader
 {

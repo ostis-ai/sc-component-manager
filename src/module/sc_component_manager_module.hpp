@@ -9,7 +9,7 @@
 #include <sc-memory/sc_memory.hpp>
 #include <sc-memory/sc_module.hpp>
 
-#include "sc_component_manager.hpp"
+#include <console-interface/sc_component_manager.hpp>
 
 class ScComponentManagerModule : public ScModule
 {

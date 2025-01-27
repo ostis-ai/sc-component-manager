@@ -10,8 +10,8 @@
 
 #include <sys/select.h>
 
-#include "sc_component_manager.hpp"
-#include "command_parser/sc_component_manager_command_parser.hpp"
+#include "console-interface/sc_component_manager.hpp"
+#include "console-interface/sc_component_manager_command_parser.hpp"
 
 static constexpr int STD_INPUT = 0;
 static constexpr suseconds_t WAIT_BETWEEN_SELECT_US = 250000L;

@@ -1,5 +1,3 @@
-set(COMMON_MODULE_SRC ${CMAKE_CURRENT_LIST_DIR}/manager/agents/common-module)
-set(INTERFACE_SRC ${CMAKE_CURRENT_LIST_DIR}/manager/console-interface)
 set(SC_COMPONENT_MANAGER_SRC "${CMAKE_SOURCE_DIR}/src")
 
 add_subdirectory(manager/agents)
@@ -9,11 +7,13 @@ file(GLOB SOURCES CONFIGURE_DEPENDS "module/*.cpp" "module/*.hpp")
 
 add_library(sc-component-manager SHARED ${SOURCES})
 target_link_libraries(sc-component-manager
-    LINK_PRIVATE sc-memory
-    LINK_PRIVATE sc-config
+    LINK_PRIVATE sc-machine::sc-memory
+    LINK_PRIVATE sc-machine::sc-config
     LINK_PRIVATE console-interface
 )
-set(SC_COMPONENT_MANAGER_MODULE "${CMAKE_CURRENT_LIST_DIR}/module")
+set_target_properties(sc-component-manager PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
+
 if(${SC_CLANG_FORMAT_CODE})
+    set(SC_COMPONENT_MANAGER_MODULE "${CMAKE_CURRENT_LIST_DIR}/module")
     target_clangformat_setup(sc-component-manager)
 endif()

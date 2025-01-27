@@ -8,12 +8,11 @@
 
 #include <sc-memory/utils/sc_exec.hpp>
 
-#include "utils/sc_component_utils.hpp"
-
-#include "module/utils/common_utils.hpp"
-
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/GenerationUtils.hpp>
+
+#include <common/sc_component_utils.hpp>
+#include <common/common_utils.hpp>
 
 using namespace common_utils;
 

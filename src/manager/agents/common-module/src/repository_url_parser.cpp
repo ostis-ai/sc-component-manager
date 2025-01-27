@@ -4,7 +4,7 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "repository_url_parser.hpp"
+#include "common/repository_url_parser.hpp"
 
 void RepositoryUrlParser::Parse(std::string const & repositoryUrlAddress)
 {

@@ -10,10 +10,11 @@
 
 #include <sc-memory/sc_agent_context.hpp>
 
-#include "sc-agents-common/utils/CommonUtils.hpp"
-#include "common-module/module/utils/common_utils.hpp"
-#include "common-module/module/keynodes/ScComponentManagerKeynodes.hpp"
-#include "commands/sc_component_manager_command.hpp"
+#include <sc-agents-common/utils/CommonUtils.hpp>
+
+#include <common/common_utils.hpp>
+#include <common/sc_component_manager_keynodes.hpp>
+#include <common/sc_component_manager_command.hpp>
 
 class ScComponentManagerCommandHandler
 {

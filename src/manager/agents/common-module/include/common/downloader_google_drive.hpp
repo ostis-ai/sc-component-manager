@@ -8,7 +8,7 @@
 
 #include <string>
 
-#include "downloader.hpp"
+#include "common/downloader.hpp"
 
 class DownloaderGoogleDrive : public Downloader
 {

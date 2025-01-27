@@ -9,12 +9,12 @@
 #include <string>
 #include <map>
 
-#include "sc-memory/sc_scs_helper.hpp"
+#include <sc-memory/sc_scs_helper.hpp>
 
-#include "downloader.hpp"
-#include "downloader_git.hpp"
-#include "downloader_google_drive.hpp"
-#include "module/keynodes/ScComponentManagerKeynodes.hpp"
+#include "common/sc_component_manager_keynodes.hpp"
+#include "common/downloader.hpp"
+#include "common/downloader_git.hpp"
+#include "common/downloader_google_drive.hpp"
 
 class DownloaderHandler
 {

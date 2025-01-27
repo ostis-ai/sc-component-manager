@@ -8,7 +8,7 @@
 
 #include <sc-memory/sc_memory.hpp>
 
-#include "module/utils/common_utils.hpp"
+#include "common/common_utils.hpp"
 
 using namespace common_utils;
 

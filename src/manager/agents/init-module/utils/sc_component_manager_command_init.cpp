@@ -4,11 +4,13 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <sc-agents-common/utils/IteratorUtils.hpp>
-#include "downloader/downloader.hpp"
 #include "sc_component_manager_command_init.hpp"
-#include "utils/sc_component_utils.hpp"
-#include "module/utils/common_utils.hpp"
+
+#include <sc-agents-common/utils/IteratorUtils.hpp>
+
+#include <common/sc_component_utils.hpp>
+#include <common/common_utils.hpp>
+#include <common/downloader.hpp>
 
 using namespace common_utils;
 

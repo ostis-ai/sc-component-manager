@@ -4,11 +4,11 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "utils/sc_component_manager_command_init.hpp"
-
 #include "sc_component_manager_agent_init.hpp"
 
-#include "sc-config/sc_config.hpp"
+#include <sc-config/sc_config.hpp>
+
+#include "utils/sc_component_manager_command_init.hpp"
 
 using namespace initModule;
 using namespace keynodes;

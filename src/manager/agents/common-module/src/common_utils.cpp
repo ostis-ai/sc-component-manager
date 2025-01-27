@@ -4,13 +4,15 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "common_utils.hpp"
+#include "common/common_utils.hpp"
+
 #include <sc-agents-common/utils/GenerationUtils.hpp>
 #include <sc-agents-common/utils/IteratorUtils.hpp>
-#include "sc-memory/sc_memory.hpp"
 
-#include "constants/command_constants.hpp"
-#include "module/keynodes/ScComponentManagerKeynodes.hpp"
+#include <sc-memory/sc_memory.hpp>
+
+#include "common/command_constants.hpp"
+#include "common/sc_component_manager_keynodes.hpp"
 
 namespace common_utils
 {

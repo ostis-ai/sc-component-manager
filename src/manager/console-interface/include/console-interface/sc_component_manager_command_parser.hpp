@@ -8,8 +8,8 @@
 
 #include <regex>
 
-#include "common-module/commands/sc_component_manager_command.hpp"
-#include "common-module/constants/command_constants.hpp"
+#include <common/sc_component_manager_command.hpp>
+#include <common/command_constants.hpp>
 
 class ScComponentManagerParser
 {

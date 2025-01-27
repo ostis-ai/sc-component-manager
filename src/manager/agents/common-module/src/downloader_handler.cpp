@@ -5,8 +5,9 @@
  */
 
 #include <sc-agents-common/utils/CommonUtils.hpp>
-#include "utils/sc_component_utils.hpp"
-#include "downloader_handler.hpp"
+
+#include "common/sc_component_utils.hpp"
+#include "common/downloader_handler.hpp"
 
 /**
  * @brief Get class of download node

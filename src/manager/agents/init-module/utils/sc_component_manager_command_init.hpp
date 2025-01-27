@@ -11,9 +11,8 @@
 
 #include <sc-memory/sc_agent_context.hpp>
 
-#include "commands/sc_component_manager_command.hpp"
-
-#include "downloader/downloader_handler.hpp"
+#include <common/sc_component_manager_command.hpp>
+#include <common/downloader_handler.hpp>
 
 class ScComponentManagerCommandInit : public ScComponentManagerCommand
 {

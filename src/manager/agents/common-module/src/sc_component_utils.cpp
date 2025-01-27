@@ -10,14 +10,14 @@
 #include <sc-memory/sc_type.hpp>
 #include <sc-memory/sc_iterator.hpp>
 #include <sc-builder/scs_loader.hpp>
+
 #include <sc-agents-common/utils/IteratorUtils.hpp>
 #include <sc-agents-common/utils/CommonUtils.hpp>
 
-#include "sc_component_utils.hpp"
-
-#include "module/keynodes/ScComponentManagerKeynodes.hpp"
-#include "constants/command_constants.hpp"
-#include "url_parser/repository_url_parser.hpp"
+#include "common/sc_component_utils.hpp"
+#include "common/sc_component_manager_keynodes.hpp"
+#include "common/command_constants.hpp"
+#include "common/repository_url_parser.hpp"
 
 using namespace common_utils;
 

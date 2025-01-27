@@ -10,8 +10,8 @@
 #include <atomic>
 #include <utility>
 
-#include "sc-memory/sc_debug.hpp"
-#include "sc-config/sc_memory_config.hpp"
+#include <sc-memory/sc_debug.hpp>
+#include <sc-config/sc_memory_config.hpp>
 
 #include "sc_component_manager_command_handler.hpp"
 

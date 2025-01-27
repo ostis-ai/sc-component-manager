@@ -1,8 +1,0 @@
-test_action_node
-<- action;
-<- action_components_search;
--> rrel_author:
-{
-    author_1;
-    this_author_has_no_common_components_with_author_1
-};;

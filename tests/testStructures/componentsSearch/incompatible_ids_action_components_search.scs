@@ -1,8 +1,0 @@
-test_action_node
-<- action;
-<- action_components_search;
--> rrel_main_idtf:
-{
-    [2];
-    [3]
-};;

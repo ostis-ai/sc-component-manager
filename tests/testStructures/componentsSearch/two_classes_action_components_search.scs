@@ -1,8 +1,0 @@
-test_action_node
-<- action;
-<- action_components_search;
--> rrel_class:
-{
-    concept_reusable_kb_component;
-    concept_atomic_reusable_component
-};;

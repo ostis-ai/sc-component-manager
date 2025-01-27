@@ -8,6 +8,7 @@ cmake-build-debug
 .vscode
 .idea
 .cache
+.venv
 
 # docs
 *.aux

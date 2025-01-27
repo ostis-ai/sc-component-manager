@@ -5,7 +5,7 @@ function usage() {
   cat <<USAGE
 Usage: $0 [--dev]
 Options:
-  --dev:          Installs dependencies required to compile scp-machine
+  --dev:          Installs dependencies required to compile sc-component-manager
 USAGE
   exit 1
 }

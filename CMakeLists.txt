@@ -4,7 +4,6 @@ project(sc-component-manager VERSION 0.1.0 LANGUAGES C CXX)
 message(STATUS "Current project version: ${CMAKE_PROJECT_VERSION}")
 cmake_policy(SET CMP0048 NEW)
 
-set(SCP_MACHINE_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -36,7 +35,7 @@ if(${SC_CLANG_FORMAT_CODE})
 endif()
 
 if(${WIN32})
-    message(SEND_ERROR "scp-machine isn't supported on Windows OS.")
+    message(SEND_ERROR "sc-component-manager isn't supported on Windows OS.")
 endif(${WIN32})
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")

@@ -19,8 +19,8 @@ cd sc-machine-<version>-<platform>
 # run sc-machine with sc-component-manager and sc-machine extensions
 ./bin/sc-machine -s ../kb.bin \
     -e "path/to/extracted/sc-component-manager/lib/extensions;lib/extensions"
-# if it needs you can provide several paths to extensions separated 
-# with semicolon
+# if several paths to extensions are provided then they should be separated 
+# by semicolon and wrapped in double quotes
 ```
 
 To learn more about how to install and use sc-machine artifacts, see [sc-machine quick start](https://ostis-ai.github.io/sc-machine/quick_start/).

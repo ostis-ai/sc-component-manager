@@ -9,7 +9,7 @@
       "inherits": "conan-debug",
       "installDir": "${sourceDir}/build/Debug/install",
       "cacheVariables": {
-        "SCP_BUILD_TESTS": true
+        "SC_BUILD_TESTS": true
       }
     },
     {
@@ -25,7 +25,7 @@
       "description": "Release config with tests (Conan dependencies used)",
       "inherits": "release-conan",
       "cacheVariables": {
-        "SCP_BUILD_TESTS": true
+        "SC_BUILD_TESTS": true
       }
     }
   ],

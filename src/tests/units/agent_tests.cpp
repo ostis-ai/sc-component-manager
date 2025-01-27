@@ -4,20 +4,13 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include <gtest/gtest.h>
-#include <sc-builder/scs_loader.hpp>
-#include <sc-memory/test/sc_test.hpp>
+#include "sc_agents_test.hpp"
 
 #include <common/sc_component_manager_keynodes.hpp>
 
 #include "init-module/module/agents/sc_component_manager_agent_init.hpp"
 #include "search-module/module/agents/sc_component_manager_agent_search.hpp"
 #include "install-module/module/agents/sc_component_manager_agent_install.hpp"
-
-using AgentTest = ScMemoryTest;
-ScsLoader loader;
-std::string const TEST_FILES_DIR_PATH = "test-structures/";
-std::string const TEST_FILES_COMPONENTS_SEARCH_DIR_PATH = "test-structures/components-search/";
 
 std::unordered_set<std::string> const ALL_SPECIFICATIONS_FOR_SEARCH = {
     "part_platform_specification",
@@ -27,9 +20,7 @@ std::unordered_set<std::string> const ALL_SPECIFICATIONS_FOR_SEARCH = {
     "specification_3",
 };
 
-int const WAIT_TIME = 5000;
-
-TEST_F(AgentTest, AgentInit)
+TEST_F(ScAgentsTest, AgentInit)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_init.scs");
@@ -65,13 +56,13 @@ void searchComponentsTestBody(
     std::unordered_set<std::string> const & expectedFoundSpecifications,
     std::string const & filename)
 {
-  loader.loadScsFile(context, TEST_FILES_COMPONENTS_SEARCH_DIR_PATH + "specifications.scs");
-  loader.loadScsFile(context, TEST_FILES_COMPONENTS_SEARCH_DIR_PATH + filename);
+  ScAgentsTest::loader.loadScsFile(context, ScAgentsTest::TEST_FILES_COMPONENTS_SEARCH_DIR_PATH + "specifications.scs");
+  ScAgentsTest::loader.loadScsFile(context, ScAgentsTest::TEST_FILES_COMPONENTS_SEARCH_DIR_PATH + filename);
   ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
   ScAction testAction = context.ConvertToAction(testActionNode);
 
   context.SubscribeAgent<searchModule::ScComponentManagerSearchAgent>();
-  testAction.InitiateAndWait(WAIT_TIME);
+  testAction.InitiateAndWait(ScAgentsTest::WAIT_TIME);
   EXPECT_TRUE(testAction.IsFinishedSuccessfully());
 
   ScStructure result = testAction.GetResult();
@@ -91,93 +82,93 @@ void searchComponentsTestBody(
   context.UnsubscribeAgent<searchModule::ScComponentManagerSearchAgent>();
 }
 
-TEST_F(AgentTest, AgentSearchByOneClass)
+TEST_F(ScAgentsTest, AgentSearchByOneClass)
 {
   searchComponentsTestBody(
       *m_ctx, {"part_platform_specification", "part_ui_specification"}, "one_class_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByTwoClasses)
+TEST_F(ScAgentsTest, AgentSearchByTwoClasses)
 {
   searchComponentsTestBody(
       *m_ctx, {"part_platform_specification", "part_ui_specification"}, "two_classes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroClasses)
+TEST_F(ScAgentsTest, AgentSearchByZeroClasses)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_classes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatibleClasses)
+TEST_F(ScAgentsTest, AgentSearchByIncompatibleClasses)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_classes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByOneAuthor)
+TEST_F(ScAgentsTest, AgentSearchByOneAuthor)
 {
   searchComponentsTestBody(*m_ctx, {"specification_1", "specification_2"}, "one_author_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByTwoAuthors)
+TEST_F(ScAgentsTest, AgentSearchByTwoAuthors)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_authors_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroAuthors)
+TEST_F(ScAgentsTest, AgentSearchByZeroAuthors)
 {
   searchComponentsTestBody(
       *m_ctx, {"specification_1", "specification_2", "specification_3"}, "zero_authors_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatibleAuthor)
+TEST_F(ScAgentsTest, AgentSearchByIncompatibleAuthor)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_authors_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByOneKey)
+TEST_F(ScAgentsTest, AgentSearchByOneKey)
 {
   searchComponentsTestBody(*m_ctx, {"specification_3"}, "one_key_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByTwoKeys)
+TEST_F(ScAgentsTest, AgentSearchByTwoKeys)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_keys_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroKeys)
+TEST_F(ScAgentsTest, AgentSearchByZeroKeys)
 {
   searchComponentsTestBody(
       *m_ctx, {"specification_1", "specification_2", "specification_3"}, "zero_keys_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatibleKeys)
+TEST_F(ScAgentsTest, AgentSearchByIncompatibleKeys)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_keys_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByOneNote)
+TEST_F(ScAgentsTest, AgentSearchByOneNote)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "one_note_action_components_search.scs");
 }
 
 // disabled because links in action arguments are passed without order so search uses `2 component` instead of
 // `component 2`
-TEST_F(AgentTest, DISABLED_AgentSearchByTwoNotes)
+TEST_F(ScAgentsTest, DISABLED_AgentSearchByTwoNotes)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_notes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroNotes)
+TEST_F(ScAgentsTest, AgentSearchByZeroNotes)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_notes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatibleNotes)
+TEST_F(ScAgentsTest, AgentSearchByIncompatibleNotes)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_notes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByOneExplanation)
+TEST_F(ScAgentsTest, AgentSearchByOneExplanation)
 {
   searchComponentsTestBody(
       *m_ctx, {"specification_1", "specification_3"}, "one_explanation_action_components_search.scs");
@@ -185,76 +176,76 @@ TEST_F(AgentTest, AgentSearchByOneExplanation)
 
 // disabled because links in action arguments are passed without order so search uses `2 component` instead of
 // `component 2`
-TEST_F(AgentTest, DISABLED_AgentSearchByTwoExplanations)
+TEST_F(ScAgentsTest, DISABLED_AgentSearchByTwoExplanations)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_explanations_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroExplanations)
+TEST_F(ScAgentsTest, AgentSearchByZeroExplanations)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_explanations_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatibleExplanations)
+TEST_F(ScAgentsTest, AgentSearchByIncompatibleExplanations)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_explanations_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByOnePurpose)
+TEST_F(ScAgentsTest, AgentSearchByOnePurpose)
 {
   searchComponentsTestBody(*m_ctx, {"specification_1", "specification_2"}, "one_purpose_action_components_search.scs");
 }
 
 // disabled because links in action arguments are passed without order so search uses `2 component` instead of
 // `component 2`
-TEST_F(AgentTest, DISABLED_AgentSearchByTwoPurposes)
+TEST_F(ScAgentsTest, DISABLED_AgentSearchByTwoPurposes)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "two_purposes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroPurposes)
+TEST_F(ScAgentsTest, AgentSearchByZeroPurposes)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_purposes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatiblePurposes)
+TEST_F(ScAgentsTest, AgentSearchByIncompatiblePurposes)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_purposes_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByOneId)
+TEST_F(ScAgentsTest, AgentSearchByOneId)
 {
   searchComponentsTestBody(*m_ctx, {"specification_1", "specification_2"}, "one_id_action_components_search.scs");
 }
 
 // disabled because links in action arguments are passed without order so search uses `3 component` instead of
 // `component 3`
-TEST_F(AgentTest, DISABLED_AgentSearchByTwoIds)
+TEST_F(ScAgentsTest, DISABLED_AgentSearchByTwoIds)
 {
   searchComponentsTestBody(*m_ctx, {"specification_3"}, "two_ids_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByZeroIds)
+TEST_F(ScAgentsTest, AgentSearchByZeroIds)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "zero_ids_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByIncompatibleIds)
+TEST_F(ScAgentsTest, AgentSearchByIncompatibleIds)
 {
   searchComponentsTestBody(*m_ctx, {}, "incompatible_ids_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchByAllArguments)
+TEST_F(ScAgentsTest, AgentSearchByAllArguments)
 {
   searchComponentsTestBody(*m_ctx, {"specification_2"}, "all_arguments_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentSearchWithEmptyArguments)
+TEST_F(ScAgentsTest, AgentSearchWithEmptyArguments)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "empty_arguments_action_components_search.scs");
 }
 
-TEST_F(AgentTest, AgentInstall)
+TEST_F(ScAgentsTest, AgentInstall)
 {
   ScAgentContext & context = *m_ctx;
   loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_install.scs");

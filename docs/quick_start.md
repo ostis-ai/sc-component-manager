@@ -21,7 +21,7 @@ Note: currently, using sc-component-manager natively on Windows isn't supported.
   # if several paths to extensions are provided then they should be separated 
   # by semicolon and wrapped in double quotes
   ```
-5. Initialize component specifications. Execute the following command in a running terminal:
+5. Download component specifications from repositories. Execute the following command in a running terminal:
   ```sh
   components init
   ```

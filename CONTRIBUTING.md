@@ -4,7 +4,7 @@ This page describes rules to contribute changes and features by Pull Requests cr
 
 To initialize your repo do:
 
-* Make fork from `https://github.com/ostis-ai/sc-component-manager`.
+* Fork `https://github.com/ostis-ai/sc-component-manager`.
 * Clone your fork to your machine and prepare (see [Readme](https://github.com/ostis-ai/sc-component-manager)).
 
 ```sh
@@ -20,8 +20,7 @@ git fetch upstream
 git checkout upstream/main
 ```
 
-* Use `git rebase` instead of `merge`. [More documentation about this command](https://git-scm.com/docs/git-rebase)
-just try to apply your commits (from current branch to commits in specified branch). To rebase your branch to main use:
+* Use `git rebase` instead of `merge`. See [documentation about this command](https://git-scm.com/docs/git-rebase). To rebase your branch against main use:
 
 ```sh
 git checkout <yourbranch>
@@ -45,8 +44,9 @@ be pointed in commit message.
 
 Examples:
 <pre>
-[cpp] Colored log output
-[cpp][test] Add unit test for ScEvent class
+[kb] Update test components specification
+[init][test] Add unit test for init comand
+[utils] Add get specification address util
 </pre>
 
 Possible tags:
@@ -69,18 +69,17 @@ Possible tags:
   * `[cmake]` - changes in `cmake` build system.
   * `[tests]` - changes in `tests`.
 
-Each commit in Pull Request should be an atomic. Another word implement or fix one feature. For example:
+Each commit in Pull Request should be an atomic. In other words, it should implement or fix one feature. For example:
 <pre>
 Last commit
 ...
-[cpp] Colored log output
-[cpp] Add class to work with console
+[utils][test] Add unit test for get specification address util
+[utils] Add get specification address util
 ...
 Init commit
 </pre>
 
-In this example we add class to work with console (where implemented colored output), then in another commit we had 
-implementation of colored log output.
+In this example we add class to work with console (where implemented colored output), then in another commit we add implementation of colored log output.
 
 ***
 Each commit should have not much differences excluding cases, with:
@@ -90,6 +89,7 @@ Each commit should have not much differences excluding cases, with:
   * Code formatting.
 
 **Do atomic commits for each changes.** For example if you rename some members in `ClassX` and `ClassY`, then do two commits:
+
 <pre>
 [refactor] Rename members in ClassX according to codestyle
 [refactor] Rename members in ClassY according to codestyle
@@ -97,14 +97,14 @@ Each commit should have not much differences excluding cases, with:
 
 **Do not mix codestyle changes and any logical fixes in one commit.**
 
-All commit, that not applies to this rules, should be split by this rules. Another way they will be rejected with Pull request.
+All commits that not applies to this rules should be split by this rules. Otherwise they will be rejected with Pull Request.
 
 ***
-## Pull request
+## Pull Request
 
-Each pull request with many changes, that not possible to review (excluding codestyle, rename changes), will be rejected.
+Each Pull Request with many changes, that not possible to review (excluding codestyle, rename changes), will be rejected.
 
-_**All commit, that not applies to these rules, should be split by these rules. Another way they will be rejected with Pull request.**_
+_**All commit, that not applies to these rules, should be split by these rules. Another way they will be rejected with Pull Request.**_
 
 ### Pull Request Preparation
 
@@ -114,7 +114,7 @@ _**All commit, that not applies to these rules, should be split by these rules. 
  - Cover new functionality by tests;
  - Your code should be written according to a codestyle like in sc-machine (see [Codestyle rules](https://ostis-ai.github.io/sc-machine/dev/codestyle/)).
 
-### Pull Request creation
+### Pull Request Creation
 
  - Create PR on GitHub;
  - Check that CI checks were passed successfully.

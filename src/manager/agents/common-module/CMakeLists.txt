@@ -19,7 +19,11 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-add_library(common-module SHARED ${SOURCES})
+file(GLOB MODULE_SOURCES CONFIGURE_DEPENDS
+    "module/*.hpp" "module/*.cpp"
+)
+
+add_library(common-module SHARED ${MODULE_SOURCES})
 target_link_libraries(common-module LINK_PRIVATE common-lib)
 target_include_directories(common-module PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/module)
 set_target_properties(common-module PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})

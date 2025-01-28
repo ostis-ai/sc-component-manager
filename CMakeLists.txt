@@ -35,7 +35,7 @@ if(${SC_CLANG_FORMAT_CODE})
 endif()
 
 if(${WIN32})
-    message(SEND_ERROR "sc-component-manager isn't supported on Windows OS.")
+    message(FATAL_ERROR "sc-component-manager isn't supported on Windows OS.")
 endif(${WIN32})
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")

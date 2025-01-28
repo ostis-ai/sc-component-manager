@@ -33,3 +33,15 @@ Note: currently, using sc-component-manager natively on Windows isn't supported.
 To learn more about how to use sc-component-manager and to manage components with it, see [this docs](usage/usage.md).
 
 In case you want to make changes to the project sources, please refer to the [build system docs](build/build_system.md).
+
+## Common issues
+
+- Can't load a whole repo using the command `components install --idtf <component_identifier>`. There is only a repository directory without source files.
+  
+  **Solution**: please make sure your Git is configured to be able to use `git sparse-checkout`.
+  ```sh
+  git config --global core.sparseCheckoutCone true
+  git config --global core.sparseCheckout true
+  git config --global index.sparse true
+  ```
+  You can see more in the [official documentation](https://git-scm.com/docs/git-sparse-checkout).

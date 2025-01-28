@@ -104,15 +104,3 @@ concept_cat
     => nrel_installation_method: ... (* <- concept_component_dynamically_installed_method;; *);;
 *];;
 ```
-
-## Common issues
-
-- Can't load a whole repo using the command `components install --idtf <component_identifier>`. There is only a repository directory without source files.
-  
-  **Solution**: please make sure your Git is configured to be able to use `git sparse-checkout`.
-  ```sh
-  git config --global core.sparseCheckoutCone true
-  git config --global core.sparseCheckout true
-  git config --global index.sparse true
-  ```
-  You can see more in the [official documentation](https://git-scm.com/docs/git-sparse-checkout).

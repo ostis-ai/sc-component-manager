@@ -1,7 +1,7 @@
 tests/units/test_defines.hpp
 generated
 
-build
+/build
 cmake-build-debug
 
 # devs

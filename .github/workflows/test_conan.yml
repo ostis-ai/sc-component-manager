@@ -76,4 +76,4 @@ jobs:
 
       - name: Run sc-component-manager tests
         id: run_tests
-        run: cd build/Release && ctest -C Release -V
+        run: cd build/Release && ctest -V

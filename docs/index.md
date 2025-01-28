@@ -10,7 +10,7 @@ Table of contents:
 
 - [Quick Start](quick_start.md) - *get up and running with sc-component-manager quickly*
 - **Build Instructions** - *guidelines for building the project, configuring settings*
-    * [Quick Start for Developers](build/quick_start.md) - *get up and start developing sc-component-manager quickly*
+    * [Quick Start for Contributors](build/quick_start.md) - *get up and start developing sc-component-manager quickly*
     * [Build System](build/build_system.md) - *how to build the project and use it as a library*
     * [CMake Flags](build/cmake_flags.md) - *description of CMake flags used to configure sc-component-manager*
 - **Development** - *guidelines for contributing to development*

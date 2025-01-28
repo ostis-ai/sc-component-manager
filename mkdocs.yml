@@ -12,7 +12,7 @@ nav:
   - Home: index.md
   - Quick Start: quick_start.md
   - Build Instructions:
-      - Quick Start for Developers: build/quick_start.md
+      - Quick Start for Contributors: build/quick_start.md
       - Build System: build/build_system.md
       - CMake Flags: build/cmake_flags.md
   - Development:

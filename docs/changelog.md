@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Intro for sc-component-manager in docs
 - CMake flags section in docs
 - Quick start section for users in docs
-- Quick start section for developers in docs
+- Quick start section for Contributors in docs
 - Describe myself decomposition
 - Add components logging
 - Update clang-format

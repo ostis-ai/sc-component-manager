@@ -3,6 +3,7 @@ generated
 
 /build
 cmake-build-debug
+kb.bin
 
 # devs
 .vscode

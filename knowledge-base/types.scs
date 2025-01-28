@@ -1,0 +1,41 @@
+sc_node_non_role_relation
+	-> nrel_component_address;
+	-> nrel_installation_method;
+	-> nrel_sc_identifier;
+	-> nrel_key_sc_element;
+	-> nrel_purpose;
+	-> nrel_explanation;
+	-> nrel_authors;
+	-> nrel_component_dependencies;
+	-> nrel_alternative_addresses;
+	-> nrel_repository_address;;
+
+sc_node_role_relation
+	-> rrel_repositories;
+	-> rrel_components;
+	-> rrel_address;
+	-> rrel_components_specifications;
+	-> rrel_repositories_specifications;;
+
+sc_node_class
+	-> concept_reusable_component;
+	-> concept_atomic_reusable_component;
+	-> concept_independent_reusable_component;
+	-> concept_reusable_kb_component;
+	-> concept_reusable_ps_component;
+	-> concept_reusable_ui_component;
+	-> concept_reusable_embedded_ostis_system;
+	-> concept_reusable_dynamically_installed_component;
+	-> concept_reusable_component_requiring_restart;
+	-> concept_reusable_source_code_component;
+	-> concept_reusable_component_specification;
+	-> concept_repository;
+	-> concept_github_url;
+	-> concept_google_drive_url;
+	-> concept_complex_address;
+	-> concept_single_address;
+	-> concept_need_to_install_components;
+	-> sc_model_of_knowledge_base;
+	-> sc_model_of_problem_solver;
+	-> sc_model_of_interface;
+	-> concept_subsystems_set;;

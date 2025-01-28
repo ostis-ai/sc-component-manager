@@ -9,6 +9,7 @@ This project uses CMake presets. These presets help manage different build confi
 If you wish to use CLI instead, you can list all the available configurations in the `CMakePresets.json` file and pick one of the presets:
 
 ```sh
+conan install . -s build_type=<Debug|Release> --build=missing
 cmake --list-presets
 ```
 

@@ -12,7 +12,6 @@ target_link_libraries(console-interface
 target_include_directories(console-interface
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
     PUBLIC $<BUILD_INTERFACE:${AGENTS_SRC}>
-    PUBLIC $<INSTALL_INTERFACE:include>
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PUBLIC $<INSTALL_INTERFACE:include>
 )

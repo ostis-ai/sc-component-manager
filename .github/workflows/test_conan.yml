@@ -40,7 +40,7 @@ jobs:
           path: |
             /var/cache/apt/
             /var/lib/apt/
-          key: apt-${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/install_deps_ubuntu.sh') }}
+          key: apt-${{ runner.os }}-${{ github.job }}
 
       - name: Set up Python
         uses: actions/setup-python@v4

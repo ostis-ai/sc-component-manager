@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.conan/data
-          key: check-style-${{ runner.os }}-${{ hashFiles('**/conanfile.py') }}
+          key: conan-${{ runner.os }}-${{ hashFiles('**/conanfile.py') }}
 
       - name: apt cache
         uses: actions/cache@v4     
@@ -58,7 +58,7 @@ jobs:
           path: |
             /var/cache/apt/
             /var/lib/apt/
-          key: apt-${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/install_deps_ubuntu.sh') }}
+          key: apt-${{ runner.os }}-${{ github.job }}
 
       - name: Set up Python
         uses: actions/setup-python@v4

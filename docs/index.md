@@ -15,7 +15,7 @@ Table of contents:
     * [Build System](build/build_system.md) - *how to build the project and use it as a library*
     * [CMake Flags](build/cmake_flags.md) - *description of CMake flags used to configure sc-component-manager*
 - **Development** - *guidelines for contributing to development*
-    * [Contributing Guide](https://github.com/ostis-ai/sc-component-manager/blob/main/CONTRIBUTING.md) - *guide for those who wants to make contribution into sc-component-manager*
+    * [Contributing Guide](https://github.com/ostis-ai/sc-component-manager/blob/main/CONTRIBUTING.md) - *guide for those who wants to make contribution to sc-component-manager*
     * [Codestyle Guide](https://ostis-ai.github.io/sc-machine/dev/codestyle/) - *guide for those who wants to write code for sc-component-manager*
 - [License](https://github.com/ostis-ai/sc-component-manager/blob/main/COPYING.MIT)
 - [Changelog](changelog.md)

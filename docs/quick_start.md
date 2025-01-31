@@ -4,7 +4,8 @@
 
 ### GitHub Releases
 
-Note: currently, using sc-component-manager natively on Windows isn't supported.
+!!! Note
+    Currently, using sc-component-manager natively on Windows isn't supported.
 
 1. Download pre-built artifacts of sc-machine from [GitHub Releases](https://github.com/ostis-ai/sc-machine/releases) and extract it to any location.
   To learn more about how to install and use sc-machine artifacts, see [sc-machine quick start](https://ostis-ai.github.io/sc-machine/quick_start/).

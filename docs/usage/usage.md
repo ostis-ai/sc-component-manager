@@ -5,11 +5,13 @@
 | Command              | Abbreviation                             | Description                                                                                       | Flags                                                                                                                          |
 |:---------------------|:-----------------------------------------|:--------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
 | `components init`    | `ci`, <br/> `comp init`                  | Download specifications from repositories.                                                        |                                                                                                                                |
-| `components search`  | `cs`, <br/> `comp search`, <br/>`comp s` | Search a component specification in the knowledge base by author, class, key sc-element, explanation, note, purpose or main identifier substring. | [--author \<author\>] <br/> [--class \<class\>] <br/> [--key \<key\>] <br/> [--explanation \<explanation\>] <br/> [--note \<note\>] <br/> [--purpose \<purpose\>] <br/> [--main-id \<main identifier\>] |
-| `components install` | `cinst`, <br/> `comp inst`               | Install components by its system identifier or install the set of components.                     | [--idtf \<system_idtf\>] or [\<system_idtf\>] - install by an identifier <br/> [--set \<set\>] - install the set of components |
+| `components search`  | `cs`, <br/> `comp search`, <br/> `comp s` | Search a component specification in the knowledge base by author, class, key sc-element, explanation, note, purpose, or main identifier substring. | `--author <author>` <br/> `--class <class>` <br/> `--key <key>` <br/> `--explanation <explanation>` <br/> `--note <note>` <br/> `--purpose <purpose>` <br/> `--main-id <main identifier>` |
+| `components install` | `cinst`, <br/> `comp inst`               | Install components by its system identifier or install the set of components.                     | `--idtf <system_idtf>` or `<system_idtf>` - install by an identifier <br/> `--set <set>` - install the set of components |
 
-- Note: if you are searching a string, you can put this string in quotes.
-- Note: `knowledge-base/specifications.scs` contains the example of a repository specification.
+!!! Note
+    If you are searching a string, you can put this string in quotes.
+!!! Note
+    `knowledge-base/specifications.scs` contains the example of a repository specification.
   
 ## Debug Logs
 

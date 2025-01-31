@@ -39,19 +39,18 @@ git rebase --abort
 
 Each commit message should be formed as: `[tag1]...[tagN] Message text (#issue)`.
 
-Message text should start from an upper case letter. If commit doesn't fix or implement any #issue, then it shouldn't 
-be pointed in commit message.
+Message text should start from an upper case letter. If commit doesn't fix or implement any #issue, then it shouldn't be pointed in commit message.
 
 Examples:
 <pre>
 [kb] Update test components specification
-[init][test] Add unit test for init comand
+[init][test] Add unit test for init command
 [utils] Add get specification address util
 </pre>
 
 Possible tags:
 
-  * `[init]` - changes in `init` comand;
+  * `[init]` - changes in `init` command;
   * `[install]` - changes in `install` module;
   * `[search]` - changes in `search` module;
   * `[utils]` - changes in `utils`;
@@ -70,6 +69,7 @@ Possible tags:
   * `[tests]` - changes in `tests`.
 
 Each commit in Pull Request should be an atomic. In other words, it should implement or fix one feature. For example:
+
 <pre>
 Last commit
 ...

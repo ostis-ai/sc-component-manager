@@ -48,10 +48,10 @@ protected:
     sc_memory_params params;
     sc_memory_params_clear(&params);
 
-    params.dump_memory = SC_FALSE;
-    params.dump_memory_statistics = SC_FALSE;
+    params.dump_memory = false;
+    params.dump_memory_statistics = false;
 
-    params.clear = SC_TRUE;
+    params.clear = true;
     params.storage = TEST_KB_BIN_PATH.c_str();
 
     ScMemory::LogMute();

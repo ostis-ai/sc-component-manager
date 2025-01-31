@@ -97,7 +97,7 @@ Commits should be small in size excluding cases, with:
 
 **Do not mix codestyle changes and any logical fixes in one commit.**
 
-All commits that not applies to this rules should be split by this rules. Otherwise they will be rejected with Pull Request.
+All commits that not follow these rules should be split according to these rules. Otherwise they will be rejected with Pull Request.
 
 ***
 ## Pull Request

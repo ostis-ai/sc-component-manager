@@ -49,7 +49,7 @@ pipx install conan
 
 ```sh
 # Install dependencies using Conan with Debug build type
-conan install . -s build_type=Debug
+conan install . -s build_type=Debug --build=missing
 # Configure using debug-conan preset
 cmake --preset debug-conan
 # Build using debug preset
@@ -60,7 +60,7 @@ To build your project for release, you can build with tests to ensure everything
 
 ```sh
 # Install dependencies using Conan with Debug build type
-conan install . -s build_type=Release
+conan install . -s build_type=Release --build=missing
 # Configure using release-with-tests preset
 cmake --preset release-with-tests-conan
 # Build using release preset

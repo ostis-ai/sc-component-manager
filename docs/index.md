@@ -4,7 +4,7 @@ Welcome to the [sc-component-manager](https://github.com/ostis-ai/sc-component-m
 
 ## What is sc-component-manager?  
 
-sc-component-manager is a **software package** to manage components of systems designed with the **OSTIS Technology**. It extends the capabilities of the [**sc-machine**](https://github.com/ostis-ai/sc-component-manager), which serves as a tool for creating, searching and distributing components of ostis-systems.
+sc-component-manager is a **software package** to manage components of systems designed with the **OSTIS Technology**. It extends the capabilities of the [**sc-machine**](https://github.com/ostis-ai/sc-machine), which serves as a tool for creating, searching and distributing components of ostis-systems.
 
 Table of contents:
 

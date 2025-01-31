@@ -44,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Build scp-machine with conan-provided dependencies
+- Build sc-component-manager with conan-provided dependencies
 - Install sc-machine with conan
 - Rename questions to actions
 - Make sc-component-manager as shared library

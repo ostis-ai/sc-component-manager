@@ -50,6 +50,7 @@ Examples:
 
 Possible tags:
 
+  * `[config]` - changes in configuration files;
   * `[init]` - changes in `init` command;
   * `[install]` - changes in `install` module;
   * `[search]` - changes in `search` module;
@@ -62,10 +63,10 @@ Possible tags:
   * `[refactor]` - commits with some code refactoring;
   * `[changelog]` - use when you update changelog;
   * `[docs]` - use when you update documentation;
-  * `[scripts]` - updates in the `sc-component_manager/scripts` files
+  * `[scripts]` - updates in the `sc-component_manager/scripts` files;
   * `[ci]` - changes in `ci` configuration or scripts;
   * `[git]` - changes in `git` configuration;
-  * `[cmake]` - changes in `cmake` build system.
+  * `[cmake]` - changes in `cmake` build system;
   * `[tests]` - changes in `tests`.
 
 Each commit in Pull Request should be an atomic. In other words, it should implement or fix one feature. For example:

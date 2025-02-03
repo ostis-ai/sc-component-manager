@@ -1,6 +1,6 @@
 version: 1.3
 about:
-  - "sc-component-manager** is a software package manager for components within the OSTIS Technology"
+  - "sc-component-manager is a software package manager for components within the OSTIS Technology"
   - "sc-component-manager allows ostis-systems to install reusable components for intelligent systems made with the OSTIS Technology"
 
 pr_review:

@@ -9,7 +9,7 @@ sc-component-manager is a **software package** to manage components of systems d
 Table of contents:
 
 - [Quick Start](quick_start.md) - *get up and running with sc-component-manager quickly*
-- [Usage][usage/usage.md] - *how to use sc-component-manager*
+- [Usage](usage/usage.md) - *how to use sc-component-manager*
 - **Build Instructions** - *guidelines for building the project, configuring settings*
     * [Quick Start for Contributors](build/quick_start.md) - *get up and start developing sc-component-manager quickly*
     * [Build System](build/build_system.md) - *how to build the project and use it as a library*

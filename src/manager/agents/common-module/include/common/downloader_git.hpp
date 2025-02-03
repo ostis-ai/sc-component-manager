@@ -14,7 +14,7 @@
 #include "common/command_constants.hpp"
 #include "common/downloader.hpp"
 
-#include "repository_url_parser.hpp"
+#include "common/repository_url_parser.hpp"
 
 class DownloaderGit : public Downloader
 {

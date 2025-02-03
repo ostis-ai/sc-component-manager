@@ -80,8 +80,6 @@ Last commit
 Init commit
 </pre>
 
-In this example we add class to work with console (where implemented colored output), then in another commit we add implementation of colored log output.
-
 ***
 Commits should be small in size excluding cases, with:
 

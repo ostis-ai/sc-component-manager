@@ -103,8 +103,6 @@ All commits that not follow these rules should be split according to these rules
 
 Each Pull Request with many changes, that not possible to review (excluding codestyle, rename changes), will be rejected.
 
-_**All commit, that not applies to these rules, should be split by these rules. Another way they will be rejected with Pull Request.**_
-
 ### Pull Request Preparation
 
  - Read rules to create PR in documentation;

@@ -2,6 +2,15 @@
 
 This guide provides short information for developers to start to work with sc-component-manager quickly. You can always learn more about the sc-component-manager's [build system](build_system.md).
 
+## Install project
+
+Install sc-component-manager via git:
+
+```sh
+git clone https://github.com/ostis-ai/sc-component-manager
+git submodule update --init --recursive
+```
+
 ## Check CMake
 
 Install pipx first using [**pipx installation guide**](https://pipx.pypa.io/stable/installation/) if not already installed.

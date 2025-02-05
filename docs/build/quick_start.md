@@ -135,7 +135,7 @@ To launch sc-component-manager, run:
 
 ```sh
 ./path/to/sc-machine/binary -s path/to/kb.bin \
-    -e "path/to/sc-component-manager/lib/extensions;path/to/sc-machine/lib/extensions"
+    -e "sc-component-manager/<Debug|Release>/lib/extensions;path/to/sc-machine/lib/extensions"
 # if several paths to extensions are provided then they should be separated 
 # by semicolon and wrapped in double quotes
 ```

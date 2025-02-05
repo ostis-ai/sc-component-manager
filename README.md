@@ -5,7 +5,7 @@
 [![Docs](https://img.shields.io/badge/Docs-gray?style=for-the-badge&logo=read-the-docs)](https://ostis-ai.github.io/sc-component-manager)
 [![Community](https://img.shields.io/badge/-Community-teal?style=for-the-badge&logo=matrix)](https://app.element.io/index.html#/room/#ostis_tech_support:matrix.org)
 
-Short version: **sc-component-manager** is a software package manager for components within the [**OSTIS Technology**](https://github.com/ostis-ai).
+**sc-component-manager** is a software package manager for components within the [**OSTIS Technology**](https://github.com/ostis-ai).
 
 sc-component-manager allows ostis-systems to install reusable components for intelligent systems made with the OSTIS Technology. sc-component-manager is an extension to [**sc-machine**](https://github.com/ostis-ai/sc-machine).
 

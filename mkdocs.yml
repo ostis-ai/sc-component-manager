@@ -17,9 +17,9 @@ nav:
       - Build System: build/build_system.md
       - CMake Flags: build/cmake_flags.md
   - Development:
-      - Contributing Guide: https://github.com/ostis-ai/sc-component-manager/blob/main/CONTRIBUTING.md
+      - Contributing Guide: CONTRIBUTING.md
       - Codestyle Guide: https://ostis-ai.github.io/sc-machine/dev/codestyle/
-  - License: https://github.com/ostis-ai/sc-component-manager/blob/main/COPYING.md
+  - License: https://github.com/ostis-ai/sc-component-manager/blob/main/COPYING.MIT
   - Changelog: changelog.md
 
 plugins:

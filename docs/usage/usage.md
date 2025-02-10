@@ -19,13 +19,14 @@ To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory
 
 ## Repository and components
 
-File `specification.scs` contains description of two sections: **components** and **repositories**.
-
-**Repositories** have links for source on GitHub with specification file, **components** have links to source with specification of component.
-
 ### Repository specification
 
-Example of repository (`specifications.scs`)
+The repository specification describes two primary sections: components and repositories:
+
+- Components section represents a list of addresses to Github repositories that contain component sources and their specifications.
+- Repositories section includes addresses to Github repositories that contain other repository specifications.
+
+See example:
 
 ```scs
 sc_component_manager_repository
@@ -80,7 +81,9 @@ sc_component_manager_repository
 
 ### Component specification
 
-Example of components specification (`specification.scs`)
+The component specification is a description of reusable component. 
+
+See example:
 
 ```scs
 cat_specification

@@ -23,7 +23,7 @@ To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory
 
 The repository specification describes two primary sections: components and repositories:
 
-- Components section represents a list of addresses to Github repositories that contain component sources and their specifications.
+- Components section represents a list of components that have addresses to Github repositories that contain component sources and their specifications.
 - Repositories section includes addresses to Github repositories that contain other repository specifications.
 
 See example:

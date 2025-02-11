@@ -8,8 +8,8 @@ Install sc-component-manager via git:
 
 ```sh
 git clone https://github.com/ostis-ai/sc-component-manager
-git submodule update --init --recursive
 cd sc-component-manager
+git submodule update --init --recursive
 ```
 
 ## Check CMake

@@ -6,10 +6,8 @@
 
 #pragma once
 
-#include "sc-memory/sc_module.hpp"
+#include <sc-memory/sc_module.hpp>
 
-namespace commonModule
-{
 class CommonModule : public ScModule
 {
 public:
@@ -17,4 +15,3 @@ public:
 
   void Shutdown(ScMemoryContext * context) override;
 };
-}  // namespace commonModule

@@ -1,149 +1,38 @@
 # sc-component-manager
 
-It is the repository for the Component manager of the [OSTIS Project](https://github.com/ostis-ai).
-It allows ostis-systems to install reusable components for intelligent systems made with the [**OSTIS Technology**](https://github.com/ostis-ai).
+[![CI](https://github.com/ostis-ai/sc-component-manager/actions/workflows/test_conan.yml/badge.svg)](https://github.com/ostis-ai/sc-component-manager/actions/workflows/test_conan.yml)
+[![license](https://img.shields.io/badge/License-MIT-yellow.svg)](COPYING.MIT)
 
-## Installation
+[![Quick Start](https://img.shields.io/badge/-Quick%20Start-black?style=for-the-badge&logo=rocket)](https://ostis-ai.github.io/sc-component-manager/quick_start)
+[![Docs](https://img.shields.io/badge/Docs-gray?style=for-the-badge&logo=read-the-docs)](https://ostis-ai.github.io/sc-component-manager)
+[![Community](https://img.shields.io/badge/-Community-teal?style=for-the-badge&logo=matrix)](https://app.element.io/index.html#/room/#ostis_tech_support:matrix.org)
 
-Using ostis-web-platform
-```sh
-git clone https://github.com/ostis-ai/ostis-web-platform
-cd ostis-web-platform
-./scripts/install_platform_with_component_manager.sh
-```
+**sc-component-manager** is a software package manager for components within the [**OSTIS Technology**](https://github.com/ostis-ai).
 
-## Build
-To build sc-component-manager run build script:
+sc-component-manager allows ostis-systems to install reusable components for intelligent systems made with the OSTIS Technology. sc-component-manager is an extension to [**sc-machine**](https://github.com/ostis-ai/sc-machine).
 
-```sh
-./scripts/build_sc_component_manager.sh
-```
+## Getting started
 
-To build knowledge base, run ```./build_kb.sh``` in ostis-web-platform scripts
+To get started, check out our [quick start guide](https://ostis-ai.github.io/sc-component-manager/quick_start).
 
-## Post Install
+## Documentation
 
-### Debug Logs
-To see sc-component-manager debug logs set `log_level` to `Debug` in `[sc-memory]` section of `sc-machine.ini`
+- A brief user manual and developer docs are hosted on our [GitHub Pages](https://ostis-ai.github.io/sc-component-manager).
+  - <details>
+      <summary>Build documentation locally</summary>
 
-### Common issues:
-- Can't load a whole repo using the command `components install --idtf <component_identifier>`. There is only a repository directory without source files.
-  
-  **Solution**: please make sure your Git is configured to be able to use `git sparse-checkout`.
-  ```sh
-  git config --global core.sparseCheckoutCone true
-  git config --global core.sparseCheckout true
-  git config --global index.sparse true
-  ```
-  You can see more in the [official documentation](https://git-scm.com/docs/git-sparse-checkout).
+    ```sh
+    pip3 install mkdocs mkdocs-material
+    mkdocs serve
+    # and open http://127.0.0.1:8004/ in your browser
+    ```
+    </details>
 
-## Usage
+## Feedback
 
-### Start sc-component manager
+Contributions, bug reports and feature requests are welcome!
+Feel free to check our [issues page](https://github.com/ostis-ai/sc-component-manager/issues) and file a new issue (or comment in existing ones).
 
-To start sc-component-manager run:
+## License
 
-``./scripts/run_sc_machine.sh``
-
-Possible run flags:
-- `-c` <CONFIG_PATH>.
-
-### Commands
-| Command              | Abbreviation                             | Description                                                                                       | Flags                                                                                                                          |
-|:---------------------|:-----------------------------------------|:--------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------|
-| `components init`    | `ci`, <br/> `comp init`                  | Download specifications from repositories.                                                        |                                                                                                                                |
-| `components search`  | `cs`, <br/> `comp search`, <br/>`comp s` | Search a component specification in the knowledge base by author, class, key sc-element, explanation, note, purpose or main identifier substring. | [--author \<author\>] <br/> [--class \<class\>] <br/> [--key \<key\>] <br/> [--explanation \<explanation\>] <br/> [--note \<note\>] <br/> [--purpose \<purpose\>] <br/> [--main-id \<main identifier\>] |
-| `components install` | `cinst`, <br/> `comp inst`               | Install components by its system identifier or install the set of components.                     | [--idtf \<system_idtf\>] or [\<system_idtf\>] - install by an identifier <br/> [--set \<set\>] - install the set of components |
-- Note: if you are searching a string, you can put this string in quotes.
-- Note: `kb/specifications.scs` contains the example of a repository specification.
-  
-
-## Repository and components
-
-File specification.scs contains description of two sections: **components** and **repositories**.
-
-**Repositories** have links for source on GitHub with specification file, **components** have links to source with specification of component.
-
-### Repository specification
-
-Example of repository (`specifications.scs`)
-
-```scs
-sc_component_manager_repository
-  <- concept_repository;
-  -> rrel_components_specifications: ..components_addresses;
-  -> rrel_repositories_specifications: ..repositories_addresses;;
-
-..components_addresses
-  <- sc_node_tuple;
-  -> knowledge_base_ims_specification
-    (*
-      <- concept_reusable_component_specification;;
-      => nrel_alternative_addresses:
-      ...
-      (*
-        <- sc_node_tuple;;
-        -> rrel_1:
-          ... 
-          (*
-            -> [https://github.com/ostis-ai/ims.ostis.kb]
-              (*
-                <- concept_github_url;;
-              *);;
-          *);;
-      *);;
-    *);
-  -> cat_kb_component_spec
-      (*
-           <- concept_reusable_component_specification;;
-           => nrel_alternative_addresses:
-           ...
-           (*
-                <- sc_node_tuple;;
-                -> rrel_1:
-                ...
-                (*
-                  -> [https://github.com/MksmOrlov/cat-kb-component]
-                      (*
-                        <- concept_github_url;;
-                      *);;
-                *);;
-            *);;
-        *);;
-
-..repositories_addresses
-  -> ... 
-      (*
-      -> rrel_address:
-          [https://github.com/MksmOrlov/components-repo-example];;
-      *);;
-```
-
-### Component specification
-
-Example of components specification (`specification.scs`)
-
-```scs
-cat_specification
-    <- concept_reusable_component_specification;;
-
-cat_specification = [*
-concept_cat
-    <- concept_reusable_component;
-    <- concept_atomic_reusable_component;
-    <- concept_independent_reusable_component;
-    <- concept_reusable_kb_component;
-    <- concept_reusable_dynamically_installed_component;
-    <- concept_reusable_source_code_component;
-
-    => nrel_sc_identifier: [Cat specification](* <- lang_en;; *);
-    => nrel_key_sc_element: concept_animal;
-    => nrel_purpose: [Cat specification is needed to design knowledge bases about animal world, pets and zoo.](* <- lang_en;; *);
-    => nrel_explanation: [Meow meow meow!] (*<- lang_en;; *);
-    => nrel_authors: ... (* -> Orlov;; *);
-    => nrel_component_dependencies: ... (* <- empty_set;; *);
-
-    => nrel_component_address: [https://github.com/MksmOrlov/cat-kb-component] (* <- concept_github_url;; *);
-    => nrel_installation_method: ... (* <- concept_component_dynamically_installed_method;; *);;
-*];;
-```
+Distributed under the MIT License. Check [COPYING.MIT](COPYING.MIT) for more information.

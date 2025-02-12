@@ -1,17 +1,23 @@
 set(AGENTS_SRC "${SC_COMPONENT_MANAGER_SRC}/manager/agents")
 
-file(GLOB_RECURSE SOURCES "*.cpp" "*.hpp")
+file(GLOB SOURCES CONFIGURE_DEPENDS
+    "src/*.hpp" "src/*.cpp"
+    "include/console-interface/*.hpp" "include/console-interface/*.cpp"
+)
 
 add_library(console-interface SHARED ${SOURCES})
 target_link_libraries(console-interface
-    LINK_PUBLIC sc-agents-common
-    LINK_PUBLIC sc-builder-lib
     LINK_PUBLIC common-lib
 )
 target_include_directories(console-interface
-    PUBLIC ${CMAKE_CURRENT_LIST_DIR}
-    PUBLIC ${AGENTS_SRC}
-    PUBLIC ${SC_CONFIG_PATH}
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    PUBLIC $<BUILD_INTERFACE:${AGENTS_SRC}>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PUBLIC $<INSTALL_INTERFACE:include>
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 if(${SC_CLANG_FORMAT_CODE})

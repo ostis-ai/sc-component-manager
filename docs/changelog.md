@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Intro for sc-component-manager in docs
+- CMake flags section in docs
+- Quick start section for users in docs
+- Quick start section for Contributors in docs
 - Describe myself decomposition
 - Add components logging
 - Update clang-format
@@ -40,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Build sc-component-manager with conan-provided dependencies
+- Install sc-machine with conan
 - Rename questions to actions
 - Make sc-component-manager as shared library
 - Separated envs from envs of sc-machine

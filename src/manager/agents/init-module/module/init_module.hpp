@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "sc-memory/sc_module.hpp"
+#include <sc-memory/sc_module.hpp>
 
 namespace initModule
 {

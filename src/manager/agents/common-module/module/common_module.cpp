@@ -6,12 +6,10 @@
 
 #include "common_module.hpp"
 
-#include "sc-memory/sc_memory.hpp"
+#include <sc-memory/sc_memory.hpp>
 
-#include "keynodes/ScComponentManagerKeynodes.hpp"
-#include "utils/common_utils.hpp"
-
-using namespace commonModule;
+#include "common/sc_component_manager_keynodes.hpp"
+#include "common/common_utils.hpp"
 
 SC_MODULE_REGISTER(CommonModule);
 

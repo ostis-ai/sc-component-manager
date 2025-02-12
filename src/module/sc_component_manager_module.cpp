@@ -6,7 +6,7 @@
 
 #include "sc_component_manager_module.hpp"
 
-#include "sc-config/sc_config.hpp"
+#include <sc-config/sc_config.hpp>
 
 SC_MODULE_REGISTER(ScComponentManagerModule);
 

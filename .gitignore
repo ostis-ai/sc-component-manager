@@ -1,13 +1,15 @@
 tests/units/test_defines.hpp
 generated
 
-build
+/build
 cmake-build-debug
+kb.bin
 
 # devs
 .vscode
 .idea
 .cache
+.venv
 
 # docs
 *.aux
@@ -20,3 +22,5 @@ cmake-build-debug
 *.log
 *.pdf
 *.run.xml
+
+/ConanPresets.json

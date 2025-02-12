@@ -4,11 +4,11 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "utils/sc_component_manager_command_install.hpp"
-
 #include "sc_component_manager_agent_install.hpp"
 
-#include "sc-config/sc_config.hpp"
+#include <sc-config/sc_config.hpp>
+
+#include "utils/sc_component_manager_command_install.hpp"
 
 using namespace installModule;
 using namespace keynodes;

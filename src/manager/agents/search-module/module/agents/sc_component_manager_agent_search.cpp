@@ -4,12 +4,12 @@
  * (See accompanying file COPYING.MIT or copy at http://opensource.org/licenses/MIT)
  */
 
-#include "module/keynodes/ScComponentManagerKeynodes.hpp"
-#include "module/utils/common_utils.hpp"
+#include "sc_component_manager_agent_search.hpp"
+
+#include <common/sc_component_manager_keynodes.hpp>
+#include <common/common_utils.hpp>
 
 #include "utils/sc_component_manager_command_search.hpp"
-
-#include "sc_component_manager_agent_search.hpp"
 
 using namespace searchModule;
 using namespace keynodes;

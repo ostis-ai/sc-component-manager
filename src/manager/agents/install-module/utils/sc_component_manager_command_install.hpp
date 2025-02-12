@@ -9,13 +9,11 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "module/utils/common_utils.hpp"
-#include "module/keynodes/ScComponentManagerKeynodes.hpp"
-
-#include "commands/sc_component_manager_command.hpp"
-
-#include "downloader/downloader.hpp"
-#include "downloader/downloader_handler.hpp"
+#include <common/common_utils.hpp>
+#include <common/sc_component_manager_keynodes.hpp>
+#include <common/sc_component_manager_command.hpp>
+#include <common/downloader.hpp>
+#include <common/downloader_handler.hpp>
 
 class ScComponentManagerCommandInstall : public ScComponentManagerCommand
 {

@@ -69,6 +69,11 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install cmake ninja ccache
 
+      - name: Set Conan remote
+        run: |
+          conan profile detect
+          conan remote add ostis-ai https://conan.ostis.net/artifactory/api/conan/ostis-ai-sc-machine/
+
       - name: Install sc-machine
         run: conan install . --build=missing
 

@@ -95,6 +95,7 @@ jobs:
           path: ./build/Release/sc-component-manager-*.tar.gz
 
   changelog:
+    needs: build-conan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

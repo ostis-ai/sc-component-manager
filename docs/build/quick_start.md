@@ -32,7 +32,7 @@ pipx ensurepath
 exec $SHELL
 ```
 
-Install Ninja generator for CMake, to use sc-machine CMake presets:
+Install Ninja generator for CMake, to use CMake presets:
 
 ```sh
 # Use pipx to install ninja if not already installed
@@ -54,6 +54,14 @@ pipx install conan
 pipx ensurepath
 # relaunch your shell after installation
 exec $SHELL
+```
+
+### Add Conan remote repository
+
+Add Conan remote repository with the specified URL:
+
+```sh
+conan remote add ostis-ai https://conan.ostis.net/artifactory/api/conan/ostis-ai-library
 ```
 
 ### Use sc-component-manager in Debug

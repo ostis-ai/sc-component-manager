@@ -1,12 +1,7 @@
 install(TARGETS
-    common-lib init-lib install-lib search-lib console-interface
+    init-module install-module search-module sc-component-manager
     EXPORT privateExport
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/extensions"
-)
-
-install(EXPORT privateExport
-    FILE privateTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sc-component-manager
 )
 
 include(CMakePackageConfigHelpers)

@@ -5,7 +5,10 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
     "include/console-interface/*.hpp" "include/console-interface/*.cpp"
 )
 
-add_library(console-interface SHARED ${SOURCES})
+# Define console-interface as an object library instead of a shared library
+# because it contains functions that are tightly coupled with other parts of the project only.
+# This approach avoids the need for dynamic loading and path management.
+add_library(console-interface OBJECT ${SOURCES})
 target_link_libraries(console-interface
     LINK_PUBLIC common-lib
 )

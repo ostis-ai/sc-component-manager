@@ -5,7 +5,7 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
     "include/console-interface/*.hpp" "include/console-interface/*.cpp"
 )
 
-add_library(console-interface SHARED ${SOURCES})
+add_library(console-interface OBJECT ${SOURCES})
 target_link_libraries(console-interface
     LINK_PUBLIC common-lib
 )

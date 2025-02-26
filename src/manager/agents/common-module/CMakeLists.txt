@@ -3,7 +3,7 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
     "include/common/*.hpp" "include/common/*.cpp"
 )
 
-add_library(common-lib SHARED ${SOURCES})
+add_library(common-lib OBJECT ${SOURCES})
 target_link_libraries(common-lib
     LINK_PUBLIC sc-machine::sc-agents-common
     LINK_PUBLIC sc-machine::sc-builder-lib
@@ -14,6 +14,7 @@ target_include_directories(common-lib
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PUBLIC $<INSTALL_INTERFACE:include>
 )
+target_compile_options(common-lib PUBLIC -fPIC)
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}

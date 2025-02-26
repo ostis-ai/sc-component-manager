@@ -1,26 +1,11 @@
-install(TARGETS 
-    common-lib console-interface
-    EXPORT sc-component-managerExport
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-# a target set for things we don't want to export to the consumers
 install(TARGETS
-    init-lib install-lib search-lib sc-component-manager
+    common-lib console-interface init-lib install-lib search-lib sc-component-manager
     EXPORT privateExport
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/extensions"
 )
 
-export(EXPORT sc-component-managerExport 
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/sc-component-managerTargets.cmake"
-)
-
-install(EXPORT sc-component-managerExport
-    FILE sc-component-managerTargets.cmake
+install(EXPORT privateExport
+    FILE privateTargets.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sc-component-manager
 )
 
@@ -32,14 +17,7 @@ write_basic_package_version_file(
     COMPATIBILITY AnyNewerVersion
 )
 
-configure_package_config_file(
-    ${SC_COMPONENT_MANAGER_ROOT}/cmake/sc-component-manager-config.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/sc-component-manager-config.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sc-component-manager
-)
-
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/sc-component-manager-config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/sc-component-manager-config-version.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sc-component-manager
 )

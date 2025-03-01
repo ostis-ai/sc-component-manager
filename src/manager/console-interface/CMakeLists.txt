@@ -26,3 +26,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
 if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(console-interface)
 endif()
+
+if(${SC_BUILD_TESTS})
+    add_subdirectory(test)
+endif()

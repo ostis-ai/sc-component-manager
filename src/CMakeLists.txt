@@ -15,7 +15,3 @@ set_target_properties(sc-component-manager PROPERTIES LIBRARY_OUTPUT_DIRECTORY $
 if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(sc-component-manager)
 endif()
-
-if(${SC_BUILD_TESTS})
-    add_subdirectory(tests)
-endif()

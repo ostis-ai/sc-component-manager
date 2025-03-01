@@ -8,9 +8,7 @@
 
 #include <common/sc_component_manager_keynodes.hpp>
 
-#include "init-module/module/agents/sc_component_manager_agent_init.hpp"
-#include "search-module/module/agents/sc_component_manager_agent_search.hpp"
-#include "install-module/module/agents/sc_component_manager_agent_install.hpp"
+#include "agents/sc_component_manager_agent_search.hpp"
 
 std::unordered_set<std::string> const ALL_SPECIFICATIONS_FOR_SEARCH = {
     "part_platform_specification",
@@ -19,37 +17,6 @@ std::unordered_set<std::string> const ALL_SPECIFICATIONS_FOR_SEARCH = {
     "specification_2",
     "specification_3",
 };
-
-TEST_F(ScAgentsTest, AgentInit)
-{
-  ScAgentContext & context = *m_ctx;
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_init.scs");
-  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
-  EXPECT_TRUE(testActionNode.IsValid());
-  ScAction testAction = context.ConvertToAction(testActionNode);
-
-  context.SubscribeAgent<initModule::ScComponentManagerInitAgent>();
-  testAction.InitiateAndWait(WAIT_TIME);
-  EXPECT_TRUE(testAction.IsFinishedSuccessfully());
-  ScStructure result = testAction.GetResult();
-
-  std::vector<std::string> namesOfSpecifications = {"part_platform_spec", "part_ui_spec"};
-  bool isSpecificationExists = false;
-  size_t foundSpecifications = 0;
-
-  ScIterator3Ptr const & specificationsIterator =
-      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNodeStructure);
-  while (specificationsIterator->Next())
-  {
-    std::string const & specificationIdentifier = context.GetElementSystemIdentifier(specificationsIterator->Get(2));
-    isSpecificationExists =
-        std::count(namesOfSpecifications.begin(), namesOfSpecifications.end(), specificationIdentifier);
-    EXPECT_TRUE(isSpecificationExists) << specificationIdentifier << " is not in action result";
-    foundSpecifications += isSpecificationExists;
-  }
-  EXPECT_EQ(foundSpecifications, namesOfSpecifications.size());
-  context.UnsubscribeAgent<initModule::ScComponentManagerInitAgent>();
-}
 
 void searchComponentsTestBody(
     ScAgentContext & context,
@@ -243,26 +210,4 @@ TEST_F(ScAgentsTest, AgentSearchByAllArguments)
 TEST_F(ScAgentsTest, AgentSearchWithEmptyArguments)
 {
   searchComponentsTestBody(*m_ctx, ALL_SPECIFICATIONS_FOR_SEARCH, "empty_arguments_action_components_search.scs");
-}
-
-TEST_F(ScAgentsTest, AgentInstall)
-{
-  ScAgentContext & context = *m_ctx;
-  loader.loadScsFile(context, TEST_FILES_DIR_PATH + "action_components_install.scs");
-  ScAddr const & testActionNode = context.SearchElementBySystemIdentifier("test_action_node");
-  ScAction testAction = context.ConvertToAction(testActionNode);
-
-  context.SubscribeAgent<installModule::ScComponentManagerInstallAgent>();
-
-  testAction.InitiateAndWait(WAIT_TIME);
-  EXPECT_TRUE(testAction.IsFinishedSuccessfully());
-  ScStructure result = testAction.GetResult();
-
-  ScIterator3Ptr const & componentsIterator =
-      context.CreateIterator3(result, ScType::ConstPermPosArc, ScType::ConstNode);
-  EXPECT_TRUE(componentsIterator->Next());
-
-  EXPECT_EQ("part_ui", context.GetElementSystemIdentifier(componentsIterator->Get(2)));
-
-  context.UnsubscribeAgent<installModule::ScComponentManagerInstallAgent>();
 }

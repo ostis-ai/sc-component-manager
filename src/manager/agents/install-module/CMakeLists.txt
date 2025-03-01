@@ -1,7 +1,7 @@
 file(GLOB SOURCES CONFIGURE_DEPENDS
-    "*.hpp" "*.cpp"
-    "*/*.hpp" "*/*.cpp"
-    "*/*/*.hpp" "*/*/*.cpp"
+    "module/*.hpp" "module/*.cpp"
+    "module/*/*.hpp" "module/*/*.cpp"
+    "utils/*.hpp" "utils/*.cpp"
 )
 
 add_library(install-module SHARED ${SOURCES})
@@ -11,4 +11,9 @@ set_target_properties(install-module PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${SC_EX
 
 if(${SC_CLANG_FORMAT_CODE})
     target_clangformat_setup(install-module)
+endif()
+
+if(${SC_BUILD_TESTS})
+    set(INSTALL_MODULE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/module)
+    add_subdirectory(test)
 endif()

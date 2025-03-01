@@ -8,7 +8,7 @@
 
 #include <common/sc_component_manager_keynodes.hpp>
 
-#include "agents/sc_component_manager_agent_search.hpp"
+#include "agent/sc_component_manager_agent_search.hpp"
 
 std::unordered_set<std::string> const ALL_SPECIFICATIONS_FOR_SEARCH = {
     "part_platform_specification",

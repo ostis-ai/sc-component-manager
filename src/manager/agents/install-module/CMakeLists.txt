@@ -1,6 +1,6 @@
 file(GLOB SOURCES CONFIGURE_DEPENDS
+    "agent/*.hpp" "agent/*.cpp"
     "module/*.hpp" "module/*.cpp"
-    "module/*/*.hpp" "module/*/*.cpp"
     "utils/*.hpp" "utils/*.cpp"
 )
 
@@ -14,6 +14,6 @@ if(${SC_CLANG_FORMAT_CODE})
 endif()
 
 if(${SC_BUILD_TESTS})
-    set(INSTALL_MODULE_SRC ${CMAKE_CURRENT_SOURCE_DIR}/module)
+    set(INSTALL_MODULE_SRC ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(test)
 endif()

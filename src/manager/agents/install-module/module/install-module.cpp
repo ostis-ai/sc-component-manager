@@ -6,7 +6,7 @@
 
 #include "install-module.hpp"
 
-#include "agents/sc_component_manager_agent_install.hpp"
+#include "agent/sc_component_manager_agent_install.hpp"
 
 using namespace installModule;
 

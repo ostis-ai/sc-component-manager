@@ -8,7 +8,7 @@
 
 #include <common/sc_component_manager_keynodes.hpp>
 
-#include "agents/sc_component_manager_agent_install.hpp"
+#include "agent/sc_component_manager_agent_install.hpp"
 
 TEST_F(ScAgentsTest, AgentInstall)
 {

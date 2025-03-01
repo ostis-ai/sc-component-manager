@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Distribute tests by modules
 - Make init-lib and console-interface as object libraries to avoid problems of dynamic loading
 
 ## [0.1.0] - 12.02.2025

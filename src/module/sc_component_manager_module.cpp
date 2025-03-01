@@ -24,6 +24,12 @@ void ScComponentManagerModule::Initialize(ScMemoryContext * context)
   for (std::string const & key : *managerConfig)
     m_params.Insert({key, managerConfig[key]});
 
+  common_utils::CommonUtils::InitParametersMap();
+  if (!common_utils::CommonUtils::CheckIfFullMyselfDecompositionExists(*context))
+  {
+    common_utils::CommonUtils::CreateMyselfDecomposition(*context);
+  }
+
   try
   {
     m_scComponentManager = std::make_unique<ScComponentManager>();
@@ -42,6 +48,8 @@ void ScComponentManagerModule::Initialize(ScMemoryContext * context)
 
 void ScComponentManagerModule::Shutdown(ScMemoryContext * context)
 {
+  common_utils::CommonUtils::ClearParametersMap();
+
   if (m_scComponentManager)
     m_scComponentManager->Stop();
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");

@@ -1,5 +1,5 @@
 install(TARGETS
-    common-module init-module install-module search-module sc-component-manager
+    init-module install-module search-module sc-component-manager
     EXPORT privateExport
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/extensions"
 )

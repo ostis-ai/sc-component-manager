@@ -174,10 +174,12 @@ protected:
     query << GitHubConstants::FLAG_NO_CHECKOUT << " ";
 
     // Get only the most recent commits and the current branch. Do not copy all history
-    query << GitHubConstants::FLAG_DEPTH << "1" << " ";
+    query << GitHubConstants::FLAG_DEPTH << "1"
+          << " ";
 
     // Clone only metadata about files and directories of the repository
-    query << GitHubConstants::FLAG_FILTER_TREE << "0" << " ";
+    query << GitHubConstants::FLAG_FILTER_TREE << "0"
+          << " ";
 
     // The last argument is the repository address to clone
     query << repositoryAddress;

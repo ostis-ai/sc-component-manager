@@ -4,13 +4,17 @@ project(sc-component-manager VERSION 0.1.0 LANGUAGES C CXX)
 message(STATUS "Current project version: ${CMAKE_PROJECT_VERSION}")
 cmake_policy(SET CMP0048 NEW)
 
+if(${WIN32})
+    message(FATAL_ERROR "sc-component-manager isn't supported on Windows OS.")
+endif()
+
 set(SC_COMPONENT_MANAGER_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH "${SC_COMPONENT_MANAGER_ROOT}/cmake")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-if (DEFINED SC_EXTENSIONS_DIRECTORY)
+if(DEFINED SC_EXTENSIONS_DIRECTORY)
     message(STATUS "Provided extensions directory: ${SC_EXTENSIONS_DIRECTORY}")
     file(MAKE_DIRECTORY ${SC_EXTENSIONS_DIRECTORY})
 else()
@@ -34,10 +38,6 @@ endif()
 if(${SC_CLANG_FORMAT_CODE})
     include(${CMAKE_MODULE_PATH}/ClangFormat.cmake)
 endif()
-
-if(${WIN32})
-    message(FATAL_ERROR "sc-component-manager isn't supported on Windows OS.")
-endif(${WIN32})
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcolor-diagnostics")

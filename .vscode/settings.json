@@ -25,8 +25,50 @@
     "testMate.cpp.test.advancedExecutables": [
         // Unittests configuration
         {
-            "pattern": "build/**/bin/sc-component-manager-tests",
-            "cwd": "${workspaceFolder}/src/tests/units",
+            "pattern": "build/**/bin/console-interface-tests",
+            "cwd": "${workspaceFolder}/src/manager/console-interface/test/units",
+            "gtest": {
+                "testGrouping": {
+                    "groupByLabel": {
+                        "label": "unittests",
+                        "groupByExecutable": {
+                            "description": "${relDirpath}/"
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "pattern": "build/**/bin/init-module-tests",
+            "cwd": "${workspaceFolder}/src/manager/agents/init-module/test/units",
+            "gtest": {
+                "testGrouping": {
+                    "groupByLabel": {
+                        "label": "unittests",
+                        "groupByExecutable": {
+                            "description": "${relDirpath}/"
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "pattern": "build/**/bin/install-module-tests",
+            "cwd": "${workspaceFolder}/src/manager/agents/install-module/test/units",
+            "gtest": {
+                "testGrouping": {
+                    "groupByLabel": {
+                        "label": "unittests",
+                        "groupByExecutable": {
+                            "description": "${relDirpath}/"
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "pattern": "build/**/bin/search-module-tests",
+            "cwd": "${workspaceFolder}/src/manager/agents/search-module/test/units",
             "gtest": {
                 "testGrouping": {
                     "groupByLabel": {

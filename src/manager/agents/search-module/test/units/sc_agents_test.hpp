@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include <sc-memory/test/sc_test.hpp>
+#include <gtest/gtest.h>
 
 #include <memory>
 #include <algorithm>
@@ -14,7 +14,6 @@
 #include <filesystem>
 
 #include <sc-builder/scs_loader.hpp>
-#include <sc-memory/sc_memory.hpp>
 #include <sc-memory/sc_agent_context.hpp>
 
 class ScAgentsTest : public testing::Test

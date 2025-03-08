@@ -1,0 +1,32 @@
+\makeatletter
+\def\input@path{{scn//}}
+\makeatother
+
+
+\documentclass{scndocument}
+
+\usepackage{import}
+\usepackage{scn}
+\usepackage[english,main=russian]{babel}
+
+\addbibresource{bibliography/biblio.bib}
+
+\begin{document}
+	
+	\selectlanguage{russian}
+	
+	\DeactivateBG
+	\title{\centering
+		Документация менеджера многократно используемых компонентов ostis-систем}
+	\maketitle
+	
+	\normalsize
+	
+	\setcounter{page}{2}
+	
+	\ActivateBG
+	\begin{SCn}
+		\input{sc-component-manager}
+		\input{agents}
+	\end{SCn}
+\end{document}

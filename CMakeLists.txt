@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 set(CMAKE_CXX_STANDARD 17)
-project(sc-component-manager VERSION 0.1.0 LANGUAGES C CXX)
+project(sc-component-manager VERSION 0.2.0 LANGUAGES C CXX)
 message(STATUS "Current project version: ${CMAKE_PROJECT_VERSION}")
 cmake_policy(SET CMP0048 NEW)
 

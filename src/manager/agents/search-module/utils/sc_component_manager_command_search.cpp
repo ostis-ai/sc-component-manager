@@ -6,6 +6,8 @@
 
 #include "sc_component_manager_command_search.hpp"
 
+#include <sc-agents-common/utils/IteratorUtils.hpp>
+
 #include <algorithm>
 
 #include <common/sc_component_manager_keynodes.hpp>
@@ -16,15 +18,15 @@ using namespace common_utils;
 ScAddrUnorderedSet ScComponentManagerCommandSearch::Execute(ScAgentContext * context, ScAddr const & actionAddr)
 {
   ScAddrUnorderedSet componentsSpecifications;
-  ScAddr const searchStructure = utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, scAgentsCommon::CoreKeynodes::rrel_1);
+  ScAddr const searchStructure = utils::IteratorUtils::getAnyByOutRelation(context, actionAddr, ScKeynodes::rrel_1);
 
   ScTemplate searchTemplate;
-  context->HelperBuildTemplate(searchTemplate, searchStructure);
+  context->BuildTemplate(searchTemplate, searchStructure);
 
-  context->HelperSearchTemplate(searchTemplate,
+  context->SearchByTemplate(searchTemplate,
   [&context, searchStructure](ScTemplateResultItem const & item) 
   {
-    ScIterator5Ptr const reusableComponentIterator = context->Iterator5(searchStructure, ScType::EdgeAccessConstPosPerm, keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::EdgeAccessVarPosPerm, ScType::NodeVar);
+    ScIterator5Ptr const reusableComponentIterator = context->Iterator5(searchStructure, ScType::VarPermPosArc, keynodes::ScComponentManagerKeynodes::concept_reusable_component, ScType::VarPermPosArc, ScType::VarNode);
     if (reusableComponentIterator->Next())
     {
 

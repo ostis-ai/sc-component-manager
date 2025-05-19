@@ -8,7 +8,6 @@
 
 #include <sc-memory/sc_memory.hpp>
 #include <sc-memory/sc_module.hpp>
-#include <sc-config-utils/sc_memory_config.hpp>
 
 #include <console-interface/sc_component_manager.hpp>
 

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <sc-memory/sc_memory.hpp>
 #include <sc-memory/sc_agent_context.hpp>
 
 #include "common/sc_component_manager_command.hpp"

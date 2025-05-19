@@ -47,6 +47,4 @@ void ScComponentManagerModule::Shutdown(ScMemoryContext * context)
   m_scComponentManager.Stop();
 
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");
-
-  return SC_RESULT_OK;
 }

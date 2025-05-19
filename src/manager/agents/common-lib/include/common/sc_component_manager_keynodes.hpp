@@ -97,23 +97,11 @@ public:
 
   static inline ScKeynode const action_components_install{"action_components_install", ScType::ConstNodeClass};
 
-  static inline ScKeynode const rrel_author{"rrel_author", ScType::ConstNodeRole};
-
   static inline ScKeynode const rrel_class{"rrel_class", ScType::ConstNodeRole};
 
   static inline ScKeynode const rrel_sets{"rrel_sets", ScType::ConstNodeRole};
 
   static inline ScKeynode const rrel_components{"rrel_components", ScType::ConstNodeRole};
-
-  static inline ScKeynode const rrel_explanation{"rrel_explanation", ScType::ConstNodeRole};
-
-  static inline ScKeynode const rrel_identifier{"rrel_identifier", ScType::ConstNodeRole};
-
-  static inline ScKeynode const rrel_note{"rrel_note", ScType::ConstNodeRole};
-
-  static inline ScKeynode const rrel_purpose{"rrel_purpose", ScType::ConstNodeRole};
-
-  static inline ScKeynode const rrel_main_idtf{"rrel_main_idtf", ScType::ConstNodeRole};
 };
 
 }  // namespace keynodes

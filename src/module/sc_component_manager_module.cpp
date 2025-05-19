@@ -32,11 +32,7 @@ void ScComponentManagerModule::Initialize(ScMemoryContext * context)
 
   try
   {
-    m_scComponentManager = std::make_unique<ScComponentManager>();
-    if (!m_scComponentManager)
-      return;
-
-    m_scComponentManager->Run();
+    m_scComponentManager.Run();
     SC_LOG_INFO("[sc-component-manager] Sc-component-manager run");
   }
   catch (utils::ScException const & exception)
@@ -48,10 +44,7 @@ void ScComponentManagerModule::Initialize(ScMemoryContext * context)
 
 void ScComponentManagerModule::Shutdown(ScMemoryContext * context)
 {
-  common_utils::CommonUtils::ClearParametersMap();
+  m_scComponentManager.Stop();
 
-  if (m_scComponentManager)
-    m_scComponentManager->Stop();
   SC_LOG_INFO("[sc-component-manager] Sc-component-manager stopped");
-  m_scComponentManager.reset();
 }

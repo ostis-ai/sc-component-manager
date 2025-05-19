@@ -20,5 +20,5 @@ public:
 
 protected:
   ScParams m_params;
-  std::unique_ptr<ScComponentManager> m_scComponentManager;
+  ScComponentManager m_scComponentManager;
 };

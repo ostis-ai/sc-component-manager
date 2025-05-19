@@ -57,7 +57,7 @@ protected:
           && commandTokens[1] == CommandConstants::COMPONENTS_COMMAND_INSTALL && tokenNumber == COMMAND_KEYWORDS_SIZE
           && commandTokens[tokenNumber][0] != PARAMETER_VALUES_DELIMITER)
       {
-        parameterName = CommandsConstantsFlags::IDTF;
+        parameterName = CommandsSearchFlags::IDTF;
         commandParameters.insert({parameterName, {}});
       }
       if (currentCommandToken.at(0) == PARAMETER_VALUES_DELIMITER)
